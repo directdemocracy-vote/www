@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,20 +11,66 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <title>directdemocracy.vote</title>
   </head>
+
   <body>
     <div class='corner-ribbon' title="This web site is in beta quality: it may have bugs and change without notice. Please, report any problem to info@<?=$base_domain?>.">Beta</div>
-    <div class="jumbotron directdemocracy-title">
-      <div class="container">
-        <h1><img src="images/directdemocracy-title.png" style="vertical-align:text-top;margin-right:35px;margin-top:10px"><b>direct</b>democracy</h1>
-        <div style="font-size:150%;position:relative;top:-40px;margin:0 0 0px 126px;">let's make a better world</div>
-        <div class="directdemocracy-subtitle" style="position:relative;top:-20px">
-          <h3>- Vote and propose referendums online</h3>
-          <h3>- Push governments to respect people's will</h3>
-          <h3>- Spread peace and prosperity worldwide</h3>
+    <main role='main'>
+      <div class="jumbotron directdemocracy-title">
+        <div class="container">
+          <h1 style="margin-top:30px"><img src="images/directdemocracy-title.png" style="vertical-align:text-top;margin-right:35px;margin-top:10px;"><b>direct</b>democracy</h1>
+          <div style="font-size:150%;position:relative;top:-45px;margin:0 0 0px 123px;">let's make a better world</div>
+          <div class="directdemocracy-subtitle" style="position:relative;top:0;margin-bottom:40px">
+            <h3>- Vote and propose referendums online</h3>
+            <h3>- Push governments to respect people's will</h3>
+            <h3>- Spread peace and prosperity worldwide</h3>
+          </div>
+          <div style="padding-bottom:40px"><a class="btn btn-success" href="#" role="button">Become a Citizen &raquo;</a></div>
         </div>
       </div>
-    </div>
-    <div class="container">
+      <!-- Example row of columns -->
+      <div class="container" style='margin-top:40px'>
+        <div class="row">
+          <div class="col-md-4">
+            <h2>Vision</h2>
+            <p>This initiative aims at establishing world-wide <a href="https://en.wikipedia.org/wiki/Direct_democracy" target="_blank">direct democracy</a> in order to bring peace, safety and prosperity to humananity, including saving the climate
+              and the biodiversity. The principle is that people will become citizens by proposing referundums and voting regardless of any official acknowledgement. Vote results from a limited number of citizens could be considered as simple survey
+              results. They could feed debates, influence political decisions and incitate more people to become citizens. Vote results from areas where a majority of people are citizens will become significant from a democratic point of view. This
+              will increase the pressure on governments to respect the democratic choices expressed by their people. Ultimately, this bottom-up initiative will enforce direct democracy everywhere in the world.</p>
+          </div>
+          <div class="col-md-4">
+            <h2>Features</h2>
+            <p>The proposed system implements the following necessary features:</p>
+            <ul>
+              <li>open to anybody with internet access from a smartphone or a computer.</li>
+              <li>allowing anybody to propose referendums.</li>
+              <li>fully decentralized: nobody can control it.</li>
+              <li>supported by a <a href="https://en.wikipedia.org/wiki/Web_of_trust" target="_blank">web of trust</a>: distributed reputation system.</li>
+              <li>verifyable: check that my vote was taken into account, check that others didn't cheat.</li>
+              <li>robust to attacks.</li>
+              <li>relying on state-of-the-art <a href="https://en.wikipedia.org/wiki/Cryptography" target="_blank">cryptography</a>, <a href="https://en.wikipedia.org/wiki/Free_and_open-source_software" target="_blank">free and open-source</a>
+                specifications and implementations.</li>
+              <li>providing easy-to-use user interfaces.</li>
+              <li>aimed at gaining confidence of both technical and non-technical people.</li>
+            </ul>
+          </div>
+          <div class="col-md-4">
+            <h2>Contribute</h2>
+            <p>Because the system is fully decentralized, you can become any of these kinds of participant:</p>
+            <ul>
+              <li><b>citizen</b>: anybody with internet access.</li>
+              <li><b>author</b>: (referendum author) anybody with internet access.</li>
+              <li><b>truster</b>: any computer scientist with computer network resources.</li>
+              <li><b>station</b>: (polling station) any computer scientist with computer network resources.</li>
+              <li><b>publisher</b>: any computer scientist with computer network resources.</li>
+              <li><b>host</b>: any computer scientist with computer network resources.</li>
+            </ul>
+            <p>We also accept donations to support our effort. More information about this will come later.</p>
+            <p><a class="btn btn-secondary" href="https://github.com/directdemocracy-vote/doc" target="_blank" role="button">View technical details &raquo;</a></p>
+          </div>
+        </div>
+      </div>
+    </main>
+    <div>
       <hr>
       <footer>
         <p style='text-align:center'><small>Made by citizens for citizens</small></p>
