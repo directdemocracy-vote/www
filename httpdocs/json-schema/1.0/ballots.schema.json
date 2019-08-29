@@ -9,7 +9,7 @@
 		"signature",
 		"published",
 		"referendum",
-		"citizen"
+		"ballots"
 	],
 	"properties": {
 		"key": {
@@ -28,9 +28,20 @@
 			"format": "date-time"
 		},
 		"referendum": {
-			"description": "public key of the referendum",
-			"type": "string",
-			"contentEncoding": "base64"
+			"type": "object",
+			"required": ["key", "signature"],
+			"properties": {
+				"key": {
+					"description": "public key of the referendum",
+					"type": "string",
+					"contentEncoding": "base64"
+				},
+				"signature": {
+					"description": "signature of the referendum",
+					"type": "string",
+					"contentEncoding": "base64"
+				}
+			}
 		},
 		"ballots": {
 			"description": "list of ballots",
