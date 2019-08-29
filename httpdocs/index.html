@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel='stylesheet' href='/css/directdemocracy.css'>
+    <link rel='stylesheet' href='css/directdemocracy.css'>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -12,40 +12,17 @@
   </head>
   <body>
     <div class='corner-ribbon' title="This web site is in beta quality: it may have bugs and change without notice. Please, report any problem to info@<?=$base_domain?>.">Beta</div>
-    <div id="alert" class="alert alert-success collapse" style="margin-bottom:0;">
-      <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
-      <div id="alert-content"><strong>Success!</strong> Indicates a successful or positive action.</div>
-    </div>
-    <nav class="navbar navbar-inverse navbar-static-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="/"><b>direct</b>democracy</a>
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse navbar-form navbar-right" style="text-align:right">
-        <button class="btn btn-success" href="#signup" data-toggle="modal" data-target="#login-modal" onclick="onSignupButton()">Sign up</button>
-        <button class="btn btn-default" href="#login" data-toggle="modal" data-target="#login-modal" onclick="onLoginButton()">Log in</button>
-       </div>
-     </div>
-    </nav>
     <div class="jumbotron directdemocracy-title">
       <div class="container">
-        <h1 style="margin:20px 0 0 0;"><img src="/images/directdemocracy-title.png" style="vertical-align:text-top;margin-right:35px;"><b>direct</b>democracy</h1>
-        <div style="font-size:150%;position:relative;top:-20px;margin:0 0 10px 126px;">let's make a better world</div>
-        <div class='directdemocracy-subtitle'>
-          <h3>Vote and propose referendums online</h3>
-          <h3>Push governments to respect people's will</h3>
-          <h3>Spread peace and prosperity worldwide</h3>
-         </div>
-        <a class="btn btn-primary btn-lg" href="/about.php" role="button">Learn more &raquo;</a>
+        <h1><img src="images/directdemocracy-title.png" style="vertical-align:text-top;margin-right:35px;margin-top:10px"><b>direct</b>democracy</h1>
+        <div style="font-size:150%;position:relative;top:-40px;margin:0 0 0px 126px;">let's make a better world</div>
+        <div class="directdemocracy-subtitle" style="position:relative;top:-20px">
+          <h3>- Vote and propose referendums online</h3>
+          <h3>- Push governments to respect people's will</h3>
+          <h3>- Spread peace and prosperity worldwide</h3>
+        </div>
       </div>
     </div>
-    <div class="directdemocracy-background"></div>
     <div class="container">
       <hr>
       <footer>
@@ -53,4 +30,5 @@
       </footer>
     </div>
   </body>
+
 </html>
