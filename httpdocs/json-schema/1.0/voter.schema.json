@@ -29,7 +29,7 @@
 		},
 		"referendum": {
 			"type": "object",
-			"required": ["key, "signature"],
+			"required": ["key", "signature"],
 			"properties": {
 				"key": {
 					"description": "public key of the referendum",
@@ -46,7 +46,7 @@
 		"citizen": {
 			"description": "citizen who voted at this referendum",
 			"type": "object",
-			"required": ["key, "signature"],
+			"required": ["key", "signature"],
 			"properties": {
 				"key": {
 					"description": "public key of the referendum",
