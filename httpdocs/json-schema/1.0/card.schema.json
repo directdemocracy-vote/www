@@ -1,6 +1,6 @@
 {
 	"$schema": "http://json-schema.org/draft-07/schema#",
-	"$id": "https://directdemocracy.net/json-schema/1.0/card.schema.json",
+	"$id": "https://directdemocracy.vote/json-schema/1.0.0/card.schema.json",
 	"title": "card",
 	"description": "information allowing to identify uniquely a citizen",
 	"type": "object",
@@ -70,7 +70,7 @@
 					"type": {
 						"description": "type of document (ID card, passport, vote card, driving license, insurance card)",
 						"type": "string",
-						"pattern": "^id$|^passport$|^vote$|^driving$|^insurance$"
+						"enum": ["id", "passport", "vote", "driving", "insurance"]
 					},
 					"issuer": {
 						"description": "country or organization that issued the document and ensure the uniqueness of the citizen",
@@ -91,7 +91,7 @@
 		"sex": {
 			"description": "sex of the citizen",
 			"type": "string",
-			"pattern": "^male$|^female$|^other$"
+			"enum": ["male", "female", "other"]
 		},
 		"address": {
 			"description": "home address of the citizen",
