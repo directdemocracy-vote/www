@@ -2,7 +2,7 @@
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"$id": "https://directdemocracy.vote/json-schema/1.0.0/vote.schema.json",
 	"title": "vote",
-	"description": "vote casted by a citizen for a referendum",
+	"description": "anonymized vote casted by a citizen for a referendum",
 	"type": "object",
 	"required": [
 		"key",
@@ -13,12 +13,12 @@
 	],
 	"properties": {
 		"key": {
-			"description": "public key of the ballot",
+			"description": "public key of the vote",
 			"type": "string",
 			"contentEncoding": "base64"
 		},
 		"signature": {
-			"description": "signature of the ballot",
+			"description": "signature of the vote",
 			"type": "string",
 			"contentEncoding": "base64"
 		},
