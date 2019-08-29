@@ -2,14 +2,14 @@
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"$id": "https://directdemocracy.vote/json-schema/1.0.0/ballots.schema.json",
 	"title": "ballots",
-	"description": "list of ballots used for a referedum by a station",
+	"description": "list of anomymized votes posted to a station for a referedum",
 	"type": "object",
 	"required": [
 		"key",
 		"signature",
 		"published",
 		"referendum",
-		"ballots"
+		"votes"
 	],
 	"properties": {
 		"key": {
@@ -23,7 +23,7 @@
 			"contentEncoding": "base64"
 		},
 		"published": {
-			"description": "date at which the ballots were published",
+			"description": "date at which the votes were published",
 			"type": "string",
 			"format": "date-time"
 		},
@@ -43,13 +43,24 @@
 				}
 			}
 		},
-		"ballots": {
+		"votes": {
 			"description": "list of ballots",
 			"type": "array",
 			"items": {
-				"description": "public key of the ballot",
-				"type": "string",
-				"contentEncoding": "base64"
+				"description": "vote",
+				"type": "object",
+				"required": ["key", "signature"],
+				"properties": {
+				"key": {
+					"description": "public key of the vote",
+					"type": "string",
+					"contentEncoding": "base64"
+				},
+				"signature": {
+					"description": "signature of the vote",
+					"type": "string",
+					"contentEncoding": "base64"
+				}
 			}
 		}
 	}
