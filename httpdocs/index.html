@@ -13,6 +13,20 @@
   </head>
 
   <body>
+    <div class="modal" id="myModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Be patient...</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">As of August 29th, 2019, this is not yet implemented... But we are working hard on it. Please come back later.</div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class='corner-ribbon' title="This web site is in beta quality: it may have bugs and change without notice. Please, report any problem to info@<?=$base_domain?>.">Beta</div>
     <main role='main'>
       <div class="jumbotron directdemocracy-title">
@@ -24,7 +38,7 @@
             <h3>- Push governments to respect people's will</h3>
             <h3>- Spread peace and prosperity worldwide</h3>
           </div>
-          <div style="padding-bottom:40px"><a class="btn btn-success" href="#" role="button">Become a Citizen &raquo;</a></div>
+          <div style="padding-bottom:40px"><button class="btn btn-success" role="button" data-toggle="modal" data-target="#myModal">Become a Citizen &raquo;</button></div>
         </div>
       </div>
       <!-- Example row of columns -->
