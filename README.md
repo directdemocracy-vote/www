@@ -4,4 +4,4 @@ This repository holds the main web site of [directdemocracy.vote](https://direct
 This web site contain only static HTML code (including images, css, js, etc.) without any server side code (php, etc.).
 Its purpose is to inform about directdemocracy.vote and foster people to participate as citizens, authors, hosts, trusters, stations and/or publishers.
 
-The main web site also contains the specification of the publication in the [json-schema](https://github.com/directdemocracy-vote/www/tree/master/httpdocs/json-format) folder.
+The main web site also contains the reference specification for the directdemocracy publications in the [json-schema](https://github.com/directdemocracy-vote/www/tree/master/httpdocs/json-schema) folder.
