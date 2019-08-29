@@ -1,6 +1,6 @@
 {
 	"$schema": "http://json-schema.org/draft-07/schema#",
-	"$id": "https://directdemocracy.net/json-schema/1.0/endorsement.schema.json",
+	"$id": "https://directdemocracy.vote/json-schema/1.0.0/endorsement.schema.json",
 	"title": "endorsement",
 	"description": "claim that a participant (endorser) acknowledges another participant (endorsed)",
 	"type": "object",
@@ -8,7 +8,7 @@
 		"key",
 		"signature",
 		"published",
-		"endorsedKey"
+		"endorsed"
 	],
 	"properties": {
 		"key": {
@@ -26,16 +26,20 @@
 			"type": "string",
 			"format": "date-time"
 		},
-		"endorsedKey": {
-			"description": "public key of the endorsed participant",
-			"type": "string",
-			"contentEncoding": "base64"
-		},
-		"endorsedSignature": {
-			"description": "signature of a card, endorsement or referendum",
-			"type": "string",
-			"contentEncoding": "base64"
-		},
+		"endorsed":
+			"description": "endorsed participant",
+		        "type": "object",
+		        "required": ["key"],
+		        "properties": {
+		        	"key": {
+					"type": "string",
+					"contentEncoding": "base64"
+				}
+				"signature": {
+					"type": "string",
+					"contentEncoding": "base64"
+				},
+			}
 		"revoke": {
 			"description": "if this field is set, the endorsement is revoked and the string should contain a justification for the revocation",
 			"type": "string"
