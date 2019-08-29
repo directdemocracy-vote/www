@@ -1,0 +1,123 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "https://directdemocracy.net/json-schema/1.0/card.schema.json",
+	"title": "card",
+	"description": "information allowing to identify uniquely a citizen",
+	"type": "object",
+	"required": [
+		"key",
+		"signature",
+		"edited",
+		"familyName",
+		"givenName",
+		"picture",
+		"latitude",
+		"longitude"
+	],
+	"properties": {
+		"key": {
+			"description": "public key of the citizen",
+			"type": "string",
+			"contentEncoding": "base64"
+		},
+		"signature": {
+			"description": "signature of the card by the citizen",
+			"type": "string",
+			"contentEncoding": "base64"
+		},
+		"published": {
+			"description": "date of publication of the citizen card",
+			"type": "string",
+			"format": "date-time"
+		},
+		"familyName": {
+			"description": "last name of the citizen",
+			"type": "string"
+		},
+		"givenName": {
+			"description": "first name of the citizen",
+			"type": "string"
+		},
+		"picture": {
+			"description": "photo of the citizen",
+			"type": "string",
+			"contentEncoding": "base64",
+			"contentMediaType": "image/jpeg"
+		},
+		"latitude": {
+			"description": "latitude of the home of the citizen expressed in degrees",
+			"type": "number",
+			"minimum": -90,
+			"maximum": 90
+		},
+		"longitude": {
+			"description": "longitude of the home of the citizen expressed in degrees",
+			"type": "number",
+			"minimum": -180,
+			"maximum": 180
+		},
+		"documents": {
+			"description": "documents to be checked by citizen endorsers",
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": [
+					"type",
+					"issuer",
+					"number"
+				],
+				"properties": {
+					"type": {
+						"description": "type of document (ID card, passport, vote card, driving license, insurance card)",
+						"type": "string",
+						"pattern": "^id$|^passport$|^vote$|^driving$|^insurance$"
+					},
+					"issuer": {
+						"description": "country or organization that issued the document and ensure the uniqueness of the citizen",
+						"type": "string"
+					},
+					"number": {
+						"description": "number uniquely identifying the citizen",
+						"type": "string"
+					}
+				}
+			}
+		},
+		"birthday": {
+			"description": "the birthday of the citizen",
+			"type": "string",
+			"format": "date"
+		},
+		"sex": {
+			"description": "sex of the citizen",
+			"type": "string",
+			"pattern": "^male$|^female$|^other$"
+		},
+		"address": {
+			"description": "home address of the citizen",
+			"type": "object",
+			"required": [
+				"street",
+				"city",
+				"country"
+			],
+			"properties": {
+				"street": {
+					"type": "string"
+				},
+				"city": {
+					"type": "string"
+				},
+				"state": {
+					"type": "string"
+				},
+				"zip": {
+					"type": "string"
+				},
+				"country": {
+					"type": "string"
+				}
+			}
+		}
+	}
+}
