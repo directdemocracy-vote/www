@@ -1,6 +1,6 @@
 {
 	"$schema": "http://json-schema.org/draft-07/schema#",
-	"$id": "https://directdemocracy.net/json-schema/1.0/ballots.schema.json",
+	"$id": "https://directdemocracy.net/json-schema/1.0.0/ballots.schema.json",
 	"title": "ballots",
 	"description": "list of ballots used for a referedum by a station",
 	"type": "object",
