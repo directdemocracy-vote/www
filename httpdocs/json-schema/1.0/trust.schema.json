@@ -1,6 +1,6 @@
 {
 	"$schema": "http://json-schema.org/draft-07/schema#",
-	"$id": "https://directdemocracy.net/json-schema/1.0/trust.schema.json",
+	"$id": "https://directdemocracy.vote/json-schema/1.0.0/trust.schema.json",
 	"title": "trust",
 	"description": "trust attributed to a citizen card by a truster",
 	"type": "object",
