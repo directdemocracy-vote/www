@@ -1,0 +1,40 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "https://directdemocracy.net/json-schema/1.0/vote.schema.json",
+	"title": "vote",
+	"description": "vote casted by a citizen for a referendum",
+	"type": "object",
+	"required": [
+		"key",
+		"signature",
+		"published",
+		"referendum",
+		"answer"
+	],
+	"properties": {
+		"key": {
+			"description": "public key of the ballot",
+			"type": "string",
+			"contentEncoding": "base64"
+		},
+		"signature": {
+			"description": "signature of the ballot",
+			"type": "string",
+			"contentEncoding": "base64"
+		},
+		"published": {
+			"description": "date at which the vote was published",
+			"type": "string",
+			"format": "date-time"
+		},
+		"referendum": {
+			"description": "public key of the referendum",
+			"type": "string",
+			"contentEncoding": "base64"
+		},
+		"answer": {
+			"description": "answer to the question of the referendum",
+			"type": "string"
+		}
+	}
+}
