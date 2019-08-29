@@ -1,98 +1,30 @@
-@import url("//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css");
 body {
+  margin-top: 0;
   padding-top: 0;
-  padding-bottom: 20px;
+  padding-bottom: 0;
 }
-.navbar {
-  margin:0;
-}
-.navbar-brand {
-  background-image: url("/images/directdemocracy-icon-inverted.png");
-  background-repeat: no-repeat;
-  background-position: 20px 15px;
-  padding-left: 50px;
-}
-.navbar-brand:hover {
-  background-image: url("/images/directdemocracy-icon-inverted-hover.png");
-}
-.user-menu-item {
-  margin-right:10px;
-}
-.error-message {
-  color:red;
-  font-weight:bold;
-  margin-left:10px;
-}
-a, a:active, a:focus,
-button, button:focus, button:active,
-.btn, .btn:focus, .btn:active:focus, .btn.active:focus, .btn.focus, .btn.focus:active, .btn.active.focus {
-  outline: none;
-  cursor: pointer;
-}
-.directdemocracy-background {
-  background: url("/images/handsup.jpg") no-repeat center center;
-  position: fixed;
-  width: 100%;
-  top:0;
-  left:0;
-  z-index: -1;
-  opacity: 0.5;
+.jumbotron {
+  padding-top: 0;
+  margin-top: 0;
 }
 .directdemocracy-title {
-  margin-top: 0px;
-  padding-top: 0px;
-  margin-bottom: 25px;
-  padding-bottom: 0px;
-  height: 375px;
+  margin-top: 0;
+  padding-top: 20px;
+  margin-bottom: 0;
+  padding-bottom: 0;
   color: black;
-  background:transparent;
+  background: url("../images/handsup.jpg") no-repeat center center;
 }
 .directdemocracy-subtitle {
   color:black;
-  background: rgba(255,255,255,0.67);
+  background: rgba(255,255,255,0.7);
   border-radius: 6px;
-  width: 396px;
-  padding: 1px 20px 10px 20px;
-  margin: 0px 0px 30px 0px;
+  width: 430px;
+  padding: 10px 20px 10px 20px;
   box-shadow: rgba(0,0,0,0.2) 0px 2px 3px, inset rgba(0,0,0,0.2) 0px -1px 2px;
 }
 .directdemocracy-subtitle h3 {
-  font-size:130%;
-}
-@media(max-width: 420px) {
-  .directdemocracy-subtitle {
-    width: 385px;
-  }
-}
-@media(max-width: 400px) {
-  .directdemocracy-subtitle {
-    width: 345px;
-  }
-  .directdemocracy-subtitle h3 {
-    font-size:120%;
-  }
-}
-@media(max-width: 360px) {
-  .directdemocracy-subtitle {
-    width: 335px;
-  }
-}
-@media(max-width: 320px) {
-  .directdemocracy-subtitle {
-    width: 295px;
-  }
-  .directdemocracy-subtitle h3 {
-    font-size:100%;
-  }
-}
-.icon-basic {
-  color: #cccccc;
-}
-.icon-info {
-  color: #31b0d5;
-}
-.icon-success {
-  color: #449d44;
+  font-size:125%;
 }
 .corner-ribbon {
   z-index:2000;
@@ -110,51 +42,4 @@ button, button:focus, button:active,
   background: #e43;
   box-shadow: 0 0 3px rgba(0,0,0,.3);
   opacity: 0.9;
-}
-
-.page-number {
-  display: inline-block;
-  min-width: 30px;
-  font-size: 80%;
-  text-align: center;
-  border: thin solid #ccc;
-  overflow-x: hidden;
-}
-
-.current-page-number {
-  background: #eee;
-}
-
-.bootstrap-select > .dropdown-toggle[title],
-.bootstrap-select > .dropdown-toggle[title]:hover,
-.bootstrap-select > .dropdown-toggle[title]:focus,
-.bootstrap-select > .dropdown-toggle[title]:active { color: white; }
-
-.image-tooltip {
-  text-decoration: none;
-  position: relative;
-}
-
-.image-tooltip span {
-  display:none;
-  -moz-border-radius:6px;
-  -webkit-border-radius:6px;
-  border-radius:6px;
-  color:black;
-  background:white;
-}
-.image-tooltip span img {
-  float:left;
-}
-.image-tooltip:hover span{
-  border:2px solid #fff;
-  box-shadow: 0px 0px 8px 4px #666;
-  display:block;
-  position:absolute;
-  top:20px;
-  left:60px;
-  z-index:10;
-  width:auto;
-  overflow:hidden;
-  padding:2px;
 }
