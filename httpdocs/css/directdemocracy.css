@@ -1,19 +1,9 @@
-body {
-  margin-top: 0;
-  padding-top: 0;
-  padding-bottom: 0;
-}
 .jumbotron {
-  padding-top: 0;
-  margin-top: 0;
+  background: url("../images/handsup.jpg") no-repeat center center;
 }
 .directdemocracy-title {
-  margin-top: 0;
-  padding-top: 20px;
-  margin-bottom: 0;
-  padding-bottom: 0;
+  padding: 20px 0 0 0;
   color: black;
-  background: url("../images/handsup.jpg") no-repeat center center;
 }
 .directdemocracy-subtitle {
   color:black;
@@ -26,6 +16,34 @@ body {
 .directdemocracy-subtitle h3 {
   font-weight: normal;
   font-size:120%;
+}
+@media(max-width: 500px) {
+  .directdemocracy-title {
+    font-size:80%;
+  }
+  .directdemocracy-title h1 {
+    font-size:300%;
+  }
+  .directdemocracy-subtitle {
+    width: 390px;
+  }
+  .directdemocracy-subtitle h3 {
+    font-size: 140%;
+  }
+}
+@media(max-width: 420px) {
+  .directdemocracy-title {
+    font-size:70%;
+  }
+  .directdemocracy-title h1 {
+    font-size:280%;
+  }
+  .directdemocracy-subtitle {
+    width: 335px;
+  }
+  .directdemocracy-subtitle h3 {
+    font-size: 135%;
+  }
 }
 .corner-ribbon {
   z-index:2000;
