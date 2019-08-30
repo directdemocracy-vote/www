@@ -48,7 +48,7 @@
 }
 @media(max-width: 360px) {
   .directdemocracy-title {
-    font-size:60%;
+    font-size:40%; /* 60% */
   }
   .directdemocracy-title h1 {
     font-size:260%;
