@@ -20,10 +20,11 @@ body {
   background: rgba(255,255,255,0.7);
   border-radius: 6px;
   width: 430px;
-  padding: 10px 20px 10px 20px;
+  padding: 15px 20px 15px 20px;
   box-shadow: rgba(0,0,0,0.2) 0px 2px 3px, inset rgba(0,0,0,0.2) 0px -1px 2px;
 }
 .directdemocracy-subtitle h3 {
+  font-weight: normal;
   font-size:125%;
 }
 .corner-ribbon {
