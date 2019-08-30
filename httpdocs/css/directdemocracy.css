@@ -28,6 +28,7 @@
     width: 390px;
   }
   .directdemocracy-subtitle h3 {
+    font-weight: normal;
     font-size: 140%;
   }
 }
@@ -42,6 +43,7 @@
     width: 335px;
   }
   .directdemocracy-subtitle h3 {
+    font-weight: normal;
     font-size: 135%;
   }
 }
@@ -56,6 +58,7 @@
     width: 280px;
   }
   .directdemocracy-subtitle h3 {
+    font-weight: normal;
     font-size: 130%;
   }
 }
@@ -70,6 +73,7 @@
     width: 265px;
   }
   .directdemocracy-subtitle h3 {
+    font-weight: normal;
     font-size: 120%;
   }
 }
