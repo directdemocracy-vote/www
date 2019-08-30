@@ -1,10 +1,11 @@
 {
 	"$schema": "http://json-schema.org/draft-07/schema#",
-	"$id": "https://directdemocracy.vote/json-schema/1.0.0/votes.schema.json",
+	"$id": "https://directdemocracy.vote/json-schema/0.0.1/votes.schema.json",
 	"title": "votes",
 	"description": "list of anomymized votes posted to a station for a referedum",
 	"type": "object",
 	"required": [
+		"schema",
 		"key",
 		"signature",
 		"published",
@@ -12,6 +13,9 @@
 		"votes"
 	],
 	"properties": {
+		"schema": {
+			"const": "https://directdemocracy.vote/json-schema/0.0.1/votes.schema.json"
+		},
 		"key": {
 			"description": "public key of the station",
 			"type": "string",

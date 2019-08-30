@@ -1,10 +1,11 @@
 {
 	"$schema": "http://json-schema.org/draft-07/schema#",
-	"$id": "https://directdemocracy.vote/json-schema/1.0.0/referendum.schema.json",
+	"$id": "https://directdemocracy.vote/json-schema/0.0.1/referendum.schema.json",
 	"title": "referendum",
 	"description": "referendum proposing a new law or a change in some existing law",
 	"type": "object",
 	"required": [
+		"schema",
 		"key",
 		"signature",
 		"published",
@@ -17,6 +18,9 @@
 		"trusters"
 	],
 	"properties": {
+		"schema": {
+			"const": "https://directdemocracy.vote/json-schema/0.0.1/card.schema.json"
+		},
 		"key": {
 			"description": "public key of the author of the referendum",
 			"type": "string",
