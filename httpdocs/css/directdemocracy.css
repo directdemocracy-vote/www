@@ -45,6 +45,20 @@
     font-size: 135%;
   }
 }
+@media(max-width: 320px) {
+  .directdemocracy-title {
+    font-size:60%;
+  }
+  .directdemocracy-title h1 {
+    font-size:260%;
+  }
+  .directdemocracy-subtitle {
+    width: 300px;
+  }
+  .directdemocracy-subtitle h3 {
+    font-size: 120%;
+  }
+}
 .corner-ribbon {
   z-index:2000;
   position: fixed;
