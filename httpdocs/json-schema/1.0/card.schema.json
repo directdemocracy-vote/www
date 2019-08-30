@@ -5,6 +5,7 @@
 	"description": "information allowing to identify uniquely a citizen",
 	"type": "object",
 	"required": [
+                "schema",
 		"key",
 		"signature",
 		"edited",
@@ -15,6 +16,10 @@
 		"longitude"
 	],
 	"properties": {
+                "schema": {
+                        "type": "string",
+                        "constant": "https://directdemocracy.vote/json-schema/1.0.0/card.schema.json"
+                },
 		"key": {
 			"description": "public key of the citizen",
 			"type": "string",
