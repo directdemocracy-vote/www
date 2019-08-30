@@ -18,9 +18,9 @@
   font-weight: normal;
   font-size:120%;
 }
-@media(max-width: 800px) { /* 500 */
+@media(max-width: 500px) {
   .directdemocracy-title {
-    font-size:60%; /* 80 */
+    font-size:80%;
   }
   .directdemocracy-title h1 {
     font-size:300%;
