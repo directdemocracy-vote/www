@@ -32,48 +32,6 @@
     font-size: 140%;
   }
 }
-@media(max-width: 420px) {
-  .directdemocracy-title {
-    font-size:70%;
-  }
-  .directdemocracy-title h1 {
-    font-size:280%;
-  }
-  .directdemocracy-subtitle {
-    width: 335px;
-  }
-  .directdemocracy-subtitle h3 {
-    font-size: 135%;
-  }
-}
-@media(max-width: 360px) {
-  .directdemocracy-title {
-    font-size:60%;
-  }
-  .directdemocracy-title h1 {
-    font-size:260%;
-  }
-  .directdemocracy-subtitle {
-    width: 280px;
-  }
-  .directdemocracy-subtitle h3 {
-    font-size: 130%;
-  }
-}
-@media(max-width: 320px) {
-  .directdemocracy-title {
-    font-size:55%;
-  }
-  .directdemocracy-title h1 {
-    font-size:240%;
-  }
-  .directdemocracy-subtitle {
-    width: 265px;
-  }
-  .directdemocracy-subtitle h3 {
-    font-size: 120%;
-  }
-}
 .corner-ribbon {
   z-index:2000;
   position: fixed;
