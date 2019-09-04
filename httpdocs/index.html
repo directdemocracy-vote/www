@@ -5,14 +5,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/directdemocracy.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin="" />
     <link rel="stylesheet" href="css/croppie.css">
+    <link rel="stylesheet" href="css/directdemocracy.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js" integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og==" crossorigin=""></script>
     <script src="js/croppie.min.js"></script>
     <script>
-var croppie = null;
+      var croppie = null;
 var onUploadClick = function() {
   var upload = document.getElementById("picture-upload");
   upload.click();
@@ -76,17 +78,17 @@ var onPictureSelect = function() {
       <div class="container">
         <ul class="nav nav-tabs">
           <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#register">Register</a>
+            <a class="nav-link active" data-toggle="tab" href="#register">Register</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#privacy">Privacy</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#about">About</a>
+            <a class="nav-link" data-toggle="tab" href="#about">About</a>
           </li>
         </ul>
         <div class="tab-content">
-          <div class="tab-pane container fade" id="register"><br>
+          <div class="tab-pane container active" id="register"><br>
             <form>
               <div class="form-group">
                 <label for="family-name">Family name:</label>
@@ -99,7 +101,7 @@ var onPictureSelect = function() {
               </div>
               <div class="form-group">
                 <label for="picture">Picture:</label>
-                  <input type="file" style="display:none" class="custom-file-input" id="picture-upload" accept="image/*" capture onchange="onPictureUploaded(event)">
+                <input type="file" style="display:none" class="custom-file-input" id="picture-upload" accept="image/*" capture onchange="onPictureUploaded(event)">
                 <div class="container">
                   <div class="row">
                     <div class="col-md-4">
@@ -111,6 +113,54 @@ var onPictureSelect = function() {
                       <small class="form-text text-muted">You need a clear, recognizable identity picture of yourself.</small>
                     </div>
                   </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-md-2">
+                      <label for "latitude">Latitude:</label>
+                      <input type="text" class="form-control" id="latitude">
+                    </div>
+                    <div class="col-md-2">
+                      <label for "longitude">Longitude:</label>
+                      <input type="text" class="form-control" id="longitude">
+                    </div>
+                    <div class="col-md-8">
+                      <label for "address">Home Address:</label>
+                      <input type="text" class="form-control" id="address">
+                    </div>
+                  </div>
+                  <small class="form-text text-muted">Select your home address very precisely on the map to display your exact latitude and longitude coordinates.</small>
+                  <div id="latlongmap" style="width:100%;height:400px;margin-top:10px"></div>
+                  <script type="text/javascript">
+                    var lat = 46.582912;
+                    var lon = 6.504872;
+                    var mymap = L.map('latlongmap');
+                    var mmr = L.marker([lat, lon]);
+                    mmr.bindPopup(lat + ',' + lon);
+                    mmr.addTo(mymap);
+                    mymap.setView([lat, lon], 12);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                    }).addTo(mymap);
+                    setui(lat, lon, 12);
+                    mymap.on('click', onMapClick);
+
+                    function onMapClick(e) {
+                      mmr.setLatLng(e.latlng);
+                      setui(e.latlng.lat, e.latlng.lng, mymap.getZoom());
+                      document.getElementById("latitude").value = Number(e.latlng.lat).toFixed(6);
+                      document.getElementById("longitude").value = Number(e.latlng.lng).toFixed(6);
+                    }
+
+                    function setui(lt, ln, zm) {
+                      lt = Number(lt).toFixed(6);
+                      ln = Number(ln).toFixed(6);
+                      mmr.setPopupContent(lt + ',' + ln).openPopup();
+                    }
+
+                  </script>
                 </div>
               </div>
             </form>
@@ -130,7 +180,7 @@ var onPictureSelect = function() {
               </div>
             </div>
           </div>
-          <div class="tab-pane container active" id="about"><br>
+          <div class="tab-pane container fade" id="about"><br>
             <div class="row">
               <div class="col-md-4">
                 <h2>Vision</h2>
