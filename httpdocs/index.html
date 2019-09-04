@@ -22,6 +22,7 @@ var onPictureUploaded = function(event) {
     croppie.destroy();
   var img = document.getElementById("picture-display");
   img.src = URL.createObjectURL(event.target.files[0]);
+  event.target.value = '';
   croppie = new Croppie(img, {boundary: {width:250, height: 300}, viewport: {width:150, height: 200}, enableExif: true});
   document.getElementById("picture-select").style.display = "";
 };
@@ -102,9 +103,9 @@ var onPictureSelect = function() {
                 <div class="container">
                   <div class="row">
                     <div class="col-md-4">
-                      <img id="picture-display" src="images/default-picture.png" style="width:150px" onclick="onUploadClick()">
+                      <img id="picture-display" src="images/default-picture.png" style="width:150px;margin: 0px 50px 0px 50px;" onclick="onUploadClick()">
                     </div>
-                    <div class="col-md-4 input-group-vertical" role="group" style="margin-top:10px">
+                    <div class="col-md-8 input-group-vertical" role="group" style="margin-top:10px">
                       <button class="btn btn-secondary" onclick="onUploadClick(); return false;">Upload</button>
                       <button class="btn btn-secondary" id="picture-select" style="display:none" onclick="onPictureSelect(); return false;">Select</button>
                       <small class="form-text text-muted">You need a clear, recognizable identity picture of yourself.</small>
