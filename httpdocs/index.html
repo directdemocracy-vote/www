@@ -5,14 +5,35 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel='stylesheet' href='css/directdemocracy.css'>
+    <link rel="stylesheet" href="css/directdemocracy.css">
+    <link rel="stylesheet" href="css/croppie.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script> var onPictureUploaded = function(event) {
-  var output = document.getElementById("picture-display");
-  output.src = URL.createObjectURL(event.target.files[0]);
+    <script src="js/croppie.min.js"></script>
+    <script>
+var croppie = null;
+var onUploadClick = function() {
+  var upload = document.getElementById("picture-upload");
+  upload.click();
+}
+var onPictureUploaded = function(event) {
+  if (croppie)
+    croppie.destroy();
+  var img = document.getElementById("picture-display");
+  img.src = URL.createObjectURL(event.target.files[0]);
+  croppie = new Croppie(img, {boundary: {width:250, height: 300}, viewport: {width:150, height: 200}, enableExif: true});
+  document.getElementById("picture-select").style.display = "";
 };
+var onPictureSelect = function() {
+  croppie.result({type:'base64', format: 'jpeg', quality: 0.95}).then(function(result) {
+    var img = document.getElementById("picture-display");
+    img.setAttribute('src', result);
+    document.getElementById("picture-select").style.display = "none";
+    croppie.destroy();
+    croppie = null;
+  });
+}
     </script>
     <title>directdemocracy.vote</title>
   </head>
@@ -77,11 +98,18 @@
               </div>
               <div class="form-group">
                 <label for="picture">Picture:</label>
-                <div class="custom-file">
-                  <input type="file" class="custom-file-input" id="picture" accept="image/*" capture onchange="onPictureUploaded(event)">
-                  <label class="custom-file-label" for="picture">Upload identity picture</label>
-                  <img id="picture-display" />
-                  <small class="form-text text-muted">You need a clear, recognizable identity picture of yourself.</small>
+                  <input type="file" style="display:none" class="custom-file-input" id="picture-upload" accept="image/*" capture onchange="onPictureUploaded(event)">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <img id="picture-display" src="images/default-picture.png" style="width:150px" onclick="onUploadClick()">
+                    </div>
+                    <div class="col-md-4 input-group-vertical" role="group" style="margin-top:10px">
+                      <button class="btn btn-secondary" onclick="onUploadClick(); return false;">Upload</button>
+                      <button class="btn btn-secondary" id="picture-select" style="display:none" onclick="onPictureSelect(); return false;">Select</button>
+                      <small class="form-text text-muted">You need a clear, recognizable identity picture of yourself.</small>
+                    </div>
+                  </div>
                 </div>
               </div>
             </form>
