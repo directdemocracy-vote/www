@@ -127,16 +127,40 @@ var onPictureSelect = function() {
                       <input type="text" class="form-control" id="longitude">
                     </div>
                     <div class="col-md-8">
-                      <label for "address">Home Address:</label>
-                      <input type="text" class="form-control" id="address">
+                      <label for "address">Address:</label>
+                      <div class="form-text text-muted" id="address" style="vertical-align:bottom"></div>
                     </div>
                   </div>
                   <small class="form-text text-muted">Select your home address very precisely on the map to display your exact latitude and longitude coordinates.</small>
                   <div id="latlongmap" style="width:100%;height:400px;margin-top:10px"></div>
                   <script type="text/javascript">
-                    var lat = 46.582912;
-                    var lon = 6.504872;
-                    var mymap = L.map('latlongmap').setView([lat, lon], 12);
+                    var lat = 10;
+                    var lon = 0;
+                    var geolocation = false;
+                    if (navigator.geolocation)
+                      navigator.geolocation.getCurrentPosition(getGeolocationPosition);
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function() {
+                      if (this.readyState == 4 && this.status == 200 && geolocation == false) {
+                        coords = this.responseText.split(',');
+                        getGeolocationPosition({coords:{latitude:coords[0], longitude:coords[1]}});
+                      }
+                    };
+                    xhttp.open("GET", "https://ipinfo.io/loc", true);
+                    xhttp.send();
+
+                    function getGeolocationPosition(position) {
+                      geolocation = true;
+                      lat = position.coords.latitude;
+                      lon = position.coords.longitude;
+                      mymap.setView([lat, lon], 12);
+                      setTimeout(updateMarker, 500);
+                    }
+                    function updateMarker() {
+                      mmr.setLatLng([lat, lon]);
+                      setui(lat, lon, 12);
+                    }
+                    var mymap = L.map('latlongmap').setView([lat, lon], 2);
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                     }).addTo(mymap);
@@ -147,18 +171,33 @@ var onPictureSelect = function() {
                     function onMapClick(e) {
                       mmr.setLatLng(e.latlng);
                       setui(e.latlng.lat, e.latlng.lng, mymap.getZoom());
-                      document.getElementById("latitude").value = Number(e.latlng.lat).toFixed(6);
-                      document.getElementById("longitude").value = Number(e.latlng.lng).toFixed(6);
                     }
 
                     function setui(lt, ln, zm) {
                       lt = Number(lt).toFixed(6);
                       ln = Number(ln).toFixed(6);
                       mmr.setPopupContent(lt + ',' + ln).openPopup();
+                      document.getElementById("latitude").value = lt;
+                      document.getElementById("longitude").value = lt;
+                      var xhttp = new XMLHttpRequest();
+                      xhttp.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+                          a = JSON.parse(this.responseText);
+                          mmr.setPopupContent(a.address.Match_addr + '<br><br><center style="color:#999">(' + lt + ', ' + ln + ')</center>').openPopup();
+                          document.getElementById("address").innerHTML = a.address.Match_addr;
+                        }
+                      };
+                      xhttp.open("GET", "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=json&featureTypes=&location=" + ln + "," + lt, true);
+                      xhttp.send();
                     }
 
                   </script>
                 </div>
+              </div>
+              <div class="form-group">
+                <label for="private-key">Private key:</label>
+                <input type="hidden" class="form-control" id="private-key">
+                <small class="form-text text-muted">Your private key was just generated.</small>
               </div>
             </form>
           </div>
