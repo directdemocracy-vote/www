@@ -51,15 +51,18 @@ var publish = function() {
   card.published = d.toISOString();
   d.setFullYear(d.getFullYear() + 10);
   card.expires = d.toISOString();
+  card.signature = "";
   var str = JSON.stringify(card);
   card.signature = crypt.sign(str, CryptoJS.SHA256, "sha256");
+  console.log("signed string: " + str);
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       console.log(this.responseText);
     }
   };
-  xhttp.open("POST", "https://publisher.directdemocracy.vote/publish", true);
+  console.log(card.key);
+  xhttp.open("POST", "https://publisher.directdemocracy.vote/publish.php", true);
   xhttp.setRequestHeader("Content-Type", "application/json");
   xhttp.send(JSON.stringify(card));
 }
