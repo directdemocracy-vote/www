@@ -53,7 +53,15 @@ var publish = function() {
   card.expires = d.toISOString();
   var str = JSON.stringify(card);
   card.signature = crypt.sign(str, CryptoJS.SHA256, "sha256");
-  console.log(card);
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      console.log(this.responseText);
+    }
+  };
+  xhttp.open("POST", "https://publisher.directdemocracy.vote/publish", true);
+  xhttp.setRequestHeader("Content-Type", "application/json");
+  xhttp.send(JSON.stringify(card));
 }
 var dt = new Date();
 var time = -(dt.getTime());
