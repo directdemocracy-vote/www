@@ -9,6 +9,7 @@
 		"key",
 		"signature",
 		"published",
+		"expires",
 		"title",
 		"description",
 		"question",
@@ -33,6 +34,11 @@
 		},
 		"published": {
 			"description": "date of the publication of the referendum",
+			"type": "string",
+			"format": "date-time"
+		},
+		"expires": {
+			"description": "date at which this publication expires",
 			"type": "string",
 			"format": "date-time"
 		},

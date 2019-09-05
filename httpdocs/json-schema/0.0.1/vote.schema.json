@@ -9,6 +9,7 @@
 		"key",
 		"signature",
 		"published",
+		"expires",
 		"referendum",
 		"answer"
 	],
@@ -28,6 +29,11 @@
 		},
 		"published": {
 			"description": "date at which the vote was published",
+			"type": "string",
+			"format": "date-time"
+		},
+		"expires": {
+			"description": "date at which this publication expires",
 			"type": "string",
 			"format": "date-time"
 		},

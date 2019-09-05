@@ -13,28 +13,65 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js" integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og==" crossorigin=""></script>
     <script src="js/croppie.min.js"></script>
+    <script src="js/jsencrypt.min.js"></script>
     <script>
-      var croppie = null;
+      var card = {};
+var validate = function() {
+  console.log(JSON.stringify(card));
+  var button = document.getElementById("publish-button");
+  if (button)
+    button.setAttribute("disabled", "disabled");
+  if (typeof card.key === 'undefined' || typeof card.picture === 'undefined')
+    return;
+  if (card.latitude == 0 && card.longitude == 0)
+    return;
+  card.familyName = document.getElementById("family-name").value;
+  if (card.familyName == '')
+    return;
+  card.givenNames = document.getElementById("given-names").value;
+  if (card.givenNames == '')
+    return;
+  if (!document.getElementById("confirm-check").checked)
+    return;
+  console.log("coucou" + card.givenNames);
+  button.removeAttribute("disabled");
+}
+var dt = new Date();
+var time = -(dt.getTime());
+var crypt = new JSEncrypt({default_key_size: 2048});
+crypt.getKey(function() {
+  dt = new Date();
+  time += (dt.getTime());
+  card.key = crypt.getPublicKey();
+  console.log(crypt.getPrivateKey());
+  document.getElementById("forging-spinner").style.display = 'none';
+  document.getElementById("private-key-icon").style.display = '';
+  document.getElementById("private-key-message").innerHTML = "You new private key was just forged in " + Number(time / 1000).toFixed(2) + " seconds.";
+  validate();
+});
+var croppie = null;
 var onUploadClick = function() {
-  var upload = document.getElementById("picture-upload");
+var upload = document.getElementById("picture-upload");
   upload.click();
 }
 var onPictureUploaded = function(event) {
   if (croppie)
-    croppie.destroy();
+  croppie.destroy();
   var img = document.getElementById("picture-display");
   img.src = URL.createObjectURL(event.target.files[0]);
   event.target.value = '';
   croppie = new Croppie(img, {boundary: {width:250, height: 300}, viewport: {width:150, height: 200}, enableExif: true});
   document.getElementById("picture-select").style.display = "";
-};
+}
 var onPictureSelect = function() {
   croppie.result({type:'base64', format: 'jpeg', quality: 0.95}).then(function(result) {
     var img = document.getElementById("picture-display");
     img.setAttribute('src', result);
+    card.picture = result;
     document.getElementById("picture-select").style.display = "none";
     croppie.destroy();
     croppie = null;
+    validate();
   });
 }
     </script>
@@ -92,11 +129,11 @@ var onPictureSelect = function() {
             <form>
               <div class="form-group">
                 <label for="family-name">Family name:</label>
-                <input type="text" class="form-control" id="family-name" placeholder="Enter your family name here">
+                <input type="text" class="form-control" id="family-name" placeholder="Enter your family name here" oninput="validate()">
               </div>
               <div class="form-group">
                 <label for="given-names">Given name(s):</label>
-                <input type="text" class="form-control" id="given-names" placeholder="Enter your given name(s) here.">
+                <input type="text" class="form-control" id="given-names" placeholder="Enter your given name(s) here." oninput="validate()">
                 <small class="form-text text-muted">Include your middle name(s) only if that helps distinguishing you from someone else at the same home address.</small>
               </div>
               <div class="form-group">
@@ -120,11 +157,11 @@ var onPictureSelect = function() {
                   <div class="row">
                     <div class="col-md-2">
                       <label for "latitude">Latitude:</label>
-                      <input type="text" class="form-control" id="latitude">
+                      <input type="text" readonly class="form-control" id="latitude">
                     </div>
                     <div class="col-md-2">
                       <label for "longitude">Longitude:</label>
-                      <input type="text" class="form-control" id="longitude">
+                      <input type="text" readonly class="form-control" id="longitude">
                     </div>
                     <div class="col-md-8">
                       <label for "address">Address:</label>
@@ -134,9 +171,9 @@ var onPictureSelect = function() {
                   <small class="form-text text-muted">Select your home address very precisely on the map to display your exact latitude and longitude coordinates.</small>
                   <div id="latlongmap" style="width:100%;height:400px;margin-top:10px"></div>
                   <script type="text/javascript">
-                    var lat = 10;
-                    var lon = 0;
                     var geolocation = false;
+                    card.latitude = 0;
+                    card.longitude = 0;
                     if (navigator.geolocation) navigator.geolocation.getCurrentPosition(getGeolocationPosition);
                     var xhttp = new XMLHttpRequest();
                     xhttp.onreadystatechange = function() {
@@ -155,44 +192,45 @@ var onPictureSelect = function() {
 
                     function getGeolocationPosition(position) {
                       geolocation = true;
-                      lat = position.coords.latitude;
-                      lon = position.coords.longitude;
-                      mymap.setView([lat, lon], 12);
+                      card.latitude = position.coords.latitude;
+                      card.longitude = position.coords.longitude;
+                      mymap.setView([card.latitude, card.longitude], 12);
                       setTimeout(updateMarker, 500);
                     }
 
                     function updateMarker() {
-                      mmr.setLatLng([lat, lon]);
-                      setui(lat, lon, 12);
+                      mmr.setLatLng([card.latitude, card.longitude]);
+                      setui(12);
                     }
-                    var mymap = L.map('latlongmap').setView([lat, lon], 2);
+                    var mymap = L.map('latlongmap').setView([card.latitude, card.longitude], 2);
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                     }).addTo(mymap);
-                    var mmr = L.marker([lat, lon]).addTo(mymap).bindPopup(lat + ',' + lon);
-                    setui(lat, lon, 12);
+                    var mmr = L.marker([card.latitude, card.longitude]).addTo(mymap).bindPopup(card.latitude + ',' + card.longitude);
+                    setui(12);
                     mymap.on('click', onMapClick);
 
                     function onMapClick(e) {
                       mmr.setLatLng(e.latlng);
-                      setui(e.latlng.lat, e.latlng.lng, mymap.getZoom());
+                      card.latitude = Number(e.latlng.lat).toFixed(6);
+                      card.longitude = Number(e.latlng.lng).toFixed(6);
+                      setui(mymap.getZoom());
                     }
 
-                    function setui(lt, ln, zm) {
-                      lt = Number(lt).toFixed(6);
-                      ln = Number(ln).toFixed(6);
-                      mmr.setPopupContent(lt + ',' + ln).openPopup();
-                      document.getElementById("latitude").value = lt;
-                      document.getElementById("longitude").value = lt;
+                    function setui(zm) {
+                      mmr.setPopupContent(card.latitude + ',' + card.longitude).openPopup();
+                      document.getElementById("latitude").value = card.latitude;
+                      document.getElementById("longitude").value = card.longitude;
+                      validate();
                       var xhttp = new XMLHttpRequest();
                       xhttp.onreadystatechange = function() {
                         if (this.readyState == 4 && this.status == 200) {
                           a = JSON.parse(this.responseText);
-                          mmr.setPopupContent(a.address.Match_addr + '<br><br><center style="color:#999">(' + lt + ', ' + ln + ')</center>').openPopup();
+                          mmr.setPopupContent(a.address.Match_addr + '<br><br><center style="color:#999">(' + card.latitude + ', ' + card.longitude + ')</center>').openPopup();
                           document.getElementById("address").innerHTML = a.address.Match_addr;
                         }
                       };
-                      xhttp.open("GET", "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=json&featureTypes=&location=" + ln + "," + lt, true);
+                      xhttp.open("GET", "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=json&featureTypes=&location=" + card.longitude + "," + card.latitude, true);
                       xhttp.send();
                     }
 
@@ -200,9 +238,23 @@ var onPictureSelect = function() {
                 </div>
               </div>
               <div class="form-group">
-                <label for="private-key">Private key: <img src="images/key.svg" style="width:32px"></label>
+                <label for="private-key">Private key: &nbsp; <img id="private-key-icon" src="images/key.svg" style="display:none;width:32px">
+                  <div id="forging-spinner" class="spinner-border" role="status"><span class="sr-only">Forging...</span></div>
+                </label>
                 <input type="hidden" class="form-control" id="private-key">
-                <small class="form-text text-muted">Your private key was just generated.</small>
+                <small class="form-text text-muted" id="private-key-message">Forging a new private key, please wait...</small>
+              </div>
+              <div class="form-group">
+                <label for="validity">Validity: 10 years.</label>
+                <small class="form-text text-muted">May be revokey before if needed.</small>
+              </div>
+              <div class="form-group"><br>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="" id="confirm-check" onchange="validate()">
+                  <label class="form-check-label" for="confirm-check"> I confirm the above information is correct.</label><br>
+                </div><br>
+                <button class="btn btn-success" id="publish-button" role="button" disabled="disabled">Publish your citizen card</button>
+                <small class="form-text text-muted">Warning: this cannot be undone!</small>
               </div>
             </form>
           </div>

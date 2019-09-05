@@ -8,9 +8,10 @@
 		"schema",
 		"key",
 		"signature",
-		"edited",
+		"published",
+		"expires",
 		"familyName",
-		"givenName",
+		"givenNames",
 		"picture",
 		"latitude",
 		"longitude"
@@ -34,12 +35,17 @@
 			"type": "string",
 			"format": "date-time"
 		},
+		"expires": {
+			"description": "date at which this publication expires",
+			"type": "string",
+			"format": "date-time"
+		},
 		"familyName": {
 			"description": "last name of the citizen",
 			"type": "string"
 		},
-		"givenName": {
-			"description": "first name of the citizen",
+		"givenNames": {
+			"description": "first name and possibly middle name of the citizen",
 			"type": "string"
 		},
 		"picture": {

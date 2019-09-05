@@ -9,6 +9,7 @@
 		"key",
 		"signature",
 		"published",
+		"expires",
 		"endorsed"
 	],
 	"properties": {
@@ -30,22 +31,36 @@
 			"type": "string",
 			"format": "date-time"
 		},
-		"endorsed":
+		"expires": {
+			"description": "date at which this publication expires",
+			"type": "string",
+			"format": "date-time"
+		},
+		"endorsed": {
 			"description": "endorsed participant",
-		        "type": "object",
-		        "required": ["key"],
-		        "properties": {
-		        	"key": {
+			"type": "object",
+			"required": ["key"],
+			"properties": {
+				"key": {
 					"type": "string",
 					"contentEncoding": "base64"
 				}
 				"signature": {
 					"type": "string",
 					"contentEncoding": "base64"
-				},
+				}
 			}
+		},
 		"revoke": {
 			"description": "if this field is set, the endorsement is revoked and the string should contain a justification for the revocation",
+			"type": "string"
+		},
+		"message": {
+			"description": "message encrypted with the public key of the endorsed participant",
+			"type": "string"
+		},
+		"comment": {
+			"description": "free comment",
 			"type": "string"
 		}
 	}
