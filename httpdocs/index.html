@@ -14,27 +14,46 @@
     <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js" integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og==" crossorigin=""></script>
     <script src="js/croppie.min.js"></script>
     <script src="js/jsencrypt.min.js"></script>
+    <script src="js/crypto-js.js"></script>
     <script>
-      var card = {};
+      var card = {
+        schema: "https://directdemocracy.vote/json-schema/0.0.1/card.schema.json",
+        key:"",
+        signature:"",
+        published:"",
+        expires:"",
+        familyName:"",
+        givenNames:"",
+        picture:"",
+        latitude:0,
+        longitude:0
+      };
 var validate = function() {
-  console.log(JSON.stringify(card));
   var button = document.getElementById("publish-button");
   if (button)
     button.setAttribute("disabled", "disabled");
-  if (typeof card.key === 'undefined' || typeof card.picture === 'undefined')
+  if (card.key === '' || card.picture === '')
     return;
-  if (card.latitude == 0 && card.longitude == 0)
+  if (card.latitude === 0 && card.longitude === 0)
     return;
   card.familyName = document.getElementById("family-name").value;
-  if (card.familyName == '')
+  if (card.familyName === '')
     return;
   card.givenNames = document.getElementById("given-names").value;
-  if (card.givenNames == '')
+  if (card.givenNames === '')
     return;
   if (!document.getElementById("confirm-check").checked)
     return;
-  console.log("coucou" + card.givenNames);
   button.removeAttribute("disabled");
+}
+var publish = function() {
+  d = new Date();
+  card.published = d.toISOString();
+  d.setFullYear(d.getFullYear() + 10);
+  card.expires = d.toISOString();
+  var str = JSON.stringify(card);
+  card.signature = crypt.sign(str, CryptoJS.SHA256, "sha256");
+  console.log(card);
 }
 var dt = new Date();
 var time = -(dt.getTime());
@@ -44,6 +63,7 @@ crypt.getKey(function() {
   time += (dt.getTime());
   card.key = crypt.getPublicKey();
   console.log(crypt.getPrivateKey());
+  localStorage.setItem("privateKey", crypt.getPrivateKey());
   document.getElementById("forging-spinner").style.display = 'none';
   document.getElementById("private-key-icon").style.display = '';
   document.getElementById("private-key-message").innerHTML = "You new private key was just forged in " + Number(time / 1000).toFixed(2) + " seconds.";
@@ -253,7 +273,7 @@ var onPictureSelect = function() {
                   <input class="form-check-input" type="checkbox" value="" id="confirm-check" onchange="validate()">
                   <label class="form-check-label" for="confirm-check"> I confirm the above information is correct.</label><br>
                 </div><br>
-                <button class="btn btn-success" id="publish-button" role="button" disabled="disabled">Publish your citizen card</button>
+                <button class="btn btn-success" id="publish-button" role="button" disabled="disabled" onclick="publish(); return false;">Publish your citizen card</button>
                 <small class="form-text text-muted">Warning: this cannot be undone!</small>
               </div>
             </form>
