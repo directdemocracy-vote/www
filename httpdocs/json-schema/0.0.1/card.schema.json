@@ -55,16 +55,16 @@
 			"contentMediaType": "image/jpeg"
 		},
 		"latitude": {
-			"description": "latitude of the home of the citizen expressed in degrees",
-			"type": "number",
-			"minimum": -90,
-			"maximum": 90
+			"description": "latitude of the home of the citizen expressed in 1/1000000 degrees",
+			"type": "integer",
+			"minimum": -90000000,
+			"maximum": 90000000
 		},
 		"longitude": {
-			"description": "longitude of the home of the citizen expressed in degrees",
-			"type": "number",
-			"minimum": -180,
-			"maximum": 180
+			"description": "longitude of the home of the citizen expressed in 1/1000000 degrees",
+			"type": "integer",
+			"minimum": -180000000,
+			"maximum": 180000000
 		},
 		"documents": {
 			"description": "documents to be checked by citizen endorsers",
