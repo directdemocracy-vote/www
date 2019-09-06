@@ -223,45 +223,49 @@ var onPictureSelect = function() {
 
                     function getGeolocationPosition(position) {
                       geolocation = true;
-                      card.latitude = position.coords.latitude;
-                      card.longitude = position.coords.longitude;
-                      mymap.setView([card.latitude, card.longitude], 12);
+                      card.latitude = Math.round(1000000 * position.coords.latitude);
+                      card.longitude = Math.round(1000000 * position.coords.longitude);
+                      mymap.setView([position.coords.latitude, position.coords.longitude], 12);
                       setTimeout(updateMarker, 500);
                     }
 
                     function updateMarker() {
-                      mmr.setLatLng([card.latitude, card.longitude]);
+                      mmr.setLatLng([card.latitude / 1000000, card.longitude / 1000000]);
                       setui(12);
                     }
-                    var mymap = L.map('latlongmap').setView([card.latitude, card.longitude], 2);
+                    var lat = card.latitude / 1000000;
+                    var lon = card.longitude / 1000000;
+                    var mymap = L.map('latlongmap').setView([lat, lon], 2);
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                     }).addTo(mymap);
-                    var mmr = L.marker([card.latitude, card.longitude]).addTo(mymap).bindPopup(card.latitude + ',' + card.longitude);
+                    var mmr = L.marker([lat, lon]).addTo(mymap).bindPopup(lat + ',' + lon);
                     setui(12);
                     mymap.on('click', onMapClick);
 
                     function onMapClick(e) {
                       mmr.setLatLng(e.latlng);
-                      card.latitude = Number(e.latlng.lat).toFixed(6);
-                      card.longitude = Number(e.latlng.lng).toFixed(6);
+                      card.latitude = Math.round(1000000 * e.latlng.lat);
+                      card.longitude = Math.round(1000000 * e.latlng.lng);
                       setui(mymap.getZoom());
                     }
 
                     function setui(zm) {
-                      mmr.setPopupContent(card.latitude + ',' + card.longitude).openPopup();
-                      document.getElementById("latitude").value = card.latitude;
-                      document.getElementById("longitude").value = card.longitude;
+                      var lat = card.latitude / 1000000;
+                      var lon = card.longitude / 1000000;
+                      mmr.setPopupContent(lat + ',' + lon).openPopup();
+                      document.getElementById("latitude").value = lat;
+                      document.getElementById("longitude").value = lon;
                       validate();
                       var xhttp = new XMLHttpRequest();
                       xhttp.onreadystatechange = function() {
                         if (this.readyState == 4 && this.status == 200) {
                           a = JSON.parse(this.responseText);
-                          mmr.setPopupContent(a.address.Match_addr + '<br><br><center style="color:#999">(' + card.latitude + ', ' + card.longitude + ')</center>').openPopup();
+                          mmr.setPopupContent(a.address.Match_addr + '<br><br><center style="color:#999">(' + lat + ', ' + lon + ')</center>').openPopup();
                           document.getElementById("address").innerHTML = a.address.Match_addr;
                         }
                       };
-                      xhttp.open("GET", "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=json&featureTypes=&location=" + card.longitude + "," + card.latitude, true);
+                      xhttp.open("GET", "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=json&featureTypes=&location=" + lon + "," + lat, true);
                       xhttp.send();
                     }
 
