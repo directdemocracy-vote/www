@@ -18,13 +18,11 @@
 		},
 		"key": {
 			"description": "public key of the truster",
-			"type": "string",
-			"contentEncoding": "base64"
+			"type": "string"
 		},
 		"signature": {
 			"description": "signature of the trust by the truster",
-			"type": "string",
-			"contentEncoding": "base64"
+			"type": "string"
 		},
 		"published": {
 			"description": "date of publication of the trust",
@@ -33,8 +31,7 @@
 		},
 		"citizen": {
 			"description": "public key of the trusted citizen",
-			"type": "string",
-			"contentEncoding": "base64"
+			"type": "string"
 		},
 		"valididy": {
 			"description": "duration expressed in seconds after which this trust should be considered invalid",

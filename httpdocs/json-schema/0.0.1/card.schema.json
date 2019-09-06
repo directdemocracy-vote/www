@@ -22,22 +22,20 @@
 		},
 		"key": {
 			"description": "public key of the citizen",
-			"type": "string",
-			"contentEncoding": "base64"
+			"type": "string"
 		},
 		"signature": {
 			"description": "signature of the card by the citizen",
-			"type": "string",
-			"contentEncoding": "base64"
+			"type": "string"
 		},
 		"published": {
 			"description": "date of publication of the citizen card",
-			"type": "string",
+			"type": "string"
 			"format": "date-time"
 		},
 		"expires": {
 			"description": "date at which this publication expires",
-			"type": "string",
+			"type": "string"
 			"format": "date-time"
 		},
 		"familyName": {
@@ -50,8 +48,7 @@
 		},
 		"picture": {
 			"description": "photo of the citizen",
-			"type": "string",
-			"contentEncoding": "base64",
+			"type": "string"
 			"contentMediaType": "image/jpeg"
 		},
 		"latitude": {

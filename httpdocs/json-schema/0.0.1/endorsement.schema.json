@@ -18,13 +18,11 @@
 		},
 		"key": {
 			"description": "public key of the endorser",
-			"type": "string",
-			"contentEncoding": "base64"
+			"type": "string"
 		},
 		"signature": {
 			"description": "signature of the endorser",
-			"type": "string",
-			"contentEncoding": "base64"
+			"type": "string"
 		},
 		"published": {
 			"description": "date of publication of the endorsement",
@@ -42,12 +40,10 @@
 			"required": ["key"],
 			"properties": {
 				"key": {
-					"type": "string",
-					"contentEncoding": "base64"
+					"type": "string"
 				}
 				"signature": {
-					"type": "string",
-					"contentEncoding": "base64"
+					"type": "string"
 				}
 			}
 		},

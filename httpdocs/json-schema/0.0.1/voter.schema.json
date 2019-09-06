@@ -19,13 +19,11 @@
 		},
 		"key": {
 			"description": "public key of the station",
-			"type": "string",
-			"contentEncoding": "base64"
+			"type": "string"
 		},
 		"signature": {
 			"description": "signature of the station",
-			"type": "string",
-			"contentEncoding": "base64"
+			"type": "string"
 		},
 		"published": {
 			"description": "date at which the voter was published",
@@ -43,13 +41,11 @@
 			"properties": {
 				"key": {
 					"description": "public key of the referendum",
-					"type": "string",
-					"contentEncoding": "base64"
+					"type": "string"
 				},
 				"signature": {
 					"description": "signature of the referendum",
-					"type": "string",
-					"contentEncoding": "base64"
+					"type": "string"
 				}
 			}
 		},
@@ -60,13 +56,11 @@
 			"properties": {
 				"key": {
 					"description": "public key of the referendum",
-					"type": "string",
-					"contentEncoding": "base64"
+					"type": "string"
 				},
 				"signature": {
 					"description": "signature of the referendum",
-					"type": "string",
-					"contentEncoding": "base64"
+					"type": "string"
 				}
 			}
 		}

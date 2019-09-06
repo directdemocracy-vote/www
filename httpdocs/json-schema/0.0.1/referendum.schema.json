@@ -24,13 +24,11 @@
 		},
 		"key": {
 			"description": "public key of the author of the referendum",
-			"type": "string",
-			"contentEncoding": "base64"
+			"type": "string"
 		},
 		"signature": {
 			"description": "signature of the author of the referendum",
-			"type": "string",
-			"contentEncoding": "base64"
+			"type": "string"
 		},
 		"published": {
 			"description": "date of the publication of the referendum",
@@ -98,8 +96,7 @@
 			"type": "array",
 			"items": {
 				"description": "public key of the truster",
-				"type": "string",
-				"contentEncoding": "base64"
+				"type": "string"
 			}
 		},
 		"websites": {
