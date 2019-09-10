@@ -98,7 +98,7 @@ var onPictureSelect = function() {
   croppie.result({type:'base64', format: 'jpeg', quality: 0.95}).then(function(result) {
     var img = document.getElementById("picture-display");
     img.setAttribute('src', result);
-    card.picture = result.substring(23);  // remove the 'data:image/jpeg;base64,' header
+    card.picture = result;
     document.getElementById("picture-select").style.display = "none";
     croppie.destroy();
     croppie = null;
