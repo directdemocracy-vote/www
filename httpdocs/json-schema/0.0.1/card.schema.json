@@ -18,15 +18,18 @@
 	],
 	"properties": {
 		"schema": {
-			"const": "https://directdemocracy.vote/json-schema/0.0.1/card.schema.json"
+			"const": "https://directdemocracy.vote/json-schema/0.0.1/card.schema.json",
+			"maxLength": 256
 		},
 		"key": {
 			"description": "public key of the citizen",
-			"type": "string"
+			"type": "string",
+			"maxLength": 512
 		},
 		"signature": {
 			"description": "signature of the card by the citizen",
-			"type": "string"
+			"type": "string",
+			"maxLength": 512
 		},
 		"published": {
 			"description": "date of publication of the citizen card",
@@ -40,16 +43,22 @@
 		},
 		"familyName": {
 			"description": "last name of the citizen",
-			"type": "string"
+			"type": "string",
+			"maxLength": 256,
+			"minLength": 1
 		},
 		"givenNames": {
 			"description": "first name and possibly middle name of the citizen",
-			"type": "string"
+			"type": "string",
+			"maxLength": 256,
+			"minLength": 1
 		},
 		"picture": {
 			"description": "photo of the citizen",
 			"type": "string",
-			"contentMediaType": "image/jpeg"
+			"contentMediaType": "image/jpeg",
+			"contentEncoding": "base64",
+			"maxLength": 2048
 		},
 		"latitude": {
 			"description": "latitude of the home of the citizen expressed in 1/1000000 degrees",
@@ -77,15 +86,18 @@
 					"type": {
 						"description": "type of document (ID card, passport, vote card, driving license, insurance card)",
 						"type": "string",
+						"maxLength": 32,
 						"enum": ["id", "passport", "vote", "driving", "insurance"]
 					},
 					"issuer": {
 						"description": "country or organization that issued the document and ensure the uniqueness of the citizen",
-						"type": "string"
+						"type": "string",
+						"maxLength": 256
 					},
 					"number": {
 						"description": "number uniquely identifying the citizen",
-						"type": "string"
+						"type": "string",
+						"maxLength": 256
 					}
 				}
 			}
@@ -98,7 +110,8 @@
 		"sex": {
 			"description": "sex of the citizen",
 			"type": "string",
-			"enum": ["male", "female", "other"]
+			"enum": ["male", "female", "other"],
+			"maxLength": 16
 		},
 		"address": {
 			"description": "home address of the citizen",
@@ -110,19 +123,24 @@
 			],
 			"properties": {
 				"street": {
-					"type": "string"
+					"type": "string",
+					"maxLength": 256
 				},
 				"city": {
-					"type": "string"
+					"type": "string",
+					"maxLength": 256
 				},
 				"state": {
-					"type": "string"
+					"type": "string",
+					"maxLength": 256
 				},
 				"zip": {
-					"type": "string"
+					"type": "string",
+					"maxLength": 256
 				},
 				"country": {
-					"type": "string"
+					"type": "string",
+					"maxLength": 256
 				}
 			}
 		}
