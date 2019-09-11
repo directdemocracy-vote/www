@@ -225,35 +225,35 @@ var onPictureSelect = function() {
                     geolocation = true;
                     card.latitude = Math.round(1000000 * position.coords.latitude);
                     card.longitude = Math.round(1000000 * position.coords.longitude);
-                    mymap.setView([position.coords.latitude, position.coords.longitude], 12);
+                    map.setView([position.coords.latitude, position.coords.longitude], 12);
                     setTimeout(updateMarker, 500);
                   }
 
                   function updateMarker() {
-                    mmr.setLatLng([card.latitude / 1000000, card.longitude / 1000000]);
-                    setui(12);
+                    marker.setLatLng([card.latitude / 1000000, card.longitude / 1000000]);
+                    setui();
                   }
                   var lat = card.latitude / 1000000;
                   var lon = card.longitude / 1000000;
-                  var mymap = L.map('latlongmap').setView([lat, lon], 2);
+                  var map = L.map('latlongmap').setView([lat, lon], 2);
                   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                  }).addTo(mymap);
-                  var mmr = L.marker([lat, lon]).addTo(mymap).bindPopup(lat + ',' + lon);
-                  setui(12);
-                  mymap.on('click', onMapClick);
+                  }).addTo(map);
+                  var marker = L.marker([lat, lon]).addTo(map).bindPopup(lat + ',' + lon);
+                  setui();
+                  map.on('click', onMapClick);
 
                   function onMapClick(e) {
-                    mmr.setLatLng(e.latlng);
+                    marker.setLatLng(e.latlng);
                     card.latitude = Math.round(1000000 * e.latlng.lat);
                     card.longitude = Math.round(1000000 * e.latlng.lng);
-                    setui(mymap.getZoom());
+                    setui();
                   }
 
-                  function setui(zm) {
+                  function setui() {
                     var lat = card.latitude / 1000000;
                     var lon = card.longitude / 1000000;
-                    mmr.setPopupContent(lat + ',' + lon).openPopup();
+                    marker.setPopupContent(lat + ',' + lon).openPopup();
                     document.getElementById("latitude").value = lat;
                     document.getElementById("longitude").value = lon;
                     validate();
@@ -261,7 +261,7 @@ var onPictureSelect = function() {
                     xhttp.onreadystatechange = function() {
                       if (this.readyState == 4 && this.status == 200) {
                         a = JSON.parse(this.responseText);
-                        mmr.setPopupContent(a.address.Match_addr + '<br><br><center style="color:#999">(' + lat + ', ' + lon + ')</center>').openPopup();
+                        marker.setPopupContent(a.address.Match_addr + '<br><br><center style="color:#999">(' + lat + ', ' + lon + ')</center>').openPopup();
                         document.getElementById("address").innerHTML = a.address.Match_addr;
                       }
                     };
