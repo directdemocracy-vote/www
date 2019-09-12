@@ -56,10 +56,10 @@
       <div class="container">
         <ul class="nav nav-tabs">
           <li class="nav-item" id="register-nav">
-            <a class="nav-link active" data-toggle="tab" href="#register">Register</a>
+            <a class="nav-link" id="register-nav-link" data-toggle="tab" href="#register">Register</a>
           </li>
           <li class="nav-item" id="card-nav">
-            <a class="nav-link" data-toggle="tab" href="#card">Citizen Card</a>
+            <a class="nav-link" id="card-nav-link" data-toggle="tab" href="#card">Citizen Card</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#privacy">Privacy</a>
@@ -149,7 +149,6 @@
                 <div id="card-coords" class="card-entry"> 34,123456 E 65.123456 N </div>
               </div>
               <div class="col-md-4">
-                <div class="card-label"> QR code: </div>
                 <img id="card-qr-code" src="" style="width:150px;height:150px">
               </div>
             </div>
@@ -225,9 +224,15 @@
       if (card_string) {
         card = JSON.parse(card_string);
         document.getElementById('register-nav').style.display = 'none';
+        document.getElementById('register').style.display = 'none';
+        document.getElementById('card-nav-link').classList.add('active');
+        $('#card').tab('show');
         updateCard();
       } else {
         document.getElementById('card-nav').style.display = 'none';
+        document.getElementById('card').style.display = 'none';
+        document.getElementById('register-nav-link').classList.add('active');
+        $('#register').tab('show');
         card = {
           schema: "https://directdemocracy.vote/json-schema/0.0.1/card.schema.json",
           key: "",
@@ -321,7 +326,11 @@
               localStorage.setItem("privateKey", crypt.getPrivateKey());
               console.log(crypt.getPrivateKey());
               document.getElementById('register-nav').style.display = 'none';
+              document.getElementById('register').style.display = 'none';
               document.getElementById('card-nav').style.display = '';
+              document.getElementById('card').style.display = '';
+              document.getElementById('register-nav-link').classList.remove('active');
+              document.getElementById('card-nav-link').classList.add('active');
               updateCard();
               document.getElementById('modal-title').innerHTML = "Publication success";
               document.getElementById('modal-contents').innerHTML = "Your citizen card was published under number " + answer.card + ".<br>Check it at <a target='_blank' href='https://publisher.directdemocracy.vote/card.php?id=" + answer.card +
