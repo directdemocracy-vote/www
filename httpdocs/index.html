@@ -16,111 +16,20 @@
     <script src="js/croppie.min.js"></script>
     <script src="js/jsencrypt.min.js"></script>
     <script src="js/crypto-js.js"></script>
-    <script>
-      var card = {
-        schema: "https://directdemocracy.vote/json-schema/0.0.1/card.schema.json",
-        key:"",
-        signature:"",
-        published:"",
-        expires:"",
-        familyName:"",
-        givenNames:"",
-        picture:"",
-        latitude:0,
-        longitude:0
-      };
-var validate = function() {
-  var button = document.getElementById("publish-button");
-  if (button)
-    button.setAttribute("disabled", "disabled");
-  if (card.key === '' || card.picture === '')
-    return;
-  if (card.latitude === 0 && card.longitude === 0)
-    return;
-  card.familyName = document.getElementById("family-name").value;
-  if (card.familyName === '')
-    return;
-  card.givenNames = document.getElementById("given-names").value;
-  if (card.givenNames === '')
-    return;
-  if (!document.getElementById("confirm-check").checked)
-    return;
-  button.removeAttribute("disabled");
-}
-var publish = function() {
-  d = new Date();
-  card.published = d.toISOString();
-  d.setFullYear(d.getFullYear() + 10);
-  card.expires = d.toISOString();
-  card.signature = "";
-  var str = JSON.stringify(card);
-  card.signature = crypt.sign(str, CryptoJS.SHA256, "sha256");
-  console.log("signed string: " + str);
-  var xhttp = new XMLHttpRequest();
-  xhttp.onload = function() {
-    if (this.status == 200) {
-      console.log(this.responseText);
-    }
-  };
-  xhttp.open("POST", "https://publisher.directdemocracy.vote/publish.php", true);
-  xhttp.send(JSON.stringify(card));
-  console.log(card.key);
-  return false;
-}
-var dt = new Date();
-var time = -(dt.getTime());
-var crypt = new JSEncrypt({default_key_size: 2048});
-crypt.getKey(function() {
-  dt = new Date();
-  time += (dt.getTime());
-  card.key = crypt.getPublicKey();
-  console.log(crypt.getPrivateKey());
-  localStorage.setItem("privateKey", crypt.getPrivateKey());
-  document.getElementById("forging-spinner").style.display = 'none';
-  document.getElementById("private-key-icon").style.display = '';
-  document.getElementById("private-key-message").innerHTML = "You new private key was just forged in " + Number(time / 1000).toFixed(2) + " seconds.";
-  validate();
-});
-var croppie = null;
-var onUploadClick = function() {
-var upload = document.getElementById("picture-upload");
-  upload.click();
-}
-var onPictureUploaded = function(event) {
-  if (croppie)
-  croppie.destroy();
-  var img = document.getElementById("picture-display");
-  img.src = URL.createObjectURL(event.target.files[0]);
-  event.target.value = '';
-  croppie = new Croppie(img, {boundary: {width:250, height: 300}, viewport: {width:150, height: 200}, enableExif: true});
-  document.getElementById("picture-select").style.display = "";
-}
-var onPictureSelect = function() {
-  croppie.result({type:'base64', format: 'jpeg', quality: 0.95}).then(function(result) {
-    var img = document.getElementById("picture-display");
-    img.setAttribute('src', result);
-    card.picture = result;
-    document.getElementById("picture-select").style.display = "none";
-    croppie.destroy();
-    croppie = null;
-    validate();
-  });
-}
-    </script>
     <title>directdemocracy.vote</title>
   </head>
 
   <body>
-    <div class="modal" id="myModal">
+    <div class="modal" id="modal">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Be patient...</h4>
+            <h4 class="modal-title" id="modal-title">Title</h4>
             <button type="button" class="close" data-dismiss="modal">&times;</button>
           </div>
-          <div class="modal-body">As of August 29th, 2019, this is not yet implemented... But we are working hard on it. Please come back later.</div>
+          <div class="modal-body" id="modal-contents">Contents.</div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" id="modal-close-button">Close</button>
           </div>
         </div>
       </div>
@@ -141,13 +50,16 @@ var onPictureSelect = function() {
             <h3>- Push governments to respect people's will</h3>
             <h3>- Spread peace and prosperity worldwide</h3>
           </div>
-          <div style="padding-bottom:40px"><button class="btn btn-success" role="button" data-toggle="modal" data-target="#myModal">Become a Citizen &raquo;</button></div>
+          <div style="padding-bottom:40px"><a class="btn btn-success" role="button" href="#register">Become a Citizen</a></div>
         </div>
       </div>
       <div class="container">
         <ul class="nav nav-tabs">
-          <li class="nav-item">
+          <li class="nav-item" id="register-nav">
             <a class="nav-link active" data-toggle="tab" href="#register">Register</a>
+          </li>
+          <li class="nav-item" id="card-nav">
+            <a class="nav-link" data-toggle="tab" href="#card">Citizen Card</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#privacy">Privacy</a>
@@ -158,15 +70,6 @@ var onPictureSelect = function() {
         </ul>
         <div class="tab-content">
           <div class="tab-pane container active" id="register"><br>
-            <div class="form-group">
-              <label for="family-name">Family name:</label>
-              <input type="text" class="form-control" id="family-name" placeholder="Enter your family name here" oninput="validate()">
-            </div>
-            <div class="form-group">
-              <label for="given-names">Given name(s):</label>
-              <input type="text" class="form-control" id="given-names" placeholder="Enter your given name(s) here." oninput="validate()">
-              <small class="form-text text-muted">Include your middle name(s) only if that helps distinguishing you from someone else at the same home address.</small>
-            </div>
             <div class="form-group">
               <label for="picture">Picture:</label>
               <input type="file" style="display:none" class="custom-file-input" id="picture-upload" accept="image/*" onchange="onPictureUploaded(event)">
@@ -182,6 +85,15 @@ var onPictureSelect = function() {
                   </div>
                 </div>
               </div>
+            </div>
+            <div class="form-group">
+              <label for="family-name">Family name:</label>
+              <input type="text" class="form-control" id="family-name" placeholder="Enter your family name here" oninput="validate()">
+            </div>
+            <div class="form-group">
+              <label for="given-names">Given name(s):</label>
+              <input type="text" class="form-control" id="given-names" placeholder="Enter your given name(s) here." oninput="validate()">
+              <small class="form-text text-muted">Include your middle name(s) only if that helps distinguishing you from someone else at the same home address.</small>
             </div>
             <div class="form-group">
               <div class="container">
@@ -201,75 +113,6 @@ var onPictureSelect = function() {
                 </div>
                 <small class="form-text text-muted">Select your home address very precisely on the map to display your exact latitude and longitude coordinates.</small>
                 <div id="latlongmap" style="width:100%;height:400px;margin-top:10px"></div>
-                <script type="text/javascript">
-                  var geolocation = false;
-                  card.latitude = 0;
-                  card.longitude = 0;
-                  if (navigator.geolocation) navigator.geolocation.getCurrentPosition(getGeolocationPosition);
-                  var xhttp = new XMLHttpRequest();
-                  xhttp.onreadystatechange = function() {
-                    if (this.readyState == 4 && this.status == 200 && geolocation == false) {
-                      coords = this.responseText.split(',');
-                      getGeolocationPosition({
-                        coords: {
-                          latitude: coords[0],
-                          longitude: coords[1]
-                        }
-                      });
-                    }
-                  };
-                  xhttp.open("GET", "https://ipinfo.io/loc", true);
-                  xhttp.send();
-
-                  function getGeolocationPosition(position) {
-                    geolocation = true;
-                    card.latitude = Math.round(1000000 * position.coords.latitude);
-                    card.longitude = Math.round(1000000 * position.coords.longitude);
-                    map.setView([position.coords.latitude, position.coords.longitude], 12);
-                    setTimeout(updateMarker, 500);
-                  }
-
-                  function updateMarker() {
-                    marker.setLatLng([card.latitude / 1000000, card.longitude / 1000000]);
-                    setui();
-                  }
-                  var lat = card.latitude / 1000000;
-                  var lon = card.longitude / 1000000;
-                  var map = L.map('latlongmap').setView([lat, lon], 2);
-                  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                  }).addTo(map);
-                  var marker = L.marker([lat, lon]).addTo(map).bindPopup(lat + ',' + lon);
-                  setui();
-                  map.on('click', onMapClick);
-
-                  function onMapClick(e) {
-                    marker.setLatLng(e.latlng);
-                    card.latitude = Math.round(1000000 * e.latlng.lat);
-                    card.longitude = Math.round(1000000 * e.latlng.lng);
-                    setui();
-                  }
-
-                  function setui() {
-                    var lat = card.latitude / 1000000;
-                    var lon = card.longitude / 1000000;
-                    marker.setPopupContent(lat + ',' + lon).openPopup();
-                    document.getElementById("latitude").value = lat;
-                    document.getElementById("longitude").value = lon;
-                    validate();
-                    var xhttp = new XMLHttpRequest();
-                    xhttp.onreadystatechange = function() {
-                      if (this.readyState == 4 && this.status == 200) {
-                        a = JSON.parse(this.responseText);
-                        marker.setPopupContent(a.address.Match_addr + '<br><br><center style="color:#999">(' + lat + ', ' + lon + ')</center>').openPopup();
-                        document.getElementById("address").innerHTML = a.address.Match_addr;
-                      }
-                    };
-                    xhttp.open("GET", "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=json&featureTypes=&location=" + lon + "," + lat, true);
-                    xhttp.send();
-                  }
-
-                </script>
               </div>
             </div>
             <div class="form-group">
@@ -290,6 +133,25 @@ var onPictureSelect = function() {
               </div><br>
               <button class="btn btn-success" id="publish-button" role="button" disabled="disabled" onclick="publish();">Publish your citizen card</button>
               <small class="form-text text-muted">Warning: this cannot be undone!</small>
+            </div>
+          </div>
+          <div class="tab-pane container fade" id="card"><br>
+            <div class="row">
+              <div class="col-md-4">
+                <img id="card-picture" src="images/default-picture.png" style="width:150px;height:150px">
+              </div>
+              <div class="col-md-4">
+                <div class="card-label"> Family name: </div>
+                <div id="card-family-name" class="card-entry"> Smith </div>
+                <div class="card-label"> Given names: </div>
+                <div id="card-given-names" class="card-entry"> John </div>
+                <div class="card-label"> Home coordinates: </div>
+                <div id="card-coords" class="card-entry"> 34,123456 E 65.123456 N </div>
+              </div>
+              <div class="col-md-4">
+                <div class="card-label"> QR code: </div>
+                <img id="card-qr-code" src="" style="width:150px;height:150px">
+              </div>
             </div>
           </div>
           <div class="tab-pane container fade" id="privacy"><br>
@@ -355,6 +217,204 @@ var onPictureSelect = function() {
         <p style='text-align:center'><small>Made by citizens for citizens</small></p>
       </footer>
     </div>
+    <script type="text/javascript">
+      var croppie = null;
+      var geolocation = false;
+      var card_string = localStorage.getItem('card');
+      var card;
+      if (card_string) {
+        card = JSON.parse(card_string);
+        document.getElementById('register-nav').style.display = 'none';
+        updateCard();
+      } else {
+        document.getElementById('card-nav').style.display = 'none';
+        card = {
+          schema: "https://directdemocracy.vote/json-schema/0.0.1/card.schema.json",
+          key: "",
+          signature: "",
+          published: "",
+          expires: "",
+          familyName: "",
+          givenNames: "",
+          picture: "",
+          latitude: 0,
+          longitude: 0
+        };
+        var dt = new Date();
+        var time = -(dt.getTime());
+        var crypt = new JSEncrypt({
+          default_key_size: 2048
+        });
+        crypt.getKey(function() {
+          dt = new Date();
+          time += (dt.getTime());
+          card.key = crypt.getPublicKey();
+          document.getElementById("forging-spinner").style.display = 'none';
+          document.getElementById("private-key-icon").style.display = '';
+          document.getElementById("private-key-message").innerHTML = "You new private key was just forged in " + Number(time / 1000).toFixed(2) + " seconds.";
+          validate();
+        });
+        if (navigator.geolocation) navigator.geolocation.getCurrentPosition(getGeolocationPosition);
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200 && geolocation == false) {
+            coords = this.responseText.split(',');
+            getGeolocationPosition({
+              coords: {
+                latitude: coords[0],
+                longitude: coords[1]
+              }
+            });
+          }
+        };
+        xhttp.open("GET", "https://ipinfo.io/loc", true);
+        xhttp.send();
+        var lat = card.latitude / 1000000;
+        var lon = card.longitude / 1000000;
+        var map = L.map('latlongmap').setView([lat, lon], 2);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+        var marker = L.marker([lat, lon]).addTo(map).bindPopup(lat + ',' + lon);
+        updateLocation();
+        map.on('click', onMapClick);
+      }
+
+      function updateCard() {
+        console.log("updateCard()");
+      }
+
+      function validate() {
+        var button = document.getElementById("publish-button");
+        if (button) button.setAttribute("disabled", "disabled");
+        if (card.key === '' || card.picture === '') return;
+        if (card.latitude === 0 && card.longitude === 0) return;
+        card.familyName = document.getElementById("family-name").value;
+        if (card.familyName === '') return;
+        card.givenNames = document.getElementById("given-names").value;
+        if (card.givenNames === '') return;
+        if (!document.getElementById("confirm-check").checked) return;
+        button.removeAttribute("disabled");
+      }
+
+      function publish() {
+        d = new Date();
+        card.published = d.toISOString();
+        d.setFullYear(d.getFullYear() + 10);
+        card.expires = d.toISOString();
+        card.signature = "";
+        var str = JSON.stringify(card);
+        card.signature = crypt.sign(str, CryptoJS.SHA256, "sha256");
+        console.log("signed string: " + str);
+        var xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+          if (this.status == 200) {
+            console.log(this.responseText);
+            answer = JSON.parse(this.responseText);
+            if (answer.error) {
+              document.getElementById('modal-title').innerHTML = "Publication error";
+              document.getElementById('modal-contents').innerHTML = answer.error + ".<br>Please try again.";
+              $('#modal').modal();
+            } else {
+              localStorage.setItem("publication", "https://publisher.directdemocracy.vote/card.php?id=" + answer.card);
+              localStorage.setItem("card", str);
+              localStorage.setItem("privateKey", crypt.getPrivateKey());
+              console.log(crypt.getPrivateKey());
+              document.getElementById('register-nav').style.display = 'none';
+              document.getElementById('card-nav').style.display = '';
+              updateCard();
+              document.getElementById('modal-title').innerHTML = "Publication success";
+              document.getElementById('modal-contents').innerHTML = "Your citizen card was published under number " + answer.card + ".<br>Check it at <a target='_blank' href='https://publisher.directdemocracy.vote/card.php?id=" + answer.card +
+                "'>https://publisher.directdemocracy.vote/card.php?id=" + answer.card + "</a><br>";
+              $('#modal').modal();
+            }
+          }
+        };
+        xhttp.open("POST", "https://publisher.directdemocracy.vote/publish.php", true);
+        xhttp.send(JSON.stringify(card));
+        return false;
+      }
+
+      function onUploadClick() {
+        var upload = document.getElementById("picture-upload");
+        upload.click();
+      }
+
+      function onPictureUploaded(event) {
+        if (croppie) croppie.destroy();
+        var img = document.getElementById("picture-display");
+        img.src = URL.createObjectURL(event.target.files[0]);
+        event.target.value = '';
+        croppie = new Croppie(img, {
+          boundary: {
+            width: 250,
+            height: 300
+          },
+          viewport: {
+            width: 150,
+            height: 200
+          },
+          enableExif: true
+        });
+        document.getElementById("picture-select").style.display = "";
+      }
+
+      function onPictureSelect() {
+        croppie.result({
+          type: 'base64',
+          format: 'jpeg',
+          quality: 0.95
+        }).then(function(result) {
+          var img = document.getElementById("picture-display");
+          img.setAttribute('src', result);
+          card.picture = result;
+          document.getElementById("picture-select").style.display = "none";
+          croppie.destroy();
+          croppie = null;
+          validate();
+        });
+      }
+
+      function getGeolocationPosition(position) {
+        geolocation = true;
+        card.latitude = Math.round(1000000 * position.coords.latitude);
+        card.longitude = Math.round(1000000 * position.coords.longitude);
+        map.setView([position.coords.latitude, position.coords.longitude], 12);
+        setTimeout(updateMarker, 500);
+      }
+
+      function updateMarker() {
+        marker.setLatLng([card.latitude / 1000000, card.longitude / 1000000]);
+        updateLocation();
+      }
+
+      function onMapClick(e) {
+        marker.setLatLng(e.latlng);
+        card.latitude = Math.round(1000000 * e.latlng.lat);
+        card.longitude = Math.round(1000000 * e.latlng.lng);
+        updateLocation();
+      }
+
+      function updateLocation() {
+        var lat = card.latitude / 1000000;
+        var lon = card.longitude / 1000000;
+        marker.setPopupContent(lat + ',' + lon).openPopup();
+        document.getElementById("latitude").value = lat;
+        document.getElementById("longitude").value = lon;
+        validate();
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            a = JSON.parse(this.responseText);
+            marker.setPopupContent(a.address.Match_addr + '<br><br><center style="color:#999">(' + lat + ', ' + lon + ')</center>').openPopup();
+            document.getElementById("address").innerHTML = a.address.Match_addr;
+          }
+        };
+        xhttp.open("GET", "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=json&featureTypes=&location=" + lon + "," + lat, true);
+        xhttp.send();
+      }
+
+    </script>
   </body>
 
 </html>
