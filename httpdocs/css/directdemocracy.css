@@ -49,3 +49,15 @@
   box-shadow: 0 0 3px rgba(0,0,0,.3);
   opacity: 0.9;
 }
+
+.card-label {
+  padding-top: 10px;
+  font-size: 80%;
+  color: grey;
+}
+
+.card-entry {
+  font-weight: bold;
+  font-size: 120%;
+  padding-bottom: 10px;
+}

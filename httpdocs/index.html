@@ -16,6 +16,7 @@
     <script src="js/croppie.min.js"></script>
     <script src="js/jsencrypt.min.js"></script>
     <script src="js/crypto-js.js"></script>
+    <script src="js/qrious.min.js"></script>
     <title>directdemocracy.vote</title>
   </head>
 
@@ -137,19 +138,19 @@
           </div>
           <div class="tab-pane container fade" id="card"><br>
             <div class="row">
-              <div class="col-md-4">
-                <img id="card-picture" src="images/default-picture.png" style="width:150px;height:150px">
+              <div class="col-md-4" style="max-width:170px">
+                <img id="card-picture" src="images/default-picture.png" style="width:150px;height:200px">
               </div>
               <div class="col-md-4">
                 <div class="card-label"> Family name: </div>
-                <div id="card-family-name" class="card-entry"> Smith </div>
+                <div id="card-family-name" class="card-entry"> </div>
                 <div class="card-label"> Given names: </div>
-                <div id="card-given-names" class="card-entry"> John </div>
-                <div class="card-label"> Home coordinates: </div>
-                <div id="card-coords" class="card-entry"> 34,123456 E 65.123456 N </div>
+                <div id="card-given-names" class="card-entry"> </div>
+                <div class="card-label"> Latitude, longitude: </div>
+                <div id="card-coords" class="card-entry"> 0, 0 </div>
               </div>
-              <div class="col-md-4">
-                <img id="card-qr-code" src="" style="width:150px;height:150px">
+              <div class="col-md-4" style="max-width:220px">
+                <canvas id="card-qr-code" width="200" height="200" style="border:1px solid">
               </div>
             </div>
           </div>
@@ -219,74 +220,19 @@
     <script type="text/javascript">
       var croppie = null;
       var geolocation = false;
-      var card_string = localStorage.getItem('card');
-      var card;
-      if (card_string) {
-        card = JSON.parse(card_string);
-        document.getElementById('register-nav').style.display = 'none';
-        document.getElementById('register').style.display = 'none';
-        document.getElementById('card-nav-link').classList.add('active');
-        $('#card').tab('show');
-        updateCard();
-      } else {
-        document.getElementById('card-nav').style.display = 'none';
-        document.getElementById('card').style.display = 'none';
-        document.getElementById('register-nav-link').classList.add('active');
-        $('#register').tab('show');
-        card = {
-          schema: "https://directdemocracy.vote/json-schema/0.0.1/card.schema.json",
-          key: "",
-          signature: "",
-          published: "",
-          expires: "",
-          familyName: "",
-          givenNames: "",
-          picture: "",
-          latitude: 0,
-          longitude: 0
-        };
-        var dt = new Date();
-        var time = -(dt.getTime());
-        var crypt = new JSEncrypt({
-          default_key_size: 2048
-        });
-        crypt.getKey(function() {
-          dt = new Date();
-          time += (dt.getTime());
-          card.key = crypt.getPublicKey();
-          document.getElementById("forging-spinner").style.display = 'none';
-          document.getElementById("private-key-icon").style.display = '';
-          document.getElementById("private-key-message").innerHTML = "You new private key was just forged in " + Number(time / 1000).toFixed(2) + " seconds.";
-          validate();
-        });
-        if (navigator.geolocation) navigator.geolocation.getCurrentPosition(getGeolocationPosition);
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-          if (this.readyState == 4 && this.status == 200 && geolocation == false) {
-            coords = this.responseText.split(',');
-            getGeolocationPosition({
-              coords: {
-                latitude: coords[0],
-                longitude: coords[1]
-              }
-            });
-          }
-        };
-        xhttp.open("GET", "https://ipinfo.io/loc", true);
-        xhttp.send();
-        var lat = card.latitude / 1000000;
-        var lon = card.longitude / 1000000;
-        var map = L.map('latlongmap').setView([lat, lon], 2);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map);
-        var marker = L.marker([lat, lon]).addTo(map).bindPopup(lat + ',' + lon);
-        updateLocation();
-        map.on('click', onMapClick);
-      }
+      var card = null;
+      var map = null;
+      var marker = null;
 
       function updateCard() {
-        console.log("updateCard()");
+        document.getElementById('card-picture').setAttribute('src', card.picture);
+        document.getElementById('card-family-name').innerHTML = card.familyName;
+        document.getElementById('card-given-names').innerHTML = card.givenNames;
+        document.getElementById('card-coords').innerHTML = "<a target='_blank' href='http://www.openstreetmap.org/?mlat=" +
+                                + card.latitude / 1000000 + "&mlon=" + card.longitude / 1000000 + "&zoom=12'>" +
+                                + card.latitude / 1000000 + ", " + card.longitude / 1000000 + "</a>";
+        var fingerprint = CryptoJS.SHA1(card.key).toString();
+        var qr = new QRious({element: document.getElementById('card-qr-code'), value: fingerprint, level: 'M', size: 200, padding: 13})
       }
 
       function validate() {
@@ -332,6 +278,7 @@
               document.getElementById('register-nav-link').classList.remove('active');
               document.getElementById('card-nav-link').classList.add('active');
               updateCard();
+              $('#card').tab('show');
               document.getElementById('modal-title').innerHTML = "Publication success";
               document.getElementById('modal-contents').innerHTML = "Your citizen card was published under number " + answer.card + ".<br>Check it at <a target='_blank' href='https://publisher.directdemocracy.vote/card.php?id=" + answer.card +
                 "'>https://publisher.directdemocracy.vote/card.php?id=" + answer.card + "</a><br>";
@@ -423,6 +370,73 @@
         xhttp.send();
       }
 
+      window.onload = function() {
+        var card_string = localStorage.getItem('card');
+        if (card_string) {
+          card = JSON.parse(card_string);
+          document.getElementById('register-nav').style.display = 'none';
+          document.getElementById('register').style.display = 'none';
+          document.getElementById('card-nav-link').classList.add('active');
+          $('#card').tab('show');
+          //$('.nav-tabs a[href="#card"]').tab('show');
+          updateCard();
+        } else {
+          document.getElementById('card-nav').style.display = 'none';
+          document.getElementById('card').style.display = 'none';
+          document.getElementById('register-nav-link').classList.add('active');
+          $('#register').tab('show');
+          card = {
+            schema: "https://directdemocracy.vote/json-schema/0.0.1/card.schema.json",
+            key: "",
+            signature: "",
+            published: "",
+            expires: "",
+            familyName: "",
+            givenNames: "",
+            picture: "",
+            latitude: 0,
+            longitude: 0
+          };
+          var dt = new Date();
+          var time = -(dt.getTime());
+          var crypt = new JSEncrypt({
+            default_key_size: 2048
+          });
+          crypt.getKey(function() {
+            dt = new Date();
+            time += (dt.getTime());
+            card.key = crypt.getPublicKey();
+            document.getElementById("forging-spinner").style.display = 'none';
+            document.getElementById("private-key-icon").style.display = '';
+            document.getElementById("private-key-message").innerHTML = "You new private key was just forged in " + Number(time / 1000).toFixed(2) + " seconds.";
+            validate();
+          });
+          if (navigator.geolocation) navigator.geolocation.getCurrentPosition(getGeolocationPosition);
+          var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200 && geolocation == false) {
+              coords = this.responseText.split(',');
+              getGeolocationPosition({
+                coords: {
+                  latitude: coords[0],
+                  longitude: coords[1]
+                }
+              });
+            }
+          };
+          xhttp.open("GET", "https://ipinfo.io/loc", true);
+          xhttp.send();
+          var lat = card.latitude / 1000000;
+          var lon = card.longitude / 1000000;
+          map = L.map('latlongmap').setView([lat, lon], 2);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          }).addTo(map);
+          marker = L.marker([lat, lon]).addTo(map).bindPopup(lat + ',' + lon);
+          updateLocation();
+          map.on('click', onMapClick);
+        }
+      }
     </script>
   </body>
 
