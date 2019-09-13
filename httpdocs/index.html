@@ -228,7 +228,7 @@
         document.getElementById('card-picture').setAttribute('src', card.picture);
         document.getElementById('card-family-name').innerHTML = card.familyName;
         document.getElementById('card-given-names').innerHTML = card.givenNames;
-        document.getElementById('card-coords').innerHTML = "<a target='_blank' href='http://www.openstreetmap.org/?mlat=" +
+        document.getElementById('card-coords').innerHTML = "<a target='_blank' href='https://openstreetmap.org/?mlat=" +
                                 + card.latitude / 1000000 + "&mlon=" + card.longitude / 1000000 + "&zoom=12'>" +
                                 + card.latitude / 1000000 + ", " + card.longitude / 1000000 + "</a>";
         var fingerprint = CryptoJS.SHA1(card.key).toString();
@@ -271,14 +271,10 @@
               localStorage.setItem("card", str);
               localStorage.setItem("privateKey", crypt.getPrivateKey());
               console.log(crypt.getPrivateKey());
-              document.getElementById('register-nav').style.display = 'none';
-              document.getElementById('register').style.display = 'none';
-              document.getElementById('card-nav').style.display = '';
-              document.getElementById('card').style.display = '';
-              document.getElementById('register-nav-link').classList.remove('active');
-              document.getElementById('card-nav-link').classList.add('active');
               updateCard();
-              $('#card').tab('show');
+              document.getElementById('card-nav-link').style.display = '';
+              document.getElementById('register-nav-link').style.display = 'none';
+              $('.nav-tabs a[href="#card"]').tab('show');
               document.getElementById('modal-title').innerHTML = "Publication success";
               document.getElementById('modal-contents').innerHTML = "Your citizen card was published under number " + answer.card + ".<br>Check it at <a target='_blank' href='https://publisher.directdemocracy.vote/card.php?id=" + answer.card +
                 "'>https://publisher.directdemocracy.vote/card.php?id=" + answer.card + "</a><br>";
@@ -374,17 +370,12 @@
         var card_string = localStorage.getItem('card');
         if (card_string) {
           card = JSON.parse(card_string);
-          document.getElementById('register-nav').style.display = 'none';
-          document.getElementById('register').style.display = 'none';
-          document.getElementById('card-nav-link').classList.add('active');
-          $('#card').tab('show');
-          //$('.nav-tabs a[href="#card"]').tab('show');
+          document.getElementById('register-nav-link').style.display = 'none';
+          $('.nav-tabs a[href="#card"]').tab('show');
           updateCard();
         } else {
-          document.getElementById('card-nav').style.display = 'none';
-          document.getElementById('card').style.display = 'none';
-          document.getElementById('register-nav-link').classList.add('active');
-          $('#register').tab('show');
+          document.getElementById('card-nav-link').style.display = 'none';
+          $('.nav-tabs a[href="#register"]').tab('show');
           card = {
             schema: "https://directdemocracy.vote/json-schema/0.0.1/card.schema.json",
             key: "",
@@ -430,7 +421,7 @@
           var lon = card.longitude / 1000000;
           map = L.map('latlongmap').setView([lat, lon], 2);
           L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>'
           }).addTo(map);
           marker = L.marker([lat, lon]).addTo(map).bindPopup(lat + ',' + lon);
           updateLocation();
