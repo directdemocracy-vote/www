@@ -28,9 +28,47 @@
             <h4 class="modal-title" id="modal-title">Title</h4>
             <button type="button" class="close" data-dismiss="modal">&times;</button>
           </div>
-          <div class="modal-body" id="modal-contents">Contents.</div>
+          <div class="modal-body" id="modal-contents">Contents</div>
           <div class="modal-footer">
             <button type="button" class="btn btn-primary" data-dismiss="modal" id="modal-close-button">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal" id="modal-revoke">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Revoke your Citizen Card?</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div>Why do you want to revoke your citizen card?</div>
+            <br>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="revoke-moved" type="checkbox" class="form-check-input" onchange="updateRevokeButton();">I moved. </label>
+            </div>
+            <div class="form-group">
+              <div class="form-check">
+                <label class="form-check-label">
+                  <input id="revoke-name" type="checkbox" class="form-check-input" onchange="updateRevokeButton();">My name changed. </label>
+              </div>
+              <div class="form-check">
+                <label class="form-check-label">
+                  <input id="revoke-key" type="checkbox" class="form-check-input" onchange="revokeKeyChanged();">My privated key may be compromised. </label>
+              </div>
+              <div class="form-check">
+                <label class="form-check-label">
+                  <input id="revoke-other" type="checkbox" class="form-check-input" onchange="revokeOtherChanged();">Other: <input id="revoke-other-text" oninput="updateRevokeButton();" type="text" class="form-control" placeholder="Please explain briefly"
+                    disabled="disabled">
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="revoke-button" class="btn btn-danger" disabled="disabled">Revoke Citizen Card</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
           </div>
         </div>
       </div>
@@ -169,6 +207,7 @@
           </div>
           <div class="tab-pane container fade" id="settings"><br>
             <button class="btn btn-danger" onclick="revoke()">Revoke my citizen card</button>
+            <small class="form-text text-muted">If you moved, changed your name or believe your private key was compromised, you should revoke your citizen card and register a new one.</small>
           </div>
           <div class="tab-pane container fade" id="privacy"><br>
             <div class="row">
@@ -271,6 +310,12 @@
         button.removeAttribute("disabled");
       }
 
+      function showModal(title, contents) {
+        document.getElementById('modal-title').innerHTML = title;
+        document.getElementById('modal-contents').innerHTML = contents;
+        $('#modal').modal();
+      }
+
       function publish() {
         d = new Date();
         card.published = d.toISOString();
@@ -286,9 +331,7 @@
             console.log(this.responseText);
             answer = JSON.parse(this.responseText);
             if (answer.error) {
-              document.getElementById('modal-title').innerHTML = "Publication error";
-              document.getElementById('modal-contents').innerHTML = answer.error + ".<br>Please try again.";
-              $('#modal').modal();
+              showModel("Publication error", answer.error + ".<br>Please try again.");
             } else {
               localStorage.setItem("publication", "https://publisher.directdemocracy.vote/card.php?id=" + answer.card);
               localStorage.setItem("card", str);
@@ -298,10 +341,8 @@
               document.getElementById('card-nav-link').style.display = '';
               document.getElementById('register-nav-link').style.display = 'none';
               $('.nav-tabs a[href="#card"]').tab('show');
-              document.getElementById('modal-title').innerHTML = "Publication success";
-              document.getElementById('modal-contents').innerHTML = "Your citizen card was published under number " + answer.card + ".<br>Check it at <a target='_blank' href='https://publisher.directdemocracy.vote/card.php?id=" + answer.card +
-                "'>https://publisher.directdemocracy.vote/card.php?id=" + answer.card + "</a><br>";
-              $('#modal').modal();
+              showModal("Publication success", "Your citizen card was published under number " + answer.card + ".<br>Check it at <a target='_blank' href='https://publisher.directdemocracy.vote/card.php?id=" + answer.card +
+                "'>https://publisher.directdemocracy.vote/card.php?id=" + answer.card + "</a><br>");
             }
           }
         };
@@ -387,6 +428,26 @@
         };
         xhttp.open("GET", "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=json&featureTypes=&location=" + lon + "," + lat, true);
         xhttp.send();
+      }
+
+      function revoke() {
+        $('#modal-revoke').modal();
+      }
+
+      function revokeKeyChanged() {
+        if (document.getElementById("revoke-key").checked) document.getElementById("revoke-button").innerHTML = "Revoke Citizen Card and Private Key";
+        else document.getElementById("revoke-button").innerHTML = "Revoke Citizen Card";
+        updateRevokeButton();
+      }
+
+      function revokeOtherChanged() {
+        document.getElementById("revoke-other-text").disabled = !document.getElementById('revoke-other').checked;
+        updateRevokeButton();
+      }
+
+      function updateRevokeButton() {
+        document.getElementById('revoke-button').disabled = !(document.getElementById('revoke-name').checked || document.getElementById('revoke-moved').checked || document.getElementById('revoke-key').checked || (document.getElementById(
+          'revoke-other').checked && document.getElementById('revoke-other-text').value != ''));
       }
       window.onload = function() {
         var card_string = localStorage.getItem('card');
