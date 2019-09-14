@@ -39,7 +39,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Revoke your Citizen Card?</h4>
+            <h4 class="modal-title">Revoke your Citizen Card</h4>
             <button type="button" class="close" data-dismiss="modal">&times;</button>
           </div>
           <div class="modal-body">
@@ -56,7 +56,7 @@
               </div>
               <div class="form-check">
                 <label class="form-check-label">
-                  <input id="revoke-key" type="checkbox" class="form-check-input" onchange="revokeKeyChanged();">My privated key may be compromised. </label>
+                  <input id="revoke-key" type="checkbox" class="form-check-input" onchange="revokeKeyChanged();">My private key may be compromised. </label>
               </div>
               <div class="form-check">
                 <label class="form-check-label">
@@ -67,7 +67,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" id="revoke-button" class="btn btn-danger" disabled="disabled">Revoke Citizen Card</button>
+            <button type="button" id="revoke-button" class="btn btn-danger" disabled="disabled" onclick="revokeCitizenCard();">Revoke Citizen Card</button>
             <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
           </div>
         </div>
@@ -449,7 +449,22 @@
         document.getElementById('revoke-button').disabled = !(document.getElementById('revoke-name').checked || document.getElementById('revoke-moved').checked || document.getElementById('revoke-key').checked || (document.getElementById(
           'revoke-other').checked && document.getElementById('revoke-other-text').value != ''));
       }
+
+      function revokeCitizenCard() {
+        var reason = "";
+        if (document.getElementById('revoke-moved').checked) reason += "I moved. ";
+        if (document.getElementById('revoke-name').checked) reason += "My name changed. ";
+        if (document.getElementById('revoke-key').checked) reason += "My private key may be compromised. ";
+        if (document.getElementById('revoke-other').checked) reason += document.getElementById('revoke-other-text').value;
+        reason = reason.trim()
+        console.log(reason);
+      }
       window.onload = function() {
+        document.getElementById('revoke-moved').checked = false;
+        document.getElementById('revoke-name').checked = false;
+        document.getElementById('revoke-key').checked = false;
+        document.getElementById('revoke-other').checked = false;
+        document.getElementById('revoke-other-text').value = '';
         var card_string = localStorage.getItem('card');
         if (card_string) {
           card = JSON.parse(card_string);
