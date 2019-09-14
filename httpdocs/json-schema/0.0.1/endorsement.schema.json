@@ -41,7 +41,7 @@
 			"properties": {
 				"key": {
 					"type": "string"
-				}
+				},
 				"signature": {
 					"type": "string"
 				}
