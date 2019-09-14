@@ -208,7 +208,7 @@
             </div>
           </div>
           <div class="tab-pane container fade" id="settings"><br>
-            <button class="btn btn-danger" onclick="revoke()">Revoke my citizen card</button>
+            <button id="revoke" class="btn btn-danger" onclick="revoke()">Revoke my citizen card</button>
             <small class="form-text text-muted">If you moved, changed your name or believe your private key was compromised, you should revoke your citizen card and register a new one.</small>
           </div>
           <div class="tab-pane container fade" id="privacy"><br>
@@ -358,6 +358,7 @@
               updateCard();
               document.getElementById('card-nav-link').style.display = '';
               document.getElementById('register-nav-link').style.display = 'none';
+              document.getElementById('revoke').removeAttribute("disabled");
               $('.nav-tabs a[href="#card"]').tab('show');
               showModal("Publication success", "Your citizen card was published under number " + answer.card + ".<br>Check it at <a target='_blank' href='https://publisher.directdemocracy.vote/card.php?id=" + answer.card +
                 "'>https://publisher.directdemocracy.vote/card.php?id=" + answer.card + "</a><br>");
@@ -489,6 +490,7 @@
         localStorage.removeItem("publication");
         document.getElementById('card-nav-link').style.display = 'none';
         document.getElementById('register-nav-link').style.display = '';
+        document.getElementById('revoke').setAttribute("disabled", "disabled");
         $('.nav-tabs a[href="#register"]').tab('show');
         clearForms();
         $('#modal-revoke').modal('hide');
@@ -540,6 +542,7 @@
           updateCard();
         } else {
           document.getElementById('card-nav-link').style.display = 'none';
+          document.getElementById('revoke').setAttribute("disabled", "disabled");
           $('.nav-tabs a[href="#register"]').tab('show');
           card = {
             schema: "https://directdemocracy.vote/json-schema/0.0.1/card.schema.json",
