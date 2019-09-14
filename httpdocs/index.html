@@ -208,8 +208,15 @@
             </div>
           </div>
           <div class="tab-pane container fade" id="settings"><br>
-            <button id="revoke" class="btn btn-danger" onclick="revoke()">Revoke my citizen card</button>
-            <small class="form-text text-muted">If you moved, changed your name or believe your private key was compromised, you should revoke your citizen card and register a new one.</small>
+            <div class="form-group"><br>
+              <label for="publisher">Publisher URL:</label>
+              <input type="url" class="form-control" id="publisher" placeholder="Enter your publisher here" required oninput="updatePublisher()">
+              <small class="form-text text-muted">Do not change this unless you know what you are doing.</small>
+            </div>
+            <div class="form-group"><br>
+              <button id="revoke" class="btn btn-danger" onclick="revoke()">Revoke my citizen card</button>
+              <small class="form-text text-muted">If you moved, changed your name or believe your private key was compromised, you should revoke your citizen card and register a new one.</small>
+            </div>
           </div>
           <div class="tab-pane container fade" id="privacy"><br>
             <div class="row">
@@ -282,6 +289,7 @@
       var marker = null;
       var crypt = null;
       var privateKey = '';
+      var publisher = '';
 
       function checkExpirationValidity() {
         var expiration = document.getElementById("expiration");
@@ -335,6 +343,11 @@
         $('#modal').modal();
       }
 
+      function updatePublisher() {
+        publisher = document.getElementById("publisher").value;
+        localStorage.setItem("publisher", publisher);
+      }
+
       function publish() {
         d = new Date();
         card.published = d.toISOString();
@@ -351,7 +364,7 @@
             if (answer.error) {
               showModal("Publication error", JSON.stringify(answer.error) + ".<br>Please try again.");
             } else {
-              localStorage.setItem("publication", "https://publisher.directdemocracy.vote/card.php?id=" + answer.card);
+              localStorage.setItem("publication", publisher + "/card.php?id=" + answer.card);
               localStorage.setItem("card", str);
               localStorage.setItem("privateKey", privateKey);
               localStorage.setItem("publicKey", card.key);
@@ -360,12 +373,12 @@
               document.getElementById('register-nav-link').style.display = 'none';
               document.getElementById('revoke').removeAttribute("disabled");
               $('.nav-tabs a[href="#card"]').tab('show');
-              showModal("Publication success", "Your citizen card was published under number " + answer.card + ".<br>Check it at <a target='_blank' href='https://publisher.directdemocracy.vote/card.php?id=" + answer.card +
-                "'>https://publisher.directdemocracy.vote/card.php?id=" + answer.card + "</a><br>");
+              showModal("Publication success", "Your citizen card was published under number " + answer.card + ".<br>Check it at <a target='_blank' href='" + publisher + "/card.php?id=" + answer.card + "'>" + publisher + "/card.php?id=" + answer.card +
+                "</a><br>");
             }
           }
         };
-        xhttp.open("POST", "https://publisher.directdemocracy.vote/publish.php", true);
+        xhttp.open("POST", publisher + "/publish.php", true);
         xhttp.send(JSON.stringify(card));
         return false;
       }
@@ -534,6 +547,9 @@
       }
       window.onload = function() {
         clearForms();
+        publisher = localStorage.getItem("publisher");
+        if (!publisher) publisher = "https://publisher.directdemocracy.vote";
+        document.getElementById("publisher").value = publisher;
         var card_string = localStorage.getItem('card');
         if (card_string) {
           card = JSON.parse(card_string);
