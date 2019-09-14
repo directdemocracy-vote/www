@@ -494,19 +494,47 @@
         if (document.getElementById('revoke-other').checked) reason += document.getElementById('revoke-other-text').value;
         reason = reason.trim();
         console.log(reason);
-        if (revoke_key) {
-          window.localStorage.removeItem("privateKey");
-          window.localStorage.removeItem("publicKey");
-          generateNewKeyPair();
-        }
-        localStorage.removeItem("card");
-        localStorage.removeItem("publication");
-        document.getElementById('card-nav-link').style.display = 'none';
-        document.getElementById('register-nav-link').style.display = '';
-        document.getElementById('revoke').setAttribute("disabled", "disabled");
-        $('.nav-tabs a[href="#register"]').tab('show');
-        clearForms();
-        $('#modal-revoke').modal('hide');
+        now = new Date();
+        var revocation = {
+          schema: "https://directdemocracy.vote/json-schema/0.0.1/revocation.schema.json",
+          key: card.key,
+          signature: "",
+          published: now.toISOString(),
+          expires: card.expires,
+          revoked: {
+            key: card.key,
+            signature: card.signature
+          }
+          comment: reason
+        };
+        var str = JSON.stringify(revocation);
+        revocation.signature = crypt.sign(str, CryptoJS.SHA256, "sha256");
+        var xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+          if (this.status == 200) {
+            answer = JSON.parse(this.responseText);
+            if (answer.error) {
+              showModal("Revocation error", JSON.stringify(answer.error) + ".<br>Please try again.");
+            } else {
+              showModal("Revocation success", "Your citizen card was successfully revoked.");
+              if (revoke_key) {
+                window.localStorage.removeItem("privateKey");
+                window.localStorage.removeItem("publicKey");
+                generateNewKeyPair();
+              }
+              localStorage.removeItem("card");
+              localStorage.removeItem("publication");
+              document.getElementById('card-nav-link').style.display = 'none';
+              document.getElementById('register-nav-link').style.display = '';
+              document.getElementById('revoke').setAttribute("disabled", "disabled");
+              $('.nav-tabs a[href="#register"]').tab('show');
+              clearForms();
+              $('#modal-revoke').modal('hide');
+            }
+          }
+        };
+        xhttp.open("POST", publisher + "/publish.php", true);
+        xhttp.send(JSON.stringify(revocation));
       }
 
       function clearForms() {
