@@ -51,7 +51,8 @@
 }
 
 .card-label {
-  padding-top: 10px;
+  white-space: nowrap;
+  padding-top: 1px;
   font-size: 80%;
   color: grey;
 }
@@ -59,5 +60,10 @@
 .card-entry {
   font-weight: bold;
   font-size: 120%;
-  padding-bottom: 10px;
+  padding-bottom: 3px;
+}
+
+.card-date {
+  color:black;
+  font-weight:bold;
 }

@@ -133,7 +133,7 @@
             <div class="form-group"><br>
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="confirm-check" onchange="validate()">
-                <label class="form-check-label" for="confirm-check"> I confirm the above information is correct.</label><br>
+                <label class="form-check-label" for="confirm-check">I confirm I am over 18 years old and the above information is correct.</label><br>
               </div><br>
               <button class="btn btn-success" id="publish-button" role="button" disabled="disabled" onclick="publish();">Publish your citizen card</button>
               <small class="form-text text-muted">Warning: this cannot be undone!</small>
@@ -151,6 +151,16 @@
                 <div id="card-given-names" class="card-entry"> </div>
                 <div class="card-label"> Latitude, longitude: </div>
                 <div id="card-coords" class="card-entry"> 0, 0 </div>
+                <div class="card-label">
+                  <div class="row">
+                    <div class="col-md-4">Created:</div>
+                    <div id="card-published" class="col-md-1 card-date">0000-00-00</div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-4">Valid until:</div>
+                    <div id="card-expires" class="col-md-1 card-date">0000-00-00</div>
+                  </div>
+                </div>
               </div>
               <div class="col-md-4" style="max-width:220px">
                 <canvas id="card-qr-code" width="200" height="200" style="border:1px solid">
@@ -234,11 +244,18 @@
         document.getElementById('card-picture').setAttribute('src', card.picture);
         document.getElementById('card-family-name').innerHTML = card.familyName;
         document.getElementById('card-given-names').innerHTML = card.givenNames;
-        document.getElementById('card-coords').innerHTML = "<a target='_blank' href='https://openstreetmap.org/?mlat=" +
-                                + card.latitude / 1000000 + "&mlon=" + card.longitude / 1000000 + "&zoom=12'>" +
-                                + card.latitude / 1000000 + ", " + card.longitude / 1000000 + "</a>";
+        document.getElementById('card-coords').innerHTML = "<a target='_blank' href='https://openstreetmap.org/?mlat=" + +card.latitude / 1000000 + "&mlon=" + card.longitude / 1000000 + "&zoom=12'>" + +card.latitude / 1000000 + ", " + card.longitude /
+          1000000 + "</a>";
+        document.getElementById('card-published').innerHTML = card.published.substring(0, 10);
+        document.getElementById('card-expires').innerHTML = card.expires.substring(0, 10);
         var fingerprint = CryptoJS.SHA1(card.key).toString();
-        var qr = new QRious({element: document.getElementById('card-qr-code'), value: fingerprint, level: 'M', size: 200, padding: 13})
+        var qr = new QRious({
+          element: document.getElementById('card-qr-code'),
+          value: fingerprint,
+          level: 'M',
+          size: 200,
+          padding: 13
+        })
       }
 
       function validate() {
@@ -371,7 +388,6 @@
         xhttp.open("GET", "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=json&featureTypes=&location=" + lon + "," + lat, true);
         xhttp.send();
       }
-
       window.onload = function() {
         var card_string = localStorage.getItem('card');
         if (card_string) {
@@ -434,6 +450,7 @@
           map.on('click', onMapClick);
         }
       }
+
     </script>
   </body>
 
