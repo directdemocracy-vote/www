@@ -2,7 +2,7 @@
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"$id": "https://directdemocracy.vote/json-schema/0.0.1/endorsement.schema.json",
 	"title": "endorsement",
-	"description": "claim that a participant (endorser) acknowledges another participant (endorsed)",
+	"description": "claim that a citizen or trustee approves or disapprove a publication",
 	"type": "object",
 	"required": [
 		"schema",
@@ -10,7 +10,8 @@
 		"signature",
 		"published",
 		"expires",
-		"endorsed"
+		"revoke",
+		"publication"
 	],
 	"properties": {
 		"schema": {
@@ -30,14 +31,18 @@
 			"format": "date-time"
 		},
 		"expires": {
-			"description": "date at which this publication expires",
+			"description": "date at which the publication expires",
 			"type": "string",
 			"format": "date-time"
 		},
-		"endorsed": {
-			"description": "endorsed participant",
+		"revoke": {
+			"description": "boolean set to true to disapprove a publication and false to approve",
+			"type": "boolean"
+		},
+		"publication": {
+			"description": "endorsed publication",
 			"type": "object",
-			"required": ["key"],
+			"required": ["key", "signature"],
 			"properties": {
 				"key": {
 					"type": "string"
@@ -48,7 +53,7 @@
 			}
 		},
 		"message": {
-			"description": "message encrypted with the public key of the endorsed participant",
+			"description": "message encrypted with the public key of the publication author",
 			"type": "string"
 		},
 		"comment": {
