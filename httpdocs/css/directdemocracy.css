@@ -1,6 +1,9 @@
 .jumbotron {
   background: url("../images/handsup.jpg") no-repeat center center;
 }
+.nav-link {
+  outline: 0
+}
 .directdemocracy-title {
   padding: 10px 0 0 0;
   color: black;
@@ -50,20 +53,20 @@
   opacity: 0.9;
 }
 
-.card-label {
+.citizen-label {
   white-space: nowrap;
   padding-top: 1px;
   font-size: 80%;
   color: grey;
 }
 
-.card-entry {
+.citizen-entry {
   font-weight: bold;
   font-size: 120%;
   padding-bottom: 3px;
 }
 
-.card-date {
+.citizen-date {
   color:black;
   font-weight:bold;
 }
