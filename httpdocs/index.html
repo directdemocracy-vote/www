@@ -97,8 +97,8 @@
           <li class="nav-item" id="register-nav">
             <a class="nav-link" id="register-nav-link" data-toggle="tab" href="#register">Register</a>
           </li>
-          <li class="nav-item" id="card-nav">
-            <a class="nav-link" id="card-nav-link" data-toggle="tab" href="#card">Citizen Card</a>
+          <li class="nav-item" id="citizen-nav">
+            <a class="nav-link" id="citizen-nav-link" data-toggle="tab" href="#citizen">Citizen Card</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#settings">Settings</a>
@@ -179,31 +179,31 @@
               <small class="form-text text-muted">Warning: this cannot be undone!</small>
             </div>
           </div>
-          <div class="tab-pane container fade" id="card"><br>
+          <div class="tab-pane container fade" id="citizen"><br>
             <div class="row">
               <div class="col-md-4" style="max-width:170px">
-                <img id="card-picture" src="images/default-picture.png" style="width:150px;height:200px">
+                <img id="citizen-picture" src="images/default-picture.png" style="width:150px;height:200px">
               </div>
               <div class="col-md-4">
-                <div class="card-label"> Family name: </div>
-                <div id="card-family-name" class="card-entry"> </div>
-                <div class="card-label"> Given names: </div>
-                <div id="card-given-names" class="card-entry"> </div>
-                <div class="card-label"> Latitude, longitude: </div>
-                <div id="card-coords" class="card-entry"> 0, 0 </div>
-                <div class="card-label">
+                <div class="citizen-label"> Family name: </div>
+                <div id="citizen-family-name" class="citizen-entry"> </div>
+                <div class="citizen-label"> Given names: </div>
+                <div id="citizen-given-names" class="citizen-entry"> </div>
+                <div class="citizen-label"> Latitude, longitude: </div>
+                <div id="citizen-coords" class="citizen-entry"> 0, 0 </div>
+                <div class="citizen-label">
                   <div class="row">
                     <div class="col-md-4">Created:</div>
-                    <div id="card-published" class="col-md-1 card-date">0000-00-00</div>
+                    <div id="citizen-published" class="col-md-1 citizen-date">0000-00-00</div>
                   </div>
                   <div class="row">
                     <div class="col-md-4">Valid until:</div>
-                    <div id="card-expires" class="col-md-1 card-date">0000-00-00</div>
+                    <div id="citizen-expires" class="col-md-1 citizen-date">0000-00-00</div>
                   </div>
                 </div>
               </div>
               <div class="col-md-4" style="max-width:220px">
-                <canvas id="card-qr-code" width="200" height="200" style="border:1px solid">
+                <canvas id="citizen-qr-code" width="200" height="200" style="border:1px solid">
               </div>
             </div>
           </div>
@@ -284,7 +284,7 @@
     <script type="text/javascript">
       var croppie = null;
       var geolocation = false;
-      var card = null;
+      var citizen = null;
       var map = null;
       var marker = null;
       var crypt = null;
@@ -305,17 +305,17 @@
         return true;
       }
 
-      function updateCard() {
-        document.getElementById('card-picture').setAttribute('src', card.picture);
-        document.getElementById('card-family-name').innerHTML = card.familyName;
-        document.getElementById('card-given-names').innerHTML = card.givenNames;
-        document.getElementById('card-coords').innerHTML = "<a target='_blank' href='https://openstreetmap.org/?mlat=" + +card.latitude / 1000000 + "&mlon=" + card.longitude / 1000000 + "&zoom=12'>" + +card.latitude / 1000000 + ", " + card.longitude /
-          1000000 + "</a>";
-        document.getElementById('card-published').innerHTML = card.published.substring(0, 10);
-        document.getElementById('card-expires').innerHTML = card.expires.substring(0, 10);
-        var fingerprint = CryptoJS.SHA1(card.key).toString();
+      function updateCitizenCard() {
+        document.getElementById('citizen-picture').setAttribute('src', citizen.picture);
+        document.getElementById('citizen-family-name').innerHTML = citizen.familyName;
+        document.getElementById('citizen-given-names').innerHTML = citizen.givenNames;
+        document.getElementById('citizen-coords').innerHTML = "<a target='_blank' href='https://openstreetmap.org/?mlat=" + +citizen.latitude / 1000000 + "&mlon=" + citizen.longitude / 1000000 + "&zoom=12'>" + +citizen.latitude / 1000000 + ", " +
+          citizen.longitude / 1000000 + "</a>";
+        document.getElementById('citizen-published').innerHTML = citizen.published.substring(0, 10);
+        document.getElementById('citizen-expires').innerHTML = citizen.expires.substring(0, 10);
+        var fingerprint = CryptoJS.SHA1(citizen.key).toString();
         var qr = new QRious({
-          element: document.getElementById('card-qr-code'),
+          element: document.getElementById('citizen-qr-code'),
           value: fingerprint,
           level: 'M',
           size: 200,
@@ -326,12 +326,12 @@
       function validate() {
         var button = document.getElementById("publish-button");
         button.setAttribute("disabled", "disabled");
-        if (card.key === '' || card.picture === '') return;
-        if (card.latitude === 0 && card.longitude === 0) return;
-        card.familyName = document.getElementById("family-name").value;
-        if (card.familyName === '') return;
-        card.givenNames = document.getElementById("given-names").value;
-        if (card.givenNames === '') return;
+        if (citizen.key === '' || citizen.picture === '') return;
+        if (citizen.latitude === 0 && citizen.longitude === 0) return;
+        citizen.familyName = document.getElementById("family-name").value;
+        if (citizen.familyName === '') return;
+        citizen.givenNames = document.getElementById("given-names").value;
+        if (citizen.givenNames === '') return;
         if (!document.getElementById("confirm-check").checked) return;
         if (!checkExpirationValidity()) return;
         button.removeAttribute("disabled");
@@ -350,13 +350,13 @@
 
       function publish() {
         d = new Date();
-        card.published = d.toISOString();
+        citizen.published = d.toISOString();
         d.setFullYear(d.getFullYear() + 10);
         d = new Date(document.getElementById("expiration").value + "T00:00:00Z");
-        card.expires = d.toISOString();
-        card.signature = "";
-        var str = JSON.stringify(card);
-        card.signature = crypt.sign(str, CryptoJS.SHA256, "sha256");
+        citizen.expires = d.toISOString();
+        citizen.signature = '';
+        var str = JSON.stringify(citizen);
+        citizen.signature = crypt.sign(str, CryptoJS.SHA256, "sha256");
         var xhttp = new XMLHttpRequest();
         xhttp.onload = function() {
           if (this.status == 200) {
@@ -364,22 +364,21 @@
             if (answer.error) {
               showModal("Publication error", JSON.stringify(answer.error) + ".<br>Please try again.");
             } else {
-              localStorage.setItem("publication", publisher + "/card.php?id=" + answer.card);
-              localStorage.setItem("card", str);
+              localStorage.setItem("publication", publisher + "/publication.php?id=" + answer.citizen);
+              localStorage.setItem("citizen", JSON.stringify(citizen));
               localStorage.setItem("privateKey", privateKey);
-              localStorage.setItem("publicKey", card.key);
-              updateCard();
-              document.getElementById('card-nav-link').style.display = '';
+              updateCitizenCard();
+              document.getElementById('citizen-nav-link').style.display = '';
               document.getElementById('register-nav-link').style.display = 'none';
               document.getElementById('revoke').removeAttribute("disabled");
-              $('.nav-tabs a[href="#card"]').tab('show');
-              showModal("Publication success", "Your citizen card was published under number " + answer.card + ".<br>Check it at <a target='_blank' href='" + publisher + "/card.php?id=" + answer.card + "'>" + publisher + "/card.php?id=" + answer.card +
-                "</a><br>");
+              $('.nav-tabs a[href="#citizen"]').tab('show');
+              showModal("Publication success", "Your citizen card was published under number " + answer.citizen + ".<br>Check it at <a target='_blank' href='" + publisher + "/publication.php?id=" + answer.citizen + "'>" + publisher +
+                "/publication.php?id=" + answer.citizen + "</a><br>");
             }
           }
         };
         xhttp.open("POST", publisher + "/publish.php", true);
-        xhttp.send(JSON.stringify(card));
+        xhttp.send(JSON.stringify(citizen));
         return false;
       }
 
@@ -415,7 +414,7 @@
         }).then(function(result) {
           var img = document.getElementById("picture-display");
           img.setAttribute('src', result);
-          card.picture = result;
+          citizen.picture = result;
           document.getElementById("picture-select").style.display = "none";
           croppie.destroy();
           croppie = null;
@@ -425,27 +424,27 @@
 
       function getGeolocationPosition(position) {
         geolocation = true;
-        card.latitude = Math.round(1000000 * position.coords.latitude);
-        card.longitude = Math.round(1000000 * position.coords.longitude);
+        citizen.latitude = Math.round(1000000 * position.coords.latitude);
+        citizen.longitude = Math.round(1000000 * position.coords.longitude);
         map.setView([position.coords.latitude, position.coords.longitude], 12);
         setTimeout(updateMarker, 500);
       }
 
       function updateMarker() {
-        marker.setLatLng([card.latitude / 1000000, card.longitude / 1000000]);
+        marker.setLatLng([citizen.latitude / 1000000, citizen.longitude / 1000000]);
         updateLocation();
       }
 
       function onMapClick(e) {
         marker.setLatLng(e.latlng);
-        card.latitude = Math.round(1000000 * e.latlng.lat);
-        card.longitude = Math.round(1000000 * e.latlng.lng);
+        citizen.latitude = Math.round(1000000 * e.latlng.lat);
+        citizen.longitude = Math.round(1000000 * e.latlng.lng);
         updateLocation();
       }
 
       function updateLocation() {
-        var lat = card.latitude / 1000000;
-        var lon = card.longitude / 1000000;
+        var lat = citizen.latitude / 1000000;
+        var lon = citizen.longitude / 1000000;
         marker.setPopupContent(lat + ',' + lon).openPopup();
         document.getElementById("latitude").value = lat;
         document.getElementById("longitude").value = lon;
@@ -493,38 +492,39 @@
         } else revoke_key = false;
         if (document.getElementById('revoke-other').checked) reason += document.getElementById('revoke-other-text').value;
         reason = reason.trim();
-        console.log(reason);
         now = new Date();
-        var revocation = {
-          schema: "https://directdemocracy.vote/json-schema/0.0.1/revocation.schema.json",
-          key: card.key,
+        var endorsement = {
+          schema: "https://directdemocracy.vote/json-schema/0.0.1/endorsement.schema.json",
+          key: citizen.key,
           signature: "",
           published: now.toISOString(),
-          expires: card.expires,
-          revoked: {
-            key: card.key,
-            signature: card.signature
-          }
+          expires: citizen.expires,
+          revoke: true,
+          publication: {
+            key: citizen.key,
+            signature: citizen.signature
+          },
           comment: reason
         };
-        var str = JSON.stringify(revocation);
-        revocation.signature = crypt.sign(str, CryptoJS.SHA256, "sha256");
+        var str = JSON.stringify(endorsement);
+        console.log(endorsement);
+        endorsement.signature = crypt.sign(str, CryptoJS.SHA256, "sha256");
         var xhttp = new XMLHttpRequest();
         xhttp.onload = function() {
           if (this.status == 200) {
             answer = JSON.parse(this.responseText);
             if (answer.error) {
+              $('#modal-revoke').modal('hide');
               showModal("Revocation error", JSON.stringify(answer.error) + ".<br>Please try again.");
             } else {
               showModal("Revocation success", "Your citizen card was successfully revoked.");
               if (revoke_key) {
                 window.localStorage.removeItem("privateKey");
-                window.localStorage.removeItem("publicKey");
                 generateNewKeyPair();
               }
-              localStorage.removeItem("card");
+              localStorage.removeItem("citizen");
               localStorage.removeItem("publication");
-              document.getElementById('card-nav-link').style.display = 'none';
+              document.getElementById('citizen-nav-link').style.display = 'none';
               document.getElementById('register-nav-link').style.display = '';
               document.getElementById('revoke').setAttribute("disabled", "disabled");
               $('.nav-tabs a[href="#register"]').tab('show');
@@ -534,7 +534,7 @@
           }
         };
         xhttp.open("POST", publisher + "/publish.php", true);
-        xhttp.send(JSON.stringify(revocation));
+        xhttp.send(JSON.stringify(endorsement));
       }
 
       function clearForms() {
@@ -553,7 +553,6 @@
 
       function generateNewKeyPair() {
         privateKey = '';
-        card.key = '';
         document.getElementById("forging-spinner").style.display = '';
         document.getElementById("private-key-icon").style.display = 'none';
         document.getElementById("private-key-message").innerHTML = "Forging a new private key, please wait...";
@@ -565,7 +564,7 @@
         crypt.getKey(function() {
           dt = new Date();
           time += (dt.getTime());
-          card.key = crypt.getPublicKey();
+          citizen.key = crypt.getPublicKey();
           privateKey = crypt.getPrivateKey();
           document.getElementById("forging-spinner").style.display = 'none';
           document.getElementById("private-key-icon").style.display = '';
@@ -578,18 +577,27 @@
         publisher = localStorage.getItem("publisher");
         if (!publisher) publisher = "https://publisher.directdemocracy.vote";
         document.getElementById("publisher").value = publisher;
-        var card_string = localStorage.getItem('card');
-        if (card_string) {
-          card = JSON.parse(card_string);
+        privateKey = localStorage.getItem("privateKey");
+        if (!privateKey) generateNewKeyPair();
+        else {
+          crypt = new JSEncrypt();
+          crypt.setPrivateKey(privateKey);
+          document.getElementById("forging-spinner").style.display = 'none';
+          document.getElementById("private-key-icon").style.display = '';
+          document.getElementById("private-key-message").innerHTML = "Using your existing private key.";
+        }
+        var citizen_string = localStorage.getItem("citizen");
+        if (citizen_string) {
+          citizen = JSON.parse(citizen_string);
           document.getElementById('register-nav-link').style.display = 'none';
-          $('.nav-tabs a[href="#card"]').tab('show');
-          updateCard();
+          $('.nav-tabs a[href="#citizen"]').tab('show');
+          updateCitizenCard();
         } else {
-          document.getElementById('card-nav-link').style.display = 'none';
+          document.getElementById('citizen-nav-link').style.display = 'none';
           document.getElementById('revoke').setAttribute("disabled", "disabled");
           $('.nav-tabs a[href="#register"]').tab('show');
-          card = {
-            schema: "https://directdemocracy.vote/json-schema/0.0.1/card.schema.json",
+          citizen = {
+            schema: "https://directdemocracy.vote/json-schema/0.0.1/citizen.schema.json",
             key: "",
             signature: "",
             published: "",
@@ -600,20 +608,6 @@
             latitude: 0,
             longitude: 0
           };
-          privateKey = localStorage.getItem("privateKey");
-          card.key = localStorage.getItem("publicKey");
-          if (!privateKey || !card.key) {
-            generateNewKeyPair();
-          } else {
-            crypt = new JSEncrypt({
-              default_key_size: 2048
-            });
-            crypt.setPublicKey(card.key);
-            crypt.setPrivateKey(privateKey);
-            document.getElementById("forging-spinner").style.display = 'none';
-            document.getElementById("private-key-icon").style.display = '';
-            document.getElementById("private-key-message").innerHTML = "Using your existing private key.";
-          }
           if (navigator.geolocation) navigator.geolocation.getCurrentPosition(getGeolocationPosition);
           var xhttp = new XMLHttpRequest();
           xhttp.onreadystatechange = function() {
@@ -629,8 +623,8 @@
           };
           xhttp.open("GET", "https://ipinfo.io/loc", true);
           xhttp.send();
-          var lat = card.latitude / 1000000;
-          var lon = card.longitude / 1000000;
+          var lat = citizen.latitude / 1000000;
+          var lon = citizen.longitude / 1000000;
           map = L.map('latlongmap').setView([lat, lon], 2);
           L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>'
