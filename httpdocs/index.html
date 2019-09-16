@@ -547,11 +547,8 @@
               $('#modal-revoke').modal('hide');
               showModal("Revocation error", JSON.stringify(answer.error) + ".<br>Please try again.");
             } else {
-              showModal("Revocation success", "Your citizen card was successfully revoked.");
-              if (revoke_key) {
-                window.localStorage.removeItem("privateKey");
-                generateNewKeyPair();
-              }
+              window.localStorage.removeItem("privateKey");
+              generateNewKeyPair();
               localStorage.removeItem("citizen");
               localStorage.removeItem("publication");
               document.getElementById('citizen-nav-link').style.display = 'none';
@@ -562,7 +559,10 @@
               $('.nav-tabs a[href="#register"]').tab('show');
               clearForms();
               $('#modal-revoke').modal('hide');
+              showModal("Revocation success", "Your private key was successfully revoked.");
+              updateRegistrationForm();
             }
+            document.getElementById('revoke-i-understand').value = '';
           }
         };
         xhttp.open("POST", publisher + "/publish.php", true);
@@ -656,7 +656,6 @@
           document.getElementById('citizen-nav-link').style.display = 'none';
           document.getElementById('revoke').setAttribute("disabled", "disabled");
           document.getElementById('edit').setAttribute("disabled", "disabled");
-          setupMap();
           $('.nav-tabs a[href="#register"]').tab('show');
           citizen = {
             schema: "https://directdemocracy.vote/json-schema/0.0.1/citizen.schema.json",
@@ -670,6 +669,7 @@
             latitude: 0,
             longitude: 0
           };
+          setupMap();
         }
       }
 
