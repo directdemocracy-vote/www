@@ -227,6 +227,10 @@
             </div>
           </div>
           <div class="tab-pane container fade" id="endorsements"><br>
+            <div class="form-group">
+              <button id="endorse" class="btn btn-primary" onclick="endorse()">Endorse a Citizen</button>
+              <small class="form-text text-muted">Scan the QR code of another citizen's card to endorse her.</small>
+            </div>
           </div>
           <div class="tab-pane container fade" id="settings"><br>
             <div class="form-group"><br>
@@ -315,6 +319,10 @@
       var crypt = null;
       var privateKey = '';
       var publisher = '';
+
+      function endorse() {
+        console.log("Endorse");
+      }
 
       function checkExpirationValidity() {
         var expiration = document.getElementById("expiration");
@@ -537,7 +545,6 @@
           }
         };
         var str = JSON.stringify(endorsement);
-        console.log(endorsement);
         endorsement.signature = crypt.sign(str, CryptoJS.SHA256, "sha256");
         var xhttp = new XMLHttpRequest();
         xhttp.onload = function() {
