@@ -39,35 +39,51 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Revoke your Citizen Card</h4>
+            <h4 class="modal-title">Revoke your Private Key</h4>
             <button type="button" class="close" data-dismiss="modal">&times;</button>
           </div>
           <div class="modal-body">
-            <div>Why do you want to revoke your citizen card?</div>
-            <br>
-            <div class="form-check">
-              <label class="form-check-label">
-                <input id="revoke-moved" type="checkbox" class="form-check-input" onchange="updateRevokeButton();">I moved. </label>
-            </div>
+            <div>You should revoke your private key only if you believe someone else could have accessed it and may be in position to usurpate your citizen indentity.</div><br>
+            <div>The consequence of revoking your private key is that all your publications and some other publications will be revoked, including:</div><br>
+            <ul>
+              <li>Your citizen card.</li>
+              <li>Your endorsements.</li>
+              <li>The endorsements you received from other citizens.</li>
+            </ul>
+            <div>You will have to create a new citizen card, re-endorse and get endorsed by other citizens.</div><br>
             <div class="form-group">
-              <div class="form-check">
-                <label class="form-check-label">
-                  <input id="revoke-name" type="checkbox" class="form-check-input" onchange="updateRevokeButton();">My name changed. </label>
-              </div>
-              <div class="form-check">
-                <label class="form-check-label">
-                  <input id="revoke-key" type="checkbox" class="form-check-input" onchange="revokeKeyChanged();">My private key may be compromised. </label>
-              </div>
-              <div class="form-check">
-                <label class="form-check-label">
-                  <input id="revoke-other" type="checkbox" class="form-check-input" onchange="revokeOtherChanged();">Other: <input id="revoke-other-text" oninput="updateRevokeButton();" type="text" class="form-control" placeholder="Please explain briefly"
-                    disabled="disabled">
-                </label>
-              </div>
+              <label class="form-control-label">
+                <div>If you are sure to understand the consequences of revoking your private key, please type "<b>I understand</b>" here:</div><br>
+                <input id="revoke-i-understand" oninput="updateRevokeButton();" type="text" class="form-control" placeholder="">
+              </label>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" id="revoke-button" class="btn btn-danger" disabled="disabled" onclick="revokeCitizenCard();">Revoke Citizen Card</button>
+            <button type="button" id="revoke-button" class="btn btn-danger" disabled="disabled" onclick="revokePrivateKey();">Revoke Private Key</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal" id="modal-edit">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Edit your Citizen Card</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div>You should edit your citizen card only if you move or change your name.</div><br>
+            <div>The consequence of editing your citizen card is that all the endorsements of your citizen card will be revoked and you will have to ask others to endorse your new citizen card.</div><br>
+            <div class="form-group">
+              <label class="form-control-label">
+                <div>If you are sure to understand the consequences of editing your citizen card, please type "<b>I understand</b>" here:</div><br>
+                <input id="edit-i-understand" oninput="updateEditButton();" type="text" class="form-control" placeholder="">
+              </label>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="edit-button" class="btn btn-danger" disabled="disabled" onclick="editCitizenCard();">Edit Citizen Card</button>
             <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
           </div>
         </div>
@@ -219,8 +235,12 @@
               <small class="form-text text-muted">Do not change this unless you know what you are doing.</small>
             </div>
             <div class="form-group"><br>
-              <button id="revoke" class="btn btn-danger" onclick="revoke()">Revoke my citizen card</button>
-              <small class="form-text text-muted">If you moved, changed your name or believe your private key was compromised, you should revoke your citizen card and register a new one.</small>
+              <button id="edit" class="btn btn-danger" onclick="edit()">Edit my citizen card</button>
+              <small class="form-text text-muted">If you move or change your name, you should edit your citizen card.</small>
+            </div>
+            <div class="form-group"><br>
+              <button id="revoke" class="btn btn-danger" onclick="revoke()">Revoke my private key</button>
+              <small class="form-text text-muted">If you believe your private key was compromised, you should revoke it.</small>
             </div>
           </div>
           <div class="tab-pane container fade" id="privacy"><br>
@@ -328,6 +348,14 @@
         })
       }
 
+      function updateRegistrationForm() {
+        document.getElementById('picture-display').src = citizen.picture;
+        document.getElementById('family-name').value = citizen.familyName;
+        document.getElementById('given-names').value = citizen.givenNames;
+        document.getElementById('latitude').value = citizen.latitude;
+        document.getElementById('longitude').value = citizen.longitude;
+      }
+
       function validate() {
         var button = document.getElementById("publish-button");
         button.setAttribute("disabled", "disabled");
@@ -376,6 +404,7 @@
               document.getElementById('citizen-nav-link').style.display = '';
               document.getElementById('register-nav-link').style.display = 'none';
               document.getElementById('revoke').removeAttribute("disabled");
+              document.getElementById('edit').removeAttribute("disabled");
               $('.nav-tabs a[href="#citizen"]').tab('show');
               showModal("Publication success", "Your citizen card was published under number " + answer.citizen + ".<br>Check it at <a target='_blank' href='" + publisher + "/publication.php?id=" + answer.citizen + "'>" + publisher +
                 "/publication.php?id=" + answer.citizen + "</a><br>");
@@ -466,37 +495,34 @@
         xhttp.send();
       }
 
+      function edit() {
+        $('#modal-edit').modal();
+      }
+
+      function updateEditButton() {
+        document.getElementById('edit-button').disabled = (document.getElementById('edit-i-understand').value != 'I understand');
+      }
+
+      function editCitizenCard() {
+        document.getElementById('citizen-nav-link').style.display = 'none';
+        document.getElementById('register-nav-link').style.display = '';
+        document.getElementById('edit').setAttribute("disabled", "disabled");
+        setupMap();
+        $('.nav-tabs a[href="#register"]').tab('show');
+        clearForms();
+        $('#modal-edit').modal('hide');
+        updateRegistrationForm();
+      }
+
       function revoke() {
         $('#modal-revoke').modal();
       }
 
-      function revokeKeyChanged() {
-        if (document.getElementById("revoke-key").checked) document.getElementById("revoke-button").innerHTML = "Revoke Citizen Card and Private Key";
-        else document.getElementById("revoke-button").innerHTML = "Revoke Citizen Card";
-        updateRevokeButton();
-      }
-
-      function revokeOtherChanged() {
-        document.getElementById("revoke-other-text").disabled = !document.getElementById('revoke-other').checked;
-        updateRevokeButton();
-      }
-
       function updateRevokeButton() {
-        document.getElementById('revoke-button').disabled = !(document.getElementById('revoke-name').checked || document.getElementById('revoke-moved').checked || document.getElementById('revoke-key').checked || (document.getElementById(
-          'revoke-other').checked && document.getElementById('revoke-other-text').value != ''));
+        document.getElementById('revoke-button').disabled = (document.getElementById('revoke-i-understand').value != 'I understand');
       }
 
-      function revokeCitizenCard() {
-        var revoke_key;
-        var reason = "";
-        if (document.getElementById('revoke-moved').checked) reason += "I moved. ";
-        if (document.getElementById('revoke-name').checked) reason += "My name changed. ";
-        if (document.getElementById('revoke-key').checked) {
-          reason += "My private key may be compromised. ";
-          revoke_key = true;
-        } else revoke_key = false;
-        if (document.getElementById('revoke-other').checked) reason += document.getElementById('revoke-other-text').value;
-        reason = reason.trim();
+      function revokePrivateKey() {
         now = new Date();
         var endorsement = {
           schema: "https://directdemocracy.vote/json-schema/0.0.1/endorsement.schema.json",
@@ -508,8 +534,7 @@
           publication: {
             key: citizen.key,
             signature: citizen.signature
-          },
-          comment: reason
+          }
         };
         var str = JSON.stringify(endorsement);
         console.log(endorsement);
@@ -531,7 +556,9 @@
               localStorage.removeItem("publication");
               document.getElementById('citizen-nav-link').style.display = 'none';
               document.getElementById('register-nav-link').style.display = '';
+              document.getElementById('edit').setAttribute("disabled", "disabled");
               document.getElementById('revoke').setAttribute("disabled", "disabled");
+              setupMap();
               $('.nav-tabs a[href="#register"]').tab('show');
               clearForms();
               $('#modal-revoke').modal('hide');
@@ -543,11 +570,8 @@
       }
 
       function clearForms() {
-        document.getElementById('revoke-moved').checked = false;
-        document.getElementById('revoke-name').checked = false;
-        document.getElementById('revoke-key').checked = false;
-        document.getElementById('revoke-other').checked = false;
-        document.getElementById('revoke-other-text').value = '';
+        document.getElementById('edit-i-understand').value = '';
+        document.getElementById('revoke-i-understand').value = '';
         document.getElementById('confirm-check').checked = false;
         document.getElementById("publish-button").setAttribute("disabled", "disabled");
         var d = new Date();
@@ -577,8 +601,39 @@
           validate();
         });
       }
+
+      function setupMap() {
+        if (map != null) return;
+        if (navigator.geolocation) navigator.geolocation.getCurrentPosition(getGeolocationPosition);
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200 && geolocation == false) {
+            coords = this.responseText.split(',');
+            getGeolocationPosition({
+              coords: {
+                latitude: coords[0],
+                longitude: coords[1]
+              }
+            });
+          }
+        };
+        xhttp.open("GET", "https://ipinfo.io/loc", true);
+        xhttp.send();
+        var lat = citizen.latitude / 1000000;
+        var lon = citizen.longitude / 1000000;
+        map = L.map('latlongmap').setView([lat, lon], 2);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+        marker = L.marker([lat, lon]).addTo(map).bindPopup(lat + ',' + lon);
+        updateLocation();
+        map.on('click', onMapClick);
+      }
       window.onload = function() {
         clearForms();
+        $('.nav-tabs').on('shown.bs.tab', function(event) {
+          if (map) map.invalidateSize();
+        });
         publisher = localStorage.getItem("publisher");
         if (!publisher) publisher = "https://publisher.directdemocracy.vote";
         document.getElementById("publisher").value = publisher;
@@ -600,6 +655,8 @@
         } else {
           document.getElementById('citizen-nav-link').style.display = 'none';
           document.getElementById('revoke').setAttribute("disabled", "disabled");
+          document.getElementById('edit').setAttribute("disabled", "disabled");
+          setupMap();
           $('.nav-tabs a[href="#register"]').tab('show');
           citizen = {
             schema: "https://directdemocracy.vote/json-schema/0.0.1/citizen.schema.json",
@@ -613,30 +670,6 @@
             latitude: 0,
             longitude: 0
           };
-          if (navigator.geolocation) navigator.geolocation.getCurrentPosition(getGeolocationPosition);
-          var xhttp = new XMLHttpRequest();
-          xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200 && geolocation == false) {
-              coords = this.responseText.split(',');
-              getGeolocationPosition({
-                coords: {
-                  latitude: coords[0],
-                  longitude: coords[1]
-                }
-              });
-            }
-          };
-          xhttp.open("GET", "https://ipinfo.io/loc", true);
-          xhttp.send();
-          var lat = citizen.latitude / 1000000;
-          var lon = citizen.longitude / 1000000;
-          map = L.map('latlongmap').setView([lat, lon], 2);
-          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>'
-          }).addTo(map);
-          marker = L.marker([lat, lon]).addTo(map).bindPopup(lat + ',' + lon);
-          updateLocation();
-          map.on('click', onMapClick);
         }
       }
 
