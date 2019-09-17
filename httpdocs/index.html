@@ -17,6 +17,7 @@
     <script src="js/jsencrypt.min.js"></script>
     <script src="js/crypto-js.js"></script>
     <script src="js/qrious.min.js"></script>
+    <script type="module" src="js/index.js"></script>
     <title>directdemocracy.vote</title>
   </head>
 
@@ -54,12 +55,12 @@
             <div class="form-group">
               <label class="form-control-label">
                 <div>If you are sure to understand the consequences of revoking your private key, please type "<b>I understand</b>" here:</div><br>
-                <input id="revoke-i-understand" oninput="updateRevokeButton();" type="text" class="form-control" placeholder="">
+                <input id="revoke-i-understand" type="text" class="form-control" placeholder="">
               </label>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" id="revoke-button" class="btn btn-danger" disabled="disabled" onclick="revokePrivateKey();">Revoke Private Key</button>
+            <button type="button" id="revoke-button" class="btn btn-danger" disabled="disabled">Revoke Private Key</button>
             <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
           </div>
         </div>
@@ -78,12 +79,12 @@
             <div class="form-group">
               <label class="form-control-label">
                 <div>If you are sure to understand the consequences of editing your citizen card, please type "<b>I understand</b>" here:</div><br>
-                <input id="edit-i-understand" oninput="updateEditButton();" type="text" class="form-control" placeholder="">
+                <input id="edit-i-understand" type="text" class="form-control" placeholder="">
               </label>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" id="edit-button" class="btn btn-danger" disabled="disabled" onclick="editCitizenCard();">Edit Citizen Card</button>
+            <button type="button" id="edit-button" class="btn btn-danger" disabled="disabled">Edit Citizen Card</button>
             <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
           </div>
         </div>
@@ -133,15 +134,15 @@
           <div class="tab-pane container active" id="register"><br>
             <div class="form-group">
               <label for="picture">Picture:</label>
-              <input type="file" style="display:none" class="custom-file-input" id="picture-upload" accept="image/*" onchange="onPictureUploaded(event)" required>
+              <input type="file" style="display:none" class="custom-file-input" id="picture-upload" accept="image/*" required>
               <div class="container">
                 <div class="row">
                   <div class="col-md-6">
-                    <img id="picture-display" src="images/default-picture.png" style="width:150px;margin: 0px 50px 0px 50px;" onclick="onUploadClick()">
+                    <img id="picture-display" src="images/default-picture.png" style="width:150px;margin: 0px 50px 0px 50px;">
                   </div>
                   <div class="col-md-6 input-group-vertical" role="group" style="margin-top:10px">
-                    <button class="btn btn-secondary" onclick="onUploadClick(); return false;">Upload</button>
-                    <button class="btn btn-secondary" id="picture-select" style="display:none" onclick="onPictureSelect(); return false;">Select</button>
+                    <button id="upload-button" class="btn btn-secondary">Upload</button>
+                    <button class="btn btn-secondary" id="picture-select" style="display:none">Select</button>
                     <small class="form-text text-muted">You need a clear, recognizable identity picture of yourself.</small>
                   </div>
                 </div>
@@ -149,11 +150,11 @@
             </div>
             <div class="form-group">
               <label for="family-name">Family name:</label>
-              <input type="text" class="form-control" id="family-name" placeholder="Enter your family name here" oninput="validate()" required>
+              <input type="text" class="form-control" id="family-name" placeholder="Enter your family name here" required>
             </div>
             <div class="form-group">
               <label for="given-names">Given name(s):</label>
-              <input type="text" class="form-control" id="given-names" placeholder="Enter your given name(s) here." oninput="validate()" required>
+              <input type="text" class="form-control" id="given-names" placeholder="Enter your given name(s) here." required>
               <small class="form-text text-muted">Include your middle name(s) only if that helps distinguishing you from someone else at the same home address.</small>
             </div>
             <div class="form-group">
@@ -185,16 +186,16 @@
             </div>
             <div class="form-group">
               <label for="expiration">Expiration:</label>
-              <input class="form-control" type="date" value="2000-01-01" id="expiration" required oninput="validate();">
+              <input class="form-control" type="date" value="2000-01-01" id="expiration" required>
               <div class="invalid-feedback">Select an expiration date between today and 10 years from now.</div>
               <small class="form-text text-muted">Leave it to 10 years unless you anticipate any ealier change (move or name change).</small>
             </div>
             <div class="form-group"><br>
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="confirm-check" onchange="validate()">
+                <input class="form-check-input" type="checkbox" id="confirm-check">
                 <label class="form-check-label" for="confirm-check">I confirm I am over 18 years old and the above information is correct.</label><br>
               </div><br>
-              <button class="btn btn-success" id="publish-button" role="button" disabled="disabled" onclick="publish();">Publish your citizen card</button>
+              <button class="btn btn-success" id="publish-button" role="button" disabled="disabled">Publish your citizen card</button>
               <small class="form-text text-muted">Warning: this cannot be undone!</small>
             </div>
           </div>
@@ -228,22 +229,22 @@
           </div>
           <div class="tab-pane container fade" id="endorsements"><br>
             <div class="form-group">
-              <button id="endorse" class="btn btn-primary" onclick="endorse()">Endorse a Citizen</button>
+              <button id="endorse" class="btn btn-primary">Endorse a Citizen</button>
               <small class="form-text text-muted">Scan the QR code of another citizen's card to endorse her.</small>
             </div>
           </div>
           <div class="tab-pane container fade" id="settings"><br>
             <div class="form-group"><br>
               <label for="publisher">Publisher URL:</label>
-              <input type="url" class="form-control" id="publisher" placeholder="Enter your publisher here" required oninput="updatePublisher()">
+              <input type="url" class="form-control" id="publisher" placeholder="Enter your publisher here" required>
               <small class="form-text text-muted">Do not change this unless you know what you are doing.</small>
             </div>
             <div class="form-group"><br>
-              <button id="edit" class="btn btn-danger" onclick="edit()">Edit my citizen card</button>
+              <button id="edit" class="btn btn-danger">Edit my citizen card</button>
               <small class="form-text text-muted">If you move or change your name, you should edit your citizen card.</small>
             </div>
             <div class="form-group"><br>
-              <button id="revoke" class="btn btn-danger" onclick="revoke()">Revoke my private key</button>
+              <button id="revoke" class="btn btn-danger">Revoke my private key</button>
               <small class="form-text text-muted">If you believe your private key was compromised, you should revoke it.</small>
             </div>
           </div>
@@ -310,381 +311,6 @@
         <p style='text-align:center'><small>Made by citizens for citizens</small></p>
       </footer>
     </div>
-    <script type="module"> import QRScanner from './js/qr-scanner.min.js';
-      QRScanner.WORKER_PATH = './js/qr-scanner-worker.min.js';
-
-    </script>
-    <script type="text/javascript">
-      var croppie = null;
-      var geolocation = false;
-      var citizen = null;
-      var map = null;
-      var marker = null;
-      var crypt = null;
-      var privateKey = '';
-      var publisher = '';
-
-      function endorse() {
-        console.log("Endorse");
-      }
-
-      function checkExpirationValidity() {
-        var expiration = document.getElementById("expiration");
-        var choice = new Date(expiration.value + 'T00:00:00Z');
-        var min = new Date();
-        var max = new Date();
-        max.setFullYear(max.getFullYear() + 10);
-        if (choice > max || choice < min) {
-          expiration.setCustomValidity("Please enter a date between tomorrow and 10 year from now.");
-          return false;
-        }
-        expiration.setCustomValidity("");
-        return true;
-      }
-
-      function updateCitizenCard() {
-        document.getElementById('citizen-picture').setAttribute('src', citizen.picture);
-        document.getElementById('citizen-family-name').innerHTML = citizen.familyName;
-        document.getElementById('citizen-given-names').innerHTML = citizen.givenNames;
-        document.getElementById('citizen-coords').innerHTML = "<a target='_blank' href='https://openstreetmap.org/?mlat=" + +citizen.latitude / 1000000 + "&mlon=" + citizen.longitude / 1000000 + "&zoom=12'>" + +citizen.latitude / 1000000 + ", " +
-          citizen.longitude / 1000000 + "</a>";
-        document.getElementById('citizen-published').innerHTML = citizen.published.substring(0, 10);
-        document.getElementById('citizen-expires').innerHTML = citizen.expires.substring(0, 10);
-        var fingerprint = CryptoJS.SHA1(citizen.key).toString();
-        var qr = new QRious({
-          element: document.getElementById('citizen-qr-code'),
-          value: fingerprint,
-          level: 'M',
-          size: 200,
-          padding: 13
-        })
-      }
-
-      function updateRegistrationForm() {
-        document.getElementById('picture-display').src = citizen.picture;
-        document.getElementById('family-name').value = citizen.familyName;
-        document.getElementById('given-names').value = citizen.givenNames;
-        document.getElementById('latitude').value = citizen.latitude;
-        document.getElementById('longitude').value = citizen.longitude;
-      }
-
-      function validate() {
-        var button = document.getElementById("publish-button");
-        button.setAttribute("disabled", "disabled");
-        if (citizen.key === '' || citizen.picture === '') return;
-        if (citizen.latitude === 0 && citizen.longitude === 0) return;
-        citizen.familyName = document.getElementById("family-name").value;
-        if (citizen.familyName === '') return;
-        citizen.givenNames = document.getElementById("given-names").value;
-        if (citizen.givenNames === '') return;
-        if (!document.getElementById("confirm-check").checked) return;
-        if (!checkExpirationValidity()) return;
-        button.removeAttribute("disabled");
-      }
-
-      function showModal(title, contents) {
-        document.getElementById('modal-title').innerHTML = title;
-        document.getElementById('modal-contents').innerHTML = contents;
-        $('#modal').modal();
-      }
-
-      function updatePublisher() {
-        publisher = document.getElementById("publisher").value;
-        localStorage.setItem("publisher", publisher);
-      }
-
-      function publish() {
-        d = new Date();
-        citizen.published = d.toISOString();
-        d.setFullYear(d.getFullYear() + 10);
-        d = new Date(document.getElementById("expiration").value + "T00:00:00Z");
-        citizen.expires = d.toISOString();
-        citizen.signature = '';
-        var str = JSON.stringify(citizen);
-        citizen.signature = crypt.sign(str, CryptoJS.SHA256, "sha256");
-        var xhttp = new XMLHttpRequest();
-        xhttp.onload = function() {
-          if (this.status == 200) {
-            answer = JSON.parse(this.responseText);
-            if (answer.error) {
-              showModal("Publication error", JSON.stringify(answer.error) + ".<br>Please try again.");
-            } else {
-              localStorage.setItem("publication", publisher + "/publication.php?id=" + answer.citizen);
-              localStorage.setItem("citizen", JSON.stringify(citizen));
-              localStorage.setItem("privateKey", privateKey);
-              updateCitizenCard();
-              document.getElementById('citizen-nav-link').style.display = '';
-              document.getElementById('register-nav-link').style.display = 'none';
-              document.getElementById('revoke').removeAttribute("disabled");
-              document.getElementById('edit').removeAttribute("disabled");
-              $('.nav-tabs a[href="#citizen"]').tab('show');
-              showModal("Publication success", "Your citizen card was published under number " + answer.citizen + ".<br>Check it at <a target='_blank' href='" + publisher + "/publication.php?id=" + answer.citizen + "'>" + publisher +
-                "/publication.php?id=" + answer.citizen + "</a><br>");
-            }
-          }
-        };
-        xhttp.open("POST", publisher + "/publish.php", true);
-        xhttp.send(JSON.stringify(citizen));
-        return false;
-      }
-
-      function onUploadClick() {
-        var upload = document.getElementById("picture-upload");
-        upload.click();
-      }
-
-      function onPictureUploaded(event) {
-        if (croppie) croppie.destroy();
-        var img = document.getElementById("picture-display");
-        img.src = URL.createObjectURL(event.target.files[0]);
-        event.target.value = '';
-        croppie = new Croppie(img, {
-          boundary: {
-            width: 250,
-            height: 300
-          },
-          viewport: {
-            width: 150,
-            height: 200
-          },
-          enableExif: true
-        });
-        document.getElementById("picture-select").style.display = "";
-      }
-
-      function onPictureSelect() {
-        croppie.result({
-          type: 'base64',
-          format: 'jpeg',
-          quality: 0.95
-        }).then(function(result) {
-          var img = document.getElementById("picture-display");
-          img.setAttribute('src', result);
-          citizen.picture = result;
-          document.getElementById("picture-select").style.display = "none";
-          croppie.destroy();
-          croppie = null;
-          validate();
-        });
-      }
-
-      function getGeolocationPosition(position) {
-        geolocation = true;
-        citizen.latitude = Math.round(1000000 * position.coords.latitude);
-        citizen.longitude = Math.round(1000000 * position.coords.longitude);
-        map.setView([position.coords.latitude, position.coords.longitude], 12);
-        setTimeout(updateMarker, 500);
-      }
-
-      function updateMarker() {
-        marker.setLatLng([citizen.latitude / 1000000, citizen.longitude / 1000000]);
-        updateLocation();
-      }
-
-      function onMapClick(e) {
-        marker.setLatLng(e.latlng);
-        citizen.latitude = Math.round(1000000 * e.latlng.lat);
-        citizen.longitude = Math.round(1000000 * e.latlng.lng);
-        updateLocation();
-      }
-
-      function updateLocation() {
-        var lat = citizen.latitude / 1000000;
-        var lon = citizen.longitude / 1000000;
-        marker.setPopupContent(lat + ',' + lon).openPopup();
-        document.getElementById("latitude").value = lat;
-        document.getElementById("longitude").value = lon;
-        validate();
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-          if (this.readyState == 4 && this.status == 200) {
-            a = JSON.parse(this.responseText);
-            marker.setPopupContent(a.address.Match_addr + '<br><br><center style="color:#999">(' + lat + ', ' + lon + ')</center>').openPopup();
-            document.getElementById("address").innerHTML = a.address.Match_addr;
-          }
-        };
-        xhttp.open("GET", "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=json&featureTypes=&location=" + lon + "," + lat, true);
-        xhttp.send();
-      }
-
-      function edit() {
-        $('#modal-edit').modal();
-      }
-
-      function updateEditButton() {
-        document.getElementById('edit-button').disabled = (document.getElementById('edit-i-understand').value != 'I understand');
-      }
-
-      function editCitizenCard() {
-        document.getElementById('citizen-nav-link').style.display = 'none';
-        document.getElementById('register-nav-link').style.display = '';
-        document.getElementById('edit').setAttribute("disabled", "disabled");
-        setupMap();
-        $('.nav-tabs a[href="#register"]').tab('show');
-        clearForms();
-        $('#modal-edit').modal('hide');
-        updateRegistrationForm();
-      }
-
-      function revoke() {
-        $('#modal-revoke').modal();
-      }
-
-      function updateRevokeButton() {
-        document.getElementById('revoke-button').disabled = (document.getElementById('revoke-i-understand').value != 'I understand');
-      }
-
-      function revokePrivateKey() {
-        now = new Date();
-        var endorsement = {
-          schema: "https://directdemocracy.vote/json-schema/0.0.1/endorsement.schema.json",
-          key: citizen.key,
-          signature: "",
-          published: now.toISOString(),
-          expires: citizen.expires,
-          revoke: true,
-          publication: {
-            key: citizen.key,
-            signature: citizen.signature
-          }
-        };
-        var str = JSON.stringify(endorsement);
-        endorsement.signature = crypt.sign(str, CryptoJS.SHA256, "sha256");
-        var xhttp = new XMLHttpRequest();
-        xhttp.onload = function() {
-          if (this.status == 200) {
-            answer = JSON.parse(this.responseText);
-            if (answer.error) {
-              $('#modal-revoke').modal('hide');
-              showModal("Revocation error", JSON.stringify(answer.error) + ".<br>Please try again.");
-            } else {
-              window.localStorage.removeItem("privateKey");
-              generateNewKeyPair();
-              localStorage.removeItem("citizen");
-              localStorage.removeItem("publication");
-              document.getElementById('citizen-nav-link').style.display = 'none';
-              document.getElementById('register-nav-link').style.display = '';
-              document.getElementById('edit').setAttribute("disabled", "disabled");
-              document.getElementById('revoke').setAttribute("disabled", "disabled");
-              setupMap();
-              $('.nav-tabs a[href="#register"]').tab('show');
-              clearForms();
-              $('#modal-revoke').modal('hide');
-              showModal("Revocation success", "Your private key was successfully revoked.");
-              updateRegistrationForm();
-            }
-            document.getElementById('revoke-i-understand').value = '';
-          }
-        };
-        xhttp.open("POST", publisher + "/publish.php", true);
-        xhttp.send(JSON.stringify(endorsement));
-      }
-
-      function clearForms() {
-        document.getElementById('edit-i-understand').value = '';
-        document.getElementById('revoke-i-understand').value = '';
-        document.getElementById('confirm-check').checked = false;
-        document.getElementById("publish-button").setAttribute("disabled", "disabled");
-        var d = new Date();
-        d.setFullYear(d.getFullYear() + 10);
-        var v = d.toISOString();
-        document.getElementById("expiration").value = v.substring(0, 10);
-      }
-
-      function generateNewKeyPair() {
-        privateKey = '';
-        document.getElementById("forging-spinner").style.display = '';
-        document.getElementById("private-key-icon").style.display = 'none';
-        document.getElementById("private-key-message").innerHTML = "Forging a new private key, please wait...";
-        var dt = new Date();
-        var time = -(dt.getTime());
-        crypt = new JSEncrypt({
-          default_key_size: 2048
-        });
-        crypt.getKey(function() {
-          dt = new Date();
-          time += (dt.getTime());
-          citizen.key = crypt.getPublicKey();
-          privateKey = crypt.getPrivateKey();
-          document.getElementById("forging-spinner").style.display = 'none';
-          document.getElementById("private-key-icon").style.display = '';
-          document.getElementById("private-key-message").innerHTML = "You new private key was just forged in " + Number(time / 1000).toFixed(2) + " seconds.";
-          validate();
-        });
-      }
-
-      function setupMap() {
-        if (map != null) return;
-        if (navigator.geolocation) navigator.geolocation.getCurrentPosition(getGeolocationPosition);
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-          if (this.readyState == 4 && this.status == 200 && geolocation == false) {
-            coords = this.responseText.split(',');
-            getGeolocationPosition({
-              coords: {
-                latitude: coords[0],
-                longitude: coords[1]
-              }
-            });
-          }
-        };
-        xhttp.open("GET", "https://ipinfo.io/loc", true);
-        xhttp.send();
-        var lat = citizen.latitude / 1000000;
-        var lon = citizen.longitude / 1000000;
-        map = L.map('latlongmap').setView([lat, lon], 2);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map);
-        marker = L.marker([lat, lon]).addTo(map).bindPopup(lat + ',' + lon);
-        updateLocation();
-        map.on('click', onMapClick);
-      }
-      window.onload = function() {
-        clearForms();
-        $('.nav-tabs').on('shown.bs.tab', function(event) {
-          if (map) map.invalidateSize();
-        });
-        publisher = localStorage.getItem("publisher");
-        if (!publisher) publisher = "https://publisher.directdemocracy.vote";
-        document.getElementById("publisher").value = publisher;
-        privateKey = localStorage.getItem("privateKey");
-        if (!privateKey) generateNewKeyPair();
-        else {
-          crypt = new JSEncrypt();
-          crypt.setPrivateKey(privateKey);
-          document.getElementById("forging-spinner").style.display = 'none';
-          document.getElementById("private-key-icon").style.display = '';
-          document.getElementById("private-key-message").innerHTML = "Using your existing private key.";
-        }
-        var citizen_string = localStorage.getItem("citizen");
-        if (citizen_string) {
-          citizen = JSON.parse(citizen_string);
-          document.getElementById('register-nav-link').style.display = 'none';
-          $('.nav-tabs a[href="#citizen"]').tab('show');
-          updateCitizenCard();
-        } else {
-          document.getElementById('citizen-nav-link').style.display = 'none';
-          document.getElementById('revoke').setAttribute("disabled", "disabled");
-          document.getElementById('edit').setAttribute("disabled", "disabled");
-          $('.nav-tabs a[href="#register"]').tab('show');
-          citizen = {
-            schema: "https://directdemocracy.vote/json-schema/0.0.1/citizen.schema.json",
-            key: "",
-            signature: "",
-            published: "",
-            expires: "",
-            familyName: "",
-            givenNames: "",
-            picture: "",
-            latitude: 0,
-            longitude: 0
-          };
-          setupMap();
-        }
-      }
-
-    </script>
   </body>
 
 </html>
