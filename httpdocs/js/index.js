@@ -112,7 +112,7 @@ window.onload = function() {
       citizen.longitude / 1000000 + '</a>';
     document.getElementById('citizen-published').innerHTML = citizen.published.substring(0, 10);
     document.getElementById('citizen-expires').innerHTML = citizen.expires.substring(0, 10);
-    var fingerprint = CryptoJS.SHA1(citizen.key).toString();
+    var fingerprint = CryptoJS.SHA1(citizen.signature).toString();
     var qr = new QRious({
       element: document.getElementById('citizen-qr-code'),
       value: fingerprint,
