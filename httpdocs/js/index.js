@@ -10,6 +10,7 @@ window.onload = function() {
   var crypt = null;
   var privateKey = '';
   var publisher = '';
+  var scanner = null;
 
   function showModal(title, contents) {
     document.getElementById('modal-title').innerHTML = title;
@@ -333,6 +334,13 @@ window.onload = function() {
   });
 
   document.getElementById('endorse-button').addEventListener('click', function() {
+    if (scanner) {
+      document.getElementById('endorse-button').innerHTML = 'Endorse a Citizen';
+      scanner.destroy();
+      scanner = null;
+      return;
+    }
+    document.getElementById('endorse-button').innerHTML = 'Cancel Scan';
     const video = document.getElementById('endorse-qr-video');
     const fingerprint = document.getElementById('endorse-fingerprint');
     function setResult(label, result) {
@@ -342,7 +350,7 @@ window.onload = function() {
       video.style.display = 'none';
     }
     video.style.display = '';
-    let scanner = new QrScanner(video, result => setResult(fingerprint, result));
+    scanner = new QrScanner(video, result => setResult(fingerprint, result));
     scanner.start();
   });
 
