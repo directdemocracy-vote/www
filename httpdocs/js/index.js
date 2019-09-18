@@ -1,5 +1,5 @@
-import QRScanner from './qr-scanner.min.js';
-QRScanner.WORKER_PATH = './qr-scanner-worker.min.js';
+import QrScanner from './qr-scanner.min.js';
+QrScanner.WORKER_PATH = 'js/qr-scanner-worker.min.js';
 
 window.onload = function() {
   var croppie = null;
@@ -332,8 +332,18 @@ window.onload = function() {
     xhttp.send(JSON.stringify(endorsement));
   });
 
-  document.getElementById('endorse').addEventListener('click', function() {
-    console.log('Endorse');
+  document.getElementById('endorse-button').addEventListener('click', function() {
+    const video = document.getElementById('endorse-qr-video');
+    const fingerprint = document.getElementById('endorse-fingerprint');
+    function setResult(label, result) {
+      label.textContent = result;
+      scanner.destroy();
+      scanner = null;
+      video.style.display = 'none';
+    }
+    video.style.display = '';
+    let scanner = new QrScanner(video, result => setResult(fingerprint, result));
+    scanner.start();
   });
 
   clearForms();

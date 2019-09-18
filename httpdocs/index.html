@@ -229,8 +229,10 @@
           </div>
           <div class="tab-pane container fade" id="endorsements"><br>
             <div class="form-group">
-              <button id="endorse" class="btn btn-primary">Endorse a Citizen</button>
+              <button id="endorse-button" class="btn btn-primary">Endorse a Citizen</button>
               <small class="form-text text-muted">Scan the QR code of another citizen's card to endorse her.</small>
+              <video muted playsinline id="endorse-qr-video" style="display:none"></video>
+              <div id="endorse-fingerprint"></div>
             </div>
           </div>
           <div class="tab-pane container fade" id="settings"><br>
@@ -308,7 +310,7 @@
     <div>
       <hr>
       <footer>
-        <p style='text-align:center'><small>Made by citizens for citizens</small></p>
+        <p style="text-align:center"><small>Made by citizens for citizens</small></p>
       </footer>
     </div>
   </body>
