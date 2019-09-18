@@ -22,12 +22,12 @@ window.onload = function() {
     document.getElementById('edit-button').setAttribute('disabled', 'disabled');
     document.getElementById('revoke-i-understand').value = '';
     document.getElementById('revoke-button').setAttribute('disabled', 'disabled');
-    document.getElementById('confirm-check').checked = false;
-    document.getElementById("publish-button").setAttribute("disabled", "disabled");
+    document.getElementById('register-confirm-check').checked = false;
+    document.getElementById('publish-button').setAttribute('disabled', 'disabled');
     var d = new Date();
     d.setFullYear(d.getFullYear() + 10);
     var v = d.toISOString();
-    document.getElementById("expiration").value = v.substring(0, 10);
+    document.getElementById('register-expiration').value = v.substring(0, 10);
   }
 
   function getGeolocationPosition(position) {
@@ -53,11 +53,11 @@ window.onload = function() {
         });
       }
     };
-    xhttp.open("GET", "https://ipinfo.io/loc", true);
+    xhttp.open('GET', 'https://ipinfo.io/loc', true);
     xhttp.send();
     var lat = citizen.latitude / 1000000;
     var lon = citizen.longitude / 1000000;
-    map = L.map('latlongmap').setView([lat, lon], 2);
+    map = L.map('register-map').setView([lat, lon], 2);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
@@ -80,35 +80,35 @@ window.onload = function() {
     var lat = citizen.latitude / 1000000;
     var lon = citizen.longitude / 1000000;
     marker.setPopupContent(lat + ',' + lon).openPopup();
-    document.getElementById("latitude").value = lat;
-    document.getElementById("longitude").value = lon;
+    document.getElementById('register-latitude').value = lat;
+    document.getElementById('register-longitude').value = lon;
     validate();
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
         var a = JSON.parse(this.responseText);
         marker.setPopupContent(a.address.Match_addr + '<br><br><center style="color:#999">(' + lat + ', ' + lon + ')</center>').openPopup();
-        document.getElementById("address").innerHTML = a.address.Match_addr;
+        document.getElementById('register-address').innerHTML = a.address.Match_addr;
       }
     };
-    xhttp.open("GET", "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=json&featureTypes=&location=" + lon + "," + lat, true);
+    xhttp.open('GET', 'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=json&featureTypes=&location=' + lon + ',' + lat, true);
     xhttp.send();
   }
 
   function updateRegistrationForm() {
-    document.getElementById('picture-display').src = citizen.picture;
-    document.getElementById('family-name').value = citizen.familyName;
-    document.getElementById('given-names').value = citizen.givenNames;
-    document.getElementById('latitude').value = citizen.latitude;
-    document.getElementById('longitude').value = citizen.longitude;
+    document.getElementById('register-picture').src = citizen.picture;
+    document.getElementById('register-family-name').value = citizen.familyName;
+    document.getElementById('register-given-names').value = citizen.givenNames;
+    document.getElementById('register-latitude').value = citizen.latitude;
+    document.getElementById('register-longitude').value = citizen.longitude;
   }
 
   function updateCitizenCard() {
     document.getElementById('citizen-picture').setAttribute('src', citizen.picture);
     document.getElementById('citizen-family-name').innerHTML = citizen.familyName;
     document.getElementById('citizen-given-names').innerHTML = citizen.givenNames;
-    document.getElementById('citizen-coords').innerHTML = "<a target='_blank' href='https://openstreetmap.org/?mlat=" + +citizen.latitude / 1000000 + "&mlon=" + citizen.longitude / 1000000 + "&zoom=12'>" + +citizen.latitude / 1000000 + ", " +
-      citizen.longitude / 1000000 + "</a>";
+    document.getElementById('citizen-coords').innerHTML = '<a target="_blank" href="https://openstreetmap.org/?mlat=' + citizen.latitude / 1000000 + '&mlon=' + citizen.longitude / 1000000 + '&zoom=12">' + citizen.latitude / 1000000 + ', ' +
+      citizen.longitude / 1000000 + '</a>';
     document.getElementById('citizen-published').innerHTML = citizen.published.substring(0, 10);
     document.getElementById('citizen-expires').innerHTML = citizen.expires.substring(0, 10);
     var fingerprint = CryptoJS.SHA1(citizen.key).toString();
@@ -122,23 +122,23 @@ window.onload = function() {
   }
 
   function checkExpirationValidity() {
-    var expiration = document.getElementById("expiration");
+    var expiration = document.getElementById('register-expiration');
     var choice = new Date(expiration.value + 'T00:00:00Z');
     var min = new Date();
     var max = new Date();
     max.setFullYear(max.getFullYear() + 10);
     if (choice > max || choice < min) {
-      expiration.setCustomValidity("Please enter a date between tomorrow and 10 year from now.");
+      expiration.setCustomValidity('Please enter a date between tomorrow and 10 year from now.');
       return false;
     }
-    expiration.setCustomValidity("");
+    expiration.setCustomValidity('');
     return true;
   }
 
   function generateNewKeyPair() {
-    document.getElementById("forging-spinner").style.display = '';
-    document.getElementById("private-key-icon").style.display = 'none';
-    document.getElementById("private-key-message").innerHTML = "Forging a new private key, please wait...";
+    document.getElementById('register-forging-spinner').style.display = '';
+    document.getElementById('register-private-key-icon').style.display = 'none';
+    document.getElementById('register-private-key-message').innerHTML = 'Forging a new private key, please wait...';
     var dt = new Date();
     var time = -(dt.getTime());
     crypt = new JSEncrypt({
@@ -149,40 +149,40 @@ window.onload = function() {
       time += (dt.getTime());
       citizen.key = crypt.getPublicKey();
       privateKey = crypt.getPrivateKey();
-      document.getElementById("forging-spinner").style.display = 'none';
-      document.getElementById("private-key-icon").style.display = '';
-      document.getElementById("private-key-message").innerHTML = "You new private key was just forged in " + Number(time / 1000).toFixed(2) + " seconds.";
+      document.getElementById('register-forging-spinner').style.display = 'none';
+      document.getElementById('register-private-key-icon').style.display = '';
+      document.getElementById('register-private-key-message').innerHTML = 'You new private key was just forged in ' + Number(time / 1000).toFixed(2) + ' seconds.';
       validate();
     });
   }
 
   function validate() {
-    var button = document.getElementById("publish-button");
-    button.setAttribute("disabled", "disabled");
+    var button = document.getElementById('publish-button');
+    button.setAttribute('disabled', 'disabled');
     if (citizen.key === '' || citizen.picture === '') return;
     if (citizen.latitude === 0 && citizen.longitude === 0) return;
-    citizen.familyName = document.getElementById("family-name").value;
+    citizen.familyName = document.getElementById('register-family-name').value;
     if (citizen.familyName === '') return;
-    citizen.givenNames = document.getElementById("given-names").value;
+    citizen.givenNames = document.getElementById('register-given-names').value;
     if (citizen.givenNames === '') return;
-    if (!document.getElementById("confirm-check").checked) return;
+    if (!document.getElementById('register-confirm-check').checked) return;
     if (!checkExpirationValidity()) return;
-    button.removeAttribute("disabled");
+    button.removeAttribute('disabled');
   }
-  document.getElementById('family-name').addEventListener('input', validate);
-  document.getElementById('given-names').addEventListener('input', validate);
-  document.getElementById('expiration').addEventListener('input', validate);
-  document.getElementById('confirm-check').addEventListener('input', validate);
+  document.getElementById('register-family-name').addEventListener('input', validate);
+  document.getElementById('register-given-names').addEventListener('input', validate);
+  document.getElementById('register-expiration').addEventListener('input', validate);
+  document.getElementById('register-confirm-check').addEventListener('input', validate);
 
   function uploadPicture() {
-    document.getElementById("picture-upload").click();
+    document.getElementById('register-picture-upload').click();
   }
-  document.getElementById("upload-button").addEventListener('click', uploadPicture);
-  document.getElementById("picture-display").addEventListener('click', uploadPicture);
+  document.getElementById('register-upload-button').addEventListener('click', uploadPicture);
+  document.getElementById('register-picture').addEventListener('click', uploadPicture);
 
-  document.getElementById('picture-upload').addEventListener('change', function(event) {
+  document.getElementById('register-picture-upload').addEventListener('change', function(event) {
     if (croppie) croppie.destroy();
-    let img = document.getElementById("picture-display");
+    let img = document.getElementById('register-picture');
     img.src = URL.createObjectURL(event.target.files[0]);
     event.target.value = '';
     croppie = new Croppie(img, {
@@ -196,18 +196,18 @@ window.onload = function() {
       },
       enableExif: true
     });
-    document.getElementById("picture-select").style.display = "";
+    document.getElementById('picture-select').style.display = '';
   });
 
-  document.getElementById("picture-select").addEventListener('click', function() {
+  document.getElementById('picture-select').addEventListener('click', function() {
     croppie.result({
       type: 'base64',
       format: 'jpeg',
       quality: 0.95
     }).then(function(result) {
-      document.getElementById("picture-display").setAttribute('src', result);
+      document.getElementById('register-picture').setAttribute('src', result);
       citizen.picture = result;
-      document.getElementById("picture-select").style.display = "none";
+      document.getElementById('picture-select').style.display = 'none';
       croppie.destroy();
       croppie = null;
       validate();
@@ -215,33 +215,33 @@ window.onload = function() {
     return false;
   });
 
-  document.getElementById("publish-button").addEventListener('click', function() {
+  document.getElementById('publish-button').addEventListener('click', function() {
     var d = new Date();
     citizen.published = d.toISOString();
     d.setFullYear(d.getFullYear() + 10);
-    d = new Date(document.getElementById("expiration").value + "T00:00:00Z");
+    d = new Date(document.getElementById('register-expiration').value + 'T00:00:00Z');
     citizen.expires = d.toISOString();
     citizen.signature = '';
     var str = JSON.stringify(citizen);
-    citizen.signature = crypt.sign(str, CryptoJS.SHA256, "sha256");
+    citizen.signature = crypt.sign(str, CryptoJS.SHA256, 'sha256');
     var xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
       if (this.status == 200) {
         let answer = JSON.parse(this.responseText);
         if (answer.error) {
-          showModal("Publication error", JSON.stringify(answer.error) + ".<br>Please try again.");
+          showModal('Publication error', JSON.stringify(answer.error) + '.<br>Please try again.');
         } else {
-          localStorage.setItem("publication", publisher + "/publication.php?id=" + answer.citizen);
-          localStorage.setItem("citizen", JSON.stringify(citizen));
-          localStorage.setItem("privateKey", privateKey);
+          localStorage.setItem('publication', publisher + '/publication.php?id=' + answer.citizen);
+          localStorage.setItem('citizen', JSON.stringify(citizen));
+          localStorage.setItem('privateKey', privateKey);
           updateCitizenCard();
           document.getElementById('citizen-nav-link').style.display = '';
           document.getElementById('register-nav-link').style.display = 'none';
-          document.getElementById('revoke').removeAttribute("disabled");
-          document.getElementById('edit').removeAttribute("disabled");
+          document.getElementById('revoke').removeAttribute('disabled');
+          document.getElementById('edit').removeAttribute('disabled');
           $('.nav-tabs a[href="#citizen"]').tab('show');
-          showModal("Publication success", "Your citizen card was published under number " + answer.citizen + ".<br>Check it at <a target='_blank' href='" + publisher + "/publication.php?id=" + answer.citizen + "'>" + publisher +
-            "/publication.php?id=" + answer.citizen + "</a><br>");
+          showModal('Publication success', 'Your citizen card was published under number ' + answer.citizen + '.<br>Check it at <a target="_blank" href="' + publisher + '/publication.php?id=' + answer.citizen + '">' + publisher +
+            '/publication.php?id=' + answer.citizen + '</a><br>');
         }
       }
     };
@@ -251,8 +251,8 @@ window.onload = function() {
   });
 
   document.getElementById('publisher').addEventListener('input', function() {
-    publisher = document.getElementById("publisher").value;
-    localStorage.setItem("publisher", publisher);
+    publisher = document.getElementById('publisher').value;
+    localStorage.setItem('publisher', publisher);
   });
 
   document.getElementById('edit-i-understand').addEventListener('input', function() {
@@ -288,9 +288,9 @@ window.onload = function() {
     document.getElementById('revoke-button').setAttribute('disabled', 'disabled');
     let now = new Date();
     let endorsement = {
-      schema: "https://directdemocracy.vote/json-schema/0.0.1/endorsement.schema.json",
+      schema: 'https://directdemocracy.vote/json-schema/0.0.1/endorsement.schema.json',
       key: citizen.key,
-      signature: "",
+      signature: '',
       published: now.toISOString(),
       expires: citizen.expires,
       revoke: true,
@@ -300,59 +300,59 @@ window.onload = function() {
       }
     };
     let str = JSON.stringify(endorsement);
-    endorsement.signature = crypt.sign(str, CryptoJS.SHA256, "sha256");
+    endorsement.signature = crypt.sign(str, CryptoJS.SHA256, 'sha256');
     var xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
       if (this.status == 200) {
         let answer = JSON.parse(this.responseText);
         if (answer.error) {
           $('#modal-revoke').modal('hide');
-          showModal("Revocation error", JSON.stringify(answer.error) + ".<br>Please try again.");
+          showModal('Revocation error', JSON.stringify(answer.error) + '.<br>Please try again.');
         } else {
-          window.localStorage.removeItem("privateKey");
+          window.localStorage.removeItem('privateKey');
           privateKey = '';
           citizen.key = '';
           generateNewKeyPair();
-          localStorage.removeItem("citizen");
-          localStorage.removeItem("publication");
+          localStorage.removeItem('citizen');
+          localStorage.removeItem('publication');
           document.getElementById('citizen-nav-link').style.display = 'none';
           document.getElementById('register-nav-link').style.display = '';
-          document.getElementById('edit').setAttribute("disabled", "disabled");
-          document.getElementById('revoke').setAttribute("disabled", "disabled");
+          document.getElementById('edit').setAttribute('disabled', 'disabled');
+          document.getElementById('revoke').setAttribute('disabled', 'disabled');
           setupMap();
           $('.nav-tabs a[href="#register"]').tab('show');
           clearForms();
           $('#modal-revoke').modal('hide');
-          showModal("Revocation success", "Your private key was successfully revoked.");
+          showModal('Revocation success', 'Your private key was successfully revoked.');
           updateRegistrationForm();
         }
       }
     };
-    xhttp.open("POST", publisher + "/publish.php", true);
+    xhttp.open('POST', publisher + '/publish.php', true);
     xhttp.send(JSON.stringify(endorsement));
   });
 
   document.getElementById('endorse').addEventListener('click', function() {
-    console.log("Endorse");
+    console.log('Endorse');
   });
 
   clearForms();
   $('.nav-tabs').on('shown.bs.tab', function(event) {
     if (map) map.invalidateSize();
   });
-  publisher = localStorage.getItem("publisher");
-  if (!publisher) publisher = "https://publisher.directdemocracy.vote";
-  document.getElementById("publisher").value = publisher;
-  privateKey = localStorage.getItem("privateKey");
+  publisher = localStorage.getItem('publisher');
+  if (!publisher) publisher = 'https://publisher.directdemocracy.vote';
+  document.getElementById('publisher').value = publisher;
+  privateKey = localStorage.getItem('privateKey');
   if (!privateKey) generateNewKeyPair();
   else {
     crypt = new JSEncrypt();
     crypt.setPrivateKey(privateKey);
-    document.getElementById("forging-spinner").style.display = 'none';
-    document.getElementById("private-key-icon").style.display = '';
-    document.getElementById("private-key-message").innerHTML = "Using your existing private key.";
+    document.getElementById('register-forging-spinner').style.display = 'none';
+    document.getElementById('register-private-key-icon').style.display = '';
+    document.getElementById('register-private-key-message').innerHTML = 'Using your existing private key.';
   }
-  var citizen_string = localStorage.getItem("citizen");
+  var citizen_string = localStorage.getItem('citizen');
   if (citizen_string) {
     citizen = JSON.parse(citizen_string);
     document.getElementById('register-nav-link').style.display = 'none';
@@ -360,18 +360,18 @@ window.onload = function() {
     updateCitizenCard();
   } else {
     document.getElementById('citizen-nav-link').style.display = 'none';
-    document.getElementById('revoke').setAttribute("disabled", "disabled");
-    document.getElementById('edit').setAttribute("disabled", "disabled");
+    document.getElementById('revoke').setAttribute('disabled', 'disabled');
+    document.getElementById('edit').setAttribute('disabled', 'disabled');
     $('.nav-tabs a[href="#register"]').tab('show');
     citizen = {
-      schema: "https://directdemocracy.vote/json-schema/0.0.1/citizen.schema.json",
-      key: "",
-      signature: "",
-      published: "",
-      expires: "",
-      familyName: "",
-      givenNames: "",
-      picture: "",
+      schema: 'https://directdemocracy.vote/json-schema/0.0.1/citizen.schema.json',
+      key: '',
+      signature: '',
+      published: '',
+      expires: '',
+      familyName: '',
+      givenNames: '',
+      picture: '',
       latitude: 0,
       longitude: 0
     };
