@@ -246,7 +246,6 @@ window.onload = function() {
         }
       }
     };
-    console.log(JSON.stringify(citizen));
     xhttp.open('POST', publisher + '/publish.php', true);
     xhttp.send(JSON.stringify(citizen));
     return false;
@@ -340,10 +339,9 @@ window.onload = function() {
       scanner = null;
       return;
     }
-    document.getElementById('endorse-button').innerHTML = 'Cancel Scan';
+    const button = document.getElementById('endorse-button');
     const video = document.getElementById('endorse-qr-video');
     const message = document.getElementById('endorse-message');
-
     function setResult(fingerprint) {
       const pattern = /^[0-9a-f]{40}$/g;
       if (!pattern.test(fingerprint)) {
@@ -357,6 +355,8 @@ window.onload = function() {
       scanner.destroy();
       scanner = null;
       video.style.display = 'none';
+      button.innerHTML = 'Endorse Citizen';
+      button.setAttribute('disabled', 'disabled');
       var xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -366,6 +366,7 @@ window.onload = function() {
             setTimeout(function() {
               message.innerHTML = '';
             }, 10000);
+            button.removeAttribute('disabled');
             return;
           }
           // verify signature of endorsed
@@ -373,24 +374,45 @@ window.onload = function() {
           endorsed.signature = '';
           let verify = new JSEncrypt();
           verify.setPublicKey(endorsed.key);
-          console.log(JSON.stringify(endorsed));
-          if (verify.verify(JSON.stringify(endorsed), signature, CryptoJS.SHA256))
-            console.log('OK');
-          else
-            console.log('KO');
+          if (!verify.verify(JSON.stringify(endorsed), signature, CryptoJS.SHA256)) {
+            message.innerHTML = 'Cannot verify citizen signature';
+            setTimeout(function() {
+              message.innerHTML = '';
+            }, 10000);
+            button.removeAttribute('disabled');
+            return;
+          }
+          message.innerHTML = '';
+          document.getElementById('endorse-button-group').style.display = 'none';
           document.getElementById('endorse-citizen').style.display = '';
           document.getElementById('endorse-picture').src = endorsed.picture;
           document.getElementById('endorse-family-name').innerHTML = endorsed.familyName;
           document.getElementById('endorse-given-names').innerHTML = endorsed.givenNames;
           document.getElementById('endorse-coords').innerHTML = endorsed.latitude + ', ' + endorsed.longitude;
-          //marker.setPopupContent(a.address.Match_addr + '<br><br><center style="color:#999">(' + lat + ', ' + lon + ')</center>').openPopup();
-          //document.getElementById('register-address').innerHTML = a.address.Match_addr;
+          let published = new Date(endorsed.published);
+          let expires = new Date(endorsed.expires);
+          document.getElementById('endorse-published').innerHTML = published.toISOString().slice(0, 10);
+          document.getElementById('endorse-expires').innerHTML = expires.toISOString().slice(0, 10);
+
+          var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+              var a = JSON.parse(this.responseText);
+              marker.setPopupContent(a.address.Match_addr + '<br><br><center style="color:#999">('
+               + lat + ', ' + lon + ')</center>').openPopup();
+              document.getElementById('register-address').innerHTML = a.address.Match_addr;
+            }
+          };
+          xhttp.open('GET', 'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=json&featureTypes=&location=' + lon + ',' + lat, true);
+          xhttp.send();
+
         }
       };
       xhttp.open('GET', publisher + '/search.php?fingerprint=' + fingerprint, true);
       xhttp.send();
     }
     video.style.display = '';
+    button.innerHTML = 'Cancel Scan';
     scanner = new QrScanner(video, fingerprint => setResult(fingerprint));
     scanner.start();
   });
