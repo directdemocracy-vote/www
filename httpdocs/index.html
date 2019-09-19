@@ -205,12 +205,12 @@
                 <img id="citizen-picture" src="images/default-picture.png" style="width:150px;height:200px">
               </div>
               <div class="col-md-4">
-                <div class="citizen-label"> Family name: </div>
-                <div id="citizen-family-name" class="citizen-entry"> </div>
-                <div class="citizen-label"> Given names: </div>
-                <div id="citizen-given-names" class="citizen-entry"> </div>
-                <div class="citizen-label"> Latitude, longitude: </div>
-                <div id="citizen-coords" class="citizen-entry"> 0, 0 </div>
+                <div class="citizen-label">Family name:</div>
+                <div id="citizen-family-name" class="citizen-entry"></div>
+                <div class="citizen-label">Given names:</div>
+                <div id="citizen-given-names" class="citizen-entry"></div>
+                <div class="citizen-label">Latitude, longitude:</div>
+                <div id="citizen-coords" class="citizen-entry">0, 0</div>
                 <div class="citizen-label">
                   <div class="row">
                     <div class="col-md-4">Created:</div>
@@ -229,10 +229,43 @@
           </div>
           <div class="tab-pane container fade" id="endorsements"><br>
             <div class="form-group">
-              <button id="endorse-button" class="btn btn-primary">Endorse a Citizen</button>
+              <button id="endorse-button" class="btn btn-primary">Endorse a Citizen</button><span id="endorse-message"></span>
               <small class="form-text text-muted">Scan the QR code of another citizen's card to endorse her.</small>
               <video muted playsinline id="endorse-qr-video" style="display:none"></video>
-              <div id="endorse-fingerprint"></div>
+              <div id="endorse-citizen" style="display:none">
+                <div class="form-group"><br>
+                  <img id="endorse-picture" src="images/default-picture.png" style="width:150px;height:200px">
+                  <input class="form-check-input" type="checkbox" id="endorse-picture-check">
+                  <label class="form-check-label" for="endorse-picture-check">I clearly recognize the citizen on this picture.</label><br>
+                </div>
+                <div class="form-group"><br>
+                  <div class="citizen-label">Family name:</div>
+                  <div id="endorse-family-name" class="citizen-entry"></div>
+                  <div class="citizen-label">Given names:</div>
+                  <div id="endorse-given-names" class="citizen-entry"></div>
+                  <input class="form-check-input" type="checkbox" id="endorse-name-check">
+                  <label class="form-check-label" for="endorse-name-check">The family and given names of the citizen are correct.</label><br>
+                </div>
+                <div class="form-group"><br>
+                  <div class="citizen-label">Latitude, longitude:</div>
+                  <div id="endorse-coords" class="citizen-entry">0, 0</div>
+                  <div id="endorse-map" style="width:100%;height:400px;margin-top:10px"></div>
+                </div>
+                <div class="form-group"><br>
+                  <div class="citizen-label">
+                    <div class="row">
+                      <div class="col-md-4">Created:</div>
+                      <div id="endorse-published" class="col-md-1 citizen-date">0000-00-00</div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-4">Valid until:</div>
+                      <div id="endorse-expires" class="col-md-1 citizen-date">0000-00-00</div>
+                    </div>
+                    <button id="edit" class="btn btn-danger" disabled>Endorse this Citizen</button>
+                    <small class="form-text text-muted">Warning: endorsing a wrong citizen is likely to affect your endorsements by trustees.</small>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="tab-pane container fade" id="settings"><br>

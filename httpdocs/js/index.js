@@ -36,7 +36,10 @@ window.onload = function() {
     citizen.latitude = Math.round(1000000 * position.coords.latitude);
     citizen.longitude = Math.round(1000000 * position.coords.longitude);
     map.setView([position.coords.latitude, position.coords.longitude], 12);
-    setTimeout(updateMarker, 500);
+    setTimeout(function() {
+      marker.setLatLng([citizen.latitude / 1000000, citizen.longitude / 1000000]);
+      updateLocation();
+    }, 500);
   }
 
   function setupMap() {
@@ -70,11 +73,6 @@ window.onload = function() {
       citizen.longitude = Math.round(1000000 * e.latlng.lng);
       updateLocation();
     });
-  }
-
-  function updateMarker() {
-    marker.setLatLng([citizen.latitude / 1000000, citizen.longitude / 1000000]);
-    updateLocation();
   }
 
   function updateLocation() {
@@ -342,15 +340,47 @@ window.onload = function() {
     }
     document.getElementById('endorse-button').innerHTML = 'Cancel Scan';
     const video = document.getElementById('endorse-qr-video');
-    const fingerprint = document.getElementById('endorse-fingerprint');
-    function setResult(label, result) {
-      label.textContent = result;
+    const message = document.getElementById('endorse-message');
+    function setResult(result) {
+      const pattern = /^[0-9a-f]{40}$/g;
+      if (!pattern.test(result)) {
+        message.innerHTML = 'Wrong QR code reading: <b>' + result + '</b>';
+        setTimeout(function() {
+          message.innerHTML = '';
+        }, 10000);
+        return;
+      }
+      message.innerHTML = 'Found fingerprint: <br>' + result + '</b>';
       scanner.destroy();
       scanner = null;
       video.style.display = 'none';
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          var endorsed = JSON.parse(this.responseText);
+          if (endorsed.hasOwnProperty('error') {
+            message.innerHTML = endorsed.error;
+            setTimeout(function() {
+              message.innerHTML = '';
+            }, 10000);
+            return;
+          }
+          // check signature of endorsed
+
+          document.getElementById('endorse-picture').src = endorsed.picture;
+          document.getElementById('endorse-family-name').innerHTML = endorsed.familyName;
+          document.getElementById('endorse-given-names').innerHTML = endorsed.givenNames;
+          document.getElementById('endorse-coords').innerHTML = endorsed.latitude + ', ' + endorsed.longitude;
+          //marker.setPopupContent(a.address.Match_addr + '<br><br><center style="color:#999">(' + lat + ', ' + lon + ')</center>').openPopup();
+          //document.getElementById('register-address').innerHTML = a.address.Match_addr;
+        }
+      };
+      xhttp.open('GET', publisher + '/search.php?fingerprint=' + fingerprint, true);
+      xhttp.send();
+
     }
     video.style.display = '';
-    scanner = new QrScanner(video, result => setResult(fingerprint, result));
+    scanner = new QrScanner(video, result => setResult(result));
     scanner.start();
   });
 
