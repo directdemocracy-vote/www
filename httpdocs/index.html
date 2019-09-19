@@ -201,28 +201,30 @@
           </div>
           <div class="tab-pane container fade" id="citizen"><br>
             <div class="row">
-              <div class="col-md-4" style="max-width:170px">
+              <div class="col" style="max-width:170px">
                 <img id="citizen-picture" src="images/default-picture.png" style="width:150px;height:200px">
               </div>
-              <div class="col-md-4">
+              <div class="col">
                 <div class="citizen-label">Family name:</div>
                 <div id="citizen-family-name" class="citizen-entry"></div>
                 <div class="citizen-label">Given names:</div>
                 <div id="citizen-given-names" class="citizen-entry"></div>
                 <div class="citizen-label">Latitude, longitude:</div>
                 <div id="citizen-coords" class="citizen-entry">0, 0</div>
-                <div class="citizen-label">
-                  <div class="row">
-                    <div class="col-md-4">Created:</div>
-                    <div id="citizen-published" class="col-md-1 citizen-date">0000-00-00</div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-4">Valid until:</div>
-                    <div id="citizen-expires" class="col-md-1 citizen-date">0000-00-00</div>
-                  </div>
+                <div>
+                  <table>
+                    <tr>
+                      <td class="citizen-label" style="padding-right:10px">Created:</td>
+                      <td id="citizen-published" class="citizen-date">0000-00-00</td>
+                    </tr>
+                    <tr>
+                      <td class="citizen-label" style="padding-right:10px">Valid until:</td>
+                      <td id="citizen-expires" class="citizen-date">0000-00-00</td>
+                    </tr>
+                  </table>
                 </div>
               </div>
-              <div class="col-md-4" style="max-width:220px">
+              <div class="col" style="max-width:220px">
                 <canvas id="citizen-qr-code" width="200" height="200" style="border:1px solid">
               </div>
             </div>

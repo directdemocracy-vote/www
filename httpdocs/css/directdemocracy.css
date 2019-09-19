@@ -61,6 +61,7 @@
 }
 
 .citizen-entry {
+  white-space: nowrap;
   font-weight: bold;
   font-size: 120%;
   padding-bottom: 3px;
