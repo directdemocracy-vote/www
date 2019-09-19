@@ -27,8 +27,7 @@ window.onload = function() {
     document.getElementById('publish-button').setAttribute('disabled', 'disabled');
     var d = new Date();
     d.setFullYear(d.getFullYear() + 10);
-    var v = d.toISOString();
-    document.getElementById('register-expiration').value = v.substring(0, 10);
+    document.getElementById('register-expiration').value = d.toISOString().slice(0, 10);
   }
 
   function getGeolocationPosition(position) {
@@ -220,8 +219,8 @@ window.onload = function() {
   });
 
   document.getElementById('publish-button').addEventListener('click', function() {
-    citizen.published = new Date();
-    citizen.expires = new Date(document.getElementById('register-expiration').value + 'T00:00:00Z');;
+    citizen.published = new Date().getTime();
+    citizen.expires = new Date(document.getElementById('register-expiration').value + 'T00:00:00Z').getTime();
     citizen.signature = '';
     var str = JSON.stringify(citizen);
     citizen.signature = crypt.sign(str, CryptoJS.SHA256, 'sha256');
@@ -247,6 +246,7 @@ window.onload = function() {
         }
       }
     };
+    console.log(JSON.stringify(citizen));
     xhttp.open('POST', publisher + '/publish.php', true);
     xhttp.send(JSON.stringify(citizen));
     return false;
@@ -292,7 +292,7 @@ window.onload = function() {
       schema: 'https://directdemocracy.vote/json-schema/0.0.1/endorsement.schema.json',
       key: citizen.key,
       signature: '',
-      published: new Date(),
+      published: new Date().getTime(),
       expires: citizen.expires,
       revoke: true,
       publication: {
