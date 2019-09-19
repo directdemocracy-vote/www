@@ -393,17 +393,23 @@ window.onload = function() {
           let expires = new Date(endorsed.expires);
           document.getElementById('endorse-published').innerHTML = published.toISOString().slice(0, 10);
           document.getElementById('endorse-expires').innerHTML = expires.toISOString().slice(0, 10);
-
+          var lat = endorsed.latitude / 1000000;
+          var lon = endorsed.longitude / 1000000;
+          var endorse_map = L.map('endorse-map').setView([lat, lon], 18);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>'
+          }).addTo(endorse_map);
+          var endorse_marker = L.marker([lat, lon]).addTo(endorse_map).bindPopup(lat + ',' + lon);
           var xhttp = new XMLHttpRequest();
           xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
               var a = JSON.parse(this.responseText);
-              marker.setPopupContent(a.address.Match_addr + '<br><br><center style="color:#999">('
+              endorse_marker.setPopupContent(a.address.Match_addr + '<br><br><center style="color:#999">('
                + lat + ', ' + lon + ')</center>').openPopup();
-              document.getElementById('register-address').innerHTML = a.address.Match_addr;
             }
           };
-          xhttp.open('GET', 'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=json&featureTypes=&location=' + lon + ',' + lat, true);
+          xhttp.open('GET', 'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=json&featureTypes=&location='
+                     + lon + ',' + lat, true);
           xhttp.send();
 
         }
