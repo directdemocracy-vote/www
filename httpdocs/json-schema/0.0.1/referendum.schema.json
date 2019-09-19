@@ -31,14 +31,16 @@
 			"type": "string"
 		},
 		"published": {
-			"description": "date of the publication of the referendum",
-			"type": "string",
-			"format": "date-time"
+			"description": "date of publication (milliseconds since 1970-01-01 00:00:00.000)",
+			"type": "integer",
+			"minimum": 0,
+			"maximum": 999999999999999
 		},
 		"expires": {
-			"description": "date at which this publication expires",
-			"type": "string",
-			"format": "date-time"
+			"description": "date at which this publication expires (milliseconds since 1970-01-01 00:00:00.000)",
+			"type": "integer",
+			"minimum": 0,
+			"maximum": 999999999999999
 		},
 		"title": {
 			"description": "title of the referendum",
@@ -60,8 +62,10 @@
 			}
 		},
 		"deadline": {
-			"type": "string",
-			"format": "date-time"
+			"description": "date of vote deadline (milliseconds since 1970-01-01 00:00:00.000)",
+			"type": "integer",
+			"minimum": 0,
+			"maximum": 999999999999999
 		},
 		"areas": {
 			"description": "areas in which the citizen should live to vote for this referendum",
@@ -91,11 +95,11 @@
 				}
 			}
 		},
-		"trusters": {
-			"description": "public keys of trusters that should be used to process this referendum",
+		"trustees": {
+			"description": "public keys of trustees that should be used to process this referendum",
 			"type": "array",
 			"items": {
-				"description": "public key of the truster",
+				"description": "public key of the trustee",
 				"type": "string"
 			}
 		},

@@ -110,8 +110,10 @@ window.onload = function() {
     document.getElementById('citizen-coords').innerHTML = '<a target="_blank" href="https://openstreetmap.org/?mlat='
      + citizen.latitude / 1000000 + '&mlon=' + citizen.longitude / 1000000 + '&zoom=12">' + citizen.latitude / 1000000 + ', '
      + citizen.longitude / 1000000 + '</a>';
-    document.getElementById('citizen-published').innerHTML = citizen.published.substring(0, 10);
-    document.getElementById('citizen-expires').innerHTML = citizen.expires.substring(0, 10);
+    let published = new Date(citizen.published);
+    let expires = new Date(citizen.expires);
+    document.getElementById('citizen-published').innerHTML = published.toISOString().slice(0, 10);
+    document.getElementById('citizen-expires').innerHTML = expires.toISOString().slice(0, 10);
     var fingerprint = CryptoJS.SHA1(citizen.signature).toString();
     var qr = new QRious({
       element: document.getElementById('citizen-qr-code'),
@@ -119,7 +121,7 @@ window.onload = function() {
       level: 'M',
       size: 200,
       padding: 13
-    })
+    });
   }
 
   function checkExpirationValidity() {
@@ -218,11 +220,8 @@ window.onload = function() {
   });
 
   document.getElementById('publish-button').addEventListener('click', function() {
-    var d = new Date();
-    citizen.published = d.toISOString();
-    d.setFullYear(d.getFullYear() + 10);
-    d = new Date(document.getElementById('register-expiration').value + 'T00:00:00Z');
-    citizen.expires = d.toISOString();
+    citizen.published = new Date();
+    citizen.expires = new Date(document.getElementById('register-expiration').value + 'T00:00:00Z');;
     citizen.signature = '';
     var str = JSON.stringify(citizen);
     citizen.signature = crypt.sign(str, CryptoJS.SHA256, 'sha256');
@@ -289,12 +288,11 @@ window.onload = function() {
   document.getElementById('revoke-button').addEventListener('click', function() {
     document.getElementById('revoke-i-understand').value = '';
     document.getElementById('revoke-button').setAttribute('disabled', 'disabled');
-    let now = new Date();
     let endorsement = {
       schema: 'https://directdemocracy.vote/json-schema/0.0.1/endorsement.schema.json',
       key: citizen.key,
       signature: '',
-      published: now.toISOString(),
+      published: new Date(),
       expires: citizen.expires,
       revoke: true,
       publication: {
@@ -346,16 +344,16 @@ window.onload = function() {
     const video = document.getElementById('endorse-qr-video');
     const message = document.getElementById('endorse-message');
 
-    function setResult(result) {
+    function setResult(fingerprint) {
       const pattern = /^[0-9a-f]{40}$/g;
-      if (!pattern.test(result)) {
-        message.innerHTML = 'Wrong QR code reading: <b>' + result + '</b>';
+      if (!pattern.test(fingerprint)) {
+        message.innerHTML = 'Wrong QR code reading: <b>' + fingerprint + '</b>';
         setTimeout(function() {
           message.innerHTML = '';
         }, 10000);
         return;
       }
-      message.innerHTML = 'Found fingerprint: <br>' + result + '</b>';
+      message.innerHTML = 'Found fingerprint: <br>' + fingerprint + '</b>';
       scanner.destroy();
       scanner = null;
       video.style.display = 'none';
@@ -363,15 +361,24 @@ window.onload = function() {
       xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
           var endorsed = JSON.parse(this.responseText);
-          if (endorsed.hasOwnProperty('error') {
+          if (endorsed.hasOwnProperty('error')) {
             message.innerHTML = endorsed.error;
             setTimeout(function() {
               message.innerHTML = '';
             }, 10000);
             return;
           }
-          // check signature of endorsed
-
+          // verify signature of endorsed
+          let signature = endorsed.signature;
+          endorsed.signature = '';
+          let verify = new JSEncrypt();
+          verify.setPublicKey(endorsed.key);
+          console.log(JSON.stringify(endorsed));
+          if (verify.verify(JSON.stringify(endorsed), signature, CryptoJS.SHA256))
+            console.log('OK');
+          else
+            console.log('KO');
+          document.getElementById('endorse-citizen').style.display = '';
           document.getElementById('endorse-picture').src = endorsed.picture;
           document.getElementById('endorse-family-name').innerHTML = endorsed.familyName;
           document.getElementById('endorse-given-names').innerHTML = endorsed.givenNames;
@@ -384,7 +391,7 @@ window.onload = function() {
       xhttp.send();
     }
     video.style.display = '';
-    scanner = new QrScanner(video, result => setResult(result));
+    scanner = new QrScanner(video, fingerprint => setResult(fingerprint));
     scanner.start();
   });
 
@@ -420,8 +427,8 @@ window.onload = function() {
       schema: 'https://directdemocracy.vote/json-schema/0.0.1/citizen.schema.json',
       key: '',
       signature: '',
-      published: '',
-      expires: '',
+      published: 0,
+      expires: 0,
       familyName: '',
       givenNames: '',
       picture: '',
