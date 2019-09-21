@@ -10,7 +10,6 @@
 		"signature",
 		"published",
 		"expires",
-		"revoke",
 		"publication"
 	],
 	"properties": {
@@ -38,7 +37,7 @@
 			"maximum": 999999999999999
 		},
 		"revoke": {
-			"description": "boolean set to true to disapprove a publication and false to approve",
+			"description": "boolean set to true to disapprove a publication and false to approve (default to false)",
 			"type": "boolean"
 		},
 		"publication": {

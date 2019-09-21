@@ -5,8 +5,11 @@ window.onload = function() {
   var croppie = null;
   var geolocation = false;
   var citizen = null;
-  var map = null;
-  var marker = null;
+  var register_map = null;
+  var register_marker = null;
+  var endorsed = null;
+  var endorse_map = null;
+  var endorse_marker = null;
   var crypt = null;
   var privateKey = '';
   var publisher = '';
@@ -34,15 +37,15 @@ window.onload = function() {
     geolocation = true;
     citizen.latitude = Math.round(1000000 * position.coords.latitude);
     citizen.longitude = Math.round(1000000 * position.coords.longitude);
-    map.setView([position.coords.latitude, position.coords.longitude], 12);
+    register_map.setView([position.coords.latitude, position.coords.longitude], 12);
     setTimeout(function() {
-      marker.setLatLng([citizen.latitude / 1000000, citizen.longitude / 1000000]);
+      register_marker.setLatLng([citizen.latitude / 1000000, citizen.longitude / 1000000]);
       updateLocation();
     }, 500);
   }
 
   function setupMap() {
-    if (map != null) return;
+    if (register_map != null) return;
     if (navigator.geolocation) navigator.geolocation.getCurrentPosition(getGeolocationPosition);
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
@@ -60,14 +63,14 @@ window.onload = function() {
     xhttp.send();
     var lat = citizen.latitude / 1000000;
     var lon = citizen.longitude / 1000000;
-    map = L.map('register-map').setView([lat, lon], 2);
+    register_map = L.map('register-map').setView([lat, lon], 2);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(map);
-    marker = L.marker([lat, lon]).addTo(map).bindPopup(lat + ',' + lon);
+    }).addTo(register_map);
+    register_marker = L.marker([lat, lon]).addTo(register_map).bindPopup(lat + ',' + lon);
     updateLocation();
-    map.on('click', function onMapClick(e) {
-      marker.setLatLng(e.latlng);
+    register_map.on('click', function onMapClick(e) {
+      register_marker.setLatLng(e.latlng);
       citizen.latitude = Math.round(1000000 * e.latlng.lat);
       citizen.longitude = Math.round(1000000 * e.latlng.lng);
       updateLocation();
@@ -77,7 +80,7 @@ window.onload = function() {
   function updateLocation() {
     var lat = citizen.latitude / 1000000;
     var lon = citizen.longitude / 1000000;
-    marker.setPopupContent(lat + ',' + lon).openPopup();
+    register_marker.setPopupContent(lat + ',' + lon).openPopup();
     document.getElementById('register-latitude').value = lat;
     document.getElementById('register-longitude').value = lon;
     validate();
@@ -85,7 +88,7 @@ window.onload = function() {
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
         var a = JSON.parse(this.responseText);
-        marker.setPopupContent(a.address.Match_addr + '<br><br><center style="color:#999">('
+        register_marker.setPopupContent(a.address.Match_addr + '<br><br><center style="color:#999">('
          + lat + ', ' + lon + ')</center>').openPopup();
         document.getElementById('register-address').innerHTML = a.address.Match_addr;
       }
@@ -235,8 +238,9 @@ window.onload = function() {
           localStorage.setItem('citizen', JSON.stringify(citizen));
           localStorage.setItem('privateKey', privateKey);
           updateCitizenCard();
-          document.getElementById('citizen-nav-link').style.display = '';
-          document.getElementById('register-nav-link').style.display = 'none';
+          document.getElementById('citizen-nav').style.display = '';
+          document.getElementById('endorsements-nav').style.display = '';
+          document.getElementById('register-nav').style.display = 'none';
           document.getElementById('revoke').removeAttribute('disabled');
           document.getElementById('edit').removeAttribute('disabled');
           $('.nav-tabs a[href="#citizen"]').tab('show');
@@ -273,8 +277,9 @@ window.onload = function() {
   });
 
   document.getElementById('edit-button').addEventListener('click', function() {
-    document.getElementById('citizen-nav-link').style.display = 'none';
-    document.getElementById('register-nav-link').style.display = '';
+    document.getElementById('citizen-nav').style.display = 'none';
+    document.getElementById('endorsements-nav').style.display = 'none';
+    document.getElementById('register-nav').style.display = '';
     document.getElementById('edit-i-understand').value = '';
     document.getElementById('edit').setAttribute('disabled', 'disabled');
     setupMap();
@@ -315,8 +320,9 @@ window.onload = function() {
           generateNewKeyPair();
           localStorage.removeItem('citizen');
           localStorage.removeItem('publication');
-          document.getElementById('citizen-nav-link').style.display = 'none';
-          document.getElementById('register-nav-link').style.display = '';
+          document.getElementById('citizen-nav').style.display = 'none';
+          document.getElementById('endorsements-nav').style.display = 'none';
+          document.getElementById('register-nav').style.display = '';
           document.getElementById('edit').setAttribute('disabled', 'disabled');
           document.getElementById('revoke').setAttribute('disabled', 'disabled');
           setupMap();
@@ -333,13 +339,14 @@ window.onload = function() {
   });
 
   document.getElementById('endorse-button').addEventListener('click', function() {
-    if (scanner) {
-      document.getElementById('endorse-button').innerHTML = 'Endorse a Citizen';
+    const button = document.getElementById('endorse-button');
+    if (scanner) {  // Cancel pressed
+      button.innerHTML = 'Endorse a Citizen';
+      button.removeAttribute('disabled');
       scanner.destroy();
       scanner = null;
       return;
     }
-    const button = document.getElementById('endorse-button');
     const video = document.getElementById('endorse-qr-video');
     const message = document.getElementById('endorse-message');
     function setResult(fingerprint) {
@@ -355,18 +362,16 @@ window.onload = function() {
       scanner.destroy();
       scanner = null;
       video.style.display = 'none';
-      button.innerHTML = 'Endorse Citizen';
       button.setAttribute('disabled', 'disabled');
       var xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-          var endorsed = JSON.parse(this.responseText);
+          endorsed = JSON.parse(this.responseText);
           if (endorsed.hasOwnProperty('error')) {
             message.innerHTML = endorsed.error;
             setTimeout(function() {
               message.innerHTML = '';
             }, 10000);
-            button.removeAttribute('disabled');
             return;
           }
           // verify signature of endorsed
@@ -379,7 +384,6 @@ window.onload = function() {
             setTimeout(function() {
               message.innerHTML = '';
             }, 10000);
-            button.removeAttribute('disabled');
             return;
           }
           message.innerHTML = '';
@@ -395,11 +399,16 @@ window.onload = function() {
           document.getElementById('endorse-expires').innerHTML = expires.toISOString().slice(0, 10);
           var lat = endorsed.latitude / 1000000;
           var lon = endorsed.longitude / 1000000;
-          var endorse_map = L.map('endorse-map').setView([lat, lon], 18);
-          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>'
-          }).addTo(endorse_map);
-          var endorse_marker = L.marker([lat, lon]).addTo(endorse_map).bindPopup(lat + ',' + lon);
+          if (endorse_map == null) {
+            endorse_map = L.map('endorse-map');
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+              attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(endorse_map);
+            endorse_marker = L.marker([lat, lon]).addTo(endorse_map);
+          } else
+            endorse_marker.setLatLng([lat, lon]);
+          endorse_marker.bindPopup(lat + ', ' + lon);
+          endorse_map.setView([lat, lon], 18);
           var xhttp = new XMLHttpRequest();
           xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
@@ -411,21 +420,85 @@ window.onload = function() {
           xhttp.open('GET', 'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=json&featureTypes=&location='
                      + lon + ',' + lat, true);
           xhttp.send();
-
         }
       };
       xhttp.open('GET', publisher + '/search.php?fingerprint=' + fingerprint, true);
       xhttp.send();
     }
     video.style.display = '';
-    button.innerHTML = 'Cancel Scan';
+    button.innerHTML = 'Cancel';
     scanner = new QrScanner(video, fingerprint => setResult(fingerprint));
     scanner.start();
   });
 
+  function checkEndorse() {
+    var button = document.getElementById('endorse');
+    if (document.getElementById('endorse-picture-check').checked &&
+        document.getElementById('endorse-name-check').checked &&
+        document.getElementById('endorse-coords-check').checked)
+      button.removeAttribute('disabled');
+    else
+      button.setAttribute('disabled', 'disabled');
+  }
+  document.getElementById('endorse-picture-check').addEventListener('change', checkEndorse);
+  document.getElementById('endorse-name-check').addEventListener('change', checkEndorse);
+  document.getElementById('endorse-coords-check').addEventListener('change', checkEndorse);
+
+  function clearEndorseChecks() {
+    document.getElementById('endorse-picture-check').checked = false;
+    document.getElementById('endorse-name-check').checked = false;
+    document.getElementById('endorse-coords-check').checked = false;
+    document.getElementById('endorse').setAttribute('disabled', 'disabled');
+  }
+
+  function clearEndorse() {
+    var button = document.getElementById('endorse-button');
+    button.innerHTML = 'Endorse a Citizen';
+    button.removeAttribute('disabled');
+    document.getElementById('endorse-button-group').style.display = '';
+    document.getElementById('endorse-citizen').style.display = 'none';
+    clearEndorseChecks();
+  }
+
+  document.getElementById('endorse-cancel').addEventListener('click', clearEndorse);
+
+  document.getElementById('endorse').addEventListener('click', function() {
+    console.log("Endorse");
+    document.getElementById('endorse-button').setAttribute('disabled', 'disabled');
+    document.getElementById('endorse-cancel').setAttribute('disabled', 'disabled');
+    var endorsement = {
+      schema: 'https://directdemocracy.vote/json-schema/0.0.1/endorsement.schema.json',
+      key: citizen.key,
+      signature: '',
+      published: new Date().getTime(),
+      expires: endorsed.expires,
+      publication: {
+        key: endorsed.key,
+        signature: endorsed.signature
+      }
+    };
+    let str = JSON.stringify(endorsement);
+    endorsement.signature = crypt.sign(str, CryptoJS.SHA256, 'sha256');
+    var xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+      if (this.status == 200) {
+        let answer = JSON.parse(this.responseText);
+        if (answer.error) {
+          showModal('Endorsement error', JSON.stringify(answer.error) + '.<br>Please try again.');
+        } else {
+          showModal('Endorsement success', 'You successfully endorsed ' + endorse.givenNames + ' ' + endorse.familyName);
+        }
+        clearEndorse();
+      }
+    };
+    xhttp.open('POST', publisher + '/publish.php', true);
+    xhttp.send(JSON.stringify(endorsement));
+  });
+
   clearForms();
+  clearEndorseChecks();
   $('.nav-tabs').on('shown.bs.tab', function(event) {
-    if (map) map.invalidateSize();
+    if (register_map) register_map.invalidateSize();
   });
   publisher = localStorage.getItem('publisher');
   if (!publisher)
@@ -443,11 +516,12 @@ window.onload = function() {
   var citizen_string = localStorage.getItem('citizen');
   if (citizen_string) {
     citizen = JSON.parse(citizen_string);
-    document.getElementById('register-nav-link').style.display = 'none';
+    document.getElementById('register-nav').style.display = 'none';
     $('.nav-tabs a[href="#citizen"]').tab('show');
     updateCitizenCard();
   } else {
-    document.getElementById('citizen-nav-link').style.display = 'none';
+    document.getElementById('citizen-nav').style.display = 'none';
+    document.getElementById('endorsements-nav').style.display = 'none';
     document.getElementById('revoke').setAttribute('disabled', 'disabled');
     document.getElementById('edit').setAttribute('disabled', 'disabled');
     $('.nav-tabs a[href="#register"]').tab('show');
