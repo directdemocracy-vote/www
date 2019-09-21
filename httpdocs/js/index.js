@@ -5,15 +5,18 @@ window.onload = function() {
   var croppie = null;
   var geolocation = false;
   var citizen = null;
+  var citizen_fingerprint = '';
   var register_map = null;
   var register_marker = null;
   var endorsed = null;
   var endorse_map = null;
   var endorse_marker = null;
+  var endorsed_fingerprint = '';
   var crypt = null;
   var privateKey = '';
   var publisher = '';
   var scanner = null;
+  var endorsements = [];
 
   function showModal(title, contents) {
     document.getElementById('modal-title').innerHTML = title;
@@ -116,10 +119,10 @@ window.onload = function() {
     let expires = new Date(citizen.expires);
     document.getElementById('citizen-published').innerHTML = published.toISOString().slice(0, 10);
     document.getElementById('citizen-expires').innerHTML = expires.toISOString().slice(0, 10);
-    var fingerprint = CryptoJS.SHA1(citizen.signature).toString();
+    citizen_fingerprint = CryptoJS.SHA1(citizen.signature).toString();
     var qr = new QRious({
       element: document.getElementById('citizen-qr-code'),
-      value: fingerprint,
+      value: citizen_fingerprint,
       level: 'M',
       size: 200,
       padding: 13
@@ -234,7 +237,6 @@ window.onload = function() {
         if (answer.error)
           showModal('Publication error', JSON.stringify(answer.error) + '.<br>Please try again.');
         else {
-          localStorage.setItem('publication', publisher + '/publication.php?id=' + answer.citizen);
           localStorage.setItem('citizen', JSON.stringify(citizen));
           localStorage.setItem('privateKey', privateKey);
           updateCitizenCard();
@@ -319,7 +321,6 @@ window.onload = function() {
           citizen.key = '';
           generateNewKeyPair();
           localStorage.removeItem('citizen');
-          localStorage.removeItem('publication');
           document.getElementById('citizen-nav').style.display = 'none';
           document.getElementById('endorsements-nav').style.display = 'none';
           document.getElementById('register-nav').style.display = '';
@@ -358,7 +359,15 @@ window.onload = function() {
         }, 10000);
         return;
       }
+      if (fingerprint == citizen_fingerprint) {
+        message.innerHTML = 'You should not endorse yourself!';
+        setTimeout(function() {
+          message.innerHTML = '';
+        }, 10000);
+        return;
+      }
       message.innerHTML = 'Found fingerprint: <br>' + fingerprint + '</b>';
+      endorsed_fingerprint = fingerprint;
       scanner.destroy();
       scanner = null;
       video.style.display = 'none';
@@ -386,6 +395,7 @@ window.onload = function() {
             }, 10000);
             return;
           }
+          endorsed.signature = signature;
           message.innerHTML = '';
           document.getElementById('endorse-button-group').style.display = 'none';
           document.getElementById('endorse-citizen').style.display = '';
@@ -463,7 +473,6 @@ window.onload = function() {
   document.getElementById('endorse-cancel').addEventListener('click', clearEndorse);
 
   document.getElementById('endorse').addEventListener('click', function() {
-    console.log("Endorse");
     document.getElementById('endorse-button').setAttribute('disabled', 'disabled');
     document.getElementById('endorse-cancel').setAttribute('disabled', 'disabled');
     var endorsement = {
@@ -483,10 +492,21 @@ window.onload = function() {
     xhttp.onload = function() {
       if (this.status == 200) {
         let answer = JSON.parse(this.responseText);
-        if (answer.error) {
+        if (answer.error)
           showModal('Endorsement error', JSON.stringify(answer.error) + '.<br>Please try again.');
-        } else {
-          showModal('Endorsement success', 'You successfully endorsed ' + endorse.givenNames + ' ' + endorse.familyName);
+        else {
+          showModal('Endorsement success', 'You successfully endorsed ' + endorsed.givenNames + ' ' + endorsed.familyName);
+          let e = {
+            published: endorsed.published,
+            expires: endorsed.expires,
+            familyName: endorsed.familyName,
+            givenNames: endorsed.givenNames,
+            picture: endorsed.picture,
+            fingerprint: endorsed_fingerprint
+          };
+          endorsements.push(e);
+          localStorage.setItem("endorsements", JSON.stringify(endorsements));
+          updateEndorsements();
         }
         clearEndorse();
       }
@@ -494,6 +514,43 @@ window.onload = function() {
     xhttp.open('POST', publisher + '/publish.php', true);
     xhttp.send(JSON.stringify(endorsement));
   });
+
+  function updateEndorsements() {
+    console.log("Update endorsements");
+    var list = document.getElementById('endorsements-list');
+    list.innerHTML = '';  // clear
+    endorsements.forEach(function(endorsement, index) {
+      let div = document.createElement('div');
+      div.classList.add('container');
+      let table = document.createElement('table');
+      div.appendChild(table);
+      let tr = document.createElement('tr');
+      table.appendChild(tr);
+      let td = document.createElement('td');
+      tr.appendChild(td);
+      let img = document.createElement('img');
+      td.appendChild(img);
+      img.src = endorsement.picture;
+      img.style.width='45px';
+      img.style.height='60px';
+      td = document.createElement('td');
+      tr.appendChild(td);
+      let a = document.createElement('a');
+      td.appendChild(a);
+      a.href = publisher + '/search.php?fingerprint=' + endorsement.fingerprint;
+      a.target = '_blank';
+      a.appendChild(document.createTextNode(endorsement.familyName));
+      a.appendChild(document.createElement('br'));
+      a.appendChild(document.createTextNode(endorsement.givenNames));
+      td.appendChild(document.createElement('br'));
+      td.appendChild(document.createTextNode('Endorsed: '));
+      let span = document.createElement('span');
+      td.appendChild(span);
+      let t = new Date(endorsement.published).toISOString().slice(0, 10);
+      span.appendChild(document.createTextNode(t))
+      list.appendChild(div);
+    });
+  }
 
   clearForms();
   clearEndorseChecks();
@@ -519,6 +576,11 @@ window.onload = function() {
     document.getElementById('register-nav').style.display = 'none';
     $('.nav-tabs a[href="#citizen"]').tab('show');
     updateCitizenCard();
+    let e = localStorage.getItem('endorsements');
+    if (e) {
+      endorsements = JSON.parse(e);
+      updateEndorsements();
+    }
   } else {
     document.getElementById('citizen-nav').style.display = 'none';
     document.getElementById('endorsements-nav').style.display = 'none';
