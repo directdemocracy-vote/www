@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/x-icon" href="//directdemocracy.vote/favicon.ico">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//unpkg.com/leaflet@1.5.1/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin="" />
+    <link rel="stylesheet" href="//unpkg.com/leaflet@1.5.1/dist/leaflet.css">
     <link rel="stylesheet" href="css/croppie.css">
     <link rel="stylesheet" href="css/directdemocracy.css">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="//unpkg.com/leaflet@1.5.1/dist/leaflet.js" integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og==" crossorigin=""></script>
+    <script src="//unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
     <script src="js/croppie.min.js"></script>
     <script src="js/jsencrypt.min.js"></script>
     <script src="js/crypto-js.js"></script>
@@ -36,7 +36,7 @@
         </div>
       </div>
     </div>
-    <div class="modal" id="modal-revoke">
+    <div class="modal" id="modal-revoke-key">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -55,12 +55,12 @@
             <div class="form-group">
               <label class="form-control-label">
                 <div>If you are sure to understand the consequences of revoking your private key, please type "<b>I understand</b>" here:</div><br>
-                <input id="revoke-i-understand" type="text" class="form-control" placeholder="">
+                <input id="revoke-key-i-understand" type="text" class="form-control" placeholder="">
               </label>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" id="revoke-button" class="btn btn-danger" disabled="disabled">Revoke Private Key</button>
+            <button type="button" id="revoke-key-button" class="btn btn-danger" disabled="disabled">Revoke Private Key</button>
             <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
           </div>
         </div>
@@ -85,6 +85,33 @@
           </div>
           <div class="modal-footer">
             <button type="button" id="edit-button" class="btn btn-danger" disabled="disabled">Edit Citizen Card</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal" id="modal-revoke-citizen">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Revoke a Citizen</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div>You should revoke a citizen only if the citizen has moved, has changed her name or is using a newer citizen card.</div><br>
+            <div>Beware that newer fake citizen cards may be created by anybody.
+              So if you find a newer card, be sure it was created by the citizen you endorsed before revoking her.</div><br>
+            <div>Revoking a citizen will contribute to lower its trust and might prevent her from voting.</div><br>
+            <div>Do you really want to revoke <span id="revoke-citizen-name" style="font-weight:bold"></span>?</div><br>
+            <div class="form-group">
+              <label class="form-control-label">
+                <div>If you are sure to understand the consequences of revoking a citizen, please type "<b>I understand</b>" here:</div><br>
+                <input id="revoke-citizen-i-understand" type="text" class="form-control" placeholder="">
+              </label>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="revoke-citizen-button" class="btn btn-danger" disabled="disabled">Revoke Citizen</button>
             <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
           </div>
         </div>
@@ -161,15 +188,15 @@
               <div class="container">
                 <div class="row">
                   <div class="col-md-2">
-                    <label for "register-latitude">Latitude:</label>
+                    <label for="register-latitude">Latitude:</label>
                     <input type="text" readonly class="form-control" id="register-latitude" required>
                   </div>
                   <div class="col-md-2">
-                    <label for "register-longitude">Longitude:</label>
+                    <label for="register-longitude">Longitude:</label>
                     <input type="text" readonly class="form-control" id="register-longitude" required>
                   </div>
                   <div class="col-md-8">
-                    <label for "register-address">Address:</label>
+                    <label for="register-address">Address:</label>
                     <div class="form-text text-muted" id="register-address" style="vertical-align:bottom"></div>
                   </div>
                 </div>
@@ -223,7 +250,7 @@
                 </table>
               </div>
               <div class="col" style="max-width:220px">
-                <canvas id="citizen-qr-code" width="200" height="200" style="border:1px solid">
+                <canvas id="citizen-qr-code" width="200" height="200" style="border:1px solid"></canvas>
               </div>
             </div>
           </div>
@@ -233,7 +260,6 @@
               <small class="form-text text-muted">Scan the QR code of another citizen's card to endorse her.</small>
               <video muted playsinline id="endorse-qr-video" style="width:100%;height:400px;display:none"></video>
             </div>
-            <div id="endorsements-list"></div>
             <div id="endorse-citizen" style="display:none">
               <div class="row">
                 <div class="col" style="max-width:170px">
@@ -272,6 +298,7 @@
                 <small class="form-text text-muted">Warning: wrongly endorsing citizen is likely to affect your own endorsements by trustees.</small>
               </div>
             </div>
+            <div id="endorsements-list"></div>
           </div>
           <div class="tab-pane container fade" id="settings"><br>
             <div class="form-group"><br>
@@ -284,7 +311,7 @@
               <small class="form-text text-muted">If you move or change your name, you should edit your citizen card.</small>
             </div>
             <div class="form-group"><br>
-              <button id="revoke" class="btn btn-danger">Revoke my private key</button>
+              <button id="revoke-key" class="btn btn-danger">Revoke my private key</button>
               <small class="form-text text-muted">If you believe your private key was compromised, you should revoke it.</small>
             </div>
           </div>

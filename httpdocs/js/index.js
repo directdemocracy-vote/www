@@ -27,8 +27,8 @@ window.onload = function() {
   function clearForms() {
     document.getElementById('edit-i-understand').value = '';
     document.getElementById('edit-button').setAttribute('disabled', 'disabled');
-    document.getElementById('revoke-i-understand').value = '';
-    document.getElementById('revoke-button').setAttribute('disabled', 'disabled');
+    document.getElementById('revoke-key-i-understand').value = '';
+    document.getElementById('revoke-key-button').setAttribute('disabled', 'disabled');
     document.getElementById('register-confirm-check').checked = false;
     document.getElementById('publish-button').setAttribute('disabled', 'disabled');
     var d = new Date();
@@ -243,7 +243,7 @@ window.onload = function() {
           document.getElementById('citizen-nav').style.display = '';
           document.getElementById('endorsements-nav').style.display = '';
           document.getElementById('register-nav').style.display = 'none';
-          document.getElementById('revoke').removeAttribute('disabled');
+          document.getElementById('revoke-key').removeAttribute('disabled');
           document.getElementById('edit').removeAttribute('disabled');
           $('.nav-tabs a[href="#citizen"]').tab('show');
           showModal('Publication success', 'Your citizen card was published under number ' + answer.citizen
@@ -266,16 +266,16 @@ window.onload = function() {
     document.getElementById('edit-button').disabled = (document.getElementById('edit-i-understand').value != 'I understand');
   });
 
-  document.getElementById('revoke-i-understand').addEventListener('input', function() {
-    document.getElementById('revoke-button').disabled = (document.getElementById('revoke-i-understand').value != 'I understand');
+  document.getElementById('revoke-key-i-understand').addEventListener('input', function() {
+    document.getElementById('revoke-key-button').disabled = (document.getElementById('revoke-key-i-understand').value != 'I understand');
   });
 
   document.getElementById('edit').addEventListener('click', function() {
     $('#modal-edit').modal();
   });
 
-  document.getElementById('revoke').addEventListener('click', function() {
-    $('#modal-revoke').modal();
+  document.getElementById('revoke-key').addEventListener('click', function() {
+    $('#modal-revoke-key').modal();
   });
 
   document.getElementById('edit-button').addEventListener('click', function() {
@@ -291,9 +291,9 @@ window.onload = function() {
     updateRegistrationForm();
   });
 
-  document.getElementById('revoke-button').addEventListener('click', function() {
-    document.getElementById('revoke-i-understand').value = '';
-    document.getElementById('revoke-button').setAttribute('disabled', 'disabled');
+  document.getElementById('revoke-key-button').addEventListener('click', function() {
+    document.getElementById('revoke-key-i-understand').value = '';
+    document.getElementById('revoke-key-button').setAttribute('disabled', 'disabled');
     let endorsement = {
       schema: 'https://directdemocracy.vote/json-schema/0.0.1/endorsement.schema.json',
       key: citizen.key,
@@ -313,7 +313,7 @@ window.onload = function() {
       if (this.status == 200) {
         let answer = JSON.parse(this.responseText);
         if (answer.error) {
-          $('#modal-revoke').modal('hide');
+          $('#modal-revoke-key').modal('hide');
           showModal('Revocation error', JSON.stringify(answer.error) + '.<br>Please try again.');
         } else {
           window.localStorage.removeItem('privateKey');
@@ -325,11 +325,11 @@ window.onload = function() {
           document.getElementById('endorsements-nav').style.display = 'none';
           document.getElementById('register-nav').style.display = '';
           document.getElementById('edit').setAttribute('disabled', 'disabled');
-          document.getElementById('revoke').setAttribute('disabled', 'disabled');
+          document.getElementById('revoke-key').setAttribute('disabled', 'disabled');
           setupMap();
           $('.nav-tabs a[href="#register"]').tab('show');
           clearForms();
-          $('#modal-revoke').modal('hide');
+          $('#modal-revoke-key').modal('hide');
           showModal('Revocation success', 'Your private key was successfully revoked.');
           updateRegistrationForm();
         }
@@ -341,14 +341,17 @@ window.onload = function() {
 
   document.getElementById('endorse-button').addEventListener('click', function() {
     const button = document.getElementById('endorse-button');
+    const video = document.getElementById('endorse-qr-video');
+    const list = document.getElementById('endorsements-list');
     if (scanner) {  // Cancel pressed
       button.innerHTML = 'Endorse a Citizen';
       button.removeAttribute('disabled');
+      video.style.display = 'none';
+      list.style.display = '';
       scanner.destroy();
       scanner = null;
       return;
     }
-    const video = document.getElementById('endorse-qr-video');
     const message = document.getElementById('endorse-message');
     function setResult(fingerprint) {
       const pattern = /^[0-9a-f]{40}$/g;
@@ -371,6 +374,7 @@ window.onload = function() {
       scanner.destroy();
       scanner = null;
       video.style.display = 'none';
+      list.style.display = '';
       button.setAttribute('disabled', 'disabled');
       var xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function() {
@@ -436,6 +440,7 @@ window.onload = function() {
       xhttp.send();
     }
     video.style.display = '';
+    list.style.display = 'none';
     button.innerHTML = 'Cancel';
     scanner = new QrScanner(video, fingerprint => setResult(fingerprint));
     scanner.start();
@@ -516,7 +521,6 @@ window.onload = function() {
   });
 
   function updateEndorsements() {
-    console.log("Update endorsements");
     var list = document.getElementById('endorsements-list');
     list.innerHTML = '';  // clear
     endorsements.forEach(function(endorsement, index) {
@@ -526,6 +530,7 @@ window.onload = function() {
       div.appendChild(table);
       table.style.width = '100%';
       table.style.maxWidth = '400px';
+      table.style.marginBottom = '15px';
       let tr = document.createElement('tr');
       table.appendChild(tr);
       let td = document.createElement('td');
@@ -537,7 +542,7 @@ window.onload = function() {
       img.style.width='45px';
       img.style.height='60px';
       td = document.createElement('td');
-      td.setAttribute('colspan', '2');
+      td.setAttribute('colspan', '3');
       tr.appendChild(td);
       let a = document.createElement('a');
       td.appendChild(a);
@@ -547,14 +552,6 @@ window.onload = function() {
       b.appendChild(document.createTextNode(endorsement.familyName));
       a.appendChild(b);
       a.appendChild(document.createTextNode(' ' + endorsement.givenNames));
-      td = document.createElement('td');
-      td.setAttribute('rowspan', '3');
-      tr.appendChild(td);
-      let button = document.createElement('button');
-      button.classList.add('btn');
-      button.classList.add('btn-danger');
-      button.appendChild(document.createTextNode('Revoke'));
-      td.appendChild(button);
       tr = document.createElement('tr');
       tr.style.lineHeight = '1';
       tr.style.fontSize = '90%';
@@ -569,6 +566,14 @@ window.onload = function() {
       let t = new Date(endorsement.published).toISOString().slice(0, 10);
       td.classList.add('citizen-date');
       td.appendChild(document.createTextNode(t));
+      td = document.createElement('td');
+      td.setAttribute('rowspan', '2');
+      tr.appendChild(td);
+      let button = document.createElement('button');
+      button.classList.add('btn');
+      button.classList.add('btn-danger');
+      button.appendChild(document.createTextNode('Revoke'));
+      td.appendChild(button);
       tr = document.createElement('tr');
       tr.style.lineHeight = '1';
       tr.style.fontSize = '90%';
@@ -585,6 +590,12 @@ window.onload = function() {
       tr.style.lineHeight = '1';
       td.appendChild(document.createTextNode(t));
       list.appendChild(div);
+      button.addEventListener('click', function() {
+        let name = endorsement.givenNames + ' ' + endorsement.familyName;
+        console.log('revoking ' + name);
+        document.getElementById('revoke-citizen-name').innerHTML = name;
+        $('#modal-revoke-citizen').modal();
+      });
     });
   }
 
@@ -620,7 +631,7 @@ window.onload = function() {
   } else {
     document.getElementById('citizen-nav').style.display = 'none';
     document.getElementById('endorsements-nav').style.display = 'none';
-    document.getElementById('revoke').setAttribute('disabled', 'disabled');
+    document.getElementById('revoke-key').setAttribute('disabled', 'disabled');
     document.getElementById('edit').setAttribute('disabled', 'disabled');
     $('.nav-tabs a[href="#register"]').tab('show');
     citizen = {
