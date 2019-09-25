@@ -270,6 +270,25 @@ window.onload = function() {
     document.getElementById('revoke-key-button').disabled = (document.getElementById('revoke-key-i-understand').value != 'I understand');
   });
 
+  document.getElementById('revoke-citizen-i-understand').addEventListener('input', function() {
+    document.getElementById('revoke-citizen-button').disabled = (document.getElementById('revoke-citizen-i-understand').value != 'I understand');
+  });
+
+  $('#modal-revoke-key').on('hidden.bs.modal', function() {
+    document.getElementById('revoke-key-i-understand').value = '';
+    document.getElementById('revoke-key-button').disabled = 'disabled';
+  });
+
+  $('#modal-revoke-citizen').on('hidden.bs.modal', function() {
+    document.getElementById('revoke-citizen-i-understand').value = '';
+    document.getElementById('revoke-citizen-button').disabled = 'disabled';
+  });
+
+  $('#modal-edit').on('hidden.bs.modal', function() {
+    document.getElementById('edit-i-understand').value = '';
+    document.getElementById('edit-button').disabled = 'disabled';
+  });
+
   document.getElementById('edit').addEventListener('click', function() {
     $('#modal-edit').modal();
   });
@@ -594,6 +613,12 @@ window.onload = function() {
         let name = endorsement.givenNames + ' ' + endorsement.familyName;
         console.log('revoking ' + name);
         document.getElementById('revoke-citizen-name').innerHTML = name;
+        function revoke() {
+          document.getElementById('revoke-citizen-button').removeEventListener('click', revoke);
+          console.log('Revoking citizen: ' + endorsement.fingerprint);
+          $('#modal-revoke-citizen').modal('hide');
+        }
+        document.getElementById('revoke-citizen-button').addEventListener('click', revoke);
         $('#modal-revoke-citizen').modal();
       });
     });
