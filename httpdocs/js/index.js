@@ -540,20 +540,19 @@ window.onload = function() {
   });
 
   function updateEndorsements() {
-    var list = document.getElementById('endorsements-list');
+    let list = document.getElementById('endorsements-list');
     list.innerHTML = '';  // clear
+    let table = document.createElement('table');
+    table.classList.add('table');
+    table.style.width = '100%';
+    table.style.maxWidth = '400px';
     endorsements.forEach(function(endorsement, index) {
-      let div = document.createElement('div');
-      div.classList.add('container');
-      let table = document.createElement('table');
-      div.appendChild(table);
-      table.style.width = '100%';
-      table.style.maxWidth = '400px';
-      table.style.marginBottom = '15px';
+      list.appendChild(table);
       let tr = document.createElement('tr');
       table.appendChild(tr);
       let td = document.createElement('td');
       tr.appendChild(td);
+      tr.setAttribute('id', 'endorsed-citizen-' + index);
       let img = document.createElement('img');
       td.setAttribute('rowspan', '3');
       td.appendChild(img);
@@ -572,6 +571,7 @@ window.onload = function() {
       a.appendChild(b);
       a.appendChild(document.createTextNode(' ' + endorsement.givenNames));
       tr = document.createElement('tr');
+      tr.setAttribute('id', 'endorsed-endorsed-' + index);
       tr.style.lineHeight = '1';
       tr.style.fontSize = '90%';
       table.appendChild(tr);
@@ -586,7 +586,11 @@ window.onload = function() {
       td.classList.add('citizen-date');
       td.appendChild(document.createTextNode(t));
       td = document.createElement('td');
+      td.setAttribute('id', 'revoke-' + index);
       td.setAttribute('rowspan', '2');
+      td.style.verticalAlign = 'middle';
+      td.style.textAlign = 'center';
+      td.style.width = '50px';
       tr.appendChild(td);
       let button = document.createElement('button');
       button.classList.add('btn');
@@ -594,6 +598,7 @@ window.onload = function() {
       button.appendChild(document.createTextNode('Revoke'));
       td.appendChild(button);
       tr = document.createElement('tr');
+      tr.setAttribute('id', 'endorsed-expires-' + index);
       tr.style.lineHeight = '1';
       tr.style.fontSize = '90%';
       table.appendChild(tr);
@@ -608,7 +613,6 @@ window.onload = function() {
       td.classList.add('citizen-date');
       tr.style.lineHeight = '1';
       td.appendChild(document.createTextNode(t));
-      list.appendChild(div);
       button.addEventListener('click', function() {
         let name = endorsement.givenNames + ' ' + endorsement.familyName;
         console.log('revoking ' + name);
@@ -616,6 +620,15 @@ window.onload = function() {
         function revoke() {
           document.getElementById('revoke-citizen-button').removeEventListener('click', revoke);
           console.log('Revoking citizen: ' + endorsement.fingerprint);
+          console.log('revoke-' + index);
+          console.log(document.getElementById('revoke-' + index));
+          td = document.getElementById('revoke-' + index);
+          td.style.color = 'red';
+          td.style.fontWeight = 'bold';
+          td.innerHTML = 'revoked';
+          document.getElementById('endorsed-citizen-' + index).classList.add('revoked');
+          document.getElementById('endorsed-endorsed-' + index).classList.add('revoked');
+          document.getElementById('endorsed-expires-' + index).classList.add('revoked');
           $('#modal-revoke-citizen').modal('hide');
         }
         document.getElementById('revoke-citizen-button').addEventListener('click', revoke);

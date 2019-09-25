@@ -71,3 +71,7 @@
   color:black;
   font-weight:bold;
 }
+
+.revoked {
+  background-color: #aaa;
+}
