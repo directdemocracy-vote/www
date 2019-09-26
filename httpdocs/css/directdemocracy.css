@@ -73,5 +73,14 @@
 }
 
 .revoked {
-  background-color: #aaa;
+  filter: grayscale(100%);
+  background-color: #ddd;
+}
+
+.revoked .citizen-date {
+  color:grey;
+}
+
+.revoked img {
+  filter: blur(2px);
 }
