@@ -520,16 +520,8 @@ window.onload = function() {
           showModal('Endorsement error', JSON.stringify(answer.error) + '.<br>Please try again.');
         else {
           showModal('Endorsement success', 'You successfully endorsed ' + endorsed.givenNames + ' ' + endorsed.familyName);
-          let e = {
-            key: endorsed.key,
-            signature: endorsed.signature,
-            published: endorsed.published,
-            expires: endorsed.expires,
-            familyName: endorsed.familyName,
-            givenNames: endorsed.givenNames,
-            picture: endorsed.picture
-          };
-          endorsements.push(e);
+          console.log(answer);
+          endorsements = answer;
           localStorage.setItem("endorsements", JSON.stringify(endorsements));
           updateEndorsements();
         }
@@ -651,19 +643,9 @@ window.onload = function() {
                   showModal('Revocation error', JSON.stringify(answer.error) + '.<br>Please try again.');
                 else {
                   showModal('Revocation success', 'You successfully revoked ' + endorsement.givenNames + ' ' + endorsement.familyName);
-                  endorsement.revoke = true;
-                  endorsement.published = e.published;
+                  endorsements = answer;
                   localStorage.setItem("endorsements", JSON.stringify(endorsements));
-                  let table = document.getElementById('endorsements-table');
-                  table.childNodes[3 * index].classList.add('revoked');
-                  table.childNodes[3 * index].childNodes[0].setAttribute('rowspan', '2');
-                  table.childNodes[3 * index].childNodes[1].style.fontStyle = 'italic';
-                  table.childNodes[3 * index + 1].classList.add('revoked');
-                  table.childNodes[3 * index + 1].childNodes[0].innerHTML = 'Revoked:';
-                  table.childNodes[3 * index + 1].childNodes[1].innerHTML = new Date(e.published).toISOString().slice(0, 10);
-                  table.childNodes[3 * index + 1].childNodes[2].innerHTML = '';
-                  table.childNodes[3 * index + 1].childNodes[2].setAttribute('rowspan', '1');
-                  table.childNodes[3 * index + 2].style.display = 'none';
+                  updateEndorsements();
                 }
               }
             };
