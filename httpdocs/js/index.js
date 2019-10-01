@@ -668,26 +668,51 @@ window.onload = function() {
     publisher = 'https://publisher.directdemocracy.vote';
   document.getElementById('publisher').value = publisher;
   privateKey = localStorage.getItem('privateKey');
-  if (!privateKey) generateNewKeyPair();
-  else {
+  if (privateKey) {
     crypt = new JSEncrypt();
     crypt.setPrivateKey(privateKey);
     document.getElementById('register-forging-spinner').style.display = 'none';
     document.getElementById('register-private-key-icon').style.display = '';
     document.getElementById('register-private-key-message').innerHTML = 'Using your existing private key.';
-  }
-  var citizen_string = localStorage.getItem('citizen');
-  if (citizen_string) {
-    citizen = JSON.parse(citizen_string);
-    document.getElementById('register-nav').style.display = 'none';
-    $('.nav-tabs a[href="#citizen"]').tab('show');
-    updateCitizenCard();
-    let e = localStorage.getItem('endorsements');
-    if (e) {
-      endorsements = JSON.parse(e);
-      updateEndorsements();
-    }
+    let xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+      if (this.status == 200) {
+        console.log(this.responseText);
+        let answer = JSON.parse(this.responseText);
+        if (answer.error)
+          showModal('Citizen error', JSON.stringify(answer.error) + '.<br>Please try again.');
+        else {
+          citizen = answer;
+          document.getElementById('register-nav').style.display = 'none';
+          $('.nav-tabs a[href="#citizen"]').tab('show');
+          updateCitizenCard();
+          xhttp2 = new XMLHttpRequest();
+          xhttp2.onload = function() {
+            if (this.status == 200) {
+              let answer = JSON.parse(this.responseText);
+              if (answer.error)
+                showModal('Endorsements error', JSON.stringify(answer.error) + '.<br>Please try again.');
+              else {
+                endorsements = answer;
+                if (endorsements) {
+                  localStorage.setItem("endorsements", JSON.stringify(endorsements));
+                  updateEndorsements();
+                }
+              }
+            }
+          };
+          xhttp2.open('POST', publisher + '/endorsements.php', true);
+          xhttp2.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+          xhttp2.send(encodeURI('fingerprint=' + citizen_fingerprint));
+        }
+      }
+    };
+    xhttp.open('POST', publisher + '/citizen.php', true);
+    xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhttp.send(encodeURI('key=' + crypt.getPublicKey()));
+
   } else {
+    generateNewKeyPair();
     document.getElementById('citizen-nav').style.display = 'none';
     document.getElementById('endorsements-nav').style.display = 'none';
     document.getElementById('revoke-key').setAttribute('disabled', 'disabled');
