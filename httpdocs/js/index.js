@@ -681,6 +681,7 @@ window.onload = function() {
           showModal('Citizen error', JSON.stringify(answer.error) + '.<br>Please try again.');
         else {
           citizen = answer;
+          citizen.key = crypt.getPublicKey();
           updateCitizenCard();
           xhttp = new XMLHttpRequest();
           xhttp.onload = function() {
@@ -697,7 +698,7 @@ window.onload = function() {
           };
           xhttp.open('POST', publisher + '/endorsements.php', true);
           xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-          xhttp.send('key=' + encodeURIComponent(crypt.getPublicKey()));
+          xhttp.send('key=' + encodeURIComponent(citizen.key));
         }
       }
     };
