@@ -237,7 +237,6 @@ window.onload = function() {
         if (answer.error)
           showModal('Publication error', JSON.stringify(answer.error) + '.<br>Please try again.');
         else {
-          localStorage.setItem('citizen', JSON.stringify(citizen));
           localStorage.setItem('privateKey', privateKey);
           updateCitizenCard();
           document.getElementById('citizen-nav').style.display = '';
@@ -522,7 +521,6 @@ window.onload = function() {
           showModal('Endorsement success', 'You successfully endorsed ' + endorsed.givenNames + ' ' + endorsed.familyName);
           console.log(answer);
           endorsements = answer;
-          localStorage.setItem("endorsements", JSON.stringify(endorsements));
           updateEndorsements();
         }
         clearEndorse();
@@ -644,7 +642,6 @@ window.onload = function() {
                 else {
                   showModal('Revocation success', 'You successfully revoked ' + endorsement.givenNames + ' ' + endorsement.familyName);
                   endorsements = answer;
-                  localStorage.setItem("endorsements", JSON.stringify(endorsements));
                   updateEndorsements();
                 }
               }
@@ -674,43 +671,39 @@ window.onload = function() {
     document.getElementById('register-forging-spinner').style.display = 'none';
     document.getElementById('register-private-key-icon').style.display = '';
     document.getElementById('register-private-key-message').innerHTML = 'Using your existing private key.';
+    document.getElementById('register-nav').style.display = 'none';
+    $('.nav-tabs a[href="#citizen"]').tab('show');
     let xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
       if (this.status == 200) {
-        console.log(this.responseText);
         let answer = JSON.parse(this.responseText);
         if (answer.error)
           showModal('Citizen error', JSON.stringify(answer.error) + '.<br>Please try again.');
         else {
           citizen = answer;
-          document.getElementById('register-nav').style.display = 'none';
-          $('.nav-tabs a[href="#citizen"]').tab('show');
           updateCitizenCard();
-          xhttp2 = new XMLHttpRequest();
-          xhttp2.onload = function() {
+          xhttp = new XMLHttpRequest();
+          xhttp.onload = function() {
             if (this.status == 200) {
               let answer = JSON.parse(this.responseText);
               if (answer.error)
                 showModal('Endorsements error', JSON.stringify(answer.error) + '.<br>Please try again.');
               else {
                 endorsements = answer;
-                if (endorsements) {
-                  localStorage.setItem("endorsements", JSON.stringify(endorsements));
+                if (endorsements)
                   updateEndorsements();
-                }
               }
             }
           };
-          xhttp2.open('POST', publisher + '/endorsements.php', true);
-          xhttp2.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-          xhttp2.send(encodeURI('fingerprint=' + citizen_fingerprint));
+          xhttp.open('POST', publisher + '/endorsements.php', true);
+          xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+          xhttp.send('key=' + encodeURIComponent(crypt.getPublicKey()));
         }
       }
     };
     xhttp.open('POST', publisher + '/citizen.php', true);
     xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhttp.send(encodeURI('key=' + crypt.getPublicKey()));
-
+    xhttp.send('key=' + encodeURIComponent(crypt.getPublicKey()));
   } else {
     generateNewKeyPair();
     document.getElementById('citizen-nav').style.display = 'none';
