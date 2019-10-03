@@ -726,4 +726,4 @@ window.onload = function() {
     };
     setupMap();
   }
-}
+};
