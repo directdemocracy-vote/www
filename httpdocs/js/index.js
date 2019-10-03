@@ -6,6 +6,7 @@ window.onload = function() {
   var geolocation = false;
   var citizen = null;
   var citizen_fingerprint = '';
+  var citizen_endorsements = [];
   var register_map = null;
   var register_marker = null;
   var endorsed = null;
@@ -126,6 +127,58 @@ window.onload = function() {
       level: 'M',
       size: 200,
       padding: 13
+    });
+    let list = document.getElementById('citizen-endorsements-list');
+    if (citizen_endorsements.length == 0) {
+      list.innertHTML = '<br><h4>Your citizen card no endorsement</h4>You should ask to other citizen to endorse you.';
+      return;
+    }
+    list.innerHTML = '<br><h4>Your citizen card has ' + citizen_endorsements.length + ' endorsement(s):</h4>';
+    let table = document.createElement('table');
+    table.classList.add('table');
+    table.style.width = '100%';
+    table.style.maxWidth = '400px';
+    list.appendChild(table);
+    citizen_endorsements.forEach(function(endorsement, index) {
+      let tr = document.createElement('tr');
+      table.appendChild(tr);
+      let td = document.createElement('td');
+      tr.appendChild(td);
+      let img = document.createElement('img');
+      td.setAttribute('rowspan', '2');
+      td.appendChild(img);
+      img.src = endorsement.picture;
+      img.style.width='45px';
+      img.style.height='60px';
+      td = document.createElement('td');
+      if (endorsement.revoke)
+        td.style.fontStyle = 'italic';
+      td.setAttribute('colspan', '2');
+      tr.appendChild(td);
+      let a = document.createElement('a');
+      td.appendChild(a);
+      a.href = publisher + '/search.php?fingerprint=' + CryptoJS.SHA1(endorsement.signature).toString();
+      a.target = '_blank';
+      let b = document.createElement('b');
+      b.appendChild(document.createTextNode(endorsement.familyName));
+      a.appendChild(b);
+      a.appendChild(document.createTextNode(' ' + endorsement.givenNames));
+      tr = document.createElement('tr');
+      if (endorsement.revoke)
+        tr.classList.add('revoked');
+      tr.style.lineHeight = '1';
+      tr.style.fontSize = '90%';
+      table.appendChild(tr);
+      td = document.createElement('td');
+      tr.appendChild(td);
+      td.classList.add('citizen-label');
+      td.appendChild(document.createTextNode(endorsement.revoke ? 'Revoked you on:' : 'Endorsed you on:'));
+      td.style.paddingRight = '10px';
+      td = document.createElement('td');
+      tr.appendChild(td);
+      let t = new Date(endorsement.published).toISOString().slice(0, 10);
+      td.classList.add('citizen-date');
+      td.appendChild(document.createTextNode(t));
     });
   }
 
@@ -538,8 +591,8 @@ window.onload = function() {
     table.classList.add('table');
     table.style.width = '100%';
     table.style.maxWidth = '400px';
+    list.appendChild(table);
     endorsements.forEach(function(endorsement, index) {
-      list.appendChild(table);
       let tr = document.createElement('tr');
       table.appendChild(tr);
       if (endorsement.revoke)
@@ -680,25 +733,18 @@ window.onload = function() {
         if (answer.error)
           showModal('Citizen error', JSON.stringify(answer.error) + '.<br>Please try again.');
         else {
-          citizen = answer;
+          citizen = answer.citizen;
           citizen.key = crypt.getPublicKey();
+          endorsements = answer.endorsements;
+          /*
+          if (answer.citizen_endorsements.length > 1) {
+            console.log(answer.citizen_endorsements[0].givenNames + " " + answer.citizen_endorsements[0].familyName + "\n");
+            console.log(answer.citizen_endorsements[1].givenNames + " " + answer.citizen_endorsements[1].familyName + "\n");
+          }
+          */
+          citizen_endorsements = answer.citizen_endorsements;
           updateCitizenCard();
-          xhttp = new XMLHttpRequest();
-          xhttp.onload = function() {
-            if (this.status == 200) {
-              let answer = JSON.parse(this.responseText);
-              if (answer.error)
-                showModal('Endorsements error', JSON.stringify(answer.error) + '.<br>Please try again.');
-              else {
-                endorsements = answer;
-                if (endorsements)
-                  updateEndorsements();
-              }
-            }
-          };
-          xhttp.open('POST', publisher + '/endorsements.php', true);
-          xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-          xhttp.send('key=' + encodeURIComponent(citizen.key));
+          updateEndorsements();
         }
       }
     };
@@ -716,6 +762,7 @@ window.onload = function() {
       schema: 'https://directdemocracy.vote/json-schema/0.0.1/citizen.schema.json',
       key: '',
       signature: '',
+      fingerprint: '',
       published: 0,
       expires: 0,
       familyName: '',
