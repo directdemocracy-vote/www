@@ -133,13 +133,27 @@ window.onload = function() {
       list.innertHTML = '<br><h4>Your citizen card no endorsement</h4>You should ask to other citizen to endorse you.';
       return;
     }
-    list.innerHTML = '<br><h4>Your citizen card has ' + citizen_endorsements.length + ' endorsement(s):</h4>';
+    let revoke_count = 0;
+    citizen_endorsements.forEach(function(endorsement) {
+      if (endorsement.revoke)
+        revoke_count++;
+    });
+    let endorsement_count = citizen_endorsements.length - revoke_count;
+    let heading = '';
+    if (endorsement_count) {
+      heading += 'Endorsed by ' + endorsement_count;
+      if (revoke_count)
+        heading += ' &ndash; ';
+    }
+    if (revoke_count)
+      heading += 'Revoked by ' + revoke_count;
+    list.innerHTML = '<br><h4>' + heading + ':</h4>';
     let table = document.createElement('table');
     table.classList.add('table');
     table.style.width = '100%';
     table.style.maxWidth = '400px';
     list.appendChild(table);
-    citizen_endorsements.forEach(function(endorsement, index) {
+    citizen_endorsements.forEach(function(endorsement) {
       let tr = document.createElement('tr');
       table.appendChild(tr);
       let td = document.createElement('td');
@@ -157,21 +171,23 @@ window.onload = function() {
       tr.appendChild(td);
       let a = document.createElement('a');
       td.appendChild(a);
-      a.href = publisher + '/search.php?fingerprint=' + CryptoJS.SHA1(endorsement.signature).toString();
+      a.href = publisher + '/search.php?fingerprint=' + endorsement.fingerprint;
       a.target = '_blank';
       let b = document.createElement('b');
       b.appendChild(document.createTextNode(endorsement.familyName));
       a.appendChild(b);
       a.appendChild(document.createTextNode(' ' + endorsement.givenNames));
       tr = document.createElement('tr');
-      if (endorsement.revoke)
-        tr.classList.add('revoked');
       tr.style.lineHeight = '1';
       tr.style.fontSize = '90%';
       table.appendChild(tr);
       td = document.createElement('td');
       tr.appendChild(td);
       td.classList.add('citizen-label');
+      if (endorsement.revoke) {
+        td.style.color = 'red';
+        td.style.fontWeight = 'bold';
+      }
       td.appendChild(document.createTextNode(endorsement.revoke ? 'Revoked you on:' : 'Endorsed you on:'));
       td.style.paddingRight = '10px';
       td = document.createElement('td');
@@ -592,7 +608,7 @@ window.onload = function() {
     table.style.width = '100%';
     table.style.maxWidth = '400px';
     list.appendChild(table);
-    endorsements.forEach(function(endorsement, index) {
+    endorsements.forEach(function(endorsement) {
       let tr = document.createElement('tr');
       table.appendChild(tr);
       if (endorsement.revoke)
@@ -670,7 +686,6 @@ window.onload = function() {
           document.getElementById('revoke-citizen-name').innerHTML = endorsement.givenNames + ' ' + endorsement.familyName;
           function revoke() {
             document.getElementById('revoke-citizen-button').removeEventListener('click', revoke);
-            console.log('Revoking citizen: ' + index);
             let e = {
               schema: 'https://directdemocracy.vote/json-schema/0.0.1/endorsement.schema.json',
               key: citizen.key,
