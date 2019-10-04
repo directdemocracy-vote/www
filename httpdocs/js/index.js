@@ -14,7 +14,7 @@ window.onload = function() {
   var endorse_marker = null;
   var endorsed_fingerprint = '';
   var crypt = null;
-  var privateKey = '';
+  var private_key = '';
   var publisher = '';
   var scanner = null;
   var endorsements = [];
@@ -225,7 +225,7 @@ window.onload = function() {
       dt = new Date();
       time += (dt.getTime());
       citizen.key = crypt.getPublicKey();
-      privateKey = crypt.getPrivateKey();
+      private_key = crypt.getPrivateKey();
       document.getElementById('register-forging-spinner').style.display = 'none';
       document.getElementById('register-private-key-icon').style.display = '';
       document.getElementById('register-private-key-message').innerHTML = 'You new private key was just forged in '
@@ -306,7 +306,7 @@ window.onload = function() {
         if (answer.error)
           showModal('Publication error', JSON.stringify(answer.error) + '.<br>Please try again.');
         else {
-          localStorage.setItem('privateKey', privateKey);
+          localStorage.setItem('privateKey', private_key);
           updateCitizenCard();
           document.getElementById('citizen-nav').style.display = '';
           document.getElementById('endorsements-nav').style.display = '';
@@ -404,7 +404,7 @@ window.onload = function() {
           showModal('Revocation error', JSON.stringify(answer.error) + '.<br>Please try again.');
         } else {
           window.localStorage.removeItem('privateKey');
-          privateKey = '';
+          private_key = '';
           citizen.key = '';
           generateNewKeyPair();
           localStorage.removeItem('citizen');
@@ -732,10 +732,10 @@ window.onload = function() {
   if (!publisher)
     publisher = 'https://publisher.directdemocracy.vote';
   document.getElementById('publisher').value = publisher;
-  privateKey = localStorage.getItem('privateKey');
-  if (privateKey) {
+  private_key = localStorage.getItem('privateKey');
+  if (private_key) {
     crypt = new JSEncrypt();
-    crypt.setPrivateKey(privateKey);
+    crypt.setPrivateKey(private_key);
     document.getElementById('register-forging-spinner').style.display = 'none';
     document.getElementById('register-private-key-icon').style.display = '';
     document.getElementById('register-private-key-message').innerHTML = 'Using your existing private key.';
@@ -751,12 +751,6 @@ window.onload = function() {
           citizen = answer.citizen;
           citizen.key = crypt.getPublicKey();
           endorsements = answer.endorsements;
-          /*
-          if (answer.citizen_endorsements.length > 1) {
-            console.log(answer.citizen_endorsements[0].givenNames + " " + answer.citizen_endorsements[0].familyName + "\n");
-            console.log(answer.citizen_endorsements[1].givenNames + " " + answer.citizen_endorsements[1].familyName + "\n");
-          }
-          */
           citizen_endorsements = answer.citizen_endorsements;
           updateCitizenCard();
           updateEndorsements();
