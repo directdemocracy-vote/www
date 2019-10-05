@@ -16,6 +16,8 @@ window.onload = function() {
   var crypt = null;
   var private_key = '';
   var publisher = '';
+  var trustee = '';
+  var station = '';
   var scanner = null;
   var endorsements = [];
 
@@ -328,6 +330,16 @@ window.onload = function() {
   document.getElementById('publisher').addEventListener('input', function() {
     publisher = document.getElementById('publisher').value;
     localStorage.setItem('publisher', publisher);
+  });
+
+  document.getElementById('trustee').addEventListener('input', function() {
+    trustee = document.getElementById('trustee').value;
+    localStorage.setItem('trustee', trustee);
+  });
+
+  document.getElementById('station').addEventListener('input', function() {
+    station = document.getElementById('station').value;
+    localStorage.setItem('station', station);
   });
 
   document.getElementById('edit-i-understand').addEventListener('input', function() {
@@ -732,6 +744,14 @@ window.onload = function() {
   if (!publisher)
     publisher = 'https://publisher.directdemocracy.vote';
   document.getElementById('publisher').value = publisher;
+  trustee = localStorage.getItem('trustee');
+  if (!trustee)
+    trustee = 'https://trustee.directdemocracy.vote';
+  document.getElementById('trustee').value = trustee;
+  station = localStorage.getItem('station');
+  if (!station)
+    station = 'https://station.directdemocracy.vote';
+  document.getElementById('station').value = station;
   private_key = localStorage.getItem('privateKey');
   if (private_key) {
     crypt = new JSEncrypt();
