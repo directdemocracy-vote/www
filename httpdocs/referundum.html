@@ -16,10 +16,12 @@
     <script src="js/croppie.min.js"></script>
     <script src="js/jsencrypt.min.js"></script>
     <script src="js/crypto-js.js"></script>
+    <script src="js/country-code-3.js"></script>
     <script>
       window.onload = function() {
   let private_key = localStorage.getItem('privateKey');
   let publisher = localStorage.getItem('publisher');
+  let trustee = localStorage.getItem('trustee');
   let latitude = 0;
   let longitude = 0;
   if (private_key) {
@@ -40,16 +42,40 @@
     xhttp.send('key=' + encodeURIComponent(crypt.getPublicKey()));
   }
   function updateArea(latitude, longitude) {
+    document.getElementById('coordinates').innerHTML = latitude + ", " + longitude;
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
-        var a = JSON.parse(this.responseText);
+        let a = JSON.parse(this.responseText);
         let select = document.getElementById('area');
-        select.options[0] = new Option('City: ' + a.address.City, 'City');
-        select.options[1] = new Option('Subregion: ' + a.address.Subregion, 'Subregion');
-        select.options[2] = new Option('Region: ' + a.address.Region, 'Region');
-        select.options[3] = new Option('Country: ' + a.address.CountryCode, 'Country');
-        select.options[4] = new Option('World', 'World');
+        let country = getCountryName(a.address.CountryCode);
+        let count = 0;
+        if (a.address.Address)
+          select.options[count++] = new Option('Address: ' + a.address.Address, 'Address');
+        if (a.address.Block)
+          select.options[count++] = new Option('Block: ' + a.address.Block, 'Block');
+        if (a.address.Sector)
+          select.options[count++] = new Option('Sector: ' + a.address.Sector, 'Sector');
+        if (a.address.Neighborhood)
+          select.options[count++] = new Option('Neighborhood: ' + a.address.Neighborhood, 'Neighborhood');
+        if (a.address.District)
+          select.options[count++] = new Option('District: ' + a.address.District, 'District');
+        if (a.address.City)
+          select.options[count++] = new Option('City: ' + a.address.City, 'City');
+        if (a.address.MetroArea)
+          select.options[count++] = new Option('Metro area: ' + a.address.MetroArea, 'MetroArea');
+        if (a.address.Subregion)
+          select.options[count++] = new Option('Subregion: ' + a.address.Subregion, 'Subregion');
+        if (a.address.Region)
+          select.options[count++] = new Option('Region: ' + a.address.Region, 'Region');
+        if (a.address.Territory)
+          select.options[count++] = new Option('Territory: ' + a.address.Territory, 'Territory');
+        select.options[count++] = new Option('Country: ' + country, 'Country');
+        if (['GBR', 'DEU', 'FRA', 'ITA', 'SWE', 'POL', 'ROU', 'HRV', 'ESP', 'NLD', 'IRL', 'BGR', 'DNK', 'GRC',
+             'AUT', 'HUN', 'FIN', 'CZE', 'PRT', 'BEL', 'MLT', 'CYP', 'LUX', 'SVN', 'LTU', 'SVK', 'EST', 'LVA']
+            .indexOf(a.address.CountryCode) >= 0)
+          select.options[count++] = new Option('Union: European Union', 'Union');
+        select.options[count++] = new Option('World', 'World');
       }
     };
     xhttp.open('GET', 'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=json&featureTypes=&location='
@@ -118,18 +144,14 @@
           <input class="form-control" type="date" id="deadline" required>
         </div>
         <div class="form-group">
-          <label for="title">Trustees:</label>
-          <input type="text" class="form-control" id="trustees" placeholder="Enter a comma-separated list of trustee URLs, e.g., https://trustee.directdemocracy.vote" required>
-        </div>
-        <div class="form-group">
-          <label for="title">Area:</label>
+          <label for="title">Area: <span id="coordinates"></span></label>
           <select class="form-control" id="area">
-            <option>Please select a trustee first</option>
+            <option>Areas are computed automatically from your GPS coordinates</option>
           </select>
         </div>
         <div class="form-group">
-          <label for="title">Web Sites:</label>
-          <input type="text" class="form-control" id="website" placeholder="Enter website URLs of your referendum if any, e.g., https://myreferendum.net">
+          <label for="title">Web Site: (optional)</label>
+          <input type="url" class="form-control" id="website" placeholder="Enter the website URL of your referendum if any, e.g., https://myreferendum.net">
         </div>
       </div>
     </main>
