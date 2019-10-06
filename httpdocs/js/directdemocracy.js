@@ -93,13 +93,14 @@ window.onload = function() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
-        var a = JSON.parse(this.responseText);
-        register_marker.setPopupContent(a.address.Match_addr + '<br><br><center style="color:#999">('
+        const a = JSON.parse(this.responseText);
+        const address = a.features[0].properties.geocoding.label;
+        register_marker.setPopupContent(address + '<br><br><center style="color:#999">('
          + lat + ', ' + lon + ')</center>').openPopup();
-        document.getElementById('register-address').innerHTML = a.address.Match_addr;
+        document.getElementById('register-address').innerHTML = address;
       }
     };
-    xhttp.open('GET', 'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=json&featureTypes=&location=' + lon + ',' + lat, true);
+    xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=geocodejson&lat=' + lat + '&lon=' + lon, true);
     xhttp.send();
   }
 
@@ -525,13 +526,13 @@ window.onload = function() {
           var xhttp = new XMLHttpRequest();
           xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-              var a = JSON.parse(this.responseText);
-              endorse_marker.setPopupContent(a.address.Match_addr + '<br><br><center style="color:#999">('
+              const a = JSON.parse(this.responseText);
+              const address = a.features[0].properties.geocoding.label;
+              endorse_marker.setPopupContent(address + '<br><br><center style="color:#999">('
                + lat + ', ' + lon + ')</center>').openPopup();
             }
           };
-          xhttp.open('GET', 'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=json&featureTypes=&location='
-                     + lon + ',' + lat, true);
+          xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=geocodejson&lat=' + lat + '&lon=' + lon, true);
           xhttp.send();
         }
       };
