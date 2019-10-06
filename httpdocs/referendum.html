@@ -42,46 +42,48 @@
     xhttp.send('key=' + encodeURIComponent(crypt.getPublicKey()));
   }
   function updateArea(latitude, longitude) {
-    document.getElementById('coordinates').innerHTML = latitude + ", " + longitude;
+    let coordinates = document.getElementById('coordinates');
+    coordinates.setAttribute('href', 'https://nominatim.openstreetmap.org/reverse.php?format=html&lat=' + latitude + '&lon=' + longitude);
+    coordinates.innerHTML = latitude + ', ' + longitude;
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
-        let a = JSON.parse(this.responseText);
+        const a = JSON.parse(this.responseText);
+        console.log(a.address);
+        const address = a.address;
         let select = document.getElementById('area');
-        let country = getCountryName(a.address.CountryCode);
         let count = 0;
-        if (a.address.Address)
-          select.options[count++] = new Option('Address: ' + a.address.Address, 'Address');
-        if (a.address.Block)
-          select.options[count++] = new Option('Block: ' + a.address.Block, 'Block');
-        if (a.address.Sector)
-          select.options[count++] = new Option('Sector: ' + a.address.Sector, 'Sector');
-        if (a.address.Neighborhood)
-          select.options[count++] = new Option('Neighborhood: ' + a.address.Neighborhood, 'Neighborhood');
-        if (a.address.District)
-          select.options[count++] = new Option('District: ' + a.address.District, 'District');
-        if (a.address.City)
-          select.options[count++] = new Option('City: ' + a.address.City, 'City');
-        if (a.address.MetroArea)
-          select.options[count++] = new Option('Metro area: ' + a.address.MetroArea, 'MetroArea');
-        if (a.address.Subregion)
-          select.options[count++] = new Option('Subregion: ' + a.address.Subregion, 'Subregion');
-        if (a.address.Region)
-          select.options[count++] = new Option('Region: ' + a.address.Region, 'Region');
-        if (a.address.Territory)
-          select.options[count++] = new Option('Territory: ' + a.address.Territory, 'Territory');
-        select.options[count++] = new Option('Country: ' + country, 'Country');
-        if (['GBR', 'DEU', 'FRA', 'ITA', 'SWE', 'POL', 'ROU', 'HRV', 'ESP', 'NLD', 'IRL', 'BGR', 'DNK', 'GRC',
-             'AUT', 'HUN', 'FIN', 'CZE', 'PRT', 'BEL', 'MLT', 'CYP', 'LUX', 'SVN', 'LTU', 'SVK', 'EST', 'LVA']
-            .indexOf(a.address.CountryCode) >= 0)
-          select.options[count++] = new Option('Union: European Union', 'Union');
-        select.options[count++] = new Option('World', 'World');
+        function addAdminLevel(level) {
+          if (level in a.address)
+            select.options[count++] = new Option(a.address[level] + ' (' + level + ')', level);
+        }
+        const admin = ['block', 'neighbourhood', 'quarter',
+                      'suburb', 'borough',
+                      'hamlet', 'village', 'town',
+                      'city',
+                      'municipality',
+                      'county', 'district',
+                      'region', 'province', 'state',
+                      'country'];
+        admin.forEach(function(item) {
+          addAdminLevel(item);
+        });
+        const country_code = a.address.country_code.toUpperCase();
+        if (['GB', 'DE', 'FR', 'IT', 'SE', 'PL', 'RO', 'HR', 'ES', 'NL', 'IE', 'BG', 'DK', 'GR',
+             'AT', 'HU', 'FI', 'CZ', 'PT', 'BE', 'MT', 'CY', 'LU', 'SI', 'LU', 'SK', 'EE', 'LV']
+            .indexOf(country_code) >= 0)
+          select.options[count++] = new Option('European Union', 'union');
+        select.options[count++] = new Option('Earth', 'world');
       }
     };
-    xhttp.open('GET', 'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=json&featureTypes=&location='
-               + longitude + ',' + latitude, true);
+    xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' + latitude + '&lon=' + longitude, true);
     xhttp.send();
   }
+  document.getElementById('area').addEventListener('change', function(event) {
+    console.log(event.target.value);
+    let coordinates = document.getElementById('coordinates');
+    coordinates.href = '&zoom'; // FIXME
+  });
 }
     </script>
     <title>directdemocracy.vote: propose a referundum</title>
@@ -144,7 +146,7 @@
           <input class="form-control" type="date" id="deadline" required>
         </div>
         <div class="form-group">
-          <label for="title">Area: <span id="coordinates"></span></label>
+          <label for="title">Area: <a id="coordinates" target="_blank"></a></label>
           <select class="form-control" id="area">
             <option>Areas are computed automatically from your GPS coordinates</option>
           </select>
