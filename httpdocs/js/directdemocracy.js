@@ -94,13 +94,13 @@ window.onload = function() {
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
         const a = JSON.parse(this.responseText);
-        const address = a.features[0].properties.geocoding.label;
+        const address = a.display_name;
         register_marker.setPopupContent(address + '<br><br><center style="color:#999">('
          + lat + ', ' + lon + ')</center>').openPopup();
         document.getElementById('register-address').innerHTML = address;
       }
     };
-    xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=geocodejson&lat=' + lat + '&lon=' + lon, true);
+    xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' + lat + '&lon=' + lon, true);
     xhttp.send();
   }
 
@@ -527,12 +527,12 @@ window.onload = function() {
           xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
               const a = JSON.parse(this.responseText);
-              const address = a.features[0].properties.geocoding.label;
+              const address = a.display_name;
               endorse_marker.setPopupContent(address + '<br><br><center style="color:#999">('
                + lat + ', ' + lon + ')</center>').openPopup();
             }
           };
-          xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=geocodejson&lat=' + lat + '&lon=' + lon, true);
+          xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' + lat + '&lon=' + lon, true);
           xhttp.send();
         }
       };
