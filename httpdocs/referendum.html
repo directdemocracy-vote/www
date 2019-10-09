@@ -24,6 +24,7 @@
   let trustee = localStorage.getItem('trustee');
   let latitude = 0;
   let longitude = 0;
+  let address = '';
   if (private_key) {
     crypt = new JSEncrypt();
     crypt.setPrivateKey(private_key);
@@ -49,13 +50,13 @@
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
         const a = JSON.parse(this.responseText);
-        console.log(a.address);
-        const address = a.address;
+        address = a.address;
+        console.log(address);
         let select = document.getElementById('area');
         let count = 0;
         function addAdminLevel(level) {
-          if (level in a.address)
-            select.options[count++] = new Option(a.address[level] + ' (' + level + ')', level);
+          if (level in address)
+            select.options[count++] = new Option(address[level], level);
         }
         const admin = ['block', 'neighbourhood', 'quarter',
                       'suburb', 'borough',
@@ -68,7 +69,7 @@
         admin.forEach(function(item) {
           addAdminLevel(item);
         });
-        const country_code = a.address.country_code.toUpperCase();
+        const country_code = address.country_code.toUpperCase();
         if (['GB', 'DE', 'FR', 'IT', 'SE', 'PL', 'RO', 'HR', 'ES', 'NL', 'IE', 'BG', 'DK', 'GR',
              'AT', 'HU', 'FI', 'CZ', 'PT', 'BE', 'MT', 'CY', 'LU', 'SI', 'LU', 'SK', 'EE', 'LV']
             .indexOf(country_code) >= 0)
@@ -80,9 +81,14 @@
     xhttp.send();
   }
   document.getElementById('area').addEventListener('change', function(event) {
-    console.log(event.target.value);
+    let query = '';
+    let first = event.target.options[event.target.selectedIndex].innerHTML;
+    for(var i = event.target.selectedIndex; i < event.target.length - 1; i++)
+      query += event.target.options[i].innerHTML + ', ';
+    query = query.slice(0, -2);
     let coordinates = document.getElementById('coordinates');
-    coordinates.href = '&zoom'; // FIXME
+    coordinates.href = 'https://nominatim.openstreetmap.org/search.php?q=' + encodeURI(query) + '&polygon_geojson=1&viewbox='; // FIXME
+    coordinates.innerHTML = first;
   });
 }
     </script>
