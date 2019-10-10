@@ -10,13 +10,13 @@
 		"signature",
 		"published",
 		"expires",
+		"trustee",
+		"areas",
 		"title",
 		"description",
 		"question",
 		"answers",
-		"deadline",
-		"areas",
-		"trusters"
+		"deadline"
 	],
 	"properties": {
 		"schema": {
@@ -42,6 +42,44 @@
 			"minimum": 0,
 			"maximum": 999999999999999
 		},
+		"trustee": {
+			"description": "public key of trustee that should be used to process this referendum",
+			"type": "string"
+		},
+		"areas": {
+			"description": "areas in which the citizen should live to vote for this referendum",
+			"type": "array",
+			"items": {
+				"type": "object",
+				"description": "area",
+				"properties": {
+					"reference": {
+						"description": "geocoding database (nominatim.openstreemap.org)",
+						"type": "string"
+					}
+					"type": {
+						"description": "type of area (city, county, department, state, country, etc.)",
+						"type": "string"
+					},
+					"name": {
+						"description": "name of the area",
+						"type": "string"
+					}
+					"latitude": {
+						"description": "latitude of the area expressed in 1/1000000 degrees",
+						"type": "integer",
+						"minimum": -90000000,
+						"maximum": 90000000
+					},
+					"longitude": {
+						"description": "longitude of the area expressed in 1/1000000 degrees",
+						"type": "integer",
+						"minimum": -180000000,
+						"maximum": 180000000
+					}
+				}
+			}
+		},
 		"title": {
 			"description": "title of the referendum",
 			"type": "string"
@@ -66,42 +104,6 @@
 			"type": "integer",
 			"minimum": 0,
 			"maximum": 999999999999999
-		},
-		"areas": {
-			"description": "areas in which the citizen should live to vote for this referendum",
-			"type": "array",
-			"items": {
-				"type": "object",
-				"description": "area",
-				"properties": {
-					"type": {
-						"description": "type of area (city, county, department, state, country, etc.)",
-						"type": "string"
-					},
-					"name": {
-						"description": "name of the area",
-						"type": "string"
-					},
-					"polygons": {
-						"description": "polygons of GPS coordinates points defining the area",
-						"type": "array",
-						"items": {
-							"type": "array",
-							"items": {
-								"type": "number"
-							}
-						}
-					}
-				}
-			}
-		},
-		"trustees": {
-			"description": "public keys of trustees that should be used to process this referendum",
-			"type": "array",
-			"items": {
-				"description": "public key of the trustee",
-				"type": "string"
-			}
 		},
 		"websites": {
 			"description": "websites providing more information about the referendum",
