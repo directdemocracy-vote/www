@@ -44,14 +44,11 @@
   }
   function updateArea(latitude, longitude) {
     let coordinates = document.getElementById('coordinates');
-    coordinates.setAttribute('href', 'https://nominatim.openstreetmap.org/reverse.php?format=html&lat=' + latitude + '&lon=' + longitude);
-    coordinates.innerHTML = latitude + ', ' + longitude;
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
         const a = JSON.parse(this.responseText);
         address = a.address;
-        console.log(address);
         let select = document.getElementById('area');
         let count = 0;
         function addAdminLevel(level) {
@@ -75,21 +72,24 @@
             .indexOf(country_code) >= 0)
           select.options[count++] = new Option('European Union', 'union');
         select.options[count++] = new Option('Earth', 'world');
+        areaChange();
       }
     };
     xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' + latitude + '&lon=' + longitude, true);
     xhttp.send();
   }
-  document.getElementById('area').addEventListener('change', function(event) {
+  document.getElementById('area').addEventListener('change', areaChange);
+  function areaChange() {
     let query = '';
-    let first = event.target.options[event.target.selectedIndex].innerHTML;
-    for(var i = event.target.selectedIndex; i < event.target.length - 1; i++)
-      query += event.target.options[i].innerHTML + ', ';
+    let area = document.getElementById('area');
+    let first = area.options[area.selectedIndex].innerHTML;
+    for(var i = area.selectedIndex; i < area.length - 1; i++)
+      query += area.options[i].innerHTML + ', ';
     query = query.slice(0, -2);
     let coordinates = document.getElementById('coordinates');
-    coordinates.href = 'https://nominatim.openstreetmap.org/search.php?q=' + encodeURI(query) + '&polygon_geojson=1&viewbox='; // FIXME
+    coordinates.href = 'https://nominatim.openstreetmap.org/search.php?q=' + encodeURI(query) + '&polygon_geojson=1&viewbox=';
     coordinates.innerHTML = first;
-  });
+  }
 }
     </script>
     <title>directdemocracy.vote: propose a referundum</title>
