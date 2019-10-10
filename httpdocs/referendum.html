@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/x-icon" href="//directdemocracy.vote/favicon.ico">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="//unpkg.com/leaflet@1.5.1/dist/leaflet.css">
     <link rel="stylesheet" href="css/croppie.css">
     <link rel="stylesheet" href="css/directdemocracy.css">
@@ -16,123 +17,7 @@
     <script src="js/croppie.min.js"></script>
     <script src="js/jsencrypt.min.js"></script>
     <script src="js/crypto-js.js"></script>
-    <script src="js/country-code-3.js"></script>
-    <script>
-      window.onload = function() {
-  let private_key = localStorage.getItem('privateKey');
-  let publisher = localStorage.getItem('publisher');
-  let trustee = localStorage.getItem('trustee');
-  let latitude = 0;
-  let longitude = 0;
-  let address = '';
-  if (private_key) {
-    crypt = new JSEncrypt();
-    crypt.setPrivateKey(private_key);
-    let xhttp = new XMLHttpRequest();
-    xhttp.onload = function() {
-      if (this.status == 200) {
-        let answer = JSON.parse(this.responseText);
-        if (answer.error)
-          showModal('Coordinates error', JSON.stringify(answer.error) + '.<br>Please try again.');
-        else {
-          latitude = answer.latitude / 1000000;
-          longitude = answer.longitude / 1000000;
-          updateArea();
-        }
-      }
-    };
-    xhttp.open('POST', publisher + '/coordinates.php', true);
-    xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhttp.send('key=' + encodeURIComponent(crypt.getPublicKey()));
-  }
-  function updateArea() {
-    let coordinates = document.getElementById('coordinates');
-    let xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        const a = JSON.parse(this.responseText);
-        address = a.address;
-        let select = document.getElementById('area');
-        let count = 0;
-        function addAdminLevel(level) {
-          if (level in address)
-            select.options[count++] = new Option(address[level], level);
-        }
-        const admin = ['block', 'neighbourhood', 'quarter',
-                      'suburb', 'borough',
-                      'hamlet', 'village', 'town',
-                      'city',
-                      'municipality',
-                      'county', 'district',
-                      'region', 'province', 'state',
-                      'country'];
-        admin.forEach(function(item) {
-          addAdminLevel(item);
-        });
-        const country_code = address.country_code.toUpperCase();
-        if (['GB', 'DE', 'FR', 'IT', 'SE', 'PL', 'RO', 'HR', 'ES', 'NL', 'IE', 'BG', 'DK', 'GR',
-             'AT', 'HU', 'FI', 'CZ', 'PT', 'BE', 'MT', 'CY', 'LU', 'SI', 'LU', 'SK', 'EE', 'LV']
-            .indexOf(country_code) >= 0)
-          select.options[count++] = new Option('European Union', 'union');
-        select.options[count++] = new Option('Earth', 'world');
-        areaChange();
-      }
-    };
-    xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' + latitude + '&lon=' + longitude, true);
-    xhttp.send();
-  }
-  document.getElementById('area').addEventListener('change', areaChange);
-  function areaChange() {
-    let query = '';
-    let area = document.getElementById('area');
-    let first = area.options[area.selectedIndex].innerHTML;
-    for(var i = area.selectedIndex; i < area.length - 1; i++)
-      query += area.options[i].innerHTML + ', ';
-    query = query.slice(0, -2);
-    let coordinates = document.getElementById('coordinates');
-    coordinates.href = 'https://nominatim.openstreetmap.org/search.php?q=' + encodeURI(query) + '&polygon_geojson=1&viewbox=';
-    coordinates.innerHTML = first;
-  }
-  function validate() {
-    var button = document.getElementById('publish-button');
-    button.setAttribute('disabled', 'disabled');
-    if (document.getElementById('title').value == '')
-      return;
-    if (document.getElementById('description').value == '')
-      return;
-    if (document.getElementById('question').value == '')
-      return;
-    if (document.getElementById('answers').value == '')
-      return;
-    if (document.getElementById('deadline').value == '')
-      return;
-    button.removeAttribute('disabled');
-  }
-  document.getElementById('title').addEventListener('input', validate);
-  document.getElementById('description').addEventListener('input', validate);
-  document.getElementById('question').addEventListener('input', validate);
-  document.getElementById('answers').addEventListener('input', validate);
-  document.getElementById('deadline').addEventListener('input', validate);
-  document.getElementById('publish-button').addEventListener('click', function() {
-    area = {};
-    area.reference = 'nominatim.openstreetmap.org';
-    area.latitude = latitude;
-    area.longitude = longitude;
-    a = document.getElementById('area');
-    area.level = a.value;
-    area.name = a.options[a.selectedIndex].innerHTML;
-    referendum = {};
-    referendum.area = area;
-    referendum.title = document.getElementById('title').value;
-    referendum.description = document.getElementById('description').value;
-    referendum.question = document.getElementById('question').value;
-    referendum.answers = document.getElementById('answers').value;
-    referendum.website = document.getElementById('website').value;
-    referendum.deadline = document.getElementById('deadline').value;
-    console.log(JSON.stringify(referendum));
-  });
-}
-    </script>
+    <script src="js/referendum.js"></script>
     <title>directdemocracy.vote: propose a referundum</title>
   </head>
 
@@ -172,7 +57,7 @@
       </div>
       <div class="container">
         <div class="form-group">
-          <label for="title">Area: <a id="coordinates" target="_blank"></a></label>
+          <label for="title">Area: <a id="place" target="_blank"></a> <i class="fa fa-external-link"></i></label>
           <select class="form-control" id="area">
             <option>Areas are computed automatically from your GPS coordinates</option>
           </select>
@@ -206,7 +91,7 @@
           <button class="btn btn-primary" id="publish-button" role="button" disabled="disabled">Publish your referendum</button>
           <small class="form-text text-muted">Warning: nothing can be modifed after publication!</small>
         </div>
-        </div>
+      </div>
       </div>
     </main>
     <div>
