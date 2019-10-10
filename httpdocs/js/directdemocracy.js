@@ -742,16 +742,22 @@ window.onload = function() {
     if (register_map) register_map.invalidateSize();
   });
   publisher = localStorage.getItem('publisher');
-  if (!publisher)
+  if (!publisher) {
     publisher = 'https://publisher.directdemocracy.vote';
+    localStorage.setItem('publisher', publisher);
+  }
   document.getElementById('publisher').value = publisher;
   trustee = localStorage.getItem('trustee');
-  if (!trustee)
+  if (!trustee) {
     trustee = 'https://trustee.directdemocracy.vote';
+    localStorage.setItem('trustee', trustee);
+  }
   document.getElementById('trustee').value = trustee;
   station = localStorage.getItem('station');
-  if (!station)
+  if (!station) {
     station = 'https://station.directdemocracy.vote';
+    localStorage.setItem('station', station);
+  }
   document.getElementById('station').value = station;
   private_key = localStorage.getItem('privateKey');
   if (private_key) {
