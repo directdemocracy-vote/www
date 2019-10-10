@@ -34,15 +34,18 @@
         let answer = JSON.parse(this.responseText);
         if (answer.error)
           showModal('Coordinates error', JSON.stringify(answer.error) + '.<br>Please try again.');
-        else
-          updateArea(answer.latitude / 1000000, answer.longitude / 1000000);
+        else {
+          latitude = answer.latitude / 1000000;
+          longitude = answer.longitude / 1000000;
+          updateArea();
+        }
       }
     };
     xhttp.open('POST', publisher + '/coordinates.php', true);
     xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhttp.send('key=' + encodeURIComponent(crypt.getPublicKey()));
   }
-  function updateArea(latitude, longitude) {
+  function updateArea() {
     let coordinates = document.getElementById('coordinates');
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
@@ -90,6 +93,44 @@
     coordinates.href = 'https://nominatim.openstreetmap.org/search.php?q=' + encodeURI(query) + '&polygon_geojson=1&viewbox=';
     coordinates.innerHTML = first;
   }
+  function validate() {
+    var button = document.getElementById('publish-button');
+    button.setAttribute('disabled', 'disabled');
+    if (document.getElementById('title').value == '')
+      return;
+    if (document.getElementById('description').value == '')
+      return;
+    if (document.getElementById('question').value == '')
+      return;
+    if (document.getElementById('answers').value == '')
+      return;
+    if (document.getElementById('deadline').value == '')
+      return;
+    button.removeAttribute('disabled');
+  }
+  document.getElementById('title').addEventListener('input', validate);
+  document.getElementById('description').addEventListener('input', validate);
+  document.getElementById('question').addEventListener('input', validate);
+  document.getElementById('answers').addEventListener('input', validate);
+  document.getElementById('deadline').addEventListener('input', validate);
+  document.getElementById('publish-button').addEventListener('click', function() {
+    area = {};
+    area.reference = 'nominatim.openstreetmap.org';
+    area.latitude = latitude;
+    area.longitude = longitude;
+    a = document.getElementById('area');
+    area.level = a.value;
+    area.name = a.options[a.selectedIndex].innerHTML;
+    referendum = {};
+    referendum.area = area;
+    referendum.title = document.getElementById('title').value;
+    referendum.description = document.getElementById('description').value;
+    referendum.question = document.getElementById('question').value;
+    referendum.answers = document.getElementById('answers').value;
+    referendum.website = document.getElementById('website').value;
+    referendum.deadline = document.getElementById('deadline').value;
+    console.log(JSON.stringify(referendum));
+  });
 }
     </script>
     <title>directdemocracy.vote: propose a referundum</title>
@@ -122,14 +163,20 @@
             </div>
           </div>
           <div class="directdemocracy-subtitle" style="position:relative;top:0;margin-bottom:40px">
-            <h3>- write a referendum</h3>
+            <h3>- select an area and write a referendum</h3>
+            <h3>- set the deadline for voting</h3>
             <h3>- publish it and advertise it</h3>
-            <h3>- get the results of the votes</h3>
           </div>
           <div><br></div>
         </div>
       </div>
       <div class="container">
+        <div class="form-group">
+          <label for="title">Area: <a id="coordinates" target="_blank"></a></label>
+          <select class="form-control" id="area">
+            <option>Areas are computed automatically from your GPS coordinates</option>
+          </select>
+        </div>
         <div class="form-group">
           <label for="title">Title:</label>
           <input type="text" class="form-control" id="title" placeholder="Enter the title of your referendum" required>
@@ -148,18 +195,17 @@
           <input type="text" class="form-control" id="answers" placeholder="Enter a comma-separated list of possible answers, e.g., Yes, No, Abstain" required>
         </div>
         <div class="form-group">
+          <label for="title">Web Site: (optional)</label>
+          <input type="url" class="form-control" id="website" placeholder="Enter the website URL of your referendum if any, e.g., https://myreferendum.net">
+        </div>
+        <div class="form-group">
           <label for="title">Vote Deadline:</label>
           <input class="form-control" type="date" id="deadline" required>
         </div>
         <div class="form-group">
-          <label for="title">Area: <a id="coordinates" target="_blank"></a></label>
-          <select class="form-control" id="area">
-            <option>Areas are computed automatically from your GPS coordinates</option>
-          </select>
+          <button class="btn btn-primary" id="publish-button" role="button" disabled="disabled">Publish your referendum</button>
+          <small class="form-text text-muted">Warning: nothing can be modifed after publication!</small>
         </div>
-        <div class="form-group">
-          <label for="title">Web Site: (optional)</label>
-          <input type="url" class="form-control" id="website" placeholder="Enter the website URL of your referendum if any, e.g., https://myreferendum.net">
         </div>
       </div>
     </main>
