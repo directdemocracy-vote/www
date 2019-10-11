@@ -5,6 +5,8 @@ window.onload = function() {
   let latitude = 0;
   let longitude = 0;
   let address = '';
+  let crypt = null;
+  let trustee_key = '';
   if (private_key) {
     crypt = new JSEncrypt();
     crypt.setPrivateKey(private_key);
@@ -13,17 +15,35 @@ window.onload = function() {
       if (this.status == 200) {
         let answer = JSON.parse(this.responseText);
         if (answer.error)
-          showModal('Coordinates error', JSON.stringify(answer.error) + '.<br>Please try again.');
+          showModal('Coordinates error', JSON.stringify(answer.error));
         else {
           latitude = answer.latitude / 1000000;
           longitude = answer.longitude / 1000000;
           updateArea();
+          update();
         }
       }
     };
     xhttp.open('POST', publisher + '/coordinates.php', true);
     xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhttp.send('key=' + encodeURIComponent(crypt.getPublicKey()));
+  }
+  if (trustee) {
+    let xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+      if (this.status == 200) {
+        let answer = JSON.parse(this.responseText);
+        if (answer.error)
+          showModal('Trustee key', JSON.stringify(answer.error));
+        else {
+          trustee_key = answer.key;
+          update();
+        }
+      }
+    };
+    xhttp.open('POST', trustee + '/key.php', true);
+    xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhttp.send();
   }
   function updateArea() {
     let xhttp = new XMLHttpRequest();
@@ -75,6 +95,10 @@ window.onload = function() {
   function validate() {
     var button = document.getElementById('publish-button');
     button.setAttribute('disabled', 'disabled');
+    if (latitude == 0 && longitude == 0)
+      return;
+    if (trustee_key == '')
+      return;
     if (document.getElementById('title').value == '')
       return;
     if (document.getElementById('description').value == '')
@@ -101,13 +125,23 @@ window.onload = function() {
     area.type = a.value;
     area.name = a.options[a.selectedIndex].innerHTML;
     referendum = {};
-    referendum.area = area;
+    referendum.schema = 'https://directdemocracy.vote/json-schema/0.0.1/referendum.schema.json';
+    referendum.key = crypt.getPublicKey();
+    referendum.signature = '';
+    referendum.published = new Date().getTime();
+    referendum.expires = new Date(new Date().setFullYear(new Date().getFullYear() + 10)).getTime();  // 10 years
+    referendum.trustee = trustee_key;  // FIXME
+    referendum.areas = array();
+    referendum.areas[0] = area;
     referendum.title = document.getElementById('title').value;
     referendum.description = document.getElementById('description').value;
     referendum.question = document.getElementById('question').value;
-    referendum.answers = document.getElementById('answers').value;
-    referendum.website = document.getElementById('website').value;
-    referendum.deadline = document.getElementById('deadline').value;
+    referendum.answers = document.getElementById('answers').value; // FIXME
+    referendum.deadline = document.getElementById('deadline').value; // FIXME
+    let website = document.getElementById('website').value;
+    if (website)
+      referendum.website = website;
+    // sign
     console.log(JSON.stringify(referendum));
   });
 };

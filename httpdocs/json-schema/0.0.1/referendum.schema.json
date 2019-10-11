@@ -52,6 +52,13 @@
 			"items": {
 				"type": "object",
 				"description": "area",
+				"required": [
+					"reference",
+					"type",
+					"name",
+					"latitude",
+					"longitude"
+				]
 				"properties": {
 					"reference": {
 						"description": "geocoding database (nominatim.openstreemap.org)",
@@ -105,13 +112,10 @@
 			"minimum": 0,
 			"maximum": 999999999999999
 		},
-		"websites": {
-			"description": "websites providing more information about the referendum",
-			"type": "array",
-			"items": {
-				"type": "string",
-				"format": "uri"
-			}
+		"website": {
+			"description": "website providing more information about the referendum",
+			"type": "string",
+			"format": "uri"
 		}
 	}
 }
