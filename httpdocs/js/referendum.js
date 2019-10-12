@@ -136,7 +136,10 @@ window.onload = function() {
     referendum.title = document.getElementById('title').value;
     referendum.description = document.getElementById('description').value;
     referendum.question = document.getElementById('question').value;
-    referendum.answers = document.getElementById('answers').value; // FIXME
+    let answers = document.getElementById('answers').value.split(',');
+    referendum.answers = array();
+    for(let i = 0; i < answers.length; i++)
+      referendum.answers[i] = answers[i].trim();
     referendum.deadline = document.getElementById('deadline').value; // FIXME
     let website = document.getElementById('website').value;
     if (website)
