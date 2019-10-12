@@ -22,22 +22,23 @@ window.onload = function() {
   var endorsements = [];
 
   function stripped_key(public_key) {
-    let striped = '';
+    let stripped = '';
     const header = '-----BEGIN PUBLIC KEY-----\n'.length;
     const footer = '-----END PUBLIC KEY-----'.length;
     const l = public_key.length - footer;
     for(let i = header; i < l; i += 65)
-      stripped += public_key.substring(offset, 64);
-    return stripped.slice(0, -1 - footer);
+      stripped += public_key.substr(i, 64);
+    stripped = stripped.slice(0, -1 - footer);
+    return stripped;
   }
 
   function public_key(key) {
-    let public_key = '-----BEGIN PUBLIC KEY-----\n';
+    let pkey = '-----BEGIN PUBLIC KEY-----\n';
     const l = key.length;
-    for(i = 0; i < l; i += 64)
-      public_key += key.substring(i, 64) + '\n';
-    public_key += '-----END PUBLIC KEY-----';
-    return key;
+    for(let i = 0; i < l; i += 64)
+      pkey += key.substr(i, 64) + '\n';
+    pkey += '-----END PUBLIC KEY-----';
+    return pkey;
   }
 
   function showModal(title, contents) {
@@ -620,7 +621,6 @@ window.onload = function() {
           showModal('Endorsement error', JSON.stringify(answer.error) + '.<br>Please try again.');
         else {
           showModal('Endorsement success', 'You successfully endorsed ' + endorsed.givenNames + ' ' + endorsed.familyName);
-          console.log(answer);
           endorsements = answer;
           updateEndorsements();
         }
@@ -817,7 +817,6 @@ window.onload = function() {
       schema: 'https://directdemocracy.vote/json-schema/0.0.1/citizen.schema.json',
       key: '',
       signature: '',
-      fingerprint: '',
       published: 0,
       expires: 0,
       familyName: '',
