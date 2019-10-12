@@ -21,6 +21,25 @@ window.onload = function() {
   var scanner = null;
   var endorsements = [];
 
+  function stripped_key(public_key) {
+    let striped = '';
+    const header = '-----BEGIN PUBLIC KEY-----\n'.length;
+    const footer = '-----END PUBLIC KEY-----'.length;
+    const l = public_key.length - footer;
+    for(let i = header; i < l; i += 65)
+      stripped += public_key.substring(offset, 64);
+    return stripped.slice(0, -1 - footer);
+  }
+
+  function public_key(key) {
+    let public_key = '-----BEGIN PUBLIC KEY-----\n';
+    const l = key.length;
+    for(i = 0; i < l; i += 64)
+      public_key += key.substring(i, 64) + '\n';
+    public_key += '-----END PUBLIC KEY-----';
+    return key;
+  }
+
   function showModal(title, contents) {
     document.getElementById('modal-title').innerHTML = title;
     document.getElementById('modal-contents').innerHTML = contents;
@@ -227,7 +246,7 @@ window.onload = function() {
     crypt.getKey(function() {
       dt = new Date();
       time += (dt.getTime());
-      citizen.key = crypt.getPublicKey();
+      citizen.key = stripped_key(crypt.getPublicKey());
       private_key = crypt.getPrivateKey();
       document.getElementById('register-forging-spinner').style.display = 'none';
       document.getElementById('register-private-key-icon').style.display = '';
@@ -491,7 +510,7 @@ window.onload = function() {
           let signature = endorsed.signature;
           endorsed.signature = '';
           let verify = new JSEncrypt();
-          verify.setPublicKey(endorsed.key);
+          verify.setPublicKey(public_key(endorsed.key));
           if (!verify.verify(JSON.stringify(endorsed), signature, CryptoJS.SHA256)) {
             message.innerHTML = 'Cannot verify citizen signature';
             setTimeout(function() {
@@ -776,7 +795,7 @@ window.onload = function() {
           showModal('Citizen error', JSON.stringify(answer.error) + '.<br>Please try again.');
         else {
           citizen = answer.citizen;
-          citizen.key = crypt.getPublicKey();
+          citizen.key = stripped_key(crypt.getPublicKey());
           endorsements = answer.endorsements;
           citizen_endorsements = answer.citizen_endorsements;
           updateCitizenCard();
@@ -786,7 +805,7 @@ window.onload = function() {
     };
     xhttp.open('POST', publisher + '/citizen.php', true);
     xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhttp.send('key=' + encodeURIComponent(crypt.getPublicKey()));
+    xhttp.send('key=' + encodeURIComponent(stripped_key(crypt.getPublicKey())));
   } else {
     generateNewKeyPair();
     document.getElementById('citizen-nav').style.display = 'none';
