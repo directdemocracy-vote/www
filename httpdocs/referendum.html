@@ -85,8 +85,9 @@
         </div>
         <div class="form-group">
           <label for="title">Vote Deadline:</label>
-          <input class="form-control" type="date" id="deadline" required>
-          <input class="form-control" type="time" id="deadline time" required>
+          <div class="form-inline">
+            <input class="form-control" type="date" id="deadline" required> &nbsp; at &nbsp; <input class="form-control" style="width:70px" type="number" id="deadline-hour" min="0" max="23" value='20' required> &nbsp; hour &mdash; Time zone offset:
+            &nbsp; <input class="form-control" style="width:70px" type="number" id="time-zone" min="-12" max="12"></div>
         </div>
         <div class="form-group">
           <button class="btn btn-primary" id="publish-button" role="button" disabled="disabled">Publish your referendum</button>

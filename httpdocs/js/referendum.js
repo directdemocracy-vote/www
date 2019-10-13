@@ -7,6 +7,8 @@ window.onload = function() {
   let address = '';
   let crypt = null;
   let trustee_key = '';
+  var offset = new Date().getTimezoneOffset();
+  document.getElementById('time-zone').value = offset / 60;
   if (private_key) {
     crypt = new JSEncrypt();
     crypt.setPrivateKey(private_key);
@@ -15,7 +17,7 @@ window.onload = function() {
       if (this.status == 200) {
         let answer = JSON.parse(this.responseText);
         if (answer.error)
-          showModal('Coordinates error', JSON.stringify(answer.error));
+          console.log('Coordinates error', JSON.stringify(answer.error));
         else {
           latitude = answer.latitude / 1000000;
           longitude = answer.longitude / 1000000;
@@ -34,10 +36,10 @@ window.onload = function() {
       if (this.status == 200) {
         let answer = JSON.parse(this.responseText);
         if (answer.error)
-          showModal('Trustee key', JSON.stringify(answer.error));
+          console.log('Trustee key', JSON.stringify(answer.error));
         else {
           trustee_key = answer.key;
-          update();
+          validate();
         }
       }
     };
@@ -140,7 +142,8 @@ window.onload = function() {
     referendum.answers = array();
     for(let i = 0; i < answers.length; i++)
       referendum.answers[i] = answers[i].trim();
-    referendum.deadline = document.getElementById('deadline').value; // FIXME
+    deadline = document.getElementById('deadline').value + "T";
+    referendum.deadline = 0; // FIXME
     let website = document.getElementById('website').value;
     if (website)
       referendum.website = website;
