@@ -43,8 +43,8 @@ window.onload = function() {
         if (answer.error)
           showModal('Coordinates error', JSON.stringify(answer.error));
         else {
-          latitude = answer.latitude / 1000000;
-          longitude = answer.longitude / 1000000;
+          latitude = answer.latitude;
+          longitude = answer.longitude;
           updateArea();
           validate();
         }
@@ -103,7 +103,9 @@ window.onload = function() {
         areaChange();
       }
     };
-    xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' + latitude + '&lon=' + longitude, true);
+    let lat = latitude / 1000000;
+    let lon = longitude / 1000000;
+    xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' + lat + '&lon=' + lon, true);
     xhttp.send();
   }
   document.getElementById('area').addEventListener('change', areaChange);

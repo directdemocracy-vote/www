@@ -20,7 +20,7 @@
 	],
 	"properties": {
 		"schema": {
-			"const": "https://directdemocracy.vote/json-schema/0.0.1/card.schema.json"
+			"const": "https://directdemocracy.vote/json-schema/0.0.1/referendum.schema.json"
 		},
 		"key": {
 			"description": "public key of the author of the referendum",
@@ -58,12 +58,12 @@
 					"name",
 					"latitude",
 					"longitude"
-				]
+				],
 				"properties": {
 					"reference": {
 						"description": "geocoding database (nominatim.openstreemap.org)",
 						"type": "string"
-					}
+					},
 					"type": {
 						"description": "type of area (city, county, department, state, country, etc.)",
 						"type": "string"
@@ -71,7 +71,7 @@
 					"name": {
 						"description": "name of the area",
 						"type": "string"
-					}
+					},
 					"latitude": {
 						"description": "latitude of the area expressed in 1/1000000 degrees",
 						"type": "integer",
