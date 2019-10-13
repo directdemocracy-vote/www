@@ -18,8 +18,7 @@
 	],
 	"properties": {
 		"schema": {
-			"const": "https://directdemocracy.vote/json-schema/0.0.1/citizen.schema.json",
-			"maxLength": 256
+			"const": "https://directdemocracy.vote/json-schema/0.0.1/citizen.schema.json"
 		},
 		"key": {
 			"description": "public key of the citizen",
@@ -73,5 +72,6 @@
 			"minimum": -180000000,
 			"maximum": 180000000
 		}
-	}
+	},
+  "additionalProperties": false
 }

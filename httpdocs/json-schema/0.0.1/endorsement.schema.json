@@ -18,11 +18,13 @@
 		},
 		"key": {
 			"description": "public key of the endorser",
-			"type": "string"
+			"type": "string",
+			"maxLength": 512
 		},
 		"signature": {
 			"description": "signature of the endorser",
-			"type": "string"
+			"type": "string",
+			"maxLength": 512
 		},
 		"published": {
 			"description": "date of publication (milliseconds since 1970-01-01 00:00:00.000)",
@@ -51,7 +53,8 @@
 				"signature": {
 					"type": "string"
 				}
-			}
+			},
+		  "additionalProperties": false
 		},
 		"message": {
 			"description": "message encrypted with the public key of the publication author",
@@ -61,5 +64,6 @@
 			"description": "free comment",
 			"type": "string"
 		}
-	}
+	},
+  "additionalProperties": false
 }

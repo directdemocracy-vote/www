@@ -55,5 +55,6 @@
 			"description": "answer to the question of the referendum",
 			"type": "string"
 		}
-	}
+	},
+  "additionalProperties": false
 }

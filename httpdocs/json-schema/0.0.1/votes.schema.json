@@ -49,7 +49,8 @@
 					"description": "signature of the referendum",
 					"type": "string"
 				}
-			}
+			},
+		  "additionalProperties": false
 		},
 		"votes": {
 			"description": "list of votes",
@@ -67,7 +68,9 @@
 					"description": "signature of the vote",
 					"type": "string"
 				}
-			}
+			},
+		  "additionalProperties": false
 		}
-	}
+	},
+  "additionalProperties": false
 }
