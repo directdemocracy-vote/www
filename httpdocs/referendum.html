@@ -57,7 +57,7 @@
       </div>
       <div class="container">
         <div class="form-group">
-          <label for="title">Area: <a id="place" target="_blank"></a> <i class="fa fa-external-link"></i></label>
+          <label for="area">Area: <a id="place" target="_blank"></a> <i class="fa fa-external-link"></i></label>
           <select class="form-control" id="area">
             <option>Areas are computed automatically from your GPS coordinates</option>
           </select>
@@ -67,27 +67,27 @@
           <input type="text" class="form-control" id="title" placeholder="Enter the title of your referendum" required>
         </div>
         <div class="form-group">
-          <label for="title">Description:</label>
+          <label for="description">Description:</label>
           <textarea class="form-control" id="description" placeholder="Enter the description of your referendum" rows="5" required></textarea>
           <small class="form-text text-muted">You may use simple text or <a target="_blank" href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> <i class="fa fa-external-link"></i> format here.</small>
         </div>
         <div class="form-group">
-          <label for="title">Question:</label>
+          <label for="question">Question:</label>
           <input type="text" class="form-control" id="question" placeholder="Enter the question that citizens should answer" required>
         </div>
         <div class="form-group">
-          <label for="title">Possible Answers:</label>
+          <label for="answers">Possible Answers:</label>
           <input type="text" class="form-control" id="answers" placeholder="Enter a comma-separated list of possible answers, e.g., Yes, No, Abstain" required>
         </div>
         <div class="form-group">
-          <label for="title">Web Site: (optional)</label>
+          <label for="url">Web Site: (optional)</label>
           <input type="url" class="form-control" id="website" placeholder="Enter the website URL of your referendum if any, e.g., https://myreferendum.net">
         </div>
         <div class="form-group">
-          <label for="title">Vote Deadline:</label>
+          <label for="deadline-day">Vote Deadline:</label>
           <div class="form-inline">
-            <input class="form-control" type="date" id="deadline" required> &nbsp; at &nbsp; <input class="form-control" style="width:70px" type="number" id="deadline-hour" min="0" max="23" value='20' required> &nbsp; hour &mdash; Time zone offset:
-            &nbsp; <input class="form-control" style="width:70px" type="number" id="time-zone" min="-12" max="12"></div>
+            <input class="form-control" type="date" id="deadline-day" required> &nbsp; at &nbsp; <input class="form-control" style="width:70px" type="number" id="deadline-hour" min="0" max="23" value='20' required> &nbsp; hour </div>
+          <div class="form-inline"> Time zone: UTC &nbsp; <input class="form-control" style="width:80px" type="text" id="deadline-time-zone"> &nbsp; hour</div>
         </div>
         <div class="form-group">
           <button class="btn btn-primary" id="publish-button" role="button" disabled="disabled">Publish your referendum</button>
