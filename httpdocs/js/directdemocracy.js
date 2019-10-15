@@ -2,24 +2,25 @@ import QrScanner from './qr-scanner.min.js';
 QrScanner.WORKER_PATH = 'js/qr-scanner-worker.min.js';
 
 window.onload = function() {
-  var croppie = null;
-  var geolocation = false;
-  var citizen = null;
-  var citizen_fingerprint = '';
-  var citizen_endorsements = [];
-  var register_map = null;
-  var register_marker = null;
-  var endorsed = null;
-  var endorse_map = null;
-  var endorse_marker = null;
-  var endorsed_fingerprint = '';
-  var crypt = null;
-  var private_key = '';
-  var publisher = '';
-  var trustee = '';
-  var station = '';
-  var scanner = null;
-  var endorsements = [];
+  const directdemocracy_version = '0.0.1';
+  let croppie = null;
+  let geolocation = false;
+  let citizen = null;
+  let citizen_fingerprint = '';
+  let citizen_endorsements = [];
+  let register_map = null;
+  let register_marker = null;
+  let endorsed = null;
+  let endorse_map = null;
+  let endorse_marker = null;
+  let endorsed_fingerprint = '';
+  let crypt = null;
+  let private_key = '';
+  let publisher = '';
+  let trustee = '';
+  let station = '';
+  let scanner = null;
+  let endorsements = [];
 
   function stripped_key(public_key) {
     let stripped = '';
@@ -54,7 +55,7 @@ window.onload = function() {
     document.getElementById('revoke-key-button').setAttribute('disabled', 'disabled');
     document.getElementById('register-confirm-check').checked = false;
     document.getElementById('publish-button').setAttribute('disabled', 'disabled');
-    var d = new Date();
+    let d = new Date();
     d.setFullYear(d.getFullYear() + 10);
     document.getElementById('register-expiration').value = d.toISOString().slice(0, 10);
   }
@@ -73,7 +74,7 @@ window.onload = function() {
   function setupMap() {
     if (register_map != null) return;
     if (navigator.geolocation) navigator.geolocation.getCurrentPosition(getGeolocationPosition);
-    var xhttp = new XMLHttpRequest();
+    let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200 && geolocation == false) {
         coords = this.responseText.split(',');
@@ -87,8 +88,8 @@ window.onload = function() {
     };
     xhttp.open('GET', 'https://ipinfo.io/loc', true);
     xhttp.send();
-    var lat = citizen.latitude / 1000000;
-    var lon = citizen.longitude / 1000000;
+    const lat = citizen.latitude / 1000000;
+    const lon = citizen.longitude / 1000000;
     register_map = L.map('register-map').setView([lat, lon], 2);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -104,13 +105,13 @@ window.onload = function() {
   }
 
   function updateLocation() {
-    var lat = citizen.latitude / 1000000;
-    var lon = citizen.longitude / 1000000;
+    const lat = citizen.latitude / 1000000;
+    const lon = citizen.longitude / 1000000;
     register_marker.setPopupContent(lat + ',' + lon).openPopup();
     document.getElementById('register-latitude').value = lat;
     document.getElementById('register-longitude').value = lon;
     validate();
-    var xhttp = new XMLHttpRequest();
+    let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
         const a = JSON.parse(this.responseText);
@@ -144,7 +145,7 @@ window.onload = function() {
     document.getElementById('citizen-published').innerHTML = published.toISOString().slice(0, 10);
     document.getElementById('citizen-expires').innerHTML = expires.toISOString().slice(0, 10);
     citizen_fingerprint = CryptoJS.SHA1(citizen.signature).toString();
-    var qr = new QRious({
+    let qr = new QRious({
       element: document.getElementById('citizen-qr-code'),
       value: citizen_fingerprint,
       level: 'M',
@@ -222,10 +223,10 @@ window.onload = function() {
   }
 
   function checkExpirationValidity() {
-    var expiration = document.getElementById('register-expiration');
-    var choice = new Date(expiration.value + 'T00:00:00Z');
-    var min = new Date();
-    var max = new Date();
+    let expiration = document.getElementById('register-expiration');
+    const choice = new Date(expiration.value + 'T00:00:00Z');
+    const min = new Date();
+    let max = new Date();
     max.setFullYear(max.getFullYear() + 10);
     if (choice > max || choice < min) {
       expiration.setCustomValidity('Please enter a date between tomorrow and 10 year from now.');
@@ -239,8 +240,8 @@ window.onload = function() {
     document.getElementById('register-forging-spinner').style.display = '';
     document.getElementById('register-private-key-icon').style.display = 'none';
     document.getElementById('register-private-key-message').innerHTML = 'Forging a new private key, please wait...';
-    var dt = new Date();
-    var time = -(dt.getTime());
+    let dt = new Date();
+    let time = -(dt.getTime());
     crypt = new JSEncrypt({
       default_key_size: 2048
     });
@@ -258,7 +259,7 @@ window.onload = function() {
   }
 
   function validate() {
-    var button = document.getElementById('publish-button');
+    let button = document.getElementById('publish-button');
     button.setAttribute('disabled', 'disabled');
     if (citizen.key === '' || citizen.picture === '') return;
     if (citizen.latitude === 0 && citizen.longitude === 0) return;
@@ -320,9 +321,8 @@ window.onload = function() {
     citizen.published = new Date().getTime();
     citizen.expires = new Date(document.getElementById('register-expiration').value + 'T00:00:00Z').getTime();
     citizen.signature = '';
-    var str = JSON.stringify(citizen);
-    citizen.signature = crypt.sign(str, CryptoJS.SHA256, 'sha256');
-    var xhttp = new XMLHttpRequest();
+    citizen.signature = crypt.sign(JSON.stringify(citizen), CryptoJS.SHA256, 'sha256');
+    let xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
       if (this.status == 200) {
         let answer = JSON.parse(this.responseText);
@@ -415,7 +415,7 @@ window.onload = function() {
     document.getElementById('revoke-key-i-understand').value = '';
     document.getElementById('revoke-key-button').setAttribute('disabled', 'disabled');
     let endorsement = {
-      schema: 'https://directdemocracy.vote/json-schema/0.0.1/endorsement.schema.json',
+      schema: 'https://directdemocracy.vote/json-schema/' + directdemocracy_version + '/endorsement.schema.json',
       key: citizen.key,
       signature: '',
       published: new Date().getTime(),
@@ -426,9 +426,8 @@ window.onload = function() {
         signature: citizen.signature
       }
     };
-    let str = JSON.stringify(endorsement);
-    endorsement.signature = crypt.sign(str, CryptoJS.SHA256, 'sha256');
-    var xhttp = new XMLHttpRequest();
+    endorsement.signature = crypt.sign(JSON.stringify(endorsement), CryptoJS.SHA256, 'sha256');
+    let xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
       if (this.status == 200) {
         let answer = JSON.parse(this.responseText);
@@ -496,7 +495,7 @@ window.onload = function() {
       video.style.display = 'none';
       list.style.display = '';
       button.setAttribute('disabled', 'disabled');
-      var xhttp = new XMLHttpRequest();
+      let xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
           endorsed = JSON.parse(this.responseText);
@@ -531,8 +530,8 @@ window.onload = function() {
           let expires = new Date(endorsed.expires);
           document.getElementById('endorse-published').innerHTML = published.toISOString().slice(0, 10);
           document.getElementById('endorse-expires').innerHTML = expires.toISOString().slice(0, 10);
-          var lat = endorsed.latitude / 1000000;
-          var lon = endorsed.longitude / 1000000;
+          const lat = endorsed.latitude / 1000000;
+          const lon = endorsed.longitude / 1000000;
           if (endorse_map == null) {
             endorse_map = L.map('endorse-map');
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -543,7 +542,7 @@ window.onload = function() {
             endorse_marker.setLatLng([lat, lon]);
           endorse_marker.bindPopup(lat + ', ' + lon);
           endorse_map.setView([lat, lon], 18);
-          var xhttp = new XMLHttpRequest();
+          let xhttp = new XMLHttpRequest();
           xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
               const a = JSON.parse(this.responseText);
@@ -567,7 +566,7 @@ window.onload = function() {
   });
 
   function checkEndorse() {
-    var button = document.getElementById('endorse');
+    let button = document.getElementById('endorse');
     if (document.getElementById('endorse-picture-check').checked &&
         document.getElementById('endorse-name-check').checked &&
         document.getElementById('endorse-coords-check').checked)
@@ -587,7 +586,7 @@ window.onload = function() {
   }
 
   function clearEndorse() {
-    var button = document.getElementById('endorse-button');
+    let button = document.getElementById('endorse-button');
     button.innerHTML = 'Endorse a Citizen';
     button.removeAttribute('disabled');
     document.getElementById('endorse-button-group').style.display = '';
@@ -601,7 +600,7 @@ window.onload = function() {
     document.getElementById('endorse-button').setAttribute('disabled', 'disabled');
     document.getElementById('endorse-cancel').setAttribute('disabled', 'disabled');
     let endorsement = {
-      schema: 'https://directdemocracy.vote/json-schema/0.0.1/endorsement.schema.json',
+      schema: 'https://directdemocracy.vote/json-schema/' + directdemocracy_version + '/endorsement.schema.json',
       key: citizen.key,
       signature: '',
       published: new Date().getTime(),
@@ -611,8 +610,7 @@ window.onload = function() {
         signature: endorsed.signature
       }
     };
-    let str = JSON.stringify(endorsement);
-    endorsement.signature = crypt.sign(str, CryptoJS.SHA256, 'sha256');
+    endorsement.signature = crypt.sign(JSON.stringify(endorsement), CryptoJS.SHA256, 'sha256');
     let xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
       if (this.status == 200) {
@@ -719,7 +717,7 @@ window.onload = function() {
           function revoke() {
             document.getElementById('revoke-citizen-button').removeEventListener('click', revoke);
             let e = {
-              schema: 'https://directdemocracy.vote/json-schema/0.0.1/endorsement.schema.json',
+              schema: 'https://directdemocracy.vote/json-schema/' + directdemocracy_version + '/endorsement.schema.json',
               key: citizen.key,
               signature: '',
               published: new Date().getTime(),
@@ -730,8 +728,7 @@ window.onload = function() {
                 signature: endorsement.signature
               }
             };
-            let str = JSON.stringify(e);
-            e.signature = crypt.sign(str, CryptoJS.SHA256, 'sha256');
+            e.signature = crypt.sign(JSON.stringify(e), CryptoJS.SHA256, 'sha256');
             let xhttp = new XMLHttpRequest();
             xhttp.onload = function() {
               if (this.status == 200) {
@@ -814,7 +811,7 @@ window.onload = function() {
     document.getElementById('edit').setAttribute('disabled', 'disabled');
     $('.nav-tabs a[href="#register"]').tab('show');
     citizen = {
-      schema: 'https://directdemocracy.vote/json-schema/0.0.1/citizen.schema.json',
+      schema: 'https://directdemocracy.vote/json-schema/' + directdemocracy_version + '/citizen.schema.json',
       key: '',
       signature: '',
       published: 0,

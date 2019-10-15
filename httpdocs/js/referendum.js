@@ -1,7 +1,8 @@
 window.onload = function() {
-  let private_key = localStorage.getItem('privateKey');
-  let publisher = localStorage.getItem('publisher');
-  let trustee = localStorage.getItem('trustee');
+  const directdemocracy_version = '0.0.1';
+  const private_key = localStorage.getItem('privateKey');
+  const publisher = localStorage.getItem('publisher');
+  const trustee = localStorage.getItem('trustee');
   let latitude = 0;
   let longitude = 0;
   let address = '';
@@ -113,7 +114,7 @@ window.onload = function() {
     let query = '';
     let area = document.getElementById('area');
     let first = area.options[area.selectedIndex].innerHTML;
-    for(var i = area.selectedIndex; i < area.length - 1; i++)
+    for(let i = area.selectedIndex; i < area.length - 1; i++)
       query += area.options[i].innerHTML + ', ';
     query = query.slice(0, -2);
     let place = document.getElementById('place');
@@ -121,7 +122,7 @@ window.onload = function() {
     place.innerHTML = first;
   }
   function validate() {
-    var button = document.getElementById('publish-button');
+    let button = document.getElementById('publish-button');
     button.setAttribute('disabled', 'disabled');
     if (latitude == 0 && longitude == 0)
       return;
@@ -175,7 +176,7 @@ window.onload = function() {
     area.type = a.value;
     area.name = a.options[a.selectedIndex].innerHTML;
     referendum = {};
-    referendum.schema = 'https://directdemocracy.vote/json-schema/0.0.1/referendum.schema.json';
+    referendum.schema = 'https://directdemocracy.vote/json-schema/' + directdemocracy_version + '/referendum.schema.json';
     referendum.key = stripped_key(crypt.getPublicKey());
     referendum.signature = '';
     referendum.published = new Date().getTime();
