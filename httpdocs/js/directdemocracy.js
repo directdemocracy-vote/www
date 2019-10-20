@@ -555,7 +555,7 @@ window.onload = function() {
           xhttp.send();
         }
       };
-      xhttp.open('GET', publisher + '/search.php?fingerprint=' + fingerprint, true);
+      xhttp.open('GET', publisher + '/publication.php?fingerprint=' + fingerprint, true);
       xhttp.send();
     }
     video.style.display = '';
