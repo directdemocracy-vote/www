@@ -195,7 +195,7 @@ window.onload = function() {
       tr.appendChild(td);
       let a = document.createElement('a');
       td.appendChild(a);
-      a.href = publisher + '/search.php?fingerprint=' + endorsement.fingerprint;
+      a.href = publisher + '/publication.php?fingerprint=' + endorsement.fingerprint;
       a.target = '_blank';
       let b = document.createElement('b');
       b.appendChild(document.createTextNode(endorsement.familyName));
@@ -658,7 +658,7 @@ window.onload = function() {
       tr.appendChild(td);
       let a = document.createElement('a');
       td.appendChild(a);
-      a.href = publisher + '/search.php?fingerprint=' + CryptoJS.SHA1(endorsement.signature).toString();
+      a.href = publisher + '/publication.php?fingerprint=' + CryptoJS.SHA1(endorsement.signature).toString();
       a.target = '_blank';
       let b = document.createElement('b');
       b.appendChild(document.createTextNode(endorsement.familyName));
