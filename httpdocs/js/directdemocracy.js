@@ -96,6 +96,7 @@ window.onload = function() {
     }).addTo(register_map);
     register_marker = L.marker([lat, lon]).addTo(register_map).bindPopup(lat + ',' + lon);
     updateLocation();
+    register_map.on('contextmenu', function(event) { return false; });
     register_map.on('click', function onMapClick(e) {
       register_marker.setLatLng(e.latlng);
       citizen.latitude = Math.round(1000000 * e.latlng.lat);
@@ -542,6 +543,7 @@ window.onload = function() {
             endorse_marker.setLatLng([lat, lon]);
           endorse_marker.bindPopup(lat + ', ' + lon);
           endorse_map.setView([lat, lon], 18);
+          endorse_map.on('contextmenu', function(event) { return false; });
           let xhttp = new XMLHttpRequest();
           xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
