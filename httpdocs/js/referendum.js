@@ -205,9 +205,8 @@ window.onload = function() {
         if (answer.error)
           showModal('Publication error', JSON.stringify(answer.error));
         else {
-          showModal('Publication success', 'Your referendum was published under number ' + answer.fingerprint
-          + '.<br>Check it at <a target="_blank" href="' + publisher + '/publication.php?fingerprint=' + answer.fingerprint
-          + '">' + publisher + '/publication.php?id=' + answer.fingerprint + '</a><br>');
+          showModal('Publication success', 'Your referendum was just published!<br>Check it <a target="_blank" href="'
+          + publisher + '/publication.php?fingerprint=' + answer.fingerprint + '">here</a>.<br>');
         }
       }
     };
