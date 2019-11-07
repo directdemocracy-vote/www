@@ -338,9 +338,8 @@ window.onload = function() {
           document.getElementById('revoke-key').removeAttribute('disabled');
           document.getElementById('edit').removeAttribute('disabled');
           $('.nav-tabs a[href="#citizen"]').tab('show');
-          showModal('Publication success', 'Your citizen card was published under number ' + answer.citizen
-          + '.<br>Check it at <a target="_blank" href="' + publisher + '/publication.php?id=' + answer.citizen
-          + '">' + publisher + '/publication.php?id=' + answer.citizen + '</a><br>');
+          showModal('Publication success', 'Your citizen card was just published!<br>Check it <a target="_blank" href="'
+          + publisher + '/publication.php?fingerprint=' + answer.fingerprint + '">here</a>.<br>');
         }
       }
     };
