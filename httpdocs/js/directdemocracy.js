@@ -22,6 +22,19 @@ window.onload = function() {
   let scanner = null;
   let endorsements = [];
 
+  function unix_time_to_text(unix_timestamp) {
+    const a = new Date(unix_timestamp * 1000);
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const year = a.getFullYear();
+    const month = months[a.getMonth()];
+    const date = a.getDate();
+    const hour = a.getHours();
+    const minute = '0' + a.getMinutes();
+    const second = '0' + a.getSeconds();
+    const time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + minute.substr(-2) + ':' + second.substr(-2);
+    return time;
+  }
+
   function stripped_key(public_key) {
     let stripped = '';
     const header = '-----BEGIN PUBLIC KEY-----\n'.length;
@@ -752,7 +765,121 @@ window.onload = function() {
         });
     });
   }
-
+  function updateVote() {
+    let xhttp1 = new XMLHttpRequest();
+    xhttp1.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        const a = JSON.parse(this.responseText);
+        const address = a.address;
+        let type = [];
+        let name = [];
+        function addAdminLevel(level) {
+          if (level in address) {
+            type.push(level);
+            name.push(address[level]);
+          }
+        }
+        const admin = ['block', 'neighbourhood', 'quarter',
+                      'suburb', 'borough',
+                      'hamlet', 'village', 'town',
+                      'city',
+                      'municipality',
+                      'county', 'district',
+                      'region', 'province', 'state',
+                      'country'];
+        admin.forEach(function(item) {
+          addAdminLevel(item);
+        });
+        const country_code = address.country_code.toUpperCase();
+        if (['GB', 'DE', 'FR', 'IT', 'SE', 'PL', 'RO', 'HR', 'ES', 'NL', 'IE', 'BG', 'DK', 'GR',
+             'AT', 'HU', 'FI', 'CZ', 'PT', 'BE', 'MT', 'CY', 'LU', 'SI', 'LU', 'SK', 'EE', 'LV']
+            .indexOf(country_code) >= 0) {
+          type.push('union');
+          name.push('European Union');
+        }
+        type.push('world');
+        name.push('Earth');
+        let xhttp2 = new XMLHttpRequest();
+        xhttp2.onload = function() {
+          if (this.status == 200) {
+            console.log(this.responseText);
+            let referendums = JSON.parse(this.responseText);
+            let accordion = document.getElementById('vote-accordion');
+            if (referendums.length == 0) {
+              accordion.innerHTML = 'No referedum is currently available in your area.';
+              return;
+            }
+            accordion.innerHTML = '';
+            referendums.forEach(function(referendum, index) {
+              let card = document.createElement('div');
+              card.setAttribute('class', 'card');
+              let header = document.createElement('div');
+              header.setAttribute('class', 'card-header d-flex');
+              card.appendChild(header);
+              let link = document.createElement('a');
+              link.setAttribute('class', 'card-link');
+              link.setAttribute('data-toggle', 'collapse');
+              link.setAttribute('href', '#collapse' + index);
+              link.innerHTML = referendum.title;
+              header.appendChild(link);
+              let area = document.createElement('div');
+              area.setAttribute('class', 'ml-auto');
+              let days = Math.round((referendum.deadline - Math.round((new Date()).getTime() / 1000)) / 86400);
+              area.innerHTML = '(' + days + 'd) Gollion';
+              header.appendChild(area);
+              let collapse = document.createElement('div');
+              collapse.setAttribute('id', 'collapse' + index);
+              collapse.setAttribute('class', 'collapse');
+              collapse.setAttribute('data-parent', '#vote-accordion');
+              let body = document.createElement('div');
+              body.setAttribute('class', 'card-body');
+              let deadline = document.createElement('div');
+              deadline.innerHTML = '<small><b>Deadline:</b> ' + unix_time_to_text(referendum.deadline) + ' &mdash; <b>Area:</b> Gollion (city)</small>';
+              body.appendChild(deadline);
+              body.appendChild(document.createElement('br'));
+              let description = document.createElement('div');
+              description.innerHTML = referendum.description;
+              body.appendChild(description);
+              body.appendChild(document.createElement('br'));
+              let question = document.createElement('div');
+              question.setAttribute('style', 'font-weight:bold');
+              question.innerHTML = referendum.question;
+              body.appendChild(question);
+              collapse.appendChild(body);
+              let footer = document.createElement('div');
+              footer.setAttribute('class', 'card-footer');
+              const answers = referendum.answers.split(', ');
+              answers.forEach(function(answer) {
+                let button = document.createElement('button');
+                button.setAttribute('class', 'btn btn-primary');
+                button.setAttribute('type', 'button');
+                button.innerHTML = answer;
+                footer.appendChild(button);
+                footer.appendChild(document.createTextNode(' '));
+              });
+              collapse.appendChild(footer);
+              card.appendChild(collapse);
+              accordion.appendChild(card);
+            });
+            $('.collapse').collapse('hide');
+          }
+        };
+        xhttp2.open('POST', publisher + '/referendum.php', true);
+        let areas = {
+          reference: 'nominatim.openstreetmap.org',
+          areas: []
+        };
+        type.forEach(function(item, index) {
+          areas.areas.push({'type': type[index], 'name': name[index]});
+        });
+        xhttp2.send(JSON.stringify(areas));
+      }
+    };
+    let lat = citizen.latitude / 1000000;
+    let lon = citizen.longitude / 1000000;
+    xhttp1.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' + lat + '&lon=' + lon, true);
+    xhttp1.send();
+  }
   clearForms();
   clearEndorseChecks();
   $('.nav-tabs').on('shown.bs.tab', function(event) {
@@ -798,6 +925,7 @@ window.onload = function() {
           citizen_endorsements = answer.citizen_endorsements;
           updateCitizenCard();
           updateEndorsements();
+          updateVote();
         }
       }
     };
