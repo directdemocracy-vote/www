@@ -114,7 +114,7 @@ window.onload = function() {
     let a = document.getElementById('area');
     let first = a.options[a.selectedIndex].innerHTML;
     let query = '';
-    for(let i = a.selectedIndex; i < a.length - 1; i++)
+    for(let i = a.length - 2; i >= a.selectedIndex; i--)
       query += a.options[i].value + '=' + a.options[i].innerHTML + '&';
     query = query.slice(0, -1);
     let place = document.getElementById('place');
