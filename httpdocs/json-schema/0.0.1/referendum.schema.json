@@ -11,7 +11,7 @@
 		"published",
 		"expires",
 		"trustee",
-		"areas",
+		"area",
 		"title",
 		"description",
 		"question",
@@ -50,50 +50,11 @@
 			"maxLength": 512,
 			"minLength": 1
 		},
-		"areas": {
-			"description": "areas in which the citizen should live to vote for this referendum",
-			"type": "array",
-			"items": {
-				"type": "object",
-				"description": "area",
-				"required": [
-					"reference",
-					"type",
-					"name",
-					"latitude",
-					"longitude"
-				],
-				"properties": {
-					"reference": {
-						"description": "geocoding database (nominatim.openstreemap.org)",
-						"type": "string",
-						"maxLength": 128
-					},
-					"type": {
-						"description": "type of area (city, county, department, state, country, etc.)",
-						"type": "string",
-						"maxLength": 64
-					},
-					"name": {
-						"description": "name of the area",
-						"type": "string",
-						"maxLength": 256
-					},
-					"latitude": {
-						"description": "latitude of the area expressed in 1/1000000 degrees",
-						"type": "integer",
-						"minimum": -90000000,
-						"maximum": 90000000
-					},
-					"longitude": {
-						"description": "longitude of the area expressed in 1/1000000 degrees",
-						"type": "integer",
-						"minimum": -180000000,
-						"maximum": 180000000
-					}
-				},
-			  "additionalProperties": false
-			}
+		"area": {
+			"description": "area of the referendum, e.g., https://nominatim.openstreetmap.org/?country=France&state=Bourgogne-Franche-Comté&county=Saône-et-Loire&city=Mâcon",
+			"type": "string",
+			"maxLength": 1024,
+			"minLength": 12
 		},
 		"title": {
 			"description": "title of the referendum",
@@ -104,7 +65,8 @@
 		"description": {
 			"description": "detailed description of the referendum (markdown allowed)",
 			"type": "string",
-			"minLength": 1
+			"minLength": 1,
+			"maxLength": 4096
 		},
 		"question": {
 			"description": "question to which the citizen should answer",
@@ -113,11 +75,10 @@
 			"minLength": 1
 		},
 		"answers": {
-			"description": "possible answers to the above question, typically, yes, no, abstain",
-			"type": "array",
-			"items": {
-				"type": "string"
-			}
+			"description": "coma separated possible answers to the above question, e.g., yes, no, abstain",
+			"type": "string",
+			"maxLength": 128,
+			"minLength": 3
 		},
 		"deadline": {
 			"description": "date of vote deadline (milliseconds since 1970-01-01 00:00:00.000)",

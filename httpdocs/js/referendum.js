@@ -5,7 +5,7 @@ window.onload = function() {
   const trustee = localStorage.getItem('trustee');
   let latitude = 0;
   let longitude = 0;
-  let address = '';
+  let area = '';
   let crypt = null;
   let trustee_key = '';
   let offset = new Date().getTimezoneOffset();
@@ -77,7 +77,7 @@ window.onload = function() {
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
         const a = JSON.parse(this.responseText);
-        address = a.address;
+        let address = a.address;
         let select = document.getElementById('area');
         let count = 0;
         function addAdminLevel(level) {
@@ -111,15 +111,16 @@ window.onload = function() {
   }
   document.getElementById('area').addEventListener('change', areaChange);
   function areaChange() {
+    let a = document.getElementById('area');
+    let first = a.options[a.selectedIndex].innerHTML;
     let query = '';
-    let area = document.getElementById('area');
-    let first = area.options[area.selectedIndex].innerHTML;
-    for(let i = area.selectedIndex; i < area.length - 1; i++)
-      query += area.options[i].innerHTML + ', ';
-    query = query.slice(0, -2);
+    for(let i = a.selectedIndex; i < a.length - 1; i++)
+      query += a.options[i].value + '=' + a.options[i].innerHTML + '&';
+    query = query.slice(0, -1);
     let place = document.getElementById('place');
-    place.href = 'https://nominatim.openstreetmap.org/search.php?q=' + encodeURI(query) + '&polygon_geojson=1&viewbox=';
+    place.href = 'https://nominatim.openstreetmap.org/search.php?' + encodeURI(query) + '&polygon_geojson=1';
     place.innerHTML = first;
+    area = 'https://nominatim.openstreetmap.org/?' + query;
   }
   function validate() {
     let button = document.getElementById('publish-button');
@@ -168,13 +169,6 @@ window.onload = function() {
   document.getElementById('deadline-hour').addEventListener('input', validate);
   document.getElementById('deadline-time-zone').addEventListener('input', validate);
   document.getElementById('publish-button').addEventListener('click', function() {
-    area = {};
-    area.reference = 'nominatim.openstreetmap.org';
-    area.latitude = latitude;
-    area.longitude = longitude;
-    a = document.getElementById('area');
-    area.type = a.value;
-    area.name = a.options[a.selectedIndex].innerHTML;
     referendum = {};
     referendum.schema = 'https://directdemocracy.vote/json-schema/' + directdemocracy_version + '/referendum.schema.json';
     referendum.key = stripped_key(crypt.getPublicKey());
@@ -182,15 +176,11 @@ window.onload = function() {
     referendum.published = new Date().getTime();
     referendum.expires = new Date(new Date().setFullYear(new Date().getFullYear() + 10)).getTime();  // 10 years
     referendum.trustee = trustee_key;
-    referendum.areas = [];
-    referendum.areas[0] = area;
+    referendum.area = area;
     referendum.title = document.getElementById('title').value;
     referendum.description = document.getElementById('description').value;
     referendum.question = document.getElementById('question').value;
-    let answers = document.getElementById('answers').value.split(',');
-    referendum.answers = [];
-    for(let i = 0; i < answers.length; i++)
-      referendum.answers[i] = answers[i].trim();
+    referendum.answers = document.getElementById('answers').value;
     referendum.deadline = deadline;
     let website = document.getElementById('website').value;
     if (website)
