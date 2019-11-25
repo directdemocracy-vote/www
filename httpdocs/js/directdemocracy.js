@@ -825,7 +825,8 @@ window.onload = function() {
               let area = document.createElement('div');
               area.setAttribute('class', 'ml-auto');
               let days = Math.round((referendum.deadline - Math.round((new Date()).getTime() / 1000)) / 86400);
-              area.innerHTML = '(' + days + 'd) Gollion';
+              let area_name = 'Gollion';
+              area.innerHTML = '<small>(' + days + 'd)</small>' + area_name;
               header.appendChild(area);
               let collapse = document.createElement('div');
               collapse.setAttribute('id', 'collapse' + index);
@@ -834,7 +835,7 @@ window.onload = function() {
               let body = document.createElement('div');
               body.setAttribute('class', 'card-body');
               let deadline = document.createElement('div');
-              deadline.innerHTML = '<small><b>Deadline:</b> ' + unix_time_to_text(referendum.deadline) + ' &mdash; <b>Area:</b> Gollion (city)</small>';
+              deadline.innerHTML = '<small><b>Deadline:</b> ' + unix_time_to_text(referendum.deadline) + ' &mdash; <b>Area:</b> ' + area_name + ' (' + area_type + ')</small>';
               body.appendChild(deadline);
               body.appendChild(document.createElement('br'));
               let description = document.createElement('div');

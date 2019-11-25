@@ -113,13 +113,19 @@ window.onload = function() {
   function areaChange() {
     let a = document.getElementById('area');
     let first = a.options[a.selectedIndex].innerHTML;
+    let first_type = a.options[a.selectedIndex].value;
     let query = '';
     for(let i = a.length - 2; i >= a.selectedIndex; i--)
       query += a.options[i].value + '=' + a.options[i].innerHTML + '&';
     query = query.slice(0, -1);
     let place = document.getElementById('place');
-    place.href = 'https://nominatim.openstreetmap.org/search.php?' + encodeURI(query) + '&polygon_geojson=1';
     place.innerHTML = first;
+    if (first_type == 'world' && first == 'Earth')
+      place.href = 'https://en.wikipedia.org/wiki/Earth';
+    else if (first_type == 'union' && first == 'European Union')
+      place.href = 'https://en.wikipedia.org/wiki/European_Union';
+    else
+      place.href = 'https://nominatim.openstreetmap.org/search.php?' + encodeURI(query) + '&polygon_geojson=1';
     area = 'https://nominatim.openstreetmap.org/?' + query;
   }
   function validate() {
@@ -169,6 +175,8 @@ window.onload = function() {
   document.getElementById('deadline-hour').addEventListener('input', validate);
   document.getElementById('deadline-time-zone').addEventListener('input', validate);
   document.getElementById('publish-button').addEventListener('click', function() {
+    let answers = document.getElementById('answers');
+    answers.value.replace(/,(?=[^\s])/g, ', ');  // add a space after each coma if needed
     referendum = {};
     referendum.schema = 'https://directdemocracy.vote/json-schema/' + directdemocracy_version + '/referendum.schema.json';
     referendum.key = stripped_key(crypt.getPublicKey());
@@ -180,7 +188,7 @@ window.onload = function() {
     referendum.title = document.getElementById('title').value;
     referendum.description = document.getElementById('description').value;
     referendum.question = document.getElementById('question').value;
-    referendum.answers = document.getElementById('answers').value;
+    referendum.answers = answers.value;
     referendum.deadline = deadline;
     let website = document.getElementById('website').value;
     if (website)
