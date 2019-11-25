@@ -799,10 +799,16 @@ window.onload = function() {
         }
         type.push('world');
         name.push('Earth');
+        let area = 'https://nominatim.directdemocracy.vote/?';
+        name.reverse();
+        type.reverse();
+        name.forEach(function(n, i) {
+          area += type[i] + '=' + name[i] + '&';
+        });
+        area = area.slice(0, -1);  // remove final &
         let xhttp2 = new XMLHttpRequest();
         xhttp2.onload = function() {
           if (this.status == 200) {
-            console.log(this.responseText);
             let referendums = JSON.parse(this.responseText);
             let accordion = document.getElementById('vote-accordion');
             if (referendums.length == 0) {
@@ -822,12 +828,23 @@ window.onload = function() {
               link.setAttribute('href', '#collapse' + index);
               link.innerHTML = referendum.title;
               header.appendChild(link);
-              let area = document.createElement('div');
-              area.setAttribute('class', 'ml-auto');
-              let days = Math.round((referendum.deadline - Math.round((new Date()).getTime() / 1000)) / 86400);
-              let area_name = 'Gollion';
-              area.innerHTML = '<small>(' + days + 'd)</small>' + area_name;
-              header.appendChild(area);
+              let area_div = document.createElement('div');
+              area_div.setAttribute('class', 'ml-auto');
+              let days = Math.round((referendum.deadline - new Date().getTime()) / 86400000);
+              const last_equal = referendum.area.lastIndexOf('=');
+              const last_and = referendum.area.lastIndexOf('&');
+              const area_name = referendum.area.substr(last_equal + 1);
+              const area_type = referendum.area.substr(last_and + 1, last_equal - last_and - 1);
+              const world_position = referendum.area.indexOf('?world=Earth');
+              const eu_position = referendum.area.indexOf('&union=European Union');
+              let area_query;
+              if (eu_position != -1)
+                area_query = referendum.area.substr(eu_position + 22);
+              else
+                area_query = referendum.area.substr(world_position + 13);
+              const area_url = 'https://nominatim.openstreetmap.org/search.php?' + encodeURI(area_query) + '&polygon_geojson=1';
+              area_div.innerHTML = '<small>(' + days + 'd)</small> ' + area_name;
+              header.appendChild(area_div);
               let collapse = document.createElement('div');
               collapse.setAttribute('id', 'collapse' + index);
               collapse.setAttribute('class', 'collapse');
@@ -835,7 +852,9 @@ window.onload = function() {
               let body = document.createElement('div');
               body.setAttribute('class', 'card-body');
               let deadline = document.createElement('div');
-              deadline.innerHTML = '<small><b>Deadline:</b> ' + unix_time_to_text(referendum.deadline) + ' &mdash; <b>Area:</b> ' + area_name + ' (' + area_type + ')</small>';
+              deadline.innerHTML = '<small><b>Deadline:</b> ' + unix_time_to_text(referendum.deadline / 1000)
+                                 + ' &mdash; <b>Area:</b> <a target="_blank" href="' + area_url + '">' + area_name
+                                 + '</a> (' + area_type + ')</small>';
               body.appendChild(deadline);
               body.appendChild(document.createElement('br'));
               let description = document.createElement('div');
@@ -866,14 +885,8 @@ window.onload = function() {
           }
         };
         xhttp2.open('POST', publisher + '/referendum.php', true);
-        let areas = {
-          reference: 'nominatim.openstreetmap.org',
-          areas: []
-        };
-        type.forEach(function(item, index) {
-          areas.areas.push({'type': type[index], 'name': name[index]});
-        });
-        xhttp2.send(JSON.stringify(areas));
+        xhttp2.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhttp2.send('area=' + encodeURIComponent(area));
       }
     };
     let lat = citizen.latitude / 1000000;

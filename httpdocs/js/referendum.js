@@ -112,21 +112,23 @@ window.onload = function() {
   document.getElementById('area').addEventListener('change', areaChange);
   function areaChange() {
     let a = document.getElementById('area');
-    let first = a.options[a.selectedIndex].innerHTML;
-    let first_type = a.options[a.selectedIndex].value;
+    let selected_name = a.options[a.selectedIndex].innerHTML;
+    let selected_type = a.options[a.selectedIndex].value;
     let query = '';
-    for(let i = a.length - 2; i >= a.selectedIndex; i--)
+    for(let i = a.length - 1; i >= a.selectedIndex; i--)
       query += a.options[i].value + '=' + a.options[i].innerHTML + '&';
     query = query.slice(0, -1);
+    area = 'https://nominatim.directdemocracy.org/?' + query;
     let place = document.getElementById('place');
-    place.innerHTML = first;
-    if (first_type == 'world' && first == 'Earth')
-      place.href = 'https://en.wikipedia.org/wiki/Earth';
-    else if (first_type == 'union' && first == 'European Union')
+    place.innerHTML = selected_name;
+    if (selected_type == 'union' && selected_name == 'European Union')
       place.href = 'https://en.wikipedia.org/wiki/European_Union';
-    else
+    else if (selected_type == 'world' && selected_name == 'Earth')
+      place.href = 'https://en.wikipedia.org/wiki/Earth';
+    else {
+      query = query.replace('world=Earth&', '').replace('union=European Union&', '');
       place.href = 'https://nominatim.openstreetmap.org/search.php?' + encodeURI(query) + '&polygon_geojson=1';
-    area = 'https://nominatim.openstreetmap.org/?' + query;
+    }
   }
   function validate() {
     let button = document.getElementById('publish-button');
@@ -176,7 +178,7 @@ window.onload = function() {
   document.getElementById('deadline-time-zone').addEventListener('input', validate);
   document.getElementById('publish-button').addEventListener('click', function() {
     let answers = document.getElementById('answers');
-    answers.value.replace(/,(?=[^\s])/g, ', ');  // add a space after each coma if needed
+    answers.value = answers.value.replace(/,(?=[^\s])/g, ', ');  // add a space after each coma if needed
     referendum = {};
     referendum.schema = 'https://directdemocracy.vote/json-schema/' + directdemocracy_version + '/referendum.schema.json';
     referendum.key = stripped_key(crypt.getPublicKey());
@@ -195,7 +197,6 @@ window.onload = function() {
       referendum.website = website;
     let str = JSON.stringify(referendum);
     referendum.signature = crypt.sign(str, CryptoJS.SHA256, 'sha256');
-    console.log(JSON.stringify(referendum));
     let xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
       if (this.status == 200) {
