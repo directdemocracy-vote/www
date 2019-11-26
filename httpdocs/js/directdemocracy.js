@@ -828,8 +828,8 @@ window.onload = function() {
               let days = Math.round((referendum.deadline - new Date().getTime()) / 86400000);
               const first_equal = referendum.area.indexOf('=');
               const first_newline = referendum.area.indexOf('\n');
-              const area_name = referendum.area.substr(first_equal + 1, first_newline - first_equal);
-              const area_type = referendum.area.substr(0, first_equal);
+              let area_name = referendum.area.substr(first_equal + 1, first_newline - first_equal);
+              let area_type = referendum.area.substr(0, first_equal);
               const area_array = referendum.area.split('\n');
               let area_query = '';
               area_array.forEach(function(argument) {
@@ -840,7 +840,15 @@ window.onload = function() {
                   area_query += type + '=' + encodeURIComponent(name) + '&';
               });
               area_query = area_query.slice(0, -1);
-              const area_url = 'https://nominatim.openstreetmap.org/search.php?' + area_query + '&polygon_geojson=1';
+              let area_url;
+              if (!area_type) {
+                area_type = 'world';
+                area_name = 'Earth';
+                area_url = 'https://en.wikipedia.org/wiki/Earth';
+              } else if (area_type == 'union')
+                area_url = 'https://en.wikipedia.org/wiki/European_Union';
+              else
+                area_url = 'https://nominatim.openstreetmap.org/search.php?' + area_query + '&polygon_geojson=1';
               area_div.innerHTML = '<small>(' + days + 'd)</small> ' + area_name;
               header.appendChild(area_div);
               let collapse = document.createElement('div');
