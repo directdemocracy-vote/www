@@ -188,12 +188,12 @@ window.onload = function() {
     referendum.expires = new Date(new Date().setFullYear(new Date().getFullYear() + 10)).getTime();  // 10 years
     referendum.trustee = trustee_key;
     referendum.area = area;
-    referendum.title = document.getElementById('title').value;
-    referendum.description = document.getElementById('description').value;
-    referendum.question = document.getElementById('question').value;
-    referendum.answers = document.getElementById('answers').value;
+    referendum.title = document.getElementById('title').value.trim();
+    referendum.description = document.getElementById('description').value.trim();
+    referendum.question = document.getElementById('question').value.trim();
+    referendum.answers = document.getElementById('answers').value.trim();
     referendum.deadline = deadline;
-    let website = document.getElementById('website').value;
+    let website = document.getElementById('website').value.trim();
     if (website)
       referendum.website = website;
     let str = JSON.stringify(referendum);

@@ -277,9 +277,9 @@ window.onload = function() {
     button.setAttribute('disabled', 'disabled');
     if (citizen.key === '' || citizen.picture === '') return;
     if (citizen.latitude === 0 && citizen.longitude === 0) return;
-    citizen.familyName = document.getElementById('register-family-name').value;
+    citizen.familyName = document.getElementById('register-family-name').value.trim();
     if (citizen.familyName === '') return;
-    citizen.givenNames = document.getElementById('register-given-names').value;
+    citizen.givenNames = document.getElementById('register-given-names').value.trim();
     if (citizen.givenNames === '') return;
     if (!document.getElementById('register-confirm-check').checked) return;
     if (!checkExpirationValidity()) return;
@@ -362,17 +362,17 @@ window.onload = function() {
   });
 
   document.getElementById('publisher').addEventListener('input', function() {
-    publisher = document.getElementById('publisher').value;
+    publisher = document.getElementById('publisher').value.trim();
     localStorage.setItem('publisher', publisher);
   });
 
   document.getElementById('trustee').addEventListener('input', function() {
-    trustee = document.getElementById('trustee').value;
+    trustee = document.getElementById('trustee').value.trim();
     localStorage.setItem('trustee', trustee);
   });
 
   document.getElementById('station').addEventListener('input', function() {
-    station = document.getElementById('station').value;
+    station = document.getElementById('station').value.trim();
     localStorage.setItem('station', station);
   });
 
