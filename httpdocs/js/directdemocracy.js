@@ -797,15 +797,10 @@ window.onload = function() {
           type.push('union');
           name.push('European Union');
         }
-        type.push('world');
-        name.push('Earth');
-        let area = 'https://nominatim.directdemocracy.vote/?';
-        name.reverse();
-        type.reverse();
+        let area = '';
         name.forEach(function(n, i) {
-          area += type[i] + '=' + name[i] + '&';
+          area += type[i] + '=' + name[i] + '\n';
         });
-        area = area.slice(0, -1);  // remove final &
         let xhttp2 = new XMLHttpRequest();
         xhttp2.onload = function() {
           if (this.status == 200) {
@@ -831,18 +826,21 @@ window.onload = function() {
               let area_div = document.createElement('div');
               area_div.setAttribute('class', 'ml-auto');
               let days = Math.round((referendum.deadline - new Date().getTime()) / 86400000);
-              const last_equal = referendum.area.lastIndexOf('=');
-              const last_and = referendum.area.lastIndexOf('&');
-              const area_name = referendum.area.substr(last_equal + 1);
-              const area_type = referendum.area.substr(last_and + 1, last_equal - last_and - 1);
-              const world_position = referendum.area.indexOf('?world=Earth');
-              const eu_position = referendum.area.indexOf('&union=European Union');
-              let area_query;
-              if (eu_position != -1)
-                area_query = referendum.area.substr(eu_position + 22);
-              else
-                area_query = referendum.area.substr(world_position + 13);
-              const area_url = 'https://nominatim.openstreetmap.org/search.php?' + encodeURI(area_query) + '&polygon_geojson=1';
+              const first_equal = referendum.area.indexOf('=');
+              const first_newline = referendum.area.indexOf('\n');
+              const area_name = referendum.area.substr(first_equal + 1, first_newline - first_equal);
+              const area_type = referendum.area.substr(0, first_equal);
+              const area_array = referendum.area.split('\n');
+              let area_query = '';
+              area_array.forEach(function(argument) {
+                const eq = argument.indexOf('=');
+                const type = argument.substr(0, eq);
+                const name = argument.substr(eq + 1);
+                if (type)
+                  area_query += type + '=' + encodeURIComponent(name) + '&';
+              });
+              area_query = area_query.slice(0, -1);
+              const area_url = 'https://nominatim.openstreetmap.org/search.php?' + area_query + '&polygon_geojson=1';
               area_div.innerHTML = '<small>(' + days + 'd)</small> ' + area_name;
               header.appendChild(area_div);
               let collapse = document.createElement('div');
@@ -868,14 +866,16 @@ window.onload = function() {
               collapse.appendChild(body);
               let footer = document.createElement('div');
               footer.setAttribute('class', 'card-footer');
-              const answers = referendum.answers.split(', ');
+              const answers = referendum.answers.split('\n');
               answers.forEach(function(answer) {
-                let button = document.createElement('button');
-                button.setAttribute('class', 'btn btn-primary');
-                button.setAttribute('type', 'button');
-                button.innerHTML = answer;
-                footer.appendChild(button);
-                footer.appendChild(document.createTextNode(' '));
+                if (answer) {
+                  let button = document.createElement('button');
+                  button.setAttribute('class', 'btn btn-primary');
+                  button.setAttribute('type', 'button');
+                  button.innerHTML = answer;
+                  footer.appendChild(button);
+                  footer.appendChild(document.createTextNode(' '));
+                }
               });
               collapse.appendChild(footer);
               card.appendChild(collapse);

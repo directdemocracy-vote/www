@@ -51,7 +51,7 @@
 			"minLength": 1
 		},
 		"area": {
-			"description": "area of the referendum, e.g., https://nominatim.openstreetmap.org/?country=France&state=Bourgogne-Franche-Comté&county=Saône-et-Loire&city=Mâcon",
+			"description": "area of the referendum with fields separated by newlines, empty means the whole world, e.g.,\ncountry=France\nstate=Bourgogne-Franche-Comté\ncounty=Saône-et-Loire\ncity=Mâcon",
 			"type": "string",
 			"maxLength": 1024,
 			"minLength": 12
@@ -75,7 +75,7 @@
 			"minLength": 1
 		},
 		"answers": {
-			"description": "coma separated possible answers to the above question, e.g., yes, no, abstain",
+			"description": "possible answers to the above question separated by newlines, e.g.,\nyes\nno\nabstain",
 			"type": "string",
 			"maxLength": 128,
 			"minLength": 3
