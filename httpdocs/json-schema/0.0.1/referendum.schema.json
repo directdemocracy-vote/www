@@ -54,7 +54,7 @@
 			"description": "area of the referendum with fields separated by newlines, empty means the whole world, e.g.,\ncountry=France\nstate=Bourgogne-Franche-Comté\ncounty=Saône-et-Loire\ncity=Mâcon",
 			"type": "string",
 			"maxLength": 1024,
-			"minLength": 12
+			"minLength": 0
 		},
 		"title": {
 			"description": "title of the referendum",
