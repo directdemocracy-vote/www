@@ -11,7 +11,7 @@
 		"published",
 		"expires",
 		"referendum",
-		"citizen"
+		"station"
 	],
 	"properties": {
 		"schema": {
@@ -42,26 +42,45 @@
 			"required": ["key", "signature"],
 			"properties": {
 				"key": {
-					"description": "public key of the referendum",
+					"description": "public key of the citizen author of the referendum",
 					"type": "string"
 				},
 				"signature": {
-					"description": "signature of the referendum",
+					"description": "citizen signature for the referendum",
 					"type": "string"
 				}
 			}
 		},
-		"citizen": {
-			"description": "citizen who voted at this referendum",
+		"station": {
+			"description": "station used by the citizen to cast her vote",
 			"type": "object",
 			"required": ["key", "signature"],
 			"properties": {
 				"key": {
-					"description": "public key of the referendum",
+					"description": "public key of the station",
 					"type": "string"
 				},
 				"signature": {
-					"description": "signature of the referendum",
+					"description": "station signature for the voter publication",
+					"type": "string"
+				}
+			}
+		},
+		"vote": {
+			"description": "vote of the citizen",
+			"type": "object",
+			"required": ["key", "signature", "refused"],
+			"properties": {
+				"key": {
+					"description": "public key of the vote",
+					"type": "string"
+				},
+				"signature": {
+					"description": "vote signature for the voter publication",
+					"type": "string"
+				},
+				"refused": {
+					"description": "voter refusal reason written by the station",
 					"type": "string"
 				}
 			}
