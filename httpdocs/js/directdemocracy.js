@@ -331,6 +331,7 @@ window.onload = function() {
   });
 
   document.getElementById('publish-button').addEventListener('click', function() {
+    citizen.schema = 'https://directdemocracy.vote/json-schema/' + directdemocracy_version + '/citizen.schema.json';
     citizen.published = new Date().getTime();
     citizen.expires = new Date(document.getElementById('register-expiration').value + 'T00:00:00Z').getTime();
     citizen.signature = '';
