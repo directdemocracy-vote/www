@@ -124,7 +124,6 @@ window.onload = function() {
     register_marker.setPopupContent(lat + ',' + lon).openPopup();
     document.getElementById('register-latitude').value = lat;
     document.getElementById('register-longitude').value = lon;
-    validate();
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
