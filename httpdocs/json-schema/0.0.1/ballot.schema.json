@@ -1,8 +1,8 @@
 {
 	"$schema": "http://json-schema.org/draft-07/schema#",
-	"$id": "https://directdemocracy.vote/json-schema/0.0.1/voter.schema.json",
-	"title": "voter",
-	"description": "citizen who voted in a referendum",
+	"$id": "https://directdemocracy.vote/json-schema/0.0.1/ballot.schema.json",
+	"title": "ballot",
+	"description": "ballot of a citizen who voted in a referendum",
 	"type": "object",
 	"required": [
 		"schema",
@@ -15,14 +15,14 @@
 	],
 	"properties": {
 		"schema": {
-			"const": "https://directdemocracy.vote/json-schema/0.0.1/voter.schema.json"
+			"const": "https://directdemocracy.vote/json-schema/0.0.1/ballot.schema.json"
 		},
 		"key": {
-			"description": "public key of the station",
+			"description": "public key of the ballot",
 			"type": "string"
 		},
 		"signature": {
-			"description": "signature of the station",
+			"description": "signature of the ballot",
 			"type": "string"
 		},
 		"published": {
@@ -54,33 +54,33 @@
 		"station": {
 			"description": "station used by the citizen to cast her vote",
 			"type": "object",
-			"required": ["key", "signature"],
+			"required": ["key"],
 			"properties": {
 				"key": {
 					"description": "public key of the station",
 					"type": "string"
 				},
 				"signature": {
-					"description": "station signature for the voter publication",
+					"description": "station signature for the ballot publication",
+					"type": "string"
+				},
+				"refused": {
+					"description": "ballot refusal reason written by the station",
 					"type": "string"
 				}
 			}
 		},
-		"vote": {
-			"description": "vote of the citizen",
+		"citizen": {
+			"description": "citizen",
 			"type": "object",
-			"required": ["key", "signature", "refused"],
+			"required": ["key", "signature"],
 			"properties": {
 				"key": {
-					"description": "public key of the vote",
+					"description": "public key of the citizen",
 					"type": "string"
 				},
 				"signature": {
-					"description": "vote signature for the voter publication",
-					"type": "string"
-				},
-				"refused": {
-					"description": "voter refusal reason written by the station",
+					"description": "signature of the ballot by the citizen",
 					"type": "string"
 				}
 			}
