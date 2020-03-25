@@ -1,12 +1,14 @@
 window.onload = function() {
   const directdemocracy_version = '0.0.1';
-  const private_key = localStorage.getItem('privateKey');
   const publisher = localStorage.getItem('publisher');
   const trustee = localStorage.getItem('trustee');
+  const citizen_private_key = localStorage.getItem('privateKey');
+  let referendum_private_key = '';
   let latitude = 0;
   let longitude = 0;
   let area = '';
-  let crypt = null;
+  let citizen_crypt = null;
+  let referendum_crypt = null;
   let trustee_key = '';
   let offset = new Date().getTimezoneOffset();
   let hour = -offset / 60;
@@ -24,6 +26,26 @@ window.onload = function() {
     document.getElementById('modal-contents').innerHTML = contents;
     $('#modal').modal();
   }
+  function generateNewKeyPair() {
+    document.getElementById('referendum-forging-spinner').style.display = '';
+    document.getElementById('referendum-private-key-icon').style.display = 'none';
+    document.getElementById('referendum-private-key-message').innerHTML = 'Forging a new private key, please wait...';
+    let dt = new Date();
+    let time = -(dt.getTime());
+    referendum_crypt = new JSEncrypt({
+      default_key_size: 2048
+    });
+    referendum_crypt.getKey(function() {
+      dt = new Date();
+      time += (dt.getTime());
+      referendum_private_key = referendum_crypt.getPrivateKey();
+      document.getElementById('referendum-forging-spinner').style.display = 'none';
+      document.getElementById('referendum-private-key-icon').style.display = '';
+      document.getElementById('referendum-private-key-message').innerHTML = 'A referendum private key was just forged in '
+                                                                            + Number(time / 1000).toFixed(2) + ' seconds.';
+      validate();
+    });
+  }
   function stripped_key(public_key) {
     let stripped = '';
     const header = '-----BEGIN PUBLIC KEY-----\n'.length;
@@ -34,9 +56,9 @@ window.onload = function() {
     stripped = stripped.slice(0, -1 - footer);
     return stripped;
   }
-  if (private_key) {
-    crypt = new JSEncrypt();
-    crypt.setPrivateKey(private_key);
+  if (citizen_private_key) {
+    citizen_crypt = new JSEncrypt();
+    citizen_crypt.setPrivateKey(citizen_private_key);
     let xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
       if (this.status == 200) {
@@ -53,7 +75,7 @@ window.onload = function() {
     };
     xhttp.open('POST', publisher + '/coordinates.php', true);
     xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhttp.send('key=' + encodeURIComponent(stripped_key(crypt.getPublicKey())));
+    xhttp.send('key=' + encodeURIComponent(stripped_key(citizen_crypt.getPublicKey())));
   }
   if (trustee) {
     let xhttp = new XMLHttpRequest();
@@ -138,6 +160,8 @@ window.onload = function() {
     button.setAttribute('disabled', 'disabled');
     if (latitude == 0 && longitude == 0)
       return;
+    if (referendum_private_key === '')
+      return;
     if (trustee_key == '')
       return;
     if (document.getElementById('title').value == '')
@@ -182,7 +206,7 @@ window.onload = function() {
   document.getElementById('publish-button').addEventListener('click', function() {
     referendum = {};
     referendum.schema = 'https://directdemocracy.vote/json-schema/' + directdemocracy_version + '/referendum.schema.json';
-    referendum.key = stripped_key(crypt.getPublicKey());
+    referendum.key = stripped_key(referendum_crypt.getPublicKey());
     referendum.signature = '';
     referendum.published = new Date().getTime();
     referendum.expires = new Date(new Date().setFullYear(new Date().getFullYear() + 10)).getTime();  // 10 years
@@ -197,7 +221,7 @@ window.onload = function() {
     if (website)
       referendum.website = website;
     let str = JSON.stringify(referendum);
-    referendum.signature = crypt.sign(str, CryptoJS.SHA256, 'sha256');
+    referendum.signature = referendum_crypt.sign(str, CryptoJS.SHA256, 'sha256');
     let xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
       if (this.status == 200) {
@@ -214,4 +238,5 @@ window.onload = function() {
     xhttp.send(JSON.stringify(referendum));
     return false;
   });
+  generateNewKeyPair();
 };
