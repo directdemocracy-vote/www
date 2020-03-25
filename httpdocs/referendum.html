@@ -93,6 +93,13 @@ Abstain" required></textarea>
           <div class="form-inline"> Time zone: UTC &nbsp; <input class="form-control" style="width:80px" type="text" id="deadline-time-zone"> &nbsp; hour</div>
         </div>
         <div class="form-group">
+          <label for="referendum-private-key">Private key: &nbsp; <img id="referendum-private-key-icon" src="images/key.svg" style="display:none;width:32px">
+            <div id="referendum-forging-spinner" class="spinner-border" role="status"><span class="sr-only">Forging...</span></div>
+          </label>
+          <input type="hidden" class="form-control" id="referendum-private-key">
+          <small class="form-text text-muted" id="referendum-private-key-message">Forging a new private key, please wait...</small>
+        </div>
+        <div class="form-group">
           <button class="btn btn-primary" id="publish-button" role="button" disabled="disabled">Publish your referendum</button>
           <small class="form-text text-muted">Warning: nothing can be modifed after publication!</small>
         </div>
