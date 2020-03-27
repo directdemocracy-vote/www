@@ -16,6 +16,7 @@ window.onload = function() {
   let endorsed_fingerprint = '';
   let crypt = null;
   let private_key = '';
+  let vote_crypt = null;
   let publisher = '';
   let trustee = '';
   let station = '';
@@ -874,20 +875,108 @@ window.onload = function() {
               collapse.appendChild(body);
               let footer = document.createElement('div');
               footer.setAttribute('class', 'card-footer');
+              let button = document.createElement('button');
+              button.setAttribute('class', 'btn btn-primary');
+              button.setAttribute('type', 'button');
+              button.setAttribute('disabled', '');
+              button.innerHTML = 'Vote';
+              let vote_message = document.createElement('span');
+              vote_message.setAttribute('class', 'spinner-border');
+              vote_message.setAttribute('role', 'status');
+              // <div id="register-forging-spinner" class="spinner-border" role="status"><span class="sr-only">Forging...</span></div>
               const answers = referendum.answers.split('\n');
+              let count = 0;
               answers.forEach(function(answer) {
                 if (answer) {
-                  let button = document.createElement('button');
-                  button.setAttribute('class', 'btn btn-primary');
-                  button.setAttribute('type', 'button');
-                  button.innerHTML = answer;
-                  footer.appendChild(button);
-                  footer.appendChild(document.createTextNode(' '));
+                  count++;
+                  let div = document.createElement('div');
+                  div.setAttribute('class', 'form-check');
+                  let input = document.createElement('input');
+                  input.setAttribute('class', 'form-check-input');
+                  input.setAttribute('type', 'radio');
+                  input.setAttribute('name', 'answer-' + index);
+                  input.setAttribute('id', 'answer-' + index + '-' + count);
+                  input.setAttribute('value', answer);
+                  input.addEventListener('click', function(event) {
+                    console.log('clicked');
+                    if (vote_crypt)
+                      return;
+                    vote_message.innerHTML = 'Forging a vote key, please wait...';
+                    let dt = new Date();
+                    let time = -(dt.getTime());
+                    vote_crypt = new JSEncrypt({
+                      default_key_size: 2048
+                    });
+                    vote_crypt.getKey(function() {
+                      dt = new Date();
+                      time += (dt.getTime());
+                      // vote_public_key = stripped_key(vote_crypt.getPublicKey());
+                      // vote_private_key = vote_crypt.getPrivateKey();
+                      vote_message.innerHTML = 'Ready to vote (key forged in ' + Number(time / 1000).toFixed(2) + ' seconds).';
+                      button.removeAttribute('disabled');
+                    });
+
+                  });
+                  div.appendChild(input);
+                  let label = document.createElement('label');
+                  label.setAttribute('class', 'form-check-label');
+                  label.setAttribute('for', 'answer-' + index + '-' + count);
+                  label.innerHTML = answer;
+                  div.appendChild(label);
+                  footer.appendChild(div);
                 }
               });
+              footer.appendChild(document.createElement('br'));
+              footer.appendChild(button);
+              footer.appendChild(document.createTextNode(' '));
+              footer.appendChild(vote_message);
               collapse.appendChild(footer);
               card.appendChild(collapse);
               accordion.appendChild(card);
+              button.addEventListener('click', function(event) {
+                let button = event.target;
+                console.log("voted: " + event.target.innerHTML);
+                let xhttp = new XMLHttpRequest();
+                xhttp.onload = function() {
+                  if (this.status == 200) {
+                    let answer = JSON.parse(this.responseText);
+                    if (answer.error)
+                      showModal('Vote error', JSON.stringify(answer.error));
+                    else {
+                      button.classList.remove('btn-primary');
+                      button.classList.add('btn-success');
+                      let children = button.parentNode.children;
+                      for (let i = 0; i < children.length; i++) {
+                        if (children[i].tagName !== 'BUTTON')
+                          continue;
+                        if (children[i].classList.contains('btn-primary')) {
+                          children[i].classList.remove('btn-primary');
+                          children[i].classList.add('btn-secondary');
+                        }
+                        children[i].setAttribute('disabled', '');
+                      }
+                      let span = document.createElement('span');
+                      span.innerHTML = 'Voted on ';
+                      button.parentNode.appendChild(span);
+                    }
+                  }
+                };
+                let vote = {
+                  schema: 'https://directdemocracy.vote/json-schema/' + directdemocracy_version + 'vote.schema.json',
+                  key: '',
+                  signature: '',
+                  published: '',
+                  expires: '',
+                  referendum: {
+                    key: '',
+                    signature: ''
+                  },
+                  answer: event.target.innerHTML
+                };
+                xhttp.open('POST', publisher + '/publish.php', true);
+                xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhttp.send(JSON.stringify(vote));
+              });
             });
             $('.collapse').collapse('hide');
           }
