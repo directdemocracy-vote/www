@@ -14,14 +14,14 @@ window.onload = function() {
   let endorse_map = null;
   let endorse_marker = null;
   let endorsed_fingerprint = '';
-  let crypt = null;
+  let citizen_crypt = null;
   let private_key = '';
-  let vote_crypt = null;
   let publisher = '';
   let trustee = '';
   let station = '';
   let scanner = null;
   let endorsements = [];
+  let votes = null;
 
   function unix_time_to_text(unix_timestamp) {
     const a = new Date(unix_timestamp * 1000);
@@ -256,14 +256,14 @@ window.onload = function() {
     document.getElementById('register-private-key-message').innerHTML = 'Forging a new private key, please wait...';
     let dt = new Date();
     let time = -(dt.getTime());
-    crypt = new JSEncrypt({
+    citizen_crypt = new JSEncrypt({
       default_key_size: 2048
     });
-    crypt.getKey(function() {
+    citizen_crypt.getKey(function() {
       dt = new Date();
       time += (dt.getTime());
-      citizen.key = stripped_key(crypt.getPublicKey());
-      private_key = crypt.getPrivateKey();
+      citizen.key = stripped_key(citizen_crypt.getPublicKey());
+      private_key = citizen_crypt.getPrivateKey();
       document.getElementById('register-forging-spinner').style.display = 'none';
       document.getElementById('register-private-key-icon').style.display = '';
       document.getElementById('register-private-key-message').innerHTML = 'You new private key was just forged in '
@@ -336,7 +336,7 @@ window.onload = function() {
     citizen.published = new Date().getTime();
     citizen.expires = new Date(document.getElementById('register-expiration').value + 'T00:00:00Z').getTime();
     citizen.signature = '';
-    citizen.signature = crypt.sign(JSON.stringify(citizen), CryptoJS.SHA256, 'sha256');
+    citizen.signature = citizen_crypt.sign(JSON.stringify(citizen), CryptoJS.SHA256, 'sha256');
     let xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
       if (this.status == 200) {
@@ -440,7 +440,7 @@ window.onload = function() {
         signature: citizen.signature
       }
     };
-    endorsement.signature = crypt.sign(JSON.stringify(endorsement), CryptoJS.SHA256, 'sha256');
+    endorsement.signature = citizen_crypt.sign(JSON.stringify(endorsement), CryptoJS.SHA256, 'sha256');
     let xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
       if (this.status == 200) {
@@ -453,7 +453,6 @@ window.onload = function() {
           private_key = '';
           citizen.key = '';
           generateNewKeyPair();
-          localStorage.removeItem('citizen');
           document.getElementById('citizen-nav').style.display = 'none';
           document.getElementById('endorsements-nav').style.display = 'none';
           document.getElementById('register-nav').style.display = '';
@@ -625,7 +624,7 @@ window.onload = function() {
         signature: endorsed.signature
       }
     };
-    endorsement.signature = crypt.sign(JSON.stringify(endorsement), CryptoJS.SHA256, 'sha256');
+    endorsement.signature = citizen_crypt.sign(JSON.stringify(endorsement), CryptoJS.SHA256, 'sha256');
     let xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
       if (this.status == 200) {
@@ -743,7 +742,7 @@ window.onload = function() {
                 signature: endorsement.signature
               }
             };
-            e.signature = crypt.sign(JSON.stringify(e), CryptoJS.SHA256, 'sha256');
+            e.signature = citizen_crypt.sign(JSON.stringify(e), CryptoJS.SHA256, 'sha256');
             let xhttp = new XMLHttpRequest();
             xhttp.onload = function() {
               if (this.status == 200) {
@@ -808,11 +807,28 @@ window.onload = function() {
             let referendums = JSON.parse(this.responseText);
             let accordion = document.getElementById('vote-accordion');
             if (referendums.length == 0) {
-              accordion.innerHTML = 'No referedum is currently available in your area.';
+              accordion.innerHTML = 'No referendum is currently available in your area.';
               return;
             }
             accordion.innerHTML = '';
             referendums.forEach(function(referendum, index) {
+              let vote = votes.find(vote => vote.referendum === referendum.key);
+              if (vote === undefined) {
+                vote = {
+                  referendum: referendum.key
+                };
+                votes.push(vote);
+              }
+              if (!vote.hasOwnProperty('private') && !vote.hasOwnProperty('public')) {
+                let crypt = new JSEncrypt({
+                  default_key_size: 2048
+                });
+                crypt.getKey(function() {
+                  vote.private = crypt.getPrivateKey();
+                  localStorage.setItem('votes', JSON.stringify(votes));
+                  updateVoteKey(index, vote);
+                });
+              }
               let card = document.createElement('div');
               card.setAttribute('class', 'card');
               let header = document.createElement('div');
@@ -878,12 +894,10 @@ window.onload = function() {
               let button = document.createElement('button');
               button.setAttribute('class', 'btn btn-primary');
               button.setAttribute('type', 'button');
-              button.setAttribute('disabled', '');
+              button.setAttribute('id', 'vote-button-' + index);
               button.innerHTML = 'Vote';
               let vote_message = document.createElement('span');
-              vote_message.setAttribute('class', 'spinner-border');
-              vote_message.setAttribute('role', 'status');
-              // <div id="register-forging-spinner" class="spinner-border" role="status"><span class="sr-only">Forging...</span></div>
+              vote_message .setAttribute('id', 'vote-message-' + index);
               const answers = referendum.answers.split('\n');
               let count = 0;
               answers.forEach(function(answer) {
@@ -897,26 +911,6 @@ window.onload = function() {
                   input.setAttribute('name', 'answer-' + index);
                   input.setAttribute('id', 'answer-' + index + '-' + count);
                   input.setAttribute('value', answer);
-                  input.addEventListener('click', function(event) {
-                    console.log('clicked');
-                    if (vote_crypt)
-                      return;
-                    vote_message.innerHTML = 'Forging a vote key, please wait...';
-                    let dt = new Date();
-                    let time = -(dt.getTime());
-                    vote_crypt = new JSEncrypt({
-                      default_key_size: 2048
-                    });
-                    vote_crypt.getKey(function() {
-                      dt = new Date();
-                      time += (dt.getTime());
-                      // vote_public_key = stripped_key(vote_crypt.getPublicKey());
-                      // vote_private_key = vote_crypt.getPrivateKey();
-                      vote_message.innerHTML = 'Ready to vote (key forged in ' + Number(time / 1000).toFixed(2) + ' seconds).';
-                      button.removeAttribute('disabled');
-                    });
-
-                  });
                   div.appendChild(input);
                   let label = document.createElement('label');
                   label.setAttribute('class', 'form-check-label');
@@ -933,6 +927,7 @@ window.onload = function() {
               collapse.appendChild(footer);
               card.appendChild(collapse);
               accordion.appendChild(card);
+              updateVoteKey(index, vote);
               button.addEventListener('click', function(event) {
                 let button = event.target;
                 console.log("voted: " + event.target.innerHTML);
@@ -941,41 +936,37 @@ window.onload = function() {
                   if (this.status == 200) {
                     let answer = JSON.parse(this.responseText);
                     if (answer.error)
-                      showModal('Vote error', JSON.stringify(answer.error));
+                      showModal('Ballot registration error', JSON.stringify(answer.error));
                     else {
-                      button.classList.remove('btn-primary');
-                      button.classList.add('btn-success');
-                      let children = button.parentNode.children;
-                      for (let i = 0; i < children.length; i++) {
-                        if (children[i].tagName !== 'BUTTON')
-                          continue;
-                        if (children[i].classList.contains('btn-primary')) {
-                          children[i].classList.remove('btn-primary');
-                          children[i].classList.add('btn-secondary');
-                        }
-                        children[i].setAttribute('disabled', '');
-                      }
-                      let span = document.createElement('span');
-                      span.innerHTML = 'Voted on ';
-                      button.parentNode.appendChild(span);
+                      console.log("Ballot registration success");
+                      // verify signature of station
                     }
                   }
                 };
-                let vote = {
+                let crypt = new JSEncrypt();
+                crypt.setPrivateKey(vote.private);
+                const now = new Date().getTime();
+                let ballot = {
                   schema: 'https://directdemocracy.vote/json-schema/' + directdemocracy_version + 'vote.schema.json',
-                  key: '',
+                  key: stripped_key(crypt.getPublicKey()),
                   signature: '',
-                  published: '',
-                  expires: '',
-                  referendum: {
-                    key: '',
+                  published: now,
+                  expires: now + 10 * 365.25 * 24 * 60 * 60 * 1000,  // 10 years
+                  referendum: referendum.key,
+                  station: {
+                    key: station_key,
                     signature: ''
                   },
-                  answer: event.target.innerHTML
+                  citizen: {
+                    key: citizen.key,
+                    signature: ''
+                  }
                 };
-                xhttp.open('POST', publisher + '/publish.php', true);
+                ballot.signature = crypt.sign(JSON.stringify(ballot), CryptoJS.SHA256, 'sha256');
+                ballot.citizen.signature = citizen_crypt.sign(JSON.stringify(ballo), CryptoJS.SHA256, 'sha256');
+                xhttp.open('POST', station + '/register.php', true);
                 xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                xhttp.send(JSON.stringify(vote));
+                xhttp.send(JSON.stringify(ballot));
               });
             });
             $('.collapse').collapse('hide');
@@ -990,6 +981,22 @@ window.onload = function() {
     let lon = citizen.longitude / 1000000;
     xhttp1.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' + lat + '&lon=' + lon, true);
     xhttp1.send();
+  }
+  function updateVoteKey(index, vote) {
+    console.log("Updating vote " + index + ": " + vote.referendum);
+    let button = document.getElementById('vote-button-' + index);
+    let message = document.getElementById('vote-message-' + index);
+
+    if (vote.hasOwnProperty('private')) {
+      message.innerHTML = 'Think twice before you vote, afterwards no change is possible.';
+      button.removeAttribute('disabled');
+    } else {
+      button.setAttribute('disabled', '');
+      if (vote.hasOwnProperty('public'))
+        message.innerHTML = 'you already voted to this referendum.';
+      else
+        message.innerHTML = 'forging key for this vote, please wait...';
+    }
   }
   clearForms();
   clearEndorseChecks();
@@ -1014,10 +1021,13 @@ window.onload = function() {
     localStorage.setItem('station', station);
   }
   document.getElementById('station').value = station;
+  votes = JSON.parse(localStorage.getItem('votes'));
+  if (votes === null)
+    votes = [];
   private_key = localStorage.getItem('privateKey');
   if (private_key) {
-    crypt = new JSEncrypt();
-    crypt.setPrivateKey(private_key);
+    citizen_crypt = new JSEncrypt();
+    citizen_crypt.setPrivateKey(private_key);
     document.getElementById('register-forging-spinner').style.display = 'none';
     document.getElementById('register-private-key-icon').style.display = '';
     document.getElementById('register-private-key-message').innerHTML = 'Using your existing private key.';
@@ -1031,7 +1041,7 @@ window.onload = function() {
           showModal('Citizen error', JSON.stringify(answer.error) + '.<br>Please try again.');
         else {
           citizen = answer.citizen;
-          citizen.key = stripped_key(crypt.getPublicKey());
+          citizen.key = stripped_key(citizen_crypt.getPublicKey());
           endorsements = answer.endorsements;
           citizen_endorsements = answer.citizen_endorsements;
           updateCitizenCard();
@@ -1042,7 +1052,7 @@ window.onload = function() {
     };
     xhttp.open('POST', publisher + '/citizen.php', true);
     xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhttp.send('key=' + encodeURIComponent(stripped_key(crypt.getPublicKey())));
+    xhttp.send('key=' + encodeURIComponent(stripped_key(citizen_crypt.getPublicKey())));
   } else {
     generateNewKeyPair();
     document.getElementById('citizen-nav').style.display = 'none';
