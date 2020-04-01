@@ -958,11 +958,12 @@ window.onload = function() {
                     signature: ''
                   },
                   citizen: {
-                    key: citizen.key,
+                    key: '',
                     signature: ''
                   }
                 };
                 ballot.signature = crypt.sign(JSON.stringify(ballot), CryptoJS.SHA256, 'sha256');
+                ballot.citizen.key = citizen.key;
                 ballot.citizen.signature = citizen_crypt.sign(JSON.stringify(ballot), CryptoJS.SHA256, 'sha256');
                 xhttp.open('POST', station + '/register.php', true);
                 xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
