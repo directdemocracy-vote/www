@@ -19,6 +19,7 @@ window.onload = function() {
   let publisher = '';
   let trustee = '';
   let station = '';
+  let station_key = '';
   let scanner = null;
   let endorsements = [];
   let votes = null;
@@ -983,11 +984,15 @@ window.onload = function() {
     xhttp1.send();
   }
   function updateVoteKey(index, vote) {
-    console.log("Updating vote " + index + ": " + vote.referendum);
     let button = document.getElementById('vote-button-' + index);
     let message = document.getElementById('vote-message-' + index);
-
-    if (vote.hasOwnProperty('private')) {
+    if (button === null || message === null)
+      return;
+    if (station_key === '') {
+      message.innerHTML = 'Getting station key...';
+      button.setAttribute('disabled', '');
+    }
+    else if (vote.hasOwnProperty('private')) {
       message.innerHTML = 'Think twice before you vote, afterwards no change is possible.';
       button.removeAttribute('disabled');
     } else {
@@ -1021,6 +1026,27 @@ window.onload = function() {
     localStorage.setItem('station', station);
   }
   document.getElementById('station').value = station;
+  if (station) {
+    let xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+      if (this.status == 200) {
+        let answer = JSON.parse(this.responseText);
+        if (answer.error)
+          showModal('Station key', JSON.stringify(answer.error));
+        else {
+          station_key = answer.key;
+          console.log("got station key: " + station_key);
+          votes.forEach(function(vote, index) {
+            updateVoteKey(index, vote);
+          });
+        }
+      }
+    };
+    xhttp.open('POST', station + '/key.php', true);
+    xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhttp.send();
+  }
+
   votes = JSON.parse(localStorage.getItem('votes'));
   if (votes === null)
     votes = [];
