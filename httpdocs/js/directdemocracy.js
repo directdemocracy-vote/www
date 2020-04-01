@@ -902,24 +902,23 @@ window.onload = function() {
               const answers = referendum.answers.split('\n');
               let count = 0;
               answers.forEach(function(answer) {
-                if (answer) {
-                  count++;
-                  let div = document.createElement('div');
-                  div.setAttribute('class', 'form-check');
-                  let input = document.createElement('input');
-                  input.setAttribute('class', 'form-check-input');
-                  input.setAttribute('type', 'radio');
-                  input.setAttribute('name', 'answer-' + index);
-                  input.setAttribute('id', 'answer-' + index + '-' + count);
-                  input.setAttribute('value', answer);
-                  div.appendChild(input);
-                  let label = document.createElement('label');
-                  label.setAttribute('class', 'form-check-label');
-                  label.setAttribute('for', 'answer-' + index + '-' + count);
-                  label.innerHTML = answer;
-                  div.appendChild(label);
-                  footer.appendChild(div);
-                }
+                count++;
+                let div = document.createElement('div');
+                div.setAttribute('class', 'form-check');
+                let input = document.createElement('input');
+                input.setAttribute('class', 'form-check-input');
+                input.setAttribute('type', 'radio');
+                input.setAttribute('name', 'answer-' + index);
+                input.setAttribute('id', 'answer-' + index + '-' + count);
+                input.setAttribute('value', answer);
+                input.addEventListener('click', function() { updateVoteKey(index, vote); });
+                div.appendChild(input);
+                let label = document.createElement('label');
+                label.setAttribute('class', 'form-check-label');
+                label.setAttribute('for', 'answer-' + index + '-' + count);
+                label.innerHTML = answer;
+                div.appendChild(label);
+                footer.appendChild(div);
               });
               footer.appendChild(document.createElement('br'));
               footer.appendChild(button);
@@ -948,7 +947,7 @@ window.onload = function() {
                 crypt.setPrivateKey(vote.private);
                 const now = new Date().getTime();
                 let ballot = {
-                  schema: 'https://directdemocracy.vote/json-schema/' + directdemocracy_version + 'vote.schema.json',
+                  schema: 'https://directdemocracy.vote/json-schema/' + directdemocracy_version + '/ballot.schema.json',
                   key: stripped_key(crypt.getPublicKey()),
                   signature: '',
                   published: now,
@@ -964,7 +963,7 @@ window.onload = function() {
                   }
                 };
                 ballot.signature = crypt.sign(JSON.stringify(ballot), CryptoJS.SHA256, 'sha256');
-                ballot.citizen.signature = citizen_crypt.sign(JSON.stringify(ballo), CryptoJS.SHA256, 'sha256');
+                ballot.citizen.signature = citizen_crypt.sign(JSON.stringify(ballot), CryptoJS.SHA256, 'sha256');
                 xhttp.open('POST', station + '/register.php', true);
                 xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                 xhttp.send(JSON.stringify(ballot));
@@ -984,6 +983,7 @@ window.onload = function() {
     xhttp1.send();
   }
   function updateVoteKey(index, vote) {
+    console.log("updateVoteKey " + index);
     let button = document.getElementById('vote-button-' + index);
     let message = document.getElementById('vote-message-' + index);
     if (button === null || message === null)
@@ -994,7 +994,10 @@ window.onload = function() {
     }
     else if (vote.hasOwnProperty('private')) {
       message.innerHTML = 'Think twice before you vote, afterwards no change is possible.';
-      button.removeAttribute('disabled');
+      if (document.querySelector('input[name="answer-' + index + '"]:checked'))
+        button.removeAttribute('disabled');
+      else
+        button.setAttribute('disabled', '');
     } else {
       button.setAttribute('disabled', '');
       if (vote.hasOwnProperty('public'))
