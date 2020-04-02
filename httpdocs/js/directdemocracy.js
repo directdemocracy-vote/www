@@ -23,6 +23,7 @@ window.onload = function() {
   let scanner = null;
   let endorsements = [];
   let votes = null;
+  let ballots = null;
 
   function unix_time_to_text(unix_timestamp) {
     const a = new Date(unix_timestamp * 1000);
@@ -935,12 +936,57 @@ window.onload = function() {
                 xhttp.onload = function() {
                   if (this.status == 200) {
                     let answer = JSON.parse(this.responseText);
-                    if (answer.error)
+                    if (answer.error) {
                       showModal('Ballot registration error', JSON.stringify(answer.error));
-                    else {
-                      console.log("Ballot registration success");
-                      // verify signature of station
+                      return;
                     }
+                    let ballot = answer.ballot;
+                    // verify the key of the ballot didn't change.
+                    let verify = new JSEncrypt();
+                    verify.setPrivateKey(vote.private);
+                    if (ballot.key != stripped_key(verify.getPublicKey())) {
+                      ShowModal('Ballot registration error', 'Wrong ballot key.');
+                      return;
+                    }
+                    // verify the station signature
+                    let station_signature = ballot.station.signature;
+                    ballot.station.signature = '';
+                    verify = new JSEncrypt();
+                    verify.setPublicKey(public_key(ballot.station.key));
+                    if (!verify.verify(JSON.stringify(ballot), station_signature, CryptoJS.SHA256)) {
+                      ShowModal('Ballot registration error', 'Wrong station signature.');
+                      return;
+                    }
+                    // verify the ballot signature
+                    let ballot_signature = ballot.signature;
+                    ballot.signature = '';
+                    verify = new JSEncrypt();
+                    verify.setPublicKey(public_key(ballot.key));
+                    if (!verify.verify(JSON.stringify(ballot), ballot_signature, CryptoJS.SHA256)) {
+                      ShowModal('Ballot registration error', 'Wrong ballot signature.');
+                      return;
+                    }
+                    // restore signatures
+                    ballot.signature = ballot_signature;
+                    ballot.station.signature = station_signature;
+                    // save registration ballot (can be a proof against cheating station)
+                    ballots.push(ballot);
+                    localStorage.setItem('ballots', JSON.stringify(ballots));
+                    console.log("Ballot registration success");
+                    // send vote ballot
+                    ballot.station.signature = '';
+                    ballot.signature = '';
+                    ballot.key = citizen.key;
+                    ballot.signature = citizen_crypt.sign(JSON.stringify(ballot), CryptoJS.SHA256, 'sha256');
+                    let commit = new XMLHttpRequest();
+                    commit.onload = function() {
+                      if (this.status == 200) {
+                        console.log('commit answer: ' + this.responseText);
+                      }
+                    };
+                    commit.open('POST', station + '/commit.php', true);
+                    commit.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                    commit.send(JSON.stringify(ballot));
                   }
                 };
                 let crypt = new JSEncrypt();
@@ -1034,6 +1080,7 @@ window.onload = function() {
     let xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
       if (this.status == 200) {
+        console.log(this.responseText);
         let answer = JSON.parse(this.responseText);
         if (answer.error)
           showModal('Station key', JSON.stringify(answer.error));
@@ -1054,6 +1101,9 @@ window.onload = function() {
   votes = JSON.parse(localStorage.getItem('votes'));
   if (votes === null)
     votes = [];
+  ballots = JSON.parse(localStorage.getItem('ballots'));
+  if (ballots === null)
+    ballots = [];
   private_key = localStorage.getItem('privateKey');
   if (private_key) {
     citizen_crypt = new JSEncrypt();
