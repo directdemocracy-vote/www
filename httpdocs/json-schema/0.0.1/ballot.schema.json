@@ -44,7 +44,7 @@
 		"station": {
 			"description": "station used by the citizen to cast her vote",
 			"type": "object",
-			"required": ["key"],
+			"required": ["key", "signature"],
 			"properties": {
 				"key": {
 					"description": "public key of the station",
