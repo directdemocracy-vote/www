@@ -66,11 +66,11 @@ window.onload = function() {
 
   function clearForms() {
     document.getElementById('edit-i-understand').value = '';
-    document.getElementById('edit-button').setAttribute('disabled', 'disabled');
+    document.getElementById('edit-button').setAttribute('disabled', '');
     document.getElementById('revoke-key-i-understand').value = '';
-    document.getElementById('revoke-key-button').setAttribute('disabled', 'disabled');
+    document.getElementById('revoke-key-button').setAttribute('disabled', '');
     document.getElementById('register-confirm-check').checked = false;
-    document.getElementById('publish-button').setAttribute('disabled', 'disabled');
+    document.getElementById('publish-button').setAttribute('disabled', '');
     let d = new Date();
     d.setFullYear(d.getFullYear() + 10);
     document.getElementById('register-expiration').value = d.toISOString().slice(0, 10);
@@ -276,7 +276,7 @@ window.onload = function() {
 
   function validate() {
     let button = document.getElementById('publish-button');
-    button.setAttribute('disabled', 'disabled');
+    button.setAttribute('disabled', '');
     if (citizen.key === '' || citizen.picture === '') return;
     if (citizen.latitude === 0 && citizen.longitude === 0) return;
     citizen.familyName = document.getElementById('register-family-name').value.trim();
@@ -419,7 +419,7 @@ window.onload = function() {
     document.getElementById('endorsements-nav').style.display = 'none';
     document.getElementById('register-nav').style.display = '';
     document.getElementById('edit-i-understand').value = '';
-    document.getElementById('edit').setAttribute('disabled', 'disabled');
+    document.getElementById('edit').setAttribute('disabled', '');
     setupMap();
     $('.nav-tabs a[href="#register"]').tab('show');
     clearForms();
@@ -429,7 +429,7 @@ window.onload = function() {
 
   document.getElementById('revoke-key-button').addEventListener('click', function() {
     document.getElementById('revoke-key-i-understand').value = '';
-    document.getElementById('revoke-key-button').setAttribute('disabled', 'disabled');
+    document.getElementById('revoke-key-button').setAttribute('disabled', '');
     let endorsement = {
       schema: 'https://directdemocracy.vote/json-schema/' + directdemocracy_version + '/endorsement.schema.json',
       key: citizen.key,
@@ -458,8 +458,8 @@ window.onload = function() {
           document.getElementById('citizen-nav').style.display = 'none';
           document.getElementById('endorsements-nav').style.display = 'none';
           document.getElementById('register-nav').style.display = '';
-          document.getElementById('edit').setAttribute('disabled', 'disabled');
-          document.getElementById('revoke-key').setAttribute('disabled', 'disabled');
+          document.getElementById('edit').setAttribute('disabled', '');
+          document.getElementById('revoke-key').setAttribute('disabled', '');
           setupMap();
           $('.nav-tabs a[href="#register"]').tab('show');
           clearForms();
@@ -509,7 +509,7 @@ window.onload = function() {
       scanner = null;
       video.style.display = 'none';
       list.style.display = '';
-      button.setAttribute('disabled', 'disabled');
+      button.setAttribute('disabled', '');
       let xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -588,7 +588,7 @@ window.onload = function() {
         document.getElementById('endorse-coords-check').checked)
       button.removeAttribute('disabled');
     else
-      button.setAttribute('disabled', 'disabled');
+      button.setAttribute('disabled', '');
   }
   document.getElementById('endorse-picture-check').addEventListener('change', checkEndorse);
   document.getElementById('endorse-name-check').addEventListener('change', checkEndorse);
@@ -598,7 +598,7 @@ window.onload = function() {
     document.getElementById('endorse-picture-check').checked = false;
     document.getElementById('endorse-name-check').checked = false;
     document.getElementById('endorse-coords-check').checked = false;
-    document.getElementById('endorse').setAttribute('disabled', 'disabled');
+    document.getElementById('endorse').setAttribute('disabled', '');
   }
 
   function clearEndorse() {
@@ -613,8 +613,8 @@ window.onload = function() {
   document.getElementById('endorse-cancel').addEventListener('click', clearEndorse);
 
   document.getElementById('endorse').addEventListener('click', function() {
-    document.getElementById('endorse-button').setAttribute('disabled', 'disabled');
-    document.getElementById('endorse-cancel').setAttribute('disabled', 'disabled');
+    document.getElementById('endorse-button').setAttribute('disabled', '');
+    document.getElementById('endorse-cancel').setAttribute('disabled', '');
     let endorsement = {
       schema: 'https://directdemocracy.vote/json-schema/' + directdemocracy_version + '/endorsement.schema.json',
       key: citizen.key,
@@ -931,7 +931,9 @@ window.onload = function() {
               updateVoteKey(index, vote);
               button.addEventListener('click', function(event) {
                 let button = event.target;
-                console.log("voted: " + event.target.innerHTML);
+                button.innerHTML =
+                  `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Voting...`;
+                button.setAttribute('disabled', '');
                 let xhttp = new XMLHttpRequest();
                 xhttp.onload = function() {
                   if (this.status == 200) {
@@ -972,7 +974,7 @@ window.onload = function() {
                     // save registration ballot (can be a proof against cheating station)
                     ballots.push(ballot);
                     localStorage.setItem('ballots', JSON.stringify(ballots));
-                    console.log("Ballot registration success");
+                    vote_message.innerHTML = "Ballot registration success";
                     // send vote ballot
                     ballot.station.signature = '';
                     ballot.signature = '';
@@ -981,7 +983,49 @@ window.onload = function() {
                     let commit = new XMLHttpRequest();
                     commit.onload = function() {
                       if (this.status == 200) {
-                        console.log('commit answer: ' + this.responseText);
+                        let response = JSON.parse(this.responseText);
+                        if (response.error) {
+                          showModal('Ballot commit error', JSON.stringify(response.error));
+                          return;
+                        }
+                        console.log('ballot fingerprint: ' + response.fingerprint);
+                        let radios = document.getElementsByName('answer-' + index);
+                        let answer = '';
+                        for(let i = 0, length = radios.length; i < length; i++)
+                          if (radios[i].checked) {
+                            answer = radios[i].value;
+                            break;
+                          }
+                        console.log("voting: " + answer);
+                        let crypt = new JSEncrypt();
+                        crypt.setPrivateKey(vote.private);
+                        vote = {
+                          schema: 'https://directdemocracy.vote/json-schema/' + directdemocracy_version + '/vote.schema.json',
+                          key: stripped_key(crypt.getPublicKey()),
+                          signature: '',
+                          published: referendum.deadline,
+                          expires: referendum.deadline + 10 * 365.25 * 24 * 60 * 60 * 1000,  // 10 years
+                          answer: answer
+                        };
+                        vote.signature = crypt.sign(JSON.stringify(vote), CryptoJS.SHA256, 'sha256');
+                        let xhttp3 = new XMLHttpRequest();
+                        xhttp3.onload = function() {
+                          if (this.status == 200) {
+                            let response = JSON.parse(this.responseText);
+                            if (response.error) {
+                              showModal('Vote error', JSON.stringify(response.error));
+                              return;
+                            }
+                            console.log("Vote fingerprint: " + response.fingerprint);
+                            button.innerHTML = 'Voted';
+                            button.setAttribute('class', 'btn btn-success');
+                            const now = new Date().getTime();
+                            vote_message.innerHTML = 'on ' + unix_time_to_text(now / 1000) + '.';
+                          }
+                        };
+                        xhttp3.open('POST', publisher + '/publish.php', true);
+                        xhttp3.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                        xhttp3.send(JSON.stringify(vote));
                       }
                     };
                     commit.open('POST', station + '/commit.php', true);
@@ -1030,7 +1074,6 @@ window.onload = function() {
     xhttp1.send();
   }
   function updateVoteKey(index, vote) {
-    console.log("updateVoteKey " + index);
     let button = document.getElementById('vote-button-' + index);
     let message = document.getElementById('vote-message-' + index);
     if (button === null || message === null)
@@ -1080,13 +1123,11 @@ window.onload = function() {
     let xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
       if (this.status == 200) {
-        console.log(this.responseText);
         let answer = JSON.parse(this.responseText);
         if (answer.error)
           showModal('Station key', JSON.stringify(answer.error));
         else {
           station_key = answer.key;
-          console.log("got station key: " + station_key);
           votes.forEach(function(vote, index) {
             updateVoteKey(index, vote);
           });
@@ -1137,8 +1178,8 @@ window.onload = function() {
     generateNewKeyPair();
     document.getElementById('citizen-nav').style.display = 'none';
     document.getElementById('endorsements-nav').style.display = 'none';
-    document.getElementById('revoke-key').setAttribute('disabled', 'disabled');
-    document.getElementById('edit').setAttribute('disabled', 'disabled');
+    document.getElementById('revoke-key').setAttribute('disabled', '');
+    document.getElementById('edit').setAttribute('disabled', '');
     $('.nav-tabs a[href="#register"]').tab('show');
     citizen = {
       schema: 'https://directdemocracy.vote/json-schema/' + directdemocracy_version + '/citizen.schema.json',
