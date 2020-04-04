@@ -999,7 +999,7 @@ window.onload = function() {
                         console.log("voting: " + answer);
                         let crypt = new JSEncrypt();
                         crypt.setPrivateKey(vote.private);
-                        vote = {
+                        let my_vote = {
                           schema: 'https://directdemocracy.vote/json-schema/' + directdemocracy_version + '/vote.schema.json',
                           key: stripped_key(crypt.getPublicKey()),
                           signature: '',
@@ -1007,7 +1007,7 @@ window.onload = function() {
                           expires: referendum.deadline + 10 * 365.25 * 24 * 60 * 60 * 1000,  // 10 years
                           answer: answer
                         };
-                        vote.signature = crypt.sign(JSON.stringify(vote), CryptoJS.SHA256, 'sha256');
+                        my_vote.signature = crypt.sign(JSON.stringify(my_vote), CryptoJS.SHA256, 'sha256');
                         let xhttp3 = new XMLHttpRequest();
                         xhttp3.onload = function() {
                           if (this.status == 200) {
@@ -1019,13 +1019,17 @@ window.onload = function() {
                             console.log("Vote fingerprint: " + response.fingerprint);
                             button.innerHTML = 'Voted';
                             button.setAttribute('class', 'btn btn-success');
-                            const now = new Date().getTime();
-                            vote_message.innerHTML = 'on ' + unix_time_to_text(now / 1000) + '.';
+                            const now = new Date().getTime() / 1000;
+                            vote_message.innerHTML = unix_time_to_text(now);
+                            delete vote.private;
+                            vote.public = stripped_key(crypt.getPublicKey());
+                            vote.date = now;
+                            localStorage.setItem('votes', JSON.stringify(votes));
                           }
                         };
                         xhttp3.open('POST', publisher + '/publish.php', true);
                         xhttp3.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                        xhttp3.send(JSON.stringify(vote));
+                        xhttp3.send(JSON.stringify(my_vote));
                       }
                     };
                     commit.open('POST', station + '/commit.php', true);
@@ -1090,9 +1094,10 @@ window.onload = function() {
         button.setAttribute('disabled', '');
     } else {
       button.setAttribute('disabled', '');
-      if (vote.hasOwnProperty('public'))
-        message.innerHTML = 'you already voted to this referendum.';
-      else
+      if (vote.hasOwnProperty('public')) {
+        button.setAttribute('class', 'btn btn-success');
+        message.innerHTML = unix_time_to_text(vote.date);
+      } else
         message.innerHTML = 'forging key for this vote, please wait...';
     }
   }
