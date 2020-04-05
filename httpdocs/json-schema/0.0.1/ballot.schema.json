@@ -26,13 +26,13 @@
 			"type": "string"
 		},
 		"published": {
-			"description": "date of publication (milliseconds since 1970-01-01 00:00:00.000)",
+			"description": "deadline of the referendum (milliseconds since 1970-01-01 00:00:00.000)",
 			"type": "integer",
 			"minimum": 0,
 			"maximum": 999999999999999
 		},
 		"expires": {
-			"description": "date at which this publication expires (milliseconds since 1970-01-01 00:00:00.000)",
+			"description": "deadline of the referendum plus one year (milliseconds since 1970-01-01 00:00:00.000)",
 			"type": "integer",
 			"minimum": 0,
 			"maximum": 999999999999999
