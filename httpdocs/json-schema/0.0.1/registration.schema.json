@@ -53,9 +53,9 @@
 				"signature": {
 					"description": "station signature for the registration publication",
 					"type": "string"
-				},
+				}
 			}
-		},
+		}
 	},
   "additionalProperties": false
 }
