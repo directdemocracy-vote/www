@@ -24,6 +24,7 @@ window.onload = function() {
   let endorsements = [];
   let votes = null;
   let ballots = null;
+  let referendums = null;
 
   function unix_time_to_text(unix_timestamp) {
     const a = new Date(unix_timestamp * 1000);
@@ -806,7 +807,7 @@ window.onload = function() {
         let xhttp2 = new XMLHttpRequest();
         xhttp2.onload = function() {
           if (this.status == 200) {
-            let referendums = JSON.parse(this.responseText);
+            referendums = JSON.parse(this.responseText);
             let accordion = document.getElementById('vote-accordion');
             if (referendums.length == 0) {
               accordion.innerHTML = 'No referendum is currently available in your area.';
@@ -1114,7 +1115,8 @@ window.onload = function() {
             answer = radios[i].value;
             break;
           }
-        if (answer == '') {  // query publisher to get answer
+        const now = new Date().getTime();
+        if (answer == '' && referendums[index].deadline < now) {  // query publisher to get verification
           let xhttp = new XMLHttpRequest();
           xhttp.onload = function() {
             if (this.status == 200) {
