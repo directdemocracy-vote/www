@@ -939,7 +939,7 @@ window.onload = function() {
                   if (this.status == 200) {
                     let answer = JSON.parse(this.responseText);
                     if (answer.error) {
-                      showModal('Ballot registration error', JSON.stringify(answer.error));
+                      showModal('Ballot error', JSON.stringify(answer.error));
                       return;
                     }
                     let ballot = answer.ballot;
@@ -947,7 +947,7 @@ window.onload = function() {
                     let verify = new JSEncrypt();
                     verify.setPrivateKey(vote.private);
                     if (ballot.key != stripped_key(verify.getPublicKey())) {
-                      ShowModal('Ballot registration error', 'Wrong ballot key.');
+                      ShowModal('Ballot error', 'Wrong ballot key.');
                       return;
                     }
                     // verify the station signature
@@ -956,7 +956,7 @@ window.onload = function() {
                     verify = new JSEncrypt();
                     verify.setPublicKey(public_key(ballot.station.key));
                     if (!verify.verify(JSON.stringify(ballot), station_signature, CryptoJS.SHA256)) {
-                      ShowModal('Ballot registration error', 'Wrong station signature.');
+                      ShowModal('Ballot error', 'Wrong station signature.');
                       return;
                     }
                     // verify the ballot signature
@@ -965,30 +965,40 @@ window.onload = function() {
                     verify = new JSEncrypt();
                     verify.setPublicKey(public_key(ballot.key));
                     if (!verify.verify(JSON.stringify(ballot), ballot_signature, CryptoJS.SHA256)) {
-                      ShowModal('Ballot registration error', 'Wrong ballot signature.');
+                      ShowModal('Ballot error', 'Wrong ballot signature.');
                       return;
                     }
                     // restore signatures
                     ballot.signature = ballot_signature;
                     ballot.station.signature = station_signature;
-                    // save registration ballot (can be a proof against cheating station)
+                    // save ballot (can be a proof against cheating station)
                     ballots.push(ballot);
                     localStorage.setItem('ballots', JSON.stringify(ballots));
-                    vote_message.innerHTML = "Ballot registration success";
-                    // send vote ballot
-                    ballot.station.signature = '';
-                    ballot.signature = '';
-                    ballot.key = citizen.key;
-                    ballot.signature = citizen_crypt.sign(JSON.stringify(ballot), CryptoJS.SHA256, 'sha256');
-                    let commit = new XMLHttpRequest();
-                    commit.onload = function() {
+                    vote_message.innerHTML = "Ballot success";
+                    // send vote registration
+                    const now = new Date().getTime();
+                    let registration = {
+                      schema: 'https://directdemocracy.vote/json-schema/' + directdemocracy_version + '/registration.schema.json',
+                      schema: '',
+                      key: citizen.key,
+                      signature: '',
+                      published: now,
+                      expires: now + 10 * 365.25 * 24 * 60 * 60 * 1000,  // 1 year
+                      station: {
+                        key: station_public_key,
+                        signature: ''
+                      }
+                    };
+                    registration.signature = citizen_crypt.sign(JSON.stringify(registration), CryptoJS.SHA256, 'sha256');
+                    let xhttp_registration = new XMLHttpRequest();
+                    xhttp_registration.onload = function() {
                       if (this.status == 200) {
                         let response = JSON.parse(this.responseText);
                         if (response.error) {
-                          showModal('Ballot commit error', JSON.stringify(response.error));
+                          showModal('Registration error', JSON.stringify(response.error));
                           return;
                         }
-                        console.log('ballot fingerprint: ' + response.fingerprint);
+                        console.log('Registration fingerprint: ' + response.fingerprint);
                         let radios = document.getElementsByName('answer-' + index);
                         let answer = '';
                         for(let i = 0, length = radios.length; i < length; i++)
@@ -1032,20 +1042,19 @@ window.onload = function() {
                         xhttp3.send(JSON.stringify(my_vote));
                       }
                     };
-                    commit.open('POST', station + '/commit.php', true);
-                    commit.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                    commit.send(JSON.stringify(ballot));
+                    xhttp_registration.open('POST', station + '/registration.php', true);
+                    xhttp_registration.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                    xhttp_registration.send(JSON.stringify(registration));
                   }
                 };
                 let crypt = new JSEncrypt();
                 crypt.setPrivateKey(vote.private);
-                const now = new Date().getTime();
                 let ballot = {
                   schema: 'https://directdemocracy.vote/json-schema/' + directdemocracy_version + '/ballot.schema.json',
                   key: stripped_key(crypt.getPublicKey()),
                   signature: '',
-                  published: now,
-                  expires: now + 10 * 365.25 * 24 * 60 * 60 * 1000,  // 10 years
+                  published: referendum.deadline,
+                  expires: referendum.deadline + 1 * 365.25 * 24 * 60 * 60 * 1000,  // 1 year
                   referendum: referendum.key,
                   station: {
                     key: station_key,
@@ -1059,7 +1068,7 @@ window.onload = function() {
                 ballot.signature = crypt.sign(JSON.stringify(ballot), CryptoJS.SHA256, 'sha256');
                 ballot.citizen.key = citizen.key;
                 ballot.citizen.signature = citizen_crypt.sign(JSON.stringify(ballot), CryptoJS.SHA256, 'sha256');
-                xhttp.open('POST', station + '/register.php', true);
+                xhttp.open('POST', station + '/ballot.php', true);
                 xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                 xhttp.send(JSON.stringify(ballot));
               });
