@@ -979,13 +979,13 @@ window.onload = function() {
                     const now = new Date().getTime();
                     let registration = {
                       schema: 'https://directdemocracy.vote/json-schema/' + directdemocracy_version + '/registration.schema.json',
-                      schema: '',
                       key: citizen.key,
                       signature: '',
                       published: now,
                       expires: now + 10 * 365.25 * 24 * 60 * 60 * 1000,  // 1 year
+                      referendum: referendum.key,
                       station: {
-                        key: station_public_key,
+                        key: station_key,
                         signature: ''
                       }
                     };
