@@ -899,6 +899,7 @@ window.onload = function() {
               button.setAttribute('id', 'vote-button-' + index);
               button.innerHTML = 'Vote';
               let vote_message = document.createElement('span');
+              vote_message.style.marginLeft = '16px';
               vote_message .setAttribute('id', 'vote-message-' + index);
               const answers = referendum.answers.split('\n');
               let count = 0;
@@ -923,7 +924,6 @@ window.onload = function() {
               });
               footer.appendChild(document.createElement('br'));
               footer.appendChild(button);
-              footer.appendChild(document.createTextNode(' '));
               footer.appendChild(vote_message);
               collapse.appendChild(footer);
               card.appendChild(collapse);
@@ -1019,7 +1019,7 @@ window.onload = function() {
                             console.log("Vote fingerprint: " + response.fingerprint);
                             button.innerHTML = 'Voted';
                             button.setAttribute('class', 'btn btn-success');
-                            const now = new Date().getTime() / 1000;
+                            const now = Math.round(new Date().getTime() / 1000);
                             vote_message.innerHTML = unix_time_to_text(now);
                             delete vote.private;
                             vote.public = stripped_key(crypt.getPublicKey());
@@ -1096,7 +1096,36 @@ window.onload = function() {
       button.setAttribute('disabled', '');
       if (vote.hasOwnProperty('public')) {
         button.setAttribute('class', 'btn btn-success');
+        button.innerHTML = 'Voted';
         message.innerHTML = unix_time_to_text(vote.date);
+        let radios = document.getElementsByName('answer-' + index);
+        let answer = '';
+        for(let i = 0, length = radios.length; i < length; i++)
+          if (radios[i].checked) {
+            answer = radios[i].value;
+            break;
+          }
+        if (answer == '') {  // query publisher to get answer
+          let xhttp = new XMLHttpRequest();
+          xhttp.onload = function() {
+            if (this.status == 200) {
+              let response = JSON.parse(this.responseText);
+              if (response.error)
+                showModal('Vote verification error', JSON.stringify(response.error));
+              else {
+                answer = response.answer;
+                for(let i = 0, length = radios.length; i < length; i++)
+                  if (radios[i].value == answer) {
+                    radios[i].checked = true;
+                    break;
+                  }
+              }
+            }
+          };
+          xhttp.open('POST', publisher + '/publication.php', true);
+          xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+          xhttp.send('key=' + encodeURIComponent(vote.public));
+        }
       } else
         message.innerHTML = 'forging key for this vote, please wait...';
     }
