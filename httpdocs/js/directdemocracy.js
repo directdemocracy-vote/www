@@ -948,25 +948,25 @@ window.onload = function() {
                     let verify = new JSEncrypt();
                     verify.setPrivateKey(vote.private);
                     if (ballot.key != stripped_key(verify.getPublicKey())) {
-                      ShowModal('Ballot error', 'Wrong ballot key.');
+                      showModal('Ballot error', 'Wrong ballot key.');
                       return;
                     }
                     // verify the station signature
-                    let station_signature = ballot.station.signature;
-                    ballot.station.signature = '';
+                    const station_signature = ballot.station.signature;
+                    delete ballot.station.signature;
                     verify = new JSEncrypt();
                     verify.setPublicKey(public_key(ballot.station.key));
                     if (!verify.verify(JSON.stringify(ballot), station_signature, CryptoJS.SHA256)) {
-                      ShowModal('Ballot error', 'Wrong station signature.');
+                      showModal('Ballot error', 'Wrong station signature (see console).');
                       return;
                     }
                     // verify the ballot signature
-                    let ballot_signature = ballot.signature;
+                    const ballot_signature = ballot.signature;
                     ballot.signature = '';
                     verify = new JSEncrypt();
                     verify.setPublicKey(public_key(ballot.key));
                     if (!verify.verify(JSON.stringify(ballot), ballot_signature, CryptoJS.SHA256)) {
-                      ShowModal('Ballot error', 'Wrong ballot signature.');
+                      showModal('Ballot error', 'Wrong ballot signature.');
                       return;
                     }
                     // restore signatures
@@ -986,8 +986,7 @@ window.onload = function() {
                       expires: now + 10 * 365.25 * 24 * 60 * 60 * 1000,  // 1 year
                       referendum: referendum.key,
                       station: {
-                        key: station_key,
-                        signature: ''
+                        key: station_key
                       }
                     };
                     registration.signature = citizen_crypt.sign(JSON.stringify(registration), CryptoJS.SHA256, 'sha256');
@@ -1058,16 +1057,13 @@ window.onload = function() {
                   expires: referendum.deadline + 1 * 365.25 * 24 * 60 * 60 * 1000,  // 1 year
                   referendum: referendum.key,
                   station: {
-                    key: station_key,
-                    signature: ''
-                  },
-                  citizen: {
-                    key: '',
-                    signature: ''
+                    key: station_key
                   }
                 };
                 ballot.signature = crypt.sign(JSON.stringify(ballot), CryptoJS.SHA256, 'sha256');
-                ballot.citizen.key = citizen.key;
+                ballot.citizen = {
+                  key: citizen.key
+                };
                 ballot.citizen.signature = citizen_crypt.sign(JSON.stringify(ballot), CryptoJS.SHA256, 'sha256');
                 xhttp.open('POST', station + '/ballot.php', true);
                 xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
