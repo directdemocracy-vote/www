@@ -1186,11 +1186,13 @@ window.onload = function() {
         message.innerHTML = unix_time_to_text(vote.date);
         let radios = document.getElementsByName('answer-' + index);
         let answer = '';
-        for(let i = 0, length = radios.length; i < length; i++)
+        for(let i = 0, length = radios.length; i < length; i++) {
+          radios[i].disabled = true;
           if (radios[i].checked) {
             answer = radios[i].value;
             break;
           }
+        }
         const now = new Date().getTime();
         if (answer == '' && referendums[index].deadline < now) {  // query publisher to get verification
           let xhttp = new XMLHttpRequest();
