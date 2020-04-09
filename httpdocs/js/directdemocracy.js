@@ -24,6 +24,7 @@ window.onload = function() {
   let endorsements = [];
   let votes = null;
   let ballots = null;
+  let registrations = null;
   let referendums = null;
 
   function unix_time_to_text(unix_timestamp) {
@@ -769,8 +770,8 @@ window.onload = function() {
     });
   }
   function updateVote() {
-    let xhttp1 = new XMLHttpRequest();
-    xhttp1.onreadystatechange = function() {
+    let xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
         const a = JSON.parse(this.responseText);
         const address = a.address;
@@ -804,8 +805,8 @@ window.onload = function() {
         name.forEach(function(n, i) {
           area += type[i] + '=' + name[i] + '\n';
         });
-        let xhttp2 = new XMLHttpRequest();
-        xhttp2.onload = function() {
+        let xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
           if (this.status == 200) {
             referendums = JSON.parse(this.responseText);
             let accordion = document.getElementById('vote-accordion');
@@ -938,113 +939,172 @@ window.onload = function() {
                 let xhttp = new XMLHttpRequest();
                 xhttp.onload = function() {
                   if (this.status == 200) {
-                    let answer = JSON.parse(this.responseText);
-                    if (answer.error) {
-                      showModal('Ballot error', JSON.stringify(answer.error));
+                    let response = JSON.parse(this.responseText);
+                    if (response.error) {
+                      showModal('Register error', JSON.stringify(response.error));
                       return;
                     }
-                    let ballot = answer.ballot;
+                    if (!response.hasOwnProperty('ballot')) {
+                      showModal('Register error', 'Missing ballot in station response.');
+                      return;
+                    }
+                    if (!response.hasOwnProperty('registration')) {
+                      showModal('Register error', 'Missing registration in station response.');
+                      return;
+                    }
+                    let ballot = response.ballot;
+                    let registration = response.registration;
                     // verify the key of the ballot didn't change.
                     let verify = new JSEncrypt();
                     verify.setPrivateKey(vote.private);
-                    if (ballot.key != stripped_key(verify.getPublicKey())) {
-                      showModal('Ballot error', 'Wrong ballot key.');
+                    if (!ballot.hasOwnProperty('key')) {
+                      showModal('Register error', 'Missing key in ballot.');
                       return;
                     }
-                    // verify the station signature
-                    const station_signature = ballot.station.signature;
+                    if (ballot.key != stripped_key(verify.getPublicKey())) {
+                      showModal('Register error', 'Wrong ballot key.');
+                      return;
+                    }
+                    // verify the station signature in the ballot
+                    if (!ballot.hasOwnProperty('station')) {
+                      showModal('Register error', 'Missing station in ballot.');
+                      return;
+                    }
+                    if (!ballot.station.hasOwnProperty('key')) {
+                      showModal('Register error', 'Missing station key in ballot.');
+                      return;
+                    }
+                    const ballot_station_signature = ballot.station.signature;
                     delete ballot.station.signature;
                     verify = new JSEncrypt();
                     verify.setPublicKey(public_key(ballot.station.key));
-                    if (!verify.verify(JSON.stringify(ballot), station_signature, CryptoJS.SHA256)) {
-                      showModal('Ballot error', 'Wrong station signature (see console).');
+                    if (!verify.verify(JSON.stringify(ballot), ballot_station_signature, CryptoJS.SHA256)) {
+                      showModal('Register error', 'Wrong station signature for ballot.');
                       return;
                     }
                     // verify the ballot signature
+                    if (!ballot.hasOwnProperty('signature')) {
+                      showModal('Register error', 'Missing signature in ballot.');
+                      return;
+                    }
                     const ballot_signature = ballot.signature;
                     ballot.signature = '';
                     verify = new JSEncrypt();
                     verify.setPublicKey(public_key(ballot.key));
                     if (!verify.verify(JSON.stringify(ballot), ballot_signature, CryptoJS.SHA256)) {
-                      showModal('Ballot error', 'Wrong ballot signature.');
+                      showModal('Register error', 'Wrong ballot signature.');
                       return;
                     }
                     // restore signatures
                     ballot.signature = ballot_signature;
-                    ballot.station.signature = station_signature;
-                    // save ballot (can be a proof against cheating station)
+                    ballot.station.signature = ballot_station_signature;
+                    // verify the key of the registration didn't change
+                    if (!registration.hasOwnProperty('key')) {
+                      showModal('Register error', 'Missing key in registration.');
+                      return;
+                    }
+                    if (registration.key != citizen.key) {
+                      showModal('Register error', 'The key in registration is wrong.');
+                      return;
+                    }
+                    // verify the station signature in the registration
+                    if (!registration.hasOwnProperty('station')) {
+                      showModal('Register error', 'Missing station in registration.');
+                      return;
+                    }
+                    if (!registration.station.hasOwnProperty('key')) {
+                      showModal('Register error', 'Missing station key in registration.');
+                      return;
+                    }
+                    const registration_station_signature = registration.station.signature;
+                    delete registration.station.signature;
+                    verify = new JSEncrypt();
+                    verify.setPublicKey(public_key(registration.station.key));
+                    if (!verify.verify(JSON.stringify(registration), registration_station_signature, CryptoJS.SHA256)) {
+                      showModal('Register error', 'Wrong station signature for registration.');
+                      return;
+                    }
+                    // verify the registration signature
+                    if (!registration.hasOwnProperty('signature')) {
+                      showModal('Register error', 'Missing signature in registration.');
+                      return;
+                    }
+                    const registration_signature = registration.signature;
+                    registration.signature = '';
+                    verify = new JSEncrypt();
+                    verify.setPublicKey(public_key(registration.key));
+                    if (!verify.verify(JSON.stringify(registration), registration_signature, CryptoJS.SHA256)) {
+                      showModal('Register error', 'Wrong registration signature.');
+                      return;
+                    }
+                    // restore signatures
+                    registration.signature = registration_signature;
+                    registration.station.signature = registration_station_signature;
+                    // check match between ballot and registration
+                    if (!ballot.hasOwnProperty('referendum')) {
+                      showModal('Register error', 'Missing referendum in ballot.');
+                      return;
+                    }
+                    if (!registration.hasOwnProperty('referendum')) {
+                      showModal('Register error', 'Missing referendum in registration.');
+                      return;
+                    }
+                    if (ballot.referendum != registration.referendum) {
+                      showModal('Register error', 'Mismatching referendum in ballot and registration.');
+                      return;
+                    }
+                    if (ballot.station.key != registration.station.key) {
+                      showModal('Register error', 'Mismatching referendum in ballot and registration.');
+                      return;
+                    }
+                    // save ballot and registration (can be a proof against cheating station)
                     ballots.push(ballot);
+                    registrations.push(registration);
                     localStorage.setItem('ballots', JSON.stringify(ballots));
-                    vote_message.innerHTML = "Ballot success";
-                    // send vote registration
-                    const now = new Date().getTime();
-                    let registration = {
-                      schema: 'https://directdemocracy.vote/json-schema/' + directdemocracy_version + '/registration.schema.json',
-                      key: citizen.key,
-                      signature: '',
-                      published: now,
-                      expires: now + 10 * 365.25 * 24 * 60 * 60 * 1000,  // 1 year
-                      referendum: referendum.key,
-                      station: {
-                        key: station_key
+                    localStorage.setItem('registrations', JSON.stringify(registrations));
+                    // proceed to vote
+                    vote_message.innerHTML = "Registration success";
+                    let radios = document.getElementsByName('answer-' + index);
+                    let answer = '';
+                    for(let i = 0, length = radios.length; i < length; i++)
+                      if (radios[i].checked) {
+                        answer = radios[i].value;
+                        break;
                       }
+                    console.log("voting: " + answer);
+                    let crypt = new JSEncrypt();
+                    crypt.setPrivateKey(vote.private);
+                    let my_vote = {
+                      schema: 'https://directdemocracy.vote/json-schema/' + directdemocracy_version + '/vote.schema.json',
+                      key: stripped_key(crypt.getPublicKey()),
+                      signature: '',
+                      published: referendum.deadline,
+                      expires: referendum.deadline + 10 * 365.25 * 24 * 60 * 60 * 1000,  // 10 years
+                      answer: answer
                     };
-                    registration.signature = citizen_crypt.sign(JSON.stringify(registration), CryptoJS.SHA256, 'sha256');
-                    let xhttp_registration = new XMLHttpRequest();
-                    xhttp_registration.onload = function() {
+                    my_vote.signature = crypt.sign(JSON.stringify(my_vote), CryptoJS.SHA256, 'sha256');
+                    let xhttp = new XMLHttpRequest();
+                    xhttp.onload = function() {
                       if (this.status == 200) {
                         let response = JSON.parse(this.responseText);
                         if (response.error) {
-                          showModal('Registration error', JSON.stringify(response.error));
+                          showModal('Vote error', JSON.stringify(response.error));
                           return;
                         }
-                        console.log('Registration fingerprint: ' + response.fingerprint);
-                        let radios = document.getElementsByName('answer-' + index);
-                        let answer = '';
-                        for(let i = 0, length = radios.length; i < length; i++)
-                          if (radios[i].checked) {
-                            answer = radios[i].value;
-                            break;
-                          }
-                        console.log("voting: " + answer);
-                        let crypt = new JSEncrypt();
-                        crypt.setPrivateKey(vote.private);
-                        let my_vote = {
-                          schema: 'https://directdemocracy.vote/json-schema/' + directdemocracy_version + '/vote.schema.json',
-                          key: stripped_key(crypt.getPublicKey()),
-                          signature: '',
-                          published: referendum.deadline,
-                          expires: referendum.deadline + 10 * 365.25 * 24 * 60 * 60 * 1000,  // 10 years
-                          answer: answer
-                        };
-                        my_vote.signature = crypt.sign(JSON.stringify(my_vote), CryptoJS.SHA256, 'sha256');
-                        let xhttp3 = new XMLHttpRequest();
-                        xhttp3.onload = function() {
-                          if (this.status == 200) {
-                            let response = JSON.parse(this.responseText);
-                            if (response.error) {
-                              showModal('Vote error', JSON.stringify(response.error));
-                              return;
-                            }
-                            console.log("Vote fingerprint: " + response.fingerprint);
-                            button.innerHTML = 'Voted';
-                            button.setAttribute('class', 'btn btn-success');
-                            const now = Math.round(new Date().getTime() / 1000);
-                            vote_message.innerHTML = unix_time_to_text(now);
-                            delete vote.private;
-                            vote.public = stripped_key(crypt.getPublicKey());
-                            vote.date = now;
-                            localStorage.setItem('votes', JSON.stringify(votes));
-                          }
-                        };
-                        xhttp3.open('POST', publisher + '/publish.php', true);
-                        xhttp3.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                        xhttp3.send(JSON.stringify(my_vote));
+                        console.log("Vote fingerprint: " + response.fingerprint);
+                        button.innerHTML = 'Voted';
+                        button.setAttribute('class', 'btn btn-success');
+                        const now = Math.round(new Date().getTime() / 1000);
+                        vote_message.innerHTML = unix_time_to_text(now);
+                        delete vote.private;
+                        vote.public = stripped_key(crypt.getPublicKey());
+                        vote.date = now;
+                        localStorage.setItem('votes', JSON.stringify(votes));
                       }
                     };
-                    xhttp_registration.open('POST', station + '/registration.php', true);
-                    xhttp_registration.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                    xhttp_registration.send(JSON.stringify(registration));
+                    xhttp.open('POST', publisher + '/publish.php', true);
+                    xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                    xhttp.send(JSON.stringify(my_vote));
                   }
                 };
                 let crypt = new JSEncrypt();
@@ -1065,23 +1125,40 @@ window.onload = function() {
                   key: citizen.key
                 };
                 ballot.citizen.signature = citizen_crypt.sign(JSON.stringify(ballot), CryptoJS.SHA256, 'sha256');
-                xhttp.open('POST', station + '/ballot.php', true);
+                const now = new Date().getTime();
+                let registration = {
+                  schema: 'https://directdemocracy.vote/json-schema/' + directdemocracy_version + '/registration.schema.json',
+                  key: citizen.key,
+                  signature: '',
+                  published: now,
+                  expires: now + 10 * 365.25 * 24 * 60 * 60 * 1000,  // 1 year
+                  referendum: referendum.key,
+                  station: {
+                    key: station_key
+                  }
+                };
+                registration.signature = citizen_crypt.sign(JSON.stringify(registration), CryptoJS.SHA256, 'sha256');
+                let request = {
+                  ballot: ballot,
+                  registration: registration
+                };
+                xhttp.open('POST', station + '/register.php', true);
                 xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                xhttp.send(JSON.stringify(ballot));
+                xhttp.send(JSON.stringify(request));
               });
             });
             $('.collapse').collapse('hide');
           }
         };
-        xhttp2.open('POST', publisher + '/referendum.php', true);
-        xhttp2.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhttp2.send('area=' + encodeURIComponent(area));
+        xhttp.open('POST', publisher + '/referendum.php', true);
+        xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhttp.send('area=' + encodeURIComponent(area));
       }
     };
     let lat = citizen.latitude / 1000000;
     let lon = citizen.longitude / 1000000;
-    xhttp1.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' + lat + '&lon=' + lon, true);
-    xhttp1.send();
+    xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' + lat + '&lon=' + lon, true);
+    xhttp.send();
   }
   function updateVoteKey(index, vote) {
     let button = document.getElementById('vote-button-' + index);
@@ -1186,6 +1263,10 @@ window.onload = function() {
   ballots = JSON.parse(localStorage.getItem('ballots'));
   if (ballots === null)
     ballots = [];
+  registrations = JSON.parse(localStorage.getItem('registrations'));
+  if (registrations === null)
+    registrations = [];
+
   private_key = localStorage.getItem('privateKey');
   if (private_key) {
     citizen_crypt = new JSEncrypt();
