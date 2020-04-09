@@ -938,7 +938,10 @@ window.onload = function() {
                 button.setAttribute('disabled', '');
                 let xhttp = new XMLHttpRequest();
                 xhttp.onload = function() {
-                  if (this.status == 200) {
+                  if (this.status != 200) {
+                    console.log('Station not responding: ' + this.status);
+                    // FIXME: publish `RSba` message to cancel ballot and registration
+                  } else {
                     let response = JSON.parse(this.responseText);
                     if (response.error) {
                       showModal('Register error', JSON.stringify(response.error));
