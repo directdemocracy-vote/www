@@ -53,25 +53,6 @@
 				"signature": {
 					"description": "station signature for the ballot publication",
 					"type": "string"
-				},
-				"refused": {
-					"description": "ballot refusal reason written by the station",
-					"type": "string"
-				}
-			}
-		},
-		"citizen": {
-			"description": "citizen",
-			"type": "object",
-			"required": ["key", "signature"],
-			"properties": {
-				"key": {
-					"description": "public key of the citizen",
-					"type": "string"
-				},
-				"signature": {
-					"description": "signature of the ballot by the citizen",
-					"type": "string"
 				}
 			}
 		}
