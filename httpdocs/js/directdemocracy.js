@@ -977,6 +977,10 @@ window.onload = function() {
                       showModal('Register error', 'Missing station key in ballot.');
                       return;
                     }
+                    if (!ballot.station.hasOwnProperty('signature')) {
+                      showModal('Register error', 'Missing station signature in ballot.');
+                      return;
+                    }
                     const ballot_station_signature = ballot.station.signature;
                     delete ballot.station.signature;
                     verify = new JSEncrypt();
@@ -1017,6 +1021,10 @@ window.onload = function() {
                     }
                     if (!registration.station.hasOwnProperty('key')) {
                       showModal('Register error', 'Missing station key in registration.');
+                      return;
+                    }
+                    if (!registration.station.hasOwnProperty('signature')) {
+                      showModal('Register error', 'Missing station signature in registration.');
                       return;
                     }
                     const registration_station_signature = registration.station.signature;
@@ -1124,10 +1132,6 @@ window.onload = function() {
                   }
                 };
                 ballot.signature = crypt.sign(JSON.stringify(ballot), CryptoJS.SHA256, 'sha256');
-                ballot.citizen = {
-                  key: citizen.key
-                };
-                ballot.citizen.signature = citizen_crypt.sign(JSON.stringify(ballot), CryptoJS.SHA256, 'sha256');
                 const now = new Date().getTime();
                 let registration = {
                   schema: 'https://directdemocracy.vote/json-schema/' + directdemocracy_version + '/registration.schema.json',
