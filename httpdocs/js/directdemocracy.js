@@ -876,7 +876,7 @@ window.onload = function() {
                 area_url = 'https://en.wikipedia.org/wiki/European_Union';
               else
                 area_url = 'https://nominatim.openstreetmap.org/search.php?' + area_query + '&polygon_geojson=1';
-              let results_url = observer + '/referendum.php?fingerprint=' + CryptoJS.SHA1(referendum.signature).toString();
+              let results_url = observer + '/referendum.html?fingerprint=' + CryptoJS.SHA1(referendum.signature).toString();
               area_div.innerHTML = '<small>(' + days + 'd)</small> ' + area_name;
               header.appendChild(area_div);
               let collapse = document.createElement('div');
