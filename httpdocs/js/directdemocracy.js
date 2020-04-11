@@ -876,6 +876,7 @@ window.onload = function() {
                 area_url = 'https://en.wikipedia.org/wiki/European_Union';
               else
                 area_url = 'https://nominatim.openstreetmap.org/search.php?' + area_query + '&polygon_geojson=1';
+              let results_url = observer + '/referendum.php?fingerprint=' + CryptoJS.SHA1(referendum.signature).toString();
               area_div.innerHTML = '<small>(' + days + 'd)</small> ' + area_name;
               header.appendChild(area_div);
               let collapse = document.createElement('div');
@@ -887,7 +888,8 @@ window.onload = function() {
               let deadline = document.createElement('div');
               deadline.innerHTML = '<small><b>Deadline:</b> ' + unix_time_to_text(referendum.deadline / 1000)
                                  + ' &mdash; <b>Area:</b> <a target="_blank" href="' + area_url + '">' + area_name
-                                 + '</a> (' + area_type + ')</small>';
+                                 + '</a> (' + area_type + ') &mdash; <a href="' + results_url
+                                 + '" target="_blank">check results</a></small>';
               body.appendChild(deadline);
               body.appendChild(document.createElement('br'));
               let description = document.createElement('div');
