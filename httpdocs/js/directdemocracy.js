@@ -1266,6 +1266,16 @@ window.onload = function() {
     xhttp.send();
   }
 
+  document.getElementById('main-button').addEventListener('click', function() {
+    if (private_key) {
+      $('.nav-tabs a[href="#endorsements"]').tab('show');
+      console.log("show endorse");
+    } else {
+      $('.nav-tabs a[href="#register"]').tab('show');
+      console.log("show register");
+    }
+  });
+
   votes = JSON.parse(localStorage.getItem('votes'));
   if (votes === null)
     votes = [];
@@ -1285,6 +1295,9 @@ window.onload = function() {
     document.getElementById('register-private-key-message').innerHTML = 'Using your existing private key.';
     document.getElementById('register-nav').style.display = 'none';
     $('.nav-tabs a[href="#citizen"]').tab('show');
+    let mainButton = document.getElementById('main-button');
+    mainButton.innerHTML = 'Endorse a Citizen';
+    mainButton.href = '#endorsements';
     let xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
       if (this.status == 200) {
