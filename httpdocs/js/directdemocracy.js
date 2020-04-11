@@ -19,6 +19,7 @@ window.onload = function() {
   let publisher = '';
   let trustee = '';
   let station = '';
+  let observer = '';
   let station_key = '';
   let scanner = null;
   let endorsements = [];
@@ -379,6 +380,11 @@ window.onload = function() {
   document.getElementById('station').addEventListener('input', function() {
     station = document.getElementById('station').value.trim();
     localStorage.setItem('station', station);
+  });
+
+  document.getElementById('observer').addEventListener('input', function() {
+    observer = document.getElementById('observer').value.trim();
+    localStorage.setItem('observer', observer);
   });
 
   document.getElementById('edit-i-understand').addEventListener('input', function() {
@@ -1175,8 +1181,7 @@ window.onload = function() {
     if (station_key === '') {
       message.innerHTML = 'Getting station key...';
       button.setAttribute('disabled', '');
-    }
-    else if (vote.hasOwnProperty('private')) {
+    } else if (vote.hasOwnProperty('private')) {
       message.innerHTML = 'Think twice before you vote, afterwards no change is possible.';
       if (document.querySelector('input[name="answer-' + index + '"]:checked'))
         button.removeAttribute('disabled');
@@ -1246,6 +1251,12 @@ window.onload = function() {
     localStorage.setItem('station', station);
   }
   document.getElementById('station').value = station;
+  observer = localStorage.getItem('observer');
+  if (!observer) {
+    observer = 'https://observer.directdemocracy.vote';
+    localStorage.setItem('observer', observer);
+  }
+  document.getElementById('observer').value = observer;
   if (station) {
     let xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
