@@ -134,9 +134,8 @@ window.onload = function() {
         areaChange();
       }
     };
-    let lat = latitude;
-    let lon = longitude;
-    xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' + lat + '&lon=' + lon, true);
+    xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' + latitude + '&lon=' + longitude,
+      true);
     xhttp.send();
   }
   document.getElementById('area').addEventListener('change', areaChange);
@@ -232,21 +231,33 @@ window.onload = function() {
       referendum.website = website;
     let str = JSON.stringify(referendum);
     referendum.signature = referendum_crypt.sign(str, CryptoJS.SHA256, 'sha256');
+
     let xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
       if (this.status == 200) {
         let answer = JSON.parse(this.responseText);
         if (answer.error)
-          showModal('Publication error', JSON.stringify(answer.error));
+          showModal('Area publication error', JSON.stringify(answer.error));
         else {
-          showModal('Publication success', 'Your referendum was just published!<br>Check it <a target="_blank" href="' +
-            publisher + '/publication.php?fingerprint=' + answer.fingerprint + '">here</a>.<br>');
+          let xhttp = new XMLHttpRequest();
+          xhttp.onload = function() {
+            if (this.status == 200) {
+              if (answer.error)
+                showModal('Referendum publication error', JSON.stringify(answer.error));
+              else
+                showModal('Publication success',
+                  'Your referendum was just published!<br>Check it <a target="_blank" href="' +
+                  publisher + '/publication.php?fingerprint=' + answer.fingerprint + '">here</a>.<br>');
+            }
+          };
+          xhttp.open('POST', publisher + '/publish.php', true);
+          xhttp.send(JSON.stringify(referendum));
         }
       }
     };
-    xhttp.open('POST', publisher + '/publish.php', true);
-    xhttp.send(JSON.stringify(referendum));
-    return false;
+    let query = trim(referendum.area).replace("\n", '&');
+    xhttp.open('GET', trustee + '/publish_area.php?' + query, true);
+    xhttp.send();
   });
   generateNewKeyPair();
 };
