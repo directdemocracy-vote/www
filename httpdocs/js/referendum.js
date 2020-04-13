@@ -255,8 +255,9 @@ window.onload = function() {
         }
       }
     };
-    let query = trim(referendum.area).replace("\n", '&');
-    xhttp.open('GET', trustee + '/publish_area.php?' + query, true);
+    let query = referendum.area.trim().replace("\n", '&');
+    xhttp.open('GET', trustee + '/publish_area.php?' + query,
+      true);
     xhttp.send();
   });
   generateNewKeyPair();
