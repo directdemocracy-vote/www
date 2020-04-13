@@ -127,22 +127,21 @@ window.onload = function() {
   }
 
   function updateLocation() {
-    const lat = citizen.latitude;
-    const lon = citizen.longitude;
-    register_marker.setPopupContent(lat + ',' + lon).openPopup();
-    document.getElementById('register-latitude').value = lat;
-    document.getElementById('register-longitude').value = lon;
+    register_marker.setPopupContent(citizen.latitude + ',' + citizen.longitude).openPopup();
+    document.getElementById('register-latitude').value = citizen.latitude;
+    document.getElementById('register-longitude').value = citizen.longitude;
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
         const a = JSON.parse(this.responseText);
         const address = a.display_name;
         register_marker.setPopupContent(address + '<br><br><center style="color:#999">(' +
-          lat + ', ' + lon + ')</center>').openPopup();
+          citizen.latitude + ', ' + citizen.longitude + ')</center>').openPopup();
         document.getElementById('register-address').innerHTML = address;
       }
     };
-    xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' + lat + '&lon=' + lon, true);
+    xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' + citizen.latitude + '&lon=' +
+      citizen.longitude, true);
     xhttp.send();
   }
 
