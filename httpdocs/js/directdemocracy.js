@@ -30,7 +30,7 @@ window.onload = function() {
 
   function unix_time_to_text(unix_timestamp) {
     const a = new Date(unix_timestamp * 1000);
-    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const year = a.getFullYear();
     const month = months[a.getMonth()];
     const date = a.getDate();
@@ -46,7 +46,7 @@ window.onload = function() {
     const header = '-----BEGIN PUBLIC KEY-----\n'.length;
     const footer = '-----END PUBLIC KEY-----'.length;
     const l = public_key.length - footer;
-    for(let i = header; i < l; i += 65)
+    for (let i = header; i < l; i += 65)
       stripped += public_key.substr(i, 64);
     stripped = stripped.slice(0, -1 - footer);
     return stripped;
@@ -55,7 +55,7 @@ window.onload = function() {
   function public_key(key) {
     let pkey = '-----BEGIN PUBLIC KEY-----\n';
     const l = key.length;
-    for(let i = 0; i < l; i += 64)
+    for (let i = 0; i < l; i += 64)
       pkey += key.substr(i, 64) + '\n';
     pkey += '-----END PUBLIC KEY-----';
     return pkey;
@@ -81,11 +81,11 @@ window.onload = function() {
 
   function getGeolocationPosition(position) {
     geolocation = true;
-    citizen.latitude = Math.round(1000000 * position.coords.latitude);
-    citizen.longitude = Math.round(1000000 * position.coords.longitude);
+    citizen.latitude = position.coords.latitude;
+    citizen.longitude = position.coords.longitude;
     register_map.setView([position.coords.latitude, position.coords.longitude], 12);
     setTimeout(function() {
-      register_marker.setLatLng([citizen.latitude / 1000000, citizen.longitude / 1000000]);
+      register_marker.setLatLng([citizen.latitude, citizen.longitude]);
       updateLocation();
     }, 500);
   }
@@ -107,26 +107,28 @@ window.onload = function() {
     };
     xhttp.open('GET', 'https://ipinfo.io/loc', true);
     xhttp.send();
-    const lat = citizen.latitude / 1000000;
-    const lon = citizen.longitude / 1000000;
+    const lat = citizen.latitude;
+    const lon = citizen.longitude;
     register_map = L.map('register-map').setView([lat, lon], 2);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(register_map);
     register_marker = L.marker([lat, lon]).addTo(register_map).bindPopup(lat + ',' + lon);
     updateLocation();
-    register_map.on('contextmenu', function(event) { return false; });
+    register_map.on('contextmenu', function(event) {
+      return false;
+    });
     register_map.on('click', function onMapClick(e) {
       register_marker.setLatLng(e.latlng);
-      citizen.latitude = Math.round(1000000 * e.latlng.lat);
-      citizen.longitude = Math.round(1000000 * e.latlng.lng);
+      citizen.latitude = e.latlng.lat;
+      citizen.longitude = e.latlng.lng;
       updateLocation();
     });
   }
 
   function updateLocation() {
-    const lat = citizen.latitude / 1000000;
-    const lon = citizen.longitude / 1000000;
+    const lat = citizen.latitude;
+    const lon = citizen.longitude;
     register_marker.setPopupContent(lat + ',' + lon).openPopup();
     document.getElementById('register-latitude').value = lat;
     document.getElementById('register-longitude').value = lon;
@@ -135,8 +137,8 @@ window.onload = function() {
       if (this.readyState == 4 && this.status == 200) {
         const a = JSON.parse(this.responseText);
         const address = a.display_name;
-        register_marker.setPopupContent(address + '<br><br><center style="color:#999">('
-         + lat + ', ' + lon + ')</center>').openPopup();
+        register_marker.setPopupContent(address + '<br><br><center style="color:#999">(' +
+          lat + ', ' + lon + ')</center>').openPopup();
         document.getElementById('register-address').innerHTML = address;
       }
     };
@@ -156,9 +158,8 @@ window.onload = function() {
     document.getElementById('citizen-picture').setAttribute('src', citizen.picture);
     document.getElementById('citizen-family-name').innerHTML = citizen.familyName;
     document.getElementById('citizen-given-names').innerHTML = citizen.givenNames;
-    document.getElementById('citizen-coords').innerHTML = '<a target="_blank" href="https://openstreetmap.org/?mlat='
-     + citizen.latitude / 1000000 + '&mlon=' + citizen.longitude / 1000000 + '&zoom=12">' + citizen.latitude / 1000000 + ', '
-     + citizen.longitude / 1000000 + '</a>';
+    document.getElementById('citizen-coords').innerHTML = '<a target="_blank" href="https://openstreetmap.org/?mlat=' +
+      citizen.latitude + '&mlon=' + citizen.longitude + '&zoom=12">' + citizen.latitude + ', ' + citizen.longitude + '</a>';
     let published = new Date(citizen.published);
     let expires = new Date(citizen.expires);
     document.getElementById('citizen-published').innerHTML = published.toISOString().slice(0, 10);
@@ -205,8 +206,8 @@ window.onload = function() {
       td.setAttribute('rowspan', '2');
       td.appendChild(img);
       img.src = endorsement.picture;
-      img.style.width='45px';
-      img.style.height='60px';
+      img.style.width = '45px';
+      img.style.height = '60px';
       td = document.createElement('td');
       if (endorsement.revoke)
         td.style.fontStyle = 'italic';
@@ -271,8 +272,8 @@ window.onload = function() {
       private_key = citizen_crypt.getPrivateKey();
       document.getElementById('register-forging-spinner').style.display = 'none';
       document.getElementById('register-private-key-icon').style.display = '';
-      document.getElementById('register-private-key-message').innerHTML = 'You new private key was just forged in '
-                                                                        + Number(time / 1000).toFixed(2) + ' seconds.';
+      document.getElementById('register-private-key-message').innerHTML = 'You new private key was just forged in ' +
+        Number(time / 1000).toFixed(2) + ' seconds.';
       validate();
     });
   }
@@ -357,8 +358,9 @@ window.onload = function() {
           document.getElementById('revoke-key').removeAttribute('disabled');
           document.getElementById('edit').removeAttribute('disabled');
           $('.nav-tabs a[href="#citizen"]').tab('show');
-          showModal('Publication success', 'Your citizen card was just published!<br>Check it <a target="_blank" href="'
-          + publisher + '/publication.php?fingerprint=' + answer.fingerprint + '">here</a>.<br>');
+          showModal('Publication success',
+            'Your citizen card was just published!<br>Check it <a target="_blank" href="' +
+            publisher + '/publication.php?fingerprint=' + answer.fingerprint + '">here</a>.<br>');
         }
       }
     };
@@ -388,15 +390,18 @@ window.onload = function() {
   });
 
   document.getElementById('edit-i-understand').addEventListener('input', function() {
-    document.getElementById('edit-button').disabled = (document.getElementById('edit-i-understand').value != 'I understand');
+    document.getElementById('edit-button').disabled = (document.getElementById('edit-i-understand').value !=
+      'I understand');
   });
 
   document.getElementById('revoke-key-i-understand').addEventListener('input', function() {
-    document.getElementById('revoke-key-button').disabled = (document.getElementById('revoke-key-i-understand').value != 'I understand');
+    document.getElementById('revoke-key-button').disabled = (document.getElementById('revoke-key-i-understand').value !=
+      'I understand');
   });
 
   document.getElementById('revoke-citizen-i-understand').addEventListener('input', function() {
-    document.getElementById('revoke-citizen-button').disabled = (document.getElementById('revoke-citizen-i-understand').value != 'I understand');
+    document.getElementById('revoke-citizen-button').disabled = (document.getElementById('revoke-citizen-i-understand').value !=
+      'I understand');
   });
 
   $('#modal-revoke-key').on('hidden.bs.modal', function() {
@@ -485,7 +490,7 @@ window.onload = function() {
     const button = document.getElementById('endorse-button');
     const video = document.getElementById('endorse-qr-video');
     const list = document.getElementById('endorsements-list');
-    if (scanner) {  // Cancel pressed
+    if (scanner) { // Cancel pressed
       button.innerHTML = 'Endorse a Citizen';
       button.removeAttribute('disabled');
       video.style.display = 'none';
@@ -495,6 +500,7 @@ window.onload = function() {
       return;
     }
     const message = document.getElementById('endorse-message');
+
     function setResult(fingerprint) {
       const pattern = /^[0-9a-f]{40}$/g;
       if (!pattern.test(fingerprint)) {
@@ -553,8 +559,8 @@ window.onload = function() {
           let expires = new Date(endorsed.expires);
           document.getElementById('endorse-published').innerHTML = published.toISOString().slice(0, 10);
           document.getElementById('endorse-expires').innerHTML = expires.toISOString().slice(0, 10);
-          const lat = endorsed.latitude / 1000000;
-          const lon = endorsed.longitude / 1000000;
+          const lat = endorsed.latitude;
+          const lon = endorsed.longitude;
           if (endorse_map == null) {
             endorse_map = L.map('endorse-map');
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -565,17 +571,20 @@ window.onload = function() {
             endorse_marker.setLatLng([lat, lon]);
           endorse_marker.bindPopup(lat + ', ' + lon);
           endorse_map.setView([lat, lon], 18);
-          endorse_map.on('contextmenu', function(event) { return false; });
+          endorse_map.on('contextmenu', function(event) {
+            return false;
+          });
           let xhttp = new XMLHttpRequest();
           xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
               const a = JSON.parse(this.responseText);
               const address = a.display_name;
-              endorse_marker.setPopupContent(address + '<br><br><center style="color:#999">('
-               + lat + ', ' + lon + ')</center>').openPopup();
+              endorse_marker.setPopupContent(address + '<br><br><center style="color:#999">(' +
+                lat + ', ' + lon + ')</center>').openPopup();
             }
           };
-          xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' + lat + '&lon=' + lon, true);
+          xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' + lat + '&lon=' + lon,
+            true);
           xhttp.send();
         }
       };
@@ -592,8 +601,8 @@ window.onload = function() {
   function checkEndorse() {
     let button = document.getElementById('endorse');
     if (document.getElementById('endorse-picture-check').checked &&
-        document.getElementById('endorse-name-check').checked &&
-        document.getElementById('endorse-coords-check').checked)
+      document.getElementById('endorse-name-check').checked &&
+      document.getElementById('endorse-coords-check').checked)
       button.removeAttribute('disabled');
     else
       button.setAttribute('disabled', '');
@@ -655,7 +664,7 @@ window.onload = function() {
 
   function updateEndorsements() {
     let list = document.getElementById('endorsements-list');
-    list.innerHTML = '';  // clear
+    list.innerHTML = ''; // clear
     let table = document.createElement('table');
     table.setAttribute('id', 'endorsements-table');
     table.classList.add('table');
@@ -673,8 +682,8 @@ window.onload = function() {
       td.setAttribute('rowspan', endorsement.revoke ? '2' : '3');
       td.appendChild(img);
       img.src = endorsement.picture;
-      img.style.width='45px';
-      img.style.height='60px';
+      img.style.width = '45px';
+      img.style.height = '60px';
       td = document.createElement('td');
       if (endorsement.revoke)
         td.style.fontStyle = 'italic';
@@ -738,10 +747,12 @@ window.onload = function() {
       if (!endorsement.revoke)
         button.addEventListener('click', function() {
           document.getElementById('revoke-citizen-name').innerHTML = endorsement.givenNames + ' ' + endorsement.familyName;
+
           function revoke() {
             document.getElementById('revoke-citizen-button').removeEventListener('click', revoke);
             let e = {
-              schema: 'https://directdemocracy.vote/json-schema/' + directdemocracy_version + '/endorsement.schema.json',
+              schema: 'https://directdemocracy.vote/json-schema/' + directdemocracy_version +
+                '/endorsement.schema.json',
               key: citizen.key,
               signature: '',
               published: new Date().getTime(),
@@ -761,7 +772,8 @@ window.onload = function() {
                 if (answer.error)
                   showModal('Revocation error', JSON.stringify(answer.error) + '.<br>Please try again.');
                 else {
-                  showModal('Revocation success', 'You successfully revoked ' + endorsement.givenNames + ' ' + endorsement.familyName);
+                  showModal('Revocation success', 'You successfully revoked ' + endorsement.givenNames + ' ' +
+                    endorsement.familyName);
                   endorsements = answer;
                   updateEndorsements();
                 }
@@ -775,6 +787,7 @@ window.onload = function() {
         });
     });
   }
+
   function updateVote() {
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
@@ -783,6 +796,7 @@ window.onload = function() {
         const address = a.address;
         let type = [];
         let name = [];
+
         function addAdminLevel(level) {
           if (level in address) {
             type.push(level);
@@ -790,20 +804,22 @@ window.onload = function() {
           }
         }
         const admin = ['block', 'neighbourhood', 'quarter',
-                      'suburb', 'borough',
-                      'hamlet', 'village', 'town',
-                      'city',
-                      'municipality',
-                      'county', 'district',
-                      'region', 'province', 'state',
-                      'country'];
+          'suburb', 'borough',
+          'hamlet', 'village', 'town',
+          'city',
+          'municipality',
+          'county', 'district',
+          'region', 'province', 'state',
+          'country'
+        ];
         admin.forEach(function(item) {
           addAdminLevel(item);
         });
         const country_code = address.country_code.toUpperCase();
         if (['GB', 'DE', 'FR', 'IT', 'SE', 'PL', 'RO', 'HR', 'ES', 'NL', 'IE', 'BG', 'DK', 'GR',
-             'AT', 'HU', 'FI', 'CZ', 'PT', 'BE', 'MT', 'CY', 'LU', 'SI', 'LU', 'SK', 'EE', 'LV']
-            .indexOf(country_code) >= 0) {
+            'AT', 'HU', 'FI', 'CZ', 'PT', 'BE', 'MT', 'CY', 'LU', 'SI', 'LU', 'SK', 'EE', 'LV'
+          ]
+          .indexOf(country_code) >= 0) {
           type.push('union');
           name.push('European Union');
         }
@@ -886,10 +902,10 @@ window.onload = function() {
               let body = document.createElement('div');
               body.setAttribute('class', 'card-body');
               let deadline = document.createElement('div');
-              deadline.innerHTML = '<small><b>Deadline:</b> ' + unix_time_to_text(referendum.deadline / 1000)
-                                 + ' &mdash; <b>Area:</b> <a target="_blank" href="' + area_url + '">' + area_name
-                                 + '</a> (' + area_type + ') &mdash; <a href="' + results_url
-                                 + '" target="_blank">check results</a></small>';
+              deadline.innerHTML = '<small><b>Deadline:</b> ' + unix_time_to_text(referendum.deadline / 1000) +
+                ' &mdash; <b>Area:</b> <a target="_blank" href="' + area_url + '">' + area_name +
+                '</a> (' + area_type + ') &mdash; <a href="' + results_url +
+                '" target="_blank">check results</a></small>';
               body.appendChild(deadline);
               body.appendChild(document.createElement('br'));
               let description = document.createElement('div');
@@ -910,7 +926,7 @@ window.onload = function() {
               button.innerHTML = 'Vote';
               let vote_message = document.createElement('span');
               vote_message.style.marginLeft = '16px';
-              vote_message .setAttribute('id', 'vote-message-' + index);
+              vote_message.setAttribute('id', 'vote-message-' + index);
               const answers = referendum.answers.split('\n');
               let count = 0;
               answers.forEach(function(answer) {
@@ -923,7 +939,9 @@ window.onload = function() {
                 input.setAttribute('name', 'answer-' + index);
                 input.setAttribute('id', 'answer-' + index + '-' + count);
                 input.setAttribute('value', answer);
-                input.addEventListener('click', function() { updateVoteKey(index, vote); });
+                input.addEventListener('click', function() {
+                  updateVoteKey(index, vote);
+                });
                 div.appendChild(input);
                 let label = document.createElement('label');
                 label.setAttribute('class', 'form-check-label');
@@ -1085,7 +1103,7 @@ window.onload = function() {
                     vote_message.innerHTML = "Registration success";
                     let radios = document.getElementsByName('answer-' + index);
                     let answer = '';
-                    for(let i = 0, length = radios.length; i < length; i++)
+                    for (let i = 0, length = radios.length; i < length; i++)
                       if (radios[i].checked) {
                         answer = radios[i].value;
                         break;
@@ -1094,11 +1112,12 @@ window.onload = function() {
                     let crypt = new JSEncrypt();
                     crypt.setPrivateKey(vote.private);
                     let my_vote = {
-                      schema: 'https://directdemocracy.vote/json-schema/' + directdemocracy_version + '/vote.schema.json',
+                      schema: 'https://directdemocracy.vote/json-schema/' + directdemocracy_version +
+                        '/vote.schema.json',
                       key: stripped_key(crypt.getPublicKey()),
                       signature: '',
                       published: referendum.deadline,
-                      expires: referendum.deadline + 10 * 365.25 * 24 * 60 * 60 * 1000,  // 10 years
+                      expires: referendum.deadline + 10 * 365.25 * 24 * 60 * 60 * 1000, // 10 years
                       answer: answer
                     };
                     my_vote.signature = crypt.sign(JSON.stringify(my_vote), CryptoJS.SHA256, 'sha256');
@@ -1129,11 +1148,12 @@ window.onload = function() {
                 let crypt = new JSEncrypt();
                 crypt.setPrivateKey(vote.private);
                 let ballot = {
-                  schema: 'https://directdemocracy.vote/json-schema/' + directdemocracy_version + '/ballot.schema.json',
+                  schema: 'https://directdemocracy.vote/json-schema/' + directdemocracy_version +
+                    '/ballot.schema.json',
                   key: stripped_key(crypt.getPublicKey()),
                   signature: '',
                   published: referendum.deadline,
-                  expires: referendum.deadline + 1 * 365.25 * 24 * 60 * 60 * 1000,  // 1 year
+                  expires: referendum.deadline + 1 * 365.25 * 24 * 60 * 60 * 1000, // 1 year
                   referendum: referendum.key,
                   station: {
                     key: station_key
@@ -1142,17 +1162,19 @@ window.onload = function() {
                 ballot.signature = crypt.sign(JSON.stringify(ballot), CryptoJS.SHA256, 'sha256');
                 const now = new Date().getTime();
                 let registration = {
-                  schema: 'https://directdemocracy.vote/json-schema/' + directdemocracy_version + '/registration.schema.json',
+                  schema: 'https://directdemocracy.vote/json-schema/' + directdemocracy_version +
+                    '/registration.schema.json',
                   key: citizen.key,
                   signature: '',
                   published: now,
-                  expires: now + 10 * 365.25 * 24 * 60 * 60 * 1000,  // 1 year
+                  expires: now + 10 * 365.25 * 24 * 60 * 60 * 1000, // 1 year
                   referendum: referendum.key,
                   station: {
                     key: station_key
                   }
                 };
-                registration.signature = citizen_crypt.sign(JSON.stringify(registration), CryptoJS.SHA256, 'sha256');
+                registration.signature = citizen_crypt.sign(JSON.stringify(registration), CryptoJS.SHA256,
+                  'sha256');
                 let request = {
                   ballot: ballot,
                   registration: registration
@@ -1170,11 +1192,12 @@ window.onload = function() {
         xhttp.send('area=' + encodeURIComponent(area));
       }
     };
-    let lat = citizen.latitude / 1000000;
-    let lon = citizen.longitude / 1000000;
+    let lat = citizen.latitude;
+    let lon = citizen.longitude;
     xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' + lat + '&lon=' + lon, true);
     xhttp.send();
   }
+
   function updateVoteKey(index, vote) {
     let button = document.getElementById('vote-button-' + index);
     let message = document.getElementById('vote-message-' + index);
@@ -1197,7 +1220,7 @@ window.onload = function() {
         message.innerHTML = unix_time_to_text(vote.date);
         let radios = document.getElementsByName('answer-' + index);
         let answer = '';
-        for(let i = 0, length = radios.length; i < length; i++) {
+        for (let i = 0, length = radios.length; i < length; i++) {
           radios[i].disabled = true;
           if (radios[i].checked) {
             answer = radios[i].value;
@@ -1205,7 +1228,7 @@ window.onload = function() {
           }
         }
         const now = new Date().getTime();
-        if (answer == '' && referendums[index].deadline < now) {  // query publisher to get verification
+        if (answer == '' && referendums[index].deadline < now) { // query publisher to get verification
           let xhttp = new XMLHttpRequest();
           xhttp.onload = function() {
             if (this.status == 200) {
@@ -1214,7 +1237,7 @@ window.onload = function() {
                 showModal('Vote verification error', JSON.stringify(response.error));
               else {
                 answer = response.answer;
-                for(let i = 0, length = radios.length; i < length; i++)
+                for (let i = 0, length = radios.length; i < length; i++)
                   if (radios[i].value == answer) {
                     radios[i].checked = true;
                     break;

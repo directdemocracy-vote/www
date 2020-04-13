@@ -21,11 +21,13 @@ window.onload = function() {
     hour = v + hour + ":" + (-offset % 60);
   document.getElementById('deadline-time-zone').value = hour;
   let deadline = 0;
+
   function showModal(title, contents) {
     document.getElementById('modal-title').innerHTML = title;
     document.getElementById('modal-contents').innerHTML = contents;
     $('#modal').modal();
   }
+
   function generateNewKeyPair() {
     document.getElementById('referendum-forging-spinner').style.display = '';
     document.getElementById('referendum-private-key-icon').style.display = 'none';
@@ -41,17 +43,19 @@ window.onload = function() {
       referendum_private_key = referendum_crypt.getPrivateKey();
       document.getElementById('referendum-forging-spinner').style.display = 'none';
       document.getElementById('referendum-private-key-icon').style.display = '';
-      document.getElementById('referendum-private-key-message').innerHTML = 'A referendum private key was just forged in '
-                                                                            + Number(time / 1000).toFixed(2) + ' seconds.';
+      document.getElementById('referendum-private-key-message').innerHTML =
+        'A referendum private key was just forged in ' +
+        Number(time / 1000).toFixed(2) + ' seconds.';
       validate();
     });
   }
+
   function stripped_key(public_key) {
     let stripped = '';
     const header = '-----BEGIN PUBLIC KEY-----\n'.length;
     const footer = '-----END PUBLIC KEY-----'.length;
     const l = public_key.length - footer;
-    for(let i = header; i < l; i += 65)
+    for (let i = header; i < l; i += 65)
       stripped += public_key.substr(i, 64);
     stripped = stripped.slice(0, -1 - footer);
     return stripped;
@@ -94,6 +98,7 @@ window.onload = function() {
     xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhttp.send();
   }
+
   function updateArea() {
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
@@ -102,6 +107,7 @@ window.onload = function() {
         let address = a.address;
         let select = document.getElementById('area');
         let count = 0;
+
         function addAdminLevel(level) {
           if (level in address)
             select.options[count++] = new Option(address[level], level);
@@ -109,36 +115,39 @@ window.onload = function() {
         // we ignore admin levels lowed than 'village':
         // 'block', 'neighbourhood', 'quarter', 'suburb', 'borough' and 'hamlet'
         const admin = ['village', 'town',
-                      'city',
-                      'municipality',
-                      'county', 'district',
-                      'region', 'province', 'state',
-                      'country'];
+          'city',
+          'municipality',
+          'county', 'district',
+          'region', 'province', 'state',
+          'country'
+        ];
         admin.forEach(function(item) {
           addAdminLevel(item);
         });
         const country_code = address.country_code.toUpperCase();
         if (['GB', 'DE', 'FR', 'IT', 'SE', 'PL', 'RO', 'HR', 'ES', 'NL', 'IE', 'BG', 'DK', 'GR',
-             'AT', 'HU', 'FI', 'CZ', 'PT', 'BE', 'MT', 'CY', 'LU', 'SI', 'LU', 'SK', 'EE', 'LV']
-            .indexOf(country_code) >= 0)
+            'AT', 'HU', 'FI', 'CZ', 'PT', 'BE', 'MT', 'CY', 'LU', 'SI', 'LU', 'SK', 'EE', 'LV'
+          ]
+          .indexOf(country_code) >= 0)
           select.options[count++] = new Option('European Union', 'union');
         select.options[count++] = new Option('Earth', 'world');
         areaChange();
       }
     };
-    let lat = latitude / 1000000;
-    let lon = longitude / 1000000;
+    let lat = latitude;
+    let lon = longitude;
     xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' + lat + '&lon=' + lon, true);
     xhttp.send();
   }
   document.getElementById('area').addEventListener('change', areaChange);
+
   function areaChange() {
     let a = document.getElementById('area');
     let selected_name = a.options[a.selectedIndex].innerHTML;
     let selected_type = a.options[a.selectedIndex].value;
     area = '';
     let query = '';
-    for(let i = a.selectedIndex; i < a.length - 1; i++) {
+    for (let i = a.selectedIndex; i < a.length - 1; i++) {
       let type = a.options[i].value;
       let name = a.options[i].innerHTML;
       area += type + '=' + name + '\n';
@@ -155,6 +164,7 @@ window.onload = function() {
     else
       place.href = 'https://nominatim.openstreetmap.org/search.php?' + query + '&polygon_geojson=1';
   }
+
   function validate() {
     let button = document.getElementById('publish-button');
     button.setAttribute('disabled', 'disabled');
@@ -209,7 +219,7 @@ window.onload = function() {
     referendum.key = stripped_key(referendum_crypt.getPublicKey());
     referendum.signature = '';
     referendum.published = new Date().getTime();
-    referendum.expires = new Date(new Date().setFullYear(new Date().getFullYear() + 10)).getTime();  // 10 years
+    referendum.expires = new Date(new Date().setFullYear(new Date().getFullYear() + 10)).getTime(); // 10 years
     referendum.trustee = trustee_key;
     referendum.area = area;
     referendum.title = document.getElementById('title').value.trim();
@@ -229,8 +239,8 @@ window.onload = function() {
         if (answer.error)
           showModal('Publication error', JSON.stringify(answer.error));
         else {
-          showModal('Publication success', 'Your referendum was just published!<br>Check it <a target="_blank" href="'
-          + publisher + '/publication.php?fingerprint=' + answer.fingerprint + '">here</a>.<br>');
+          showModal('Publication success', 'Your referendum was just published!<br>Check it <a target="_blank" href="' +
+            publisher + '/publication.php?fingerprint=' + answer.fingerprint + '">here</a>.<br>');
         }
       }
     };
