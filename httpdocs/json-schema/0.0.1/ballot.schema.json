@@ -55,6 +55,10 @@
 					"type": "string"
 				}
 			}
+		},
+		"revoke": {
+			"description": "revokes a previous ballot signed by the same station",
+			"type": "boolean"
 		}
 	},
   "additionalProperties": false
