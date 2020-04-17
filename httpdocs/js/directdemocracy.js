@@ -544,6 +544,8 @@ window.onload = function() {
           verify.setPublicKey(public_key(endorsed.key));
           if (!verify.verify(JSON.stringify(endorsed), signature, CryptoJS.SHA256)) {
             message.innerHTML = 'Cannot verify citizen signature';
+            endorsed.signature = signature;
+            console.log(JSON.stringify(endorsed));
             setTimeout(function() {
               message.innerHTML = '';
             }, 10000);
