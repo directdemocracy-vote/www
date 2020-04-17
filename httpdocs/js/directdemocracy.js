@@ -62,7 +62,7 @@ window.onload = function() {
   }
 
   function round_to_6(v) {
-    return Math.round(v * 1000000) / 1000000;
+    return Math.round(v * 100000) / 100000;
   }
 
   function showModal(title, contents) {
