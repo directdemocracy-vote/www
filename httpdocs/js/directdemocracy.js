@@ -61,7 +61,7 @@ window.onload = function() {
     return pkey;
   }
 
-  function round_to_6(v) {
+  function round_geo(v) {
     return Math.round(v * 100000) / 100000;
   }
 
@@ -85,9 +85,9 @@ window.onload = function() {
 
   function getGeolocationPosition(position) {
     geolocation = true;
-    citizen.latitude = position.coords.latitude;
-    citizen.longitude = position.coords.longitude;
-    register_map.setView([position.coords.latitude, position.coords.longitude], 12);
+    citizen.latitude = round_geo(position.coords.latitude);
+    citizen.longitude = round_geo(position.coords.longitude);
+    register_map.setView([citizen.latitude, citizen.longitude], 12);
     setTimeout(function() {
       register_marker.setLatLng([citizen.latitude, citizen.longitude]);
       updateLocation();
@@ -96,7 +96,8 @@ window.onload = function() {
 
   function setupMap() {
     if (register_map != null) return;
-    if (navigator.geolocation) navigator.geolocation.getCurrentPosition(getGeolocationPosition);
+    if (navigator.geolocation)
+      navigator.geolocation.getCurrentPosition(getGeolocationPosition);
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200 && geolocation == false) {
@@ -116,21 +117,21 @@ window.onload = function() {
       attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(register_map);
     register_marker = L.marker([citizen.latitude, citizen.longitude]).addTo(register_map)
-      .bindPopup(round_to_6(citizen.latitude) + ',' + round_to_6(citizen.longitude));
+      .bindPopup(citizen.latitude + ',' + citizen.longitude);
     updateLocation();
     register_map.on('contextmenu', function(event) {
       return false;
     });
     register_map.on('click', function onMapClick(e) {
-      register_marker.setLatLng(e.latlng);
-      citizen.latitude = e.latlng.lat;
-      citizen.longitude = e.latlng.lng;
+      citizen.latitude = round_geo(e.latlng.lat);
+      citizen.longitude = round_geo(e.latlng.lng);
+      register_marker.setLatLng([citizen.latitude, citizen.longitude]);
       updateLocation();
     });
   }
 
   function updateLocation() {
-    register_marker.setPopupContent(round_to_6(citizen.latitude) + ', ' + round_to_6(citizen.longitude)).openPopup();
+    register_marker.setPopupContent(citizen.latitude + ', ' + citizen.longitude).openPopup();
     document.getElementById('register-latitude').value = citizen.latitude;
     document.getElementById('register-longitude').value = citizen.longitude;
     let xhttp = new XMLHttpRequest();
@@ -139,7 +140,7 @@ window.onload = function() {
         const a = JSON.parse(this.responseText);
         const address = a.display_name;
         register_marker.setPopupContent(address + '<br><br><center style="color:#999">(' +
-          round_to_6(citizen.latitude) + ', ' + round_to_6(citizen.longitude) + ')</center>').openPopup();
+          citizen.latitude + ', ' + citizen.longitude + ')</center>').openPopup();
         document.getElementById('register-address').innerHTML = address;
       }
     };
@@ -161,7 +162,8 @@ window.onload = function() {
     document.getElementById('citizen-family-name').innerHTML = citizen.familyName;
     document.getElementById('citizen-given-names').innerHTML = citizen.givenNames;
     document.getElementById('citizen-coords').innerHTML = '<a target="_blank" href="https://openstreetmap.org/?mlat=' +
-      citizen.latitude + '&mlon=' + citizen.longitude + '&zoom=12">' + citizen.latitude + ', ' + citizen.longitude + '</a>';
+      citizen.latitude + '&mlon=' + citizen.longitude + '&zoom=12">' +
+      citizen.latitude + ', ' + citizen.longitude + '</a>';
     let published = new Date(citizen.published);
     let expires = new Date(citizen.expires);
     document.getElementById('citizen-published').innerHTML = published.toISOString().slice(0, 10);
@@ -560,7 +562,7 @@ window.onload = function() {
           document.getElementById('endorse-given-names').innerHTML = endorsed.givenNames;
           const lat = endorsed.latitude;
           const lon = endorsed.longitude;
-          document.getElementById('endorse-coords').innerHTML = round_to_6(lat) + ', ' + round_to_6(lon);
+          document.getElementById('endorse-coords').innerHTML = lat + ', ' + lon;
           let published = new Date(endorsed.published);
           let expires = new Date(endorsed.expires);
           document.getElementById('endorse-published').innerHTML = published.toISOString().slice(0, 10);
@@ -573,7 +575,7 @@ window.onload = function() {
             endorse_marker = L.marker([lat, lon]).addTo(endorse_map);
           } else
             endorse_marker.setLatLng([lat, lon]);
-          endorse_marker.bindPopup(round_to_6(lat) + ', ' + round_to_6(lon));
+          endorse_marker.bindPopup(lat + ', ' + lon);
           endorse_map.setView([lat, lon], 18);
           endorse_map.on('contextmenu', function(event) {
             return false;
@@ -584,7 +586,7 @@ window.onload = function() {
               const a = JSON.parse(this.responseText);
               const address = a.display_name;
               endorse_marker.setPopupContent(address + '<br><br><center style="color:#999">(' +
-                round_to_6(lat) + ', ' + round_to_6(lon) + ')</center>').openPopup();
+                lat + ', ' + lon + ')</center>').openPopup();
             }
           };
           xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' + lat + '&lon=' + lon,
