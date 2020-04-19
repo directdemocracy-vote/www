@@ -56,9 +56,9 @@
 				}
 			}
 		},
-		"revoke": {
-			"description": "revokes a previous ballot signed by the same station",
-			"type": "boolean"
+		"answer": {
+			"description": "answer if the citizen to the referendum question",
+			"type": "string"
 		}
 	},
   "additionalProperties": false
