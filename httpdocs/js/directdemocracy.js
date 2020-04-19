@@ -183,9 +183,11 @@ window.onload = function() {
         let reputation = document.getElementById('citizen-reputation');
         let answer = JSON.parse(this.responseText);
         if (answer.error)
-          reputation.innerHTML = 'Reputation error: <span color="red">' + answer.error + "</span>";
-        else
-          reputation.innerHTML = 'Reputation: ' + answer.reputation;
+          reputation.innerHTML = 'Reputation error: <span style="color:red">' + answer.error + "</span>";
+        else {
+          const color = answer.endorsed ? 'green' : 'red';
+          reputation.innerHTML = 'Reputation: <span style="color:' + color + '">' + answer.reputation + '</span>';
+        }
       }
     };
     console.log("GET " + trustee + '/reputation.php?key=' + encodeURIComponent(citizen.key));
