@@ -1011,6 +1011,17 @@ window.onload = function() {
                       showModal('Register error', 'Wrong ballot key.');
                       return;
                     }
+
+                    // verify the ballot signature (it should exist and be empty)
+                    if (!ballot.hasOwnProperty('signature')) {
+                      showModal('Register error', 'Missing signature in ballot.');
+                      return;
+                    }
+                    if (ballot.signature !== '') {
+                      showModal('Register error', 'Ballot signature should be empty.');
+                      return;
+                    }
+
                     // verify the station signature in the ballot
                     if (!ballot.hasOwnProperty('station')) {
                       showModal('Register error', 'Missing station in ballot.');
@@ -1024,30 +1035,16 @@ window.onload = function() {
                       showModal('Register error', 'Missing station signature in ballot.');
                       return;
                     }
-                    const ballot_station_signature = ballot.station.signature;
-                    delete ballot.station.signature;
                     verify = new JSEncrypt();
+                    const ballot_station_signature = ballot.station.signature;
+                    ballot.station.signature = '';
                     verify.setPublicKey(public_key(ballot.station.key));
                     if (!verify.verify(JSON.stringify(ballot), ballot_station_signature, CryptoJS.SHA256)) {
                       showModal('Register error', 'Wrong station signature for ballot.');
                       return;
                     }
-                    // verify the ballot signature
-                    if (!ballot.hasOwnProperty('signature')) {
-                      showModal('Register error', 'Missing signature in ballot.');
-                      return;
-                    }
-                    const ballot_signature = ballot.signature;
-                    ballot.signature = '';
-                    verify = new JSEncrypt();
-                    verify.setPublicKey(public_key(ballot.key));
-                    if (!verify.verify(JSON.stringify(ballot), ballot_signature, CryptoJS.SHA256)) {
-                      showModal('Register error', 'Wrong ballot signature.');
-                      return;
-                    }
-                    // restore signatures
-                    ballot.signature = ballot_signature;
                     ballot.station.signature = ballot_station_signature;
+
                     // verify the key of the registration didn't change
                     if (!registration.hasOwnProperty('key')) {
                       showModal('Register error', 'Missing key in registration.');
@@ -1057,6 +1054,7 @@ window.onload = function() {
                       showModal('Register error', 'The key in registration is wrong.');
                       return;
                     }
+
                     // verify the station signature in the registration
                     if (!registration.hasOwnProperty('station')) {
                       showModal('Register error', 'Missing station in registration.');
