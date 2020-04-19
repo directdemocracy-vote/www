@@ -62,7 +62,7 @@ window.onload = function() {
   }
 
   function round_geo(v) {
-    return Math.round(v * 100000) / 100000;
+    return Math.round(v * 1000000) / 1000000;
   }
 
   function showModal(title, contents) {
@@ -176,6 +176,21 @@ window.onload = function() {
       size: 200,
       padding: 13
     });
+    // get reputation from trustee
+    let xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+      if (this.status == 200) {
+        let reputation = document.getElementById('citizen-reputation');
+        let answer = JSON.parse(this.responseText);
+        if (answer.error)
+          reputation.innerHTML = 'Reputation error: <span color="red">' + answer.error + "</span>";
+        else
+          reputation.innerHTML = 'Reputation: ' + answer.reputation;
+      }
+    };
+    console.log("GET " + trustee + '/reputation.php?key=' + encodeURIComponent(citizen.key));
+    xhttp.open('GET', trustee + '/reputation.php?key=' + encodeURIComponent(citizen.key), true);
+    xhttp.send();
     let list = document.getElementById('citizen-endorsements-list');
     if (citizen_endorsements.length == 0) {
       list.innertHTML = '<br><h4>Your citizen card no endorsement</h4>You should ask to other citizen to endorse you.';
