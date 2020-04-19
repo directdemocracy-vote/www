@@ -19,7 +19,6 @@ window.onload = function() {
   let publisher = '';
   let trustee = '';
   let station = '';
-  let observer = '';
   let station_key = '';
   let scanner = null;
   let endorsements = [];
@@ -403,11 +402,6 @@ window.onload = function() {
   document.getElementById('station').addEventListener('input', function() {
     station = document.getElementById('station').value.trim();
     localStorage.setItem('station', station);
-  });
-
-  document.getElementById('observer').addEventListener('input', function() {
-    observer = document.getElementById('observer').value.trim();
-    localStorage.setItem('observer', observer);
   });
 
   document.getElementById('edit-i-understand').addEventListener('input', function() {
@@ -915,7 +909,7 @@ window.onload = function() {
                 area_url = 'https://en.wikipedia.org/wiki/European_Union';
               else
                 area_url = 'https://nominatim.openstreetmap.org/search.php?' + area_query + '&polygon_geojson=1';
-              let results_url = observer + '/referendum.html?fingerprint=' + CryptoJS.SHA1(referendum.signature).toString();
+              let results_url = publisher + '/referendum.html?fingerprint=' + CryptoJS.SHA1(referendum.signature).toString();
               area_div.innerHTML = '<small>(' + days + 'd)</small> ' + area_name;
               header.appendChild(area_div);
               let collapse = document.createElement('div');
@@ -1298,12 +1292,6 @@ window.onload = function() {
     localStorage.setItem('station', station);
   }
   document.getElementById('station').value = station;
-  observer = localStorage.getItem('observer');
-  if (!observer) {
-    observer = 'https://observer.directdemocracy.vote';
-    localStorage.setItem('observer', observer);
-  }
-  document.getElementById('observer').value = observer;
   if (station) {
     let xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
