@@ -188,7 +188,6 @@ window.onload = function() {
         }
       }
     };
-    console.log("GET " + trustee + '/reputation.php?key=' + encodeURIComponent(citizen.key));
     xhttp.open('GET', trustee + '/reputation.php?key=' + encodeURIComponent(citizen.key), true);
     xhttp.send();
     let list = document.getElementById('citizen-endorsements-list');
@@ -557,7 +556,6 @@ window.onload = function() {
           if (!verify.verify(JSON.stringify(endorsed), signature, CryptoJS.SHA256)) {
             message.innerHTML = 'Cannot verify citizen signature';
             endorsed.signature = signature;
-            console.log(JSON.stringify(endorsed));
             setTimeout(function() {
               message.innerHTML = '';
             }, 10000);
@@ -982,7 +980,7 @@ window.onload = function() {
                 xhttp.onload = function() {
                   if (this.status != 200) {
                     console.log('Station not responding: ' + this.status);
-                    // FIXME: publish `RSba` message to cancel ballot and registration
+                    // FIXME: allow to try to vote again
                   } else {
                     let response = JSON.parse(this.responseText);
                     if (response.error) {
@@ -1001,9 +999,9 @@ window.onload = function() {
                     let registration = response.registration;
                     // verify the fields of the ballot didn't change.
                     let keys = Object.keys(ballot);
-                    if (!keys.include('schema') || !keys.include('key') || !keys.include('signature') ||
-                      !keys.include('published') || !keys.include('expires') || !keys.include('referendum') ||
-                      !keys.include('station')) {
+                    if (!keys.includes('schema') || !keys.includes('key') || !keys.includes('signature') ||
+                      !keys.includes('published') || !keys.includes('expires') || !keys.includes('referendum') ||
+                      !keys.includes('station')) {
                       showModal('Register error', 'Missing field in ballot');
                       return false;
                     }
@@ -1016,6 +1014,8 @@ window.onload = function() {
                       showModal('Register error', 'Wrong schema in ballot.');
                       return;
                     }
+                    let verify = new JSEncrypt();
+                    verify.setPrivateKey(vote.private);
                     if (ballot.key != stripped_key(verify.getPublicKey())) {
                       showModal('Register error', 'Wrong ballot key.');
                       return;
@@ -1037,7 +1037,7 @@ window.onload = function() {
                       return;
                     }
                     keys = Object.keys(ballot.station);
-                    if (!keys.include('key') || !keys.include('signature')) {
+                    if (!keys.includes('key') || !keys.includes('signature')) {
                       showModal('Register error', 'Missing station key or signature in ballot.');
                       return;
                     }
@@ -1045,14 +1045,14 @@ window.onload = function() {
                       showModal('Register error', 'Extra station fields in ballot.');
                       return;
                     }
-                    if (ballot.station.key != station) {
+                    if (ballot.station.key != station_key) {
                       showModal('Register error', 'Wrong station key in ballot.');
                       return;
                     }
                     // check the signature of the station
-                    verify = new JSEncrypt();
                     const ballot_station_signature = ballot.station.signature;
-                    ballot.station.signature = '';
+                    delete ballot.station.signature;
+                    verify = new JSEncrypt();
                     verify.setPublicKey(public_key(ballot.station.key));
                     if (!verify.verify(JSON.stringify(ballot), ballot_station_signature, CryptoJS.SHA256)) {
                       showModal('Register error', 'Wrong station signature for ballot.');
@@ -1307,13 +1307,10 @@ window.onload = function() {
   }
 
   document.getElementById('main-button').addEventListener('click', function() {
-    if (private_key) {
+    if (private_key)
       $('.nav-tabs a[href="#endorsements"]').tab('show');
-      console.log("show endorse");
-    } else {
+    else
       $('.nav-tabs a[href="#register"]').tab('show');
-      console.log("show register");
-    }
   });
 
   votes = JSON.parse(localStorage.getItem('votes'));
