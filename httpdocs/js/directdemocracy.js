@@ -143,7 +143,7 @@ window.onload = function() {
       }
     };
     xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' + citizen.latitude + '&lon=' +
-      citizen.longitude, true);
+      citizen.longitude + '&zoom=10', true);
     xhttp.send();
   }
 
@@ -597,8 +597,8 @@ window.onload = function() {
                 lat + ', ' + lon + ')</center>').openPopup();
             }
           };
-          xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' + lat + '&lon=' + lon,
-            true);
+          xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' + lat + '&lon=' + lon +
+            '&zoom=10', true);
           xhttp.send();
         }
       };
@@ -1204,7 +1204,7 @@ window.onload = function() {
       }
     };
     xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' +
-      citizen.latitude + '&lon=' + citizen.longitude, true);
+      citizen.latitude + '&lon=' + citizen.longitude + '&zoom=10', true);
     xhttp.send();
   }
 

@@ -134,8 +134,8 @@ window.onload = function() {
         areaChange();
       }
     };
-    xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' + latitude + '&lon=' + longitude,
-      true);
+    xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' + latitude + '&lon=' + longitude +
+      '&zoom=10', true);
     xhttp.send();
   }
   document.getElementById('area').addEventListener('change', areaChange);
