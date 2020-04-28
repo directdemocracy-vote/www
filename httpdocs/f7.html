@@ -8,6 +8,8 @@
     <meta name="theme-color" content="#2196f3">
     <title>directdemocracy.vote</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/framework7/5.6.0/css/framework7.bundle.min.css">
+    <link rel="stylesheet" href="//unpkg.com/leaflet@1.6.0/dist/leaflet.css">
+    <link rel="stylesheet" href="css/croppie.css">
     <link rel="stylesheet" href="css/f7.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/framework7-icons@3.0.0/css/framework7-icons.css">
   </head>
@@ -78,24 +80,26 @@
                     <li class="item-content item-input">
                       <div class="item-inner">
                         <div class="item-title item-label">Picture:</div>
-                        <div class="block">
-                          <div class="row">
-                            <img class="col-50" id="register-picture" src="images/default-picture.png" style="width:150px;height:200px;margin: 0px 0px 0px 0px;">
-                            <button class="col-30 button button-fill" id="register-upload-button">Upload</button>
-                            <!-- <button class="button button-fill" id="picture-select" style="display:none">Select</button> -->
-                          </div>
+                        <div class="item-input-wrap row">
+                          <img class="col-60" id="register-picture" src="images/default-picture.png">
+                          <input class="custom-file-input" type="file" style="display:none" id="register-picture-upload" accept="image/*" required>
+                          <button class="col-20 button button-fill" id="register-upload-button"><i class="icon f7-icons">camera_fill</i></button>
+                          <!--
+                          <button class="col-20 button button-fill" id="picture-select"<i class="icon f7-icons">crop</i></button>
+                          <button class="col-20 button button-fill" id="picture-select"><i class="icon f7-icons">rotate_left_fill</i></button>
+                          <button class="col-20 button button-fill" id="picture-select"><i class="icon f7-icons">rotate_right_fill</i></button>
+                        -->
                         </div>
                       </div>
                     </li>
                     <li class="item-content item-input">
                       <div class="item-inner">
                         <div class="item-title item-label">Home location:</div>
-                        <div class="item-input-wrap">
-                          <div class="row">
-                            <input class="col" type="text" id="register-latitude" placeholder="latitude" required>
-                            <input class="col" type="text" id="register-longitude" placeholder="longitude" required>
-                            <button id="register-location" class="col button">Select</button>
+                        <div class="item-input-wrap row">
+                          <div class="col-80">
+                            <input type="text" id="coordinates" placeholder="latitude, longitude" disabled required>
                           </div>
+                          <button class="col-20 button button-fill" id="register-location-button"><i class="icon f7-icons">placemark_fill</i></button>
                         </div>
                       </div>
                     </li>
@@ -207,6 +211,11 @@
       </div>
     </div>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/framework7/5.6.0/js/framework7.bundle.min.js"></script>
+    <script src="//unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+    <script src="js/croppie.min.js"></script>
+    <script src="js/jsencrypt.min.js"></script>
+    <script src="js/crypto-js.js"></script>
+    <script src="js/qrious.min.js"></script>
     <script type="module" src="js/f7.js"></script>
   </body>
 
