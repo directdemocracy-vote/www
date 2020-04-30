@@ -34,7 +34,7 @@ window.onload = function() {
     </div>
   </div>
   <div class="sheet-modal-inner">
-    <div class="block">
+    <div class="block margin-top-half no-padding-left no-padding-right">
       <p><img id="edit-picture"></p>
       <div class="row">
         <button class="col button" id="rotate-right"><i class="icon f7-icons">rotate_right_fill</i></button>
@@ -43,11 +43,24 @@ window.onload = function() {
     </div>
   </div>
 </div>`;
-    var sheet = app.sheet.create({
+    let sheet = app.sheet.create({
       content: content.innerHTML,
       on: {
         opened: function() {
           console.log('Sheet opened');
+        },
+        close: function() {
+          console.log('Sheet closing');
+          croppie.result({
+            type: 'base64',
+            format: 'jpeg',
+            quality: 0.95
+          }).then(function(result) {
+            document.getElementById('register-picture').setAttribute('src', result);
+            citizen.picture = result;
+            croppie.destroy();
+            croppie = null;
+          });
         }
       }
     });
@@ -55,15 +68,15 @@ window.onload = function() {
     let img = document.getElementById('edit-picture');
     img.src = URL.createObjectURL(event.target.files[0]);
     event.target.value = '';
-    let w = screen.width * 0.8;
+    let w = screen.width * 0.95;
     croppie = new Croppie(img, {
       boundary: {
         width: w,
-        height: w * 1.5
+        height: w * 4 / 3
       },
       viewport: {
         width: w * 0.75,
-        height: w * 0.75 * 1.5
+        height: w * 0.75 * 4 / 3
       },
       enableOrientation: true,
       enableExif: true
@@ -74,24 +87,5 @@ window.onload = function() {
     document.getElementById('rotate-left').addEventListener('click', function() {
       croppie.rotate(90);
     });
-
-    // document.getElementById('picture-select').style.display = '';
   });
-  /*
-    document.getElementById('picture-select').addEventListener('click', function() {
-      croppie.result({
-        type: 'base64',
-        format: 'jpeg',
-        quality: 0.95
-      }).then(function(result) {
-        document.getElementById('register-picture').setAttribute('src', result);
-        citizen.picture = result;
-        document.getElementById('picture-select').style.display = 'none';
-        croppie.destroy();
-        croppie = null;
-        // validate();
-      });
-      return false;
-    });
-  */
 };
