@@ -10,7 +10,55 @@ var app = new Framework7({
 var mainView = app.views.create('.view-main');
 
 window.onload = function() {
-  let citizen = {};
+  function strippedKey(publicKey) {
+    let stripped = '';
+    const header = '-----BEGIN PUBLIC KEY-----\n'.length;
+    const footer = '-----END PUBLIC KEY-----'.length;
+    const l = publicKey.length - footer;
+    for (let i = header; i < l; i += 65)
+      stripped += publicKey.substr(i, 64);
+    stripped = stripped.slice(0, -1 - footer);
+    return stripped;
+  }
+
+  let citizen = {
+    latitude: 0,
+    longitude: 0
+  };
+  let citizenCrypt = null;
+
+  let privateKey = localStorage.getItem('privateKey');
+  if (privateKey) {
+    citizenCrypt = new JSEncrypt();
+    citizenCrypt.setPrivateKey(privateKey);
+    privateKeyAvailable();
+  } else {
+    let dt = new Date();
+    let time = -(dt.getTime());
+    citizenCrypt = new JSEncrypt({
+      default_key_size: 2048
+    });
+    citizenCrypt.getKey(function() {
+      dt = new Date();
+      time += (dt.getTime());
+      citizen.key = strippedKey(citizenCrypt.getPublicKey());
+      privateKey = citizenCrypt.getPrivateKey();
+      localStorage.setItem('privateKey', privateKey);
+      console.log('You new private key was just forged in ' + Number(time / 1000).toFixed(2) + ' seconds.');
+      privateKeyAvailable();
+    });
+  }
+
+  function privateKeyAvailable() {
+    let progress = document.getElementById('register-progressbar');
+    progress.classList.remove('progressbar-infinite');
+    progress.classList.add('progressbar');
+    progress.setAttribute('data-progress', '100');
+    let button = document.getElementById('register-button');
+    button.classList.remove('color-gray');
+    button.disabled = false;
+    button.innerHTML = 'Register';
+  }
 
   function uploadPicture() {
     document.getElementById('register-picture-upload').click();
@@ -98,7 +146,7 @@ window.onload = function() {
   </div>
   <div class="sheet-modal-inner">
     <div class="block margin-top-half no-padding-left no-padding-right">
-      <p><small class="form-text text-muted">Zoom to building level to precisely select your home address.</small></p>
+      <div class="text-align-center" style="width:100%"><small>Zoom to building level to precisely select your home address.</small></div>
       <div id="register-map" style="width:100%;height:500px;margin-top:10px"></div>
     </div>
   </div>
@@ -111,13 +159,13 @@ window.onload = function() {
           let geolocation = false;
 
           function updateLocation() {
-            register_marker.setPopupContent(citizen.latitude + ', ' + citizen.longitude).openPopup();
+            registerMarker.setPopupContent(citizen.latitude + ', ' + citizen.longitude).openPopup();
             let xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
               if (this.readyState == 4 && this.status == 200) {
                 const a = JSON.parse(this.responseText);
                 const address = a.display_name;
-                register_marker.setPopupContent(address + '<br><br><center style="color:#999">(' +
+                registerMarker.setPopupContent(address + '<br><br><center style="color:#999">(' +
                   citizen.latitude + ', ' + citizen.longitude + ')</center>').openPopup();
               }
             };
@@ -129,16 +177,16 @@ window.onload = function() {
 
           function getGeolocationPosition(position) {
             geolocation = true;
-            citizen.latitude = round_geo(position.coords.latitude);
-            citizen.longitude = round_geo(position.coords.longitude);
-            register_map.setView([citizen.latitude, citizen.longitude], 12);
+            citizen.latitude = roundGeo(position.coords.latitude);
+            citizen.longitude = roundGeo(position.coords.longitude);
+            registerMap.setView([citizen.latitude, citizen.longitude], 12);
             setTimeout(function() {
-              register_marker.setLatLng([citizen.latitude, citizen.longitude]);
+              registerMarker.setLatLng([citizen.latitude, citizen.longitude]);
               updateLocation();
             }, 500);
           }
 
-          function round_geo(v) {
+          function roundGeo(v) {
             return Math.round(v * 1000000) / 1000000;
           }
           if (navigator.geolocation)
@@ -157,22 +205,24 @@ window.onload = function() {
           };
           xhttp.open('GET', 'https://ipinfo.io/loc', true);
           xhttp.send();
-          citizen.latitude = 0;
-          citizen.longitude = 0;
-          let register_map = L.map('register-map').setView([citizen.latitude, citizen.longitude], 2);
+          let registerMap = L.map('register-map').setView([citizen.latitude, citizen.longitude], 2);
           L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>'
-          }).addTo(register_map);
-          let register_marker = L.marker([citizen.latitude, citizen.longitude]).addTo(register_map)
+          }).addTo(registerMap);
+          let registerMarker = L.marker([citizen.latitude, citizen.longitude]).addTo(registerMap)
             .bindPopup(citizen.latitude + ',' + citizen.longitude);
+          let e = document.getElementById('register-map');
+          const rect = e.getBoundingClientRect();
+          const h = screen.height - rect.top;
+          e.style.height = h + 'px';
           updateLocation();
-          register_map.on('contextmenu', function(event) {
+          registerMap.on('contextmenu', function(event) {
             return false;
           });
-          register_map.on('click', function onMapClick(e) {
-            citizen.latitude = round_geo(e.latlng.lat);
-            citizen.longitude = round_geo(e.latlng.lng);
-            register_marker.setLatLng([citizen.latitude, citizen.longitude]);
+          registerMap.on('click', function onMapClick(e) {
+            citizen.latitude = roundGeo(e.latlng.lat);
+            citizen.longitude = roundGeo(e.latlng.lng);
+            registerMarker.setLatLng([citizen.latitude, citizen.longitude]);
             updateLocation();
           });
         },
