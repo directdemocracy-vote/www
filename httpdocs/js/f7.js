@@ -1,26 +1,15 @@
 import QrScanner from './qr-scanner.min.js';
 QrScanner.WORKER_PATH = 'js/qr-scanner-worker.min.js';
 
-var app = new Framework7({
+let app = new Framework7({
   root: '#app',
   name: 'directdemocracy.vote',
   id: 'directdemocracy.vote',
 });
 
-var mainView = app.views.create('.view-main');
+let mainView = app.views.create('.view-main');
 
 window.onload = function() {
-  function strippedKey(publicKey) {
-    let stripped = '';
-    const header = '-----BEGIN PUBLIC KEY-----\n'.length;
-    const footer = '-----END PUBLIC KEY-----'.length;
-    const l = publicKey.length - footer;
-    for (let i = header; i < l; i += 65)
-      stripped += publicKey.substr(i, 64);
-    stripped = stripped.slice(0, -1 - footer);
-    return stripped;
-  }
-
   let citizen = {
     latitude: 0,
     longitude: 0
@@ -31,7 +20,7 @@ window.onload = function() {
   if (privateKey) {
     citizenCrypt = new JSEncrypt();
     citizenCrypt.setPrivateKey(privateKey);
-    privateKeyAvailable();
+    privateKeyAvailable('complete.');
   } else {
     let dt = new Date();
     let time = -(dt.getTime());
@@ -44,25 +33,75 @@ window.onload = function() {
       citizen.key = strippedKey(citizenCrypt.getPublicKey());
       privateKey = citizenCrypt.getPrivateKey();
       localStorage.setItem('privateKey', privateKey);
-      console.log('You new private key was just forged in ' + Number(time / 1000).toFixed(2) + ' seconds.');
-      privateKeyAvailable();
+      privateKeyAvailable('forged in ' + Number(time / 1000).toFixed(2) + ' seconds.');
     });
   }
+  const now = new Date();
+  let ten = new Date();
+  ten.setFullYear(ten.getFullYear() + 10);
+  const inTenYears = String(ten.getDate()).padStart(2, '0') + '/' + String(ten.getMonth() + 1).padStart(2, '0') + '/' + ten.getFullYear();
+  let date = document.getElementById('register-date');
+  date.setAttribute('placeholder', inTenYears);
+  date.value = inTenYears;
+  let calendar = app.calendar.create({
+    inputEl: '#register-date',
+    dateFormat: 'dd/mm/yyyy',
+    disabled: [{
+      to: now
+    }, {
+      from: ten
+    }]
+  });
 
-  function privateKeyAvailable() {
+  function strippedKey(publicKey) {
+    let stripped = '';
+    const header = '-----BEGIN PUBLIC KEY-----\n'.length;
+    const footer = '-----END PUBLIC KEY-----'.length;
+    const l = publicKey.length - footer;
+    for (let i = header; i < l; i += 65)
+      stripped += publicKey.substr(i, 64);
+    stripped = stripped.slice(0, -1 - footer);
+    return stripped;
+  }
+
+  function privateKeyAvailable(message) {
     let progress = document.getElementById('register-progressbar');
     progress.classList.remove('progressbar-infinite');
     progress.classList.add('progressbar');
     progress.setAttribute('data-progress', '100');
     let button = document.getElementById('register-button');
-    button.classList.remove('color-gray');
-    button.disabled = false;
     button.innerHTML = 'Register';
+    document.getElementById('registration-key-generation-status').innerHTML = message;
+    validateRegistration();
+  }
+
+  function validateRegistration() {
+    let button = document.getElementById('register-button');
+    button.disabled = true;
+    if (!button.classList.contains('color-gray'))
+      button.classList.add('color-gray');
+
+    if (document.getElementById('register-family-name').value == '')
+      return;
+    if (document.getElementById('register-given-names').value == '')
+      return;
+    if (document.getElementById('register-picture').src == 'images/default-picture.png')
+      return;
+    if (document.getElementById('register-location').value == '')
+      return;
+    if (!document.getElementById('register-confirm-check').checked)
+      return;
+    button.disabled = false;
+    button.classList.remove('color-gray');
   }
 
   function uploadPicture() {
     document.getElementById('register-picture-upload').click();
   }
+  document.getElementById('register-family-name').addEventListener('input', validateRegistration);
+  document.getElementById('register-given-names').addEventListener('input', validateRegistration);
+  document.getElementById('register-confirm-check').addEventListener('input', validateRegistration);
+
   document.getElementById('register-upload-button').addEventListener('click', uploadPicture);
   document.getElementById('register-picture').addEventListener('click', uploadPicture);
 
@@ -234,5 +273,7 @@ window.onload = function() {
     });
     sheet.open();
   });
+  document.getElementById('register-button').addEventListener('click', function() {
 
+  });
 };

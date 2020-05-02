@@ -56,12 +56,12 @@
           </div>
           <div class="tabs-swipeable-wrap">
             <div class="tabs">
-              <div class="tab tab-active" id="tab-register">
+              <div class="tab tab-active page-content" id="tab-register">
                 <div class="list">
                   <ul>
-                    <li class="item-content item-input padding-top">
-                      <div class="item-inner padding-top">
-                        <div class="item-title item-label padding-top">Family name:</div>
+                    <li class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">Family name:</div>
                         <div class="item-input-wrap">
                           <input type="url" id="register-family-name" placeholder="Enter your family name here" required>
                           <span class="input-clear-button"></span>
@@ -72,7 +72,7 @@
                       <div class="item-inner">
                         <div class="item-title item-label">Given name(s):</div>
                         <div class="item-input-wrap">
-                          <input type="url" id="trustee" placeholder="Enter your given name(s) here." required>
+                          <input type="url" id="register-given-names" placeholder="Enter your given name(s) here." required>
                           <span class="input-clear-button"></span>
                         </div>
                       </div>
@@ -98,9 +98,38 @@
                         </div>
                       </div>
                     </li>
-                    <li class="item-content item-input padding-bottom">
+                    <li>
+                      <div class="item-content item-input">
+                        <div class="item-inner">
+                          <div class="item-title item-label">Expiration date:</div>
+                          <div class="item-input-wrap">
+                            <input type="text" readonly id="register-date" />
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-inner">
+                          <div class="item-inner">
+                            <div class="item-label">I confirm I am over 18 years old and the above information is correct.</div>
+                          </div>
+                          <div class="item-after">
+                            <label class="toggle">
+                              <input id="register-confirm-check" type="checkbox" name="switch" value="yes"><i class="toggle-icon"></i>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="item-content item-input">
                       <div class="item-inner">
-                        <div id="register-progressbar" class="progressbar-infinite margin-bottom-half"></div>
+                        <div class="item-title item-label">Cryptographic key generation: <span id="registration-key-generation-status">please wait...</span></div>
+                        <div id="register-progressbar" class="progressbar-infinite margin-top-half"></div>
+                      </div>
+                    </li>
+                    <li class="item-content item-input">
+                      <div class="item-inner">
                         <button disabled class="button button-fill color-gray" id="register-button">Generating cryptographic key...</button>
                       </div>
                     </li>
