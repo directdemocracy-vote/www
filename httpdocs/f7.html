@@ -57,8 +57,9 @@
           <div class="tabs-swipeable-wrap">
             <div class="tabs">
               <div class="tab tab-active page-content" id="tab-register">
-                <div class="list">
-                  <ul>
+                <div class="block-title block-title-medium">Become a citizen</div>
+                <div class="list padding-top">
+                  <ul class="padding-top padding-bottom">
                     <li class="item-content item-input">
                       <div class="item-inner">
                         <div class="item-title item-label">Family name:</div>
@@ -108,32 +109,30 @@
                         </div>
                       </div>
                     </li>
-                    <li>
-                      <div class="item-content">
-                        <div class="item-inner">
-                          <div class="item-inner">
-                            <div class="item-label">I confirm I am over 18 years old and the above information is correct.</div>
-                          </div>
-                          <div class="item-after">
-                            <label class="toggle">
-                              <input id="register-confirm-check" type="checkbox" name="switch" value="yes"><i class="toggle-icon"></i>
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
                     <li class="item-content item-input">
                       <div class="item-inner">
                         <div class="item-title item-label">Cryptographic key generation: <span id="registration-key-generation-status">please wait...</span></div>
                         <div id="register-progressbar" class="progressbar-infinite margin-top-half"></div>
                       </div>
                     </li>
-                    <li class="item-content item-input">
-                      <div class="item-inner">
-                        <button disabled class="button button-fill color-gray" id="register-button">Generating cryptographic key...</button>
+                    <li>
+                      <div class="item-content">
+                        <div>
+                          <div class="item-inner row" width="100%">
+                            <div class="item-label col-80">I confirm I am over 18 years old and the above information is correct.</div>
+                            <div class="item-after col-20">
+                              <label class="toggle">
+                                <input id="register-confirm-check" type="checkbox" name="switch" value="yes"><i class="toggle-icon"></i>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </li>
                   </ul>
+                  <div class="block">
+                    <button disabled class="button button-fill color-gray" id="register-button">Generating cryptographic key...</button>
+                  </div>
                 </div>
               </div>
               <div class="page-content tab" id="tab-card">Card</div>
