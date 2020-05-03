@@ -23,6 +23,8 @@ window.onload = function() {
     latitude: 0,
     longitude: 0
   };
+  let endorsements = [];
+  let citizenEndorsements = [];
   let citizenCrypt = null;
 
   let publisher = localStorage.getItem('publisher');
@@ -333,12 +335,12 @@ window.onload = function() {
           document.getElementById('edit').removeAttribute('disabled');
           $('.nav-tabs a[href="#citizen"]').tab('show');
           */
-          document.getElementById('tabbar-register').style.display = 'none';
-          document.getElementById('tabbar-card').style.display = 'flex';
-          document.getElementById('tabbar-endorse').style.display = 'flex';
-          document.getElementById('tabbar-vote').style.display = 'flex';
-
+          let tabbarRegister = document.getElementById('tabbar-register');
+          tabbarRegister.style.display = 'none';
+          tabbarRegister.classList.remove('tab-link-active');
+          updateCitizenCard();
           app.dialog.alert('Congratulation: Your citizen card was just published!');
+          window.localStorage.setItem('registered', true);
         }
       }
     };
@@ -346,4 +348,150 @@ window.onload = function() {
     xhttp.send(JSON.stringify(citizen));
     return false;
   });
+  if (window.localStorage.getItem('registered')) {
+    console.log('registered');
+    let xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+      if (this.status == 200) {
+        let answer = JSON.parse(this.responseText);
+        if (answer.error)
+          app.dialog.alert('Citizen error: ' + JSON.stringify(answer.error) + '.<br>Please try again.');
+        else {
+          citizen = answer.citizen;
+          // citizen.key = strippedKey(citizenCrypt.getPublicKey());
+          endorsements = answer.endorsements;
+          citizenEndorsements = answer.citizen_endorsements;
+          updateCitizenCard();
+          app.tab.show('#tab-card', '#tabbar-card', false);
+          /*
+          updateCitizenCard();
+          updateEndorsements();
+          updateVote();
+          */
+        }
+      }
+    };
+    xhttp.open('POST', publisher + '/citizen.php', true);
+    xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhttp.send('key=' + encodeURIComponent(strippedKey(citizenCrypt.getPublicKey())));
+  }
+
+  function updateCitizenCard() {
+    document.getElementById('tabbar-card').style.display = 'flex';
+    document.getElementById('tabbar-endorse').style.display = 'flex';
+    document.getElementById('tabbar-vote').style.display = 'flex';
+    document.getElementById('citizen-picture').setAttribute('src', citizen.picture);
+    document.getElementById('citizen-family-name').innerHTML = citizen.familyName;
+    document.getElementById('citizen-given-names').innerHTML = citizen.givenNames;
+    document.getElementById('citizen-coords').innerHTML = '<a target="_blank" href="https://openstreetmap.org/?mlat=' +
+      citizen.latitude + '&mlon=' + citizen.longitude + '&zoom=12">' +
+      citizen.latitude + ', ' + citizen.longitude + '</a>';
+    let published = new Date(citizen.published);
+    let expires = new Date(citizen.expires);
+    document.getElementById('citizen-published').innerHTML = published.toISOString().slice(0, 10);
+    document.getElementById('citizen-expires').innerHTML = expires.toISOString().slice(0, 10);
+    let citizenFingerprint = CryptoJS.SHA1(citizen.signature).toString();
+    let qrImage = document.getElementById('citizen-qr-code');
+    const rect = qrImage.getBoundingClientRect();
+    const rect2 = document.getElementById('tabbar').getBoundingClientRect();
+    const height = rect2.top - rect.top + 20;
+    const width = screen.width * 0.95;
+    const size = width > height ? height : width;
+    console.log("width = " + width + " height = " + height + " => size = " + size);
+    let qr = new QRious({
+      element: qrImage,
+      value: citizenFingerprint,
+      level: 'M',
+      size: size,
+      padding: 13
+    });
+    document.getElementById('citizen-qr-code').style.width = size + 'px';
+    document.getElementById('citizen-qr-code').style.height = size + 'px';
+    /*
+    // get reputation from trustee
+    let xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+      if (this.status == 200) {
+        let reputation = document.getElementById('citizen-reputation');
+        let answer = JSON.parse(this.responseText);
+        if (answer.error)
+          reputation.innerHTML = 'Reputation error: <span style="color:red">' + answer.error + "</span>";
+        else {
+          const color = answer.endorsed ? 'green' : 'red';
+          reputation.innerHTML = 'Reputation: <span style="color:' + color + '">' + answer.reputation + '</span>';
+        }
+      }
+    };
+    xhttp.open('GET', trustee + '/reputation.php?key=' + encodeURIComponent(citizen.key), true);
+    xhttp.send();
+    let list = document.getElementById('citizen-endorsements-list');
+    if (citizen_endorsements.length == 0) {
+      list.innertHTML = '<br><h4>Your citizen card no endorsement</h4>You should ask to other citizen to endorse you.';
+      return;
+    }
+    let revoke_count = 0;
+    citizen_endorsements.forEach(function(endorsement) {
+      if (endorsement.revoke)
+        revoke_count++;
+    });
+    let endorsement_count = citizen_endorsements.length - revoke_count;
+    let heading = '';
+    if (endorsement_count) {
+      heading += 'Endorsed by ' + endorsement_count;
+      if (revoke_count)
+        heading += ' &ndash; ';
+    }
+    if (revoke_count)
+      heading += 'Revoked by ' + revoke_count;
+    list.innerHTML = '<br><h4>' + heading + ':</h4>';
+    let table = document.createElement('table');
+    table.classList.add('table');
+    table.style.width = '100%';
+    table.style.maxWidth = '400px';
+    list.appendChild(table);
+    citizen_endorsements.forEach(function(endorsement) {
+      let tr = document.createElement('tr');
+      table.appendChild(tr);
+      let td = document.createElement('td');
+      tr.appendChild(td);
+      let img = document.createElement('img');
+      td.setAttribute('rowspan', '2');
+      td.appendChild(img);
+      img.src = endorsement.picture;
+      img.style.width = '45px';
+      img.style.height = '60px';
+      td = document.createElement('td');
+      if (endorsement.revoke)
+        td.style.fontStyle = 'italic';
+      td.setAttribute('colspan', '2');
+      tr.appendChild(td);
+      let a = document.createElement('a');
+      td.appendChild(a);
+      a.href = publisher + '/publication.php?fingerprint=' + endorsement.fingerprint;
+      a.target = '_blank';
+      let b = document.createElement('b');
+      b.appendChild(document.createTextNode(endorsement.familyName));
+      a.appendChild(b);
+      a.appendChild(document.createTextNode(' ' + endorsement.givenNames));
+      tr = document.createElement('tr');
+      tr.style.lineHeight = '1';
+      tr.style.fontSize = '90%';
+      table.appendChild(tr);
+      td = document.createElement('td');
+      tr.appendChild(td);
+      td.classList.add('citizen-label');
+      if (endorsement.revoke) {
+        td.style.color = 'red';
+        td.style.fontWeight = 'bold';
+      }
+      td.appendChild(document.createTextNode(endorsement.revoke ? 'Revoked you on:' : 'Endorsed you on:'));
+      td.style.paddingRight = '10px';
+      td = document.createElement('td');
+      tr.appendChild(td);
+      let t = new Date(endorsement.published).toISOString().slice(0, 10);
+      td.classList.add('citizen-date');
+      td.appendChild(document.createTextNode(t));
+    });
+    */
+  }
 };
