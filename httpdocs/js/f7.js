@@ -10,12 +10,39 @@ let app = new Framework7({
 let mainView = app.views.create('.view-main');
 
 window.onload = function() {
+  const DIRECTDEMOCRACY_VERSION = '0.0.1';
   let citizen = {
+    schema: 'https://directdemocracy.vote/json-schema/' + DIRECTDEMOCRACY_VERSION + '/citizen.schema.json',
+    key: '',
+    signature: '',
+    published: 0,
+    expires: 0,
+    familyName: '',
+    givenNames: '',
+    picture: '',
     latitude: 0,
     longitude: 0
   };
   let citizenCrypt = null;
 
+  let publisher = localStorage.getItem('publisher');
+  if (!publisher) {
+    publisher = 'https://publisher.directdemocracy.vote';
+    localStorage.setItem('publisher', publisher);
+  }
+  document.getElementById('publisher').value = publisher;
+  let trustee = localStorage.getItem('trustee');
+  if (!trustee) {
+    trustee = 'https://trustee.directdemocracy.vote';
+    localStorage.setItem('trustee', trustee);
+  }
+  document.getElementById('trustee').value = trustee;
+  let station = localStorage.getItem('station');
+  if (!station) {
+    station = 'https://station.directdemocracy.vote';
+    localStorage.setItem('station', station);
+  }
+  document.getElementById('station').value = station;
   let privateKey = localStorage.getItem('privateKey');
   if (privateKey) {
     citizenCrypt = new JSEncrypt();
@@ -30,22 +57,25 @@ window.onload = function() {
     citizenCrypt.getKey(function() {
       dt = new Date();
       time += (dt.getTime());
-      citizen.key = strippedKey(citizenCrypt.getPublicKey());
       privateKey = citizenCrypt.getPrivateKey();
       localStorage.setItem('privateKey', privateKey);
       privateKeyAvailable('forged in ' + Number(time / 1000).toFixed(2) + ' seconds.');
     });
   }
+  document.getElementById('tabbar-card').style.display = 'none';
+  document.getElementById('tabbar-endorse').style.display = 'none';
+  document.getElementById('tabbar-vote').style.display = 'none';
   const now = new Date();
   let ten = new Date();
   ten.setFullYear(ten.getFullYear() + 10);
-  const inTenYears = String(ten.getDate()).padStart(2, '0') + '/' + String(ten.getMonth() + 1).padStart(2, '0') + '/' + ten.getFullYear();
-  let date = document.getElementById('register-date');
+  const inTenYears = ten.getFullYear() + '-' + String(ten.getMonth() + 1).padStart(2, '0') +
+    '-' + String(ten.getDate()).padStart(2, '0');
+  let date = document.getElementById('register-expiration');
   date.setAttribute('placeholder', inTenYears);
   date.value = inTenYears;
   let calendar = app.calendar.create({
-    inputEl: '#register-date',
-    dateFormat: 'dd/mm/yyyy',
+    inputEl: '#register-expiration',
+    dateFormat: 'yyyy-mm-dd',
     disabled: [{
       to: now
     }, {
@@ -81,9 +111,9 @@ window.onload = function() {
     if (!button.classList.contains('color-gray'))
       button.classList.add('color-gray');
 
-    if (document.getElementById('register-family-name').value == '')
+    if (document.getElementById('register-family-name').value.trim() == '')
       return;
-    if (document.getElementById('register-given-names').value == '')
+    if (document.getElementById('register-given-names').value.trim() == '')
       return;
     if (document.getElementById('register-picture').src == 'images/default-picture.png')
       return;
@@ -158,6 +188,10 @@ window.onload = function() {
         close: function() {
           croppie.result({
             type: 'base64',
+            size: {
+              width: 150,
+              height: 200
+            },
             format: 'jpeg',
             quality: 0.95
           }).then(function(result) {
@@ -165,6 +199,7 @@ window.onload = function() {
             citizen.picture = result;
             croppie.destroy();
             croppie = null;
+            validateRegistration();
           });
         }
       }
@@ -268,12 +303,47 @@ window.onload = function() {
         close: function() {
           console.log('Sheet closing');
           document.getElementById('register-location').value = citizen.latitude + ', ' + citizen.longitude;
+          validateRegistration();
         }
       }
     });
     sheet.open();
   });
   document.getElementById('register-button').addEventListener('click', function() {
+    citizen.key = strippedKey(citizenCrypt.getPublicKey());
+    citizen.published = new Date().getTime();
+    citizen.expires = new Date(document.getElementById('register-expiration').value + 'T00:00:00Z').getTime();
+    citizen.familyName = document.getElementById('register-family-name').value.trim();
+    citizen.givenNames = document.getElementById('register-given-names').value.trim();
+    citizen.signature = citizenCrypt.sign(JSON.stringify(citizen), CryptoJS.SHA256, 'sha256');
+    let xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+      if (this.status == 200) {
+        let answer = JSON.parse(this.responseText);
+        if (answer.error)
+          app.dialog.alert('Publication error: ' + JSON.stringify(answer.error) + '.<br>Please try again.');
+        else {
+          /*
+          localStorage.setItem('privateKey', private_key);
+          updateCitizenCard();
+          document.getElementById('citizen-nav').style.display = '';
+          document.getElementById('endorsements-nav').style.display = '';
+          document.getElementById('register-nav').style.display = 'none';
+          document.getElementById('revoke-key').removeAttribute('disabled');
+          document.getElementById('edit').removeAttribute('disabled');
+          $('.nav-tabs a[href="#citizen"]').tab('show');
+          */
+          document.getElementById('tabbar-register').style.display = 'none';
+          document.getElementById('tabbar-card').style.display = 'flex';
+          document.getElementById('tabbar-endorse').style.display = 'flex';
+          document.getElementById('tabbar-vote').style.display = 'flex';
 
+          app.dialog.alert('Congratulation: Your citizen card was just published!');
+        }
+      }
+    };
+    xhttp.open('POST', publisher + '/publish.php', true);
+    xhttp.send(JSON.stringify(citizen));
+    return false;
   });
 };
