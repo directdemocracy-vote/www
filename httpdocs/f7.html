@@ -28,11 +28,7 @@
           </div>
           <div id="tabbar" class="toolbar tabbar tabbar-labels toolbar-bottom">
             <div class="toolbar-inner">
-              <a href="#" class="tab-link tab-link-active" data-tab="#tab-register" id="tabbar-register">
-                <i class="icon f7-icons">person_badge_plus_fill</i>
-                <span class="tabbar-label">Register</span>
-              </a>
-              <a href="#" class="tab-link" data-tab="#tab-card" id="tabbar-card">
+              <a href="#" class="tab-link tab-link-active" data-tab="#tab-card" id="tabbar-card">
                 <i class="icon f7-icons">person_fill</i>
                 <span class="tabbar-label">Card</span>
               </a>
@@ -56,119 +52,122 @@
           </div>
           <div class="tabs-swipeable-wrap">
             <div class="tabs">
-              <div class="tab tab-active page-content" id="tab-register">
-                <div class="block-title block-title-medium">Become a citizen</div>
-                <div class="list padding-top">
-                  <ul class="padding-top padding-bottom">
-                    <li class="item-content item-input">
-                      <div class="item-inner">
-                        <div class="item-title item-label">Family name:</div>
-                        <div class="item-input-wrap">
-                          <input type="url" id="register-family-name" placeholder="Enter your family name here" required>
-                          <span class="input-clear-button"></span>
-                        </div>
-                      </div>
-                    </li>
-                    <li class="item-content item-input">
-                      <div class="item-inner">
-                        <div class="item-title item-label">Given name(s):</div>
-                        <div class="item-input-wrap">
-                          <input type="url" id="register-given-names" placeholder="Enter your given name(s) here." required>
-                          <span class="input-clear-button"></span>
-                        </div>
-                      </div>
-                    </li>
-                    <li class="item-content item-input">
-                      <div class="item-inner">
-                        <div class="item-title item-label">Picture:</div>
-                        <div class="item-input-wrap row">
-                          <img class="col-50" id="register-picture" src="images/default-picture.png">
-                          <input class="custom-file-input" type="file" style="display:none" id="register-picture-upload" accept="image/*" required>
-                          <button class="col-30 button" id="register-upload-button"><i class="icon f7-icons">camera_fill</i></button>
-                        </div>
-                      </div>
-                    </li>
-                    <li class="item-content item-input">
-                      <div class="item-inner">
-                        <div class="item-title item-label">Home location:</div>
-                        <div class="item-input-wrap row">
-                          <div class="col-70">
-                            <input type="text" id="register-location" placeholder="latitude, longitude" disabled required>
-                          </div>
-                          <button class="col-30 button" id="register-location-button"><i class="icon f7-icons">placemark_fill</i></button>
-                        </div>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="item-content item-input">
+              <div class="tab tab-active page-content" id="tab-card">
+                <div id="splash-page" style="height:100%;background: url('/images/handsup.jpg');background-size:cover;"></div>
+                <div id="register-page" style="display:none">
+                  <div class="block-title block-title-medium">Become a citizen</div>
+                  <div class="list padding-top">
+                    <ul class="padding-top padding-bottom">
+                      <li class="item-content item-input">
                         <div class="item-inner">
-                          <div class="item-title item-label">Expiration date:</div>
+                          <div class="item-title item-label">Family name:</div>
                           <div class="item-input-wrap">
-                            <input type="text" readonly id="register-expiration" />
+                            <input type="url" id="register-family-name" placeholder="Enter your family name here" required>
+                            <span class="input-clear-button"></span>
                           </div>
                         </div>
-                      </div>
-                    </li>
-                    <li class="item-content item-input">
-                      <div class="item-inner">
-                        <div class="item-title item-label">Cryptographic key generation: <span id="registration-key-generation-status">please wait...</span></div>
-                        <div id="register-progressbar" class="progressbar-infinite margin-top-half"></div>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="item-content">
-                        <div>
-                          <div class="item-inner row" width="100%">
-                            <div class="item-label col-80">I confirm I am over 18 years old and the above information is correct.</div>
-                            <div class="item-after col-20">
-                              <label class="toggle">
-                                <input id="register-confirm-check" type="checkbox" name="switch" value="yes"><i class="toggle-icon"></i>
-                              </label>
+                      </li>
+                      <li class="item-content item-input">
+                        <div class="item-inner">
+                          <div class="item-title item-label">Given name(s):</div>
+                          <div class="item-input-wrap">
+                            <input type="url" id="register-given-names" placeholder="Enter your given name(s) here." required>
+                            <span class="input-clear-button"></span>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="item-content item-input">
+                        <div class="item-inner">
+                          <div class="item-title item-label">Picture:</div>
+                          <div class="item-input-wrap row">
+                            <img class="col-50" id="register-picture" src="images/default-picture.png">
+                            <input class="custom-file-input" type="file" style="display:none" id="register-picture-upload" accept="image/*" required>
+                            <button class="col-30 button" id="register-upload-button"><i class="icon f7-icons">camera_fill</i></button>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="item-content item-input">
+                        <div class="item-inner">
+                          <div class="item-title item-label">Home location:</div>
+                          <div class="item-input-wrap row">
+                            <div class="col-70">
+                              <input type="text" id="register-location" placeholder="latitude, longitude" disabled required>
+                            </div>
+                            <button class="col-30 button" id="register-location-button"><i class="icon f7-icons">placemark_fill</i></button>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content item-input">
+                          <div class="item-inner">
+                            <div class="item-title item-label">Expiration date:</div>
+                            <div class="item-input-wrap">
+                              <input type="text" readonly id="register-expiration" />
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </li>
-                  </ul>
-                  <div class="block">
-                    <button disabled class="button button-fill color-gray" id="register-button">Generating cryptographic key...</button>
+                      </li>
+                      <li class="item-content item-input">
+                        <div class="item-inner">
+                          <div class="item-title item-label">Cryptographic key generation: <span id="registration-key-generation-status">please wait...</span></div>
+                          <div id="register-progressbar" class="progressbar-infinite margin-top-half"></div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content">
+                          <div>
+                            <div class="item-inner row" width="100%">
+                              <div class="item-label col-80">I confirm I am over 18 years old and the above information is correct.</div>
+                              <div class="item-after col-20">
+                                <label class="toggle">
+                                  <input id="register-confirm-check" type="checkbox" name="switch" value="yes"><i class="toggle-icon"></i>
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                    <div class="block">
+                      <button disabled class="button button-fill color-gray" id="register-button">Generating cryptographic key...</button>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="page-content tab" id="tab-card">
-                <div class="card no-margin-left no-margin-right no-margin-top no-margin-bottom">
-                  <div class="card-content">
-                    <div class="list media-list">
-                      <ul>
-                        <li class="item-content no-padding-left no-padding-right">
-                          <div class="item-media">
-                            <img class="col-50" id="citizen-picture" style="width:150px;height:200px">
-                          </div>
-                          <div class="item-inner margin-left-half">
-                            <div class="item-title-row">
-                              <div class="item-subtitle">Family name:</div>
+                <div id="card-page" style="display:none">
+                  <div class="card no-margin-left no-margin-right no-margin-top no-margin-bottom">
+                    <div class="card-content">
+                      <div class="list media-list">
+                        <ul>
+                          <li class="item-content no-padding-left no-padding-right">
+                            <div class="item-media">
+                              <img class="col-50" id="citizen-picture" style="width:150px;height:200px">
                             </div>
-                            <div class="item-title"><b id="citizen-family-name"></b></div>
-                            <div class="item-title-row padding-top-half">
-                              <div class="item-subtitle">Given name(s):</div>
+                            <div class="item-inner margin-left-half">
+                              <div class="item-title-row">
+                                <div class="item-subtitle">Family name:</div>
+                              </div>
+                              <div class="item-title"><b id="citizen-family-name"></b></div>
+                              <div class="item-title-row padding-top-half">
+                                <div class="item-subtitle">Given name(s):</div>
+                              </div>
+                              <div class="item-title"><b id="citizen-given-names"></b></div>
+                              <div class="item-title-row padding-top-half">
+                                <div class="item-subtitle">Latitude, longitude:</div>
+                              </div>
+                              <div class="item-title"><b id="citizen-coords"></b></div>
+                              <div class="item-title-row padding-top-half">
+                                <div class="item-subtitle">Created: <b id="citizen-published">2020-05-03</b></div>
+                              </div>
+                              <div class="item-title-row">
+                                <div class="item-subtitle">Expires: <b id="citizen-expires">2020-05-03</b></div>
+                              </div>
                             </div>
-                            <div class="item-title"><b id="citizen-given-names"></b></div>
-                            <div class="item-title-row padding-top-half">
-                              <div class="item-subtitle">Latitude, longitude:</div>
-                            </div>
-                            <div class="item-title"><b id="citizen-coords"></b></div>
-                            <div class="item-title-row padding-top-half">
-                              <div class="item-subtitle">Created: <b id="citizen-published">2020-05-03</b></div>
-                            </div>
-                            <div class="item-title-row">
-                              <div class="item-subtitle">Expires: <b id="citizen-expires">2020-05-03</b></div>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="item-content">
-                          <img id="citizen-qr-code">
-                        </li>
-                      </ul>
+                          </li>
+                          <li class="item-content">
+                            <img id="citizen-qr-code">
+                          </li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
                 </div>

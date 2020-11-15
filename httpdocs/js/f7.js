@@ -64,9 +64,6 @@ window.onload = function() {
       privateKeyAvailable('forged in ' + Number(time / 1000).toFixed(2) + ' seconds.');
     });
   }
-  document.getElementById('tabbar-card').style.display = 'none';
-  document.getElementById('tabbar-endorse').style.display = 'none';
-  document.getElementById('tabbar-vote').style.display = 'none';
   const now = new Date();
   let ten = new Date();
   ten.setFullYear(ten.getFullYear() + 10);
@@ -335,9 +332,8 @@ window.onload = function() {
           document.getElementById('edit').removeAttribute('disabled');
           $('.nav-tabs a[href="#citizen"]').tab('show');
           */
-          let tabbarRegister = document.getElementById('tabbar-register');
-          tabbarRegister.style.display = 'none';
-          tabbarRegister.classList.remove('tab-link-active');
+          document.getElementById('register-page').style.display = 'none';
+          document.getElementById('card-page').style.display = '';
           updateCitizenCard();
           app.dialog.alert('Congratulation: Your citizen card was just published!');
           window.localStorage.setItem('registered', true);
@@ -361,13 +357,9 @@ window.onload = function() {
           // citizen.key = strippedKey(citizenCrypt.getPublicKey());
           endorsements = answer.endorsements;
           citizenEndorsements = answer.citizen_endorsements;
+          document.getElementById('splash-page').style.display = 'none';
+          document.getElementById('card-page').style.display = '';
           updateCitizenCard();
-          app.tab.show('#tab-card', '#tabbar-card', false);
-          /*
-          updateCitizenCard();
-          updateEndorsements();
-          updateVote();
-          */
         }
       }
     };
@@ -376,14 +368,17 @@ window.onload = function() {
     xhttp.send('key=' + encodeURIComponent(strippedKey(citizenCrypt.getPublicKey())));
   }
 
+  function editCitizenCard() {
+    document.getElementById('card-page').style.display = 'none';
+    document.getElementById('register-page').style.display = '';
+  }
+
   function updateCitizenCard() {
-    document.getElementById('tabbar-register').style.display = 'none';
-    document.getElementById('tabbar-card').style.display = 'flex';
-    document.getElementById('tabbar-endorse').style.display = 'flex';
-    document.getElementById('tabbar-vote').style.display = 'flex';
     document.getElementById('citizen-picture').setAttribute('src', citizen.picture);
     document.getElementById('citizen-family-name').innerHTML = citizen.familyName;
+    document.getElementById('register-family-name').value = citizen.familyName;
     document.getElementById('citizen-given-names').innerHTML = citizen.givenNames;
+    document.getElementById('register-given-names').value = citizen.givenNames;
     document.getElementById('citizen-coords').innerHTML = '<a target="_blank" href="https://openstreetmap.org/?mlat=' +
       citizen.latitude + '&mlon=' + citizen.longitude + '&zoom=12">' +
       citizen.latitude + ', ' + citizen.longitude + '</a>';
@@ -517,11 +512,7 @@ window.onload = function() {
         if (index === 0) // cancel
           return;
         console.log('OK, proceeding with edit');
-        /*
-        const inputValue = dialog.$el.find('.dialog-input').val();
-        if (index === 0 && callbackCancel) callbackCancel(inputValue);
-        if (index === 1 && callbackOk) callbackOk(inputValue);
-        */
+        editCitizenCard();
       },
       on: {
         open: function(d) {
