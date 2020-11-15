@@ -377,6 +377,7 @@ window.onload = function() {
   }
 
   function updateCitizenCard() {
+    document.getElementById('tabbar-register').style.display = 'none';
     document.getElementById('tabbar-card').style.display = 'flex';
     document.getElementById('tabbar-endorse').style.display = 'flex';
     document.getElementById('tabbar-vote').style.display = 'flex';
@@ -494,4 +495,47 @@ window.onload = function() {
     });
     */
   }
+  document.getElementById('edit').addEventListener('click', function(event) {
+    app.dialog.create({
+      title: 'Edit your citizen card',
+      text: '<p>You should edit your citizen card only if you move or change your name.</p>' +
+        '<p>As a consequence, you will have to ask others to endorse you again.</p>' +
+        '<p>Please type <b>I understand</b> here:</p>',
+      content: '<div class="dialog-input-field item-input"><div class="item-input-wrap">' +
+        '<input type="text" class="dialog-input"></div></div>',
+      buttons: [{
+          text: app.params.dialog.buttonCancel,
+          keyCodes: app.keyboardActions ? [27] : null
+        },
+        {
+          text: app.params.dialog.buttonOk,
+          bold: true,
+          keyCodes: app.keyboardActions ? [13] : null
+        }],
+      destroyOnClose: true,
+      onClick: function(dialog, index) {
+        if (index === 0) // cancel
+          return;
+        console.log('OK, proceeding with edit');
+        /*
+        const inputValue = dialog.$el.find('.dialog-input').val();
+        if (index === 0 && callbackCancel) callbackCancel(inputValue);
+        if (index === 1 && callbackOk) callbackOk(inputValue);
+        */
+      },
+      on: {
+        open: function(d) {
+          let input = d.$el.find('.dialog-input')[0];
+          let okButton = d.$el.find('.dialog-button')[1];
+          okButton.classList.add('disabled');
+          input.addEventListener('input', function(event) {
+            if (event.target.value === 'I understand')
+              okButton.classList.remove('disabled');
+            else if (!okButton.classList.contains('disabled'))
+              okButton.classList.add('disabled');
+          });
+        }
+      }
+    }).open();
+  });
 };
