@@ -106,10 +106,8 @@ window.onload = function() {
 
   function validateRegistration() {
     let button = document.getElementById('register-button');
-    button.disabled = true;
-    if (!button.classList.contains('color-gray'))
-      button.classList.add('color-gray');
-
+    if (!button.classList.contains('disabled'))
+      button.classList.add('disabled');
     if (document.getElementById('register-family-name').value.trim() == '')
       return;
     if (document.getElementById('register-given-names').value.trim() == '')
@@ -120,8 +118,7 @@ window.onload = function() {
       return;
     if (!document.getElementById('register-confirm-check').checked)
       return;
-    button.disabled = false;
-    button.classList.remove('color-gray');
+    button.classList.remove('disabled');
   }
 
   function uploadPicture() {
@@ -371,10 +368,18 @@ window.onload = function() {
   function editCitizenCard() {
     document.getElementById('card-page').style.display = 'none';
     document.getElementById('register-page').style.display = '';
+    document.getElementById('tab-card-title').innerHTML = 'Edit Citizen Card';
+    let button = document.getElementById('register-button');
+    button.innerHTML = 'Submit';
+    if (!button.classList.contains('disabled'))
+      button.classList.add('disabled');
+    document.getElementById('register-confirm-check').checked = false;
+    app.tab.show('#tab-card', true);
   }
 
   function updateCitizenCard() {
     document.getElementById('citizen-picture').setAttribute('src', citizen.picture);
+    document.getElementById('register-picture').setAttribute('src', citizen.picture);
     document.getElementById('citizen-family-name').innerHTML = citizen.familyName;
     document.getElementById('register-family-name').value = citizen.familyName;
     document.getElementById('citizen-given-names').innerHTML = citizen.givenNames;
@@ -382,10 +387,12 @@ window.onload = function() {
     document.getElementById('citizen-coords').innerHTML = '<a target="_blank" href="https://openstreetmap.org/?mlat=' +
       citizen.latitude + '&mlon=' + citizen.longitude + '&zoom=12">' +
       citizen.latitude + ', ' + citizen.longitude + '</a>';
+    document.getElementById('register-location').value = citizen.latitude + ', ' + citizen.longitude;
     let published = new Date(citizen.published);
     let expires = new Date(citizen.expires);
     document.getElementById('citizen-published').innerHTML = published.toISOString().slice(0, 10);
     document.getElementById('citizen-expires').innerHTML = expires.toISOString().slice(0, 10);
+    document.getElementById('register-expiration').value = expires.toISOString().slice(0, 10);
     let citizenFingerprint = CryptoJS.SHA1(citizen.signature).toString();
     let qrImage = document.getElementById('citizen-qr-code');
     const rect = qrImage.getBoundingClientRect();
@@ -509,21 +516,26 @@ window.onload = function() {
         }],
       destroyOnClose: true,
       onClick: function(dialog, index) {
-        if (index === 0) // cancel
-          return;
-        console.log('OK, proceeding with edit');
-        editCitizenCard();
+        if (index === 1) // OK
+          editCitizenCard();
       },
       on: {
         open: function(d) {
           let input = d.$el.find('.dialog-input')[0];
           let okButton = d.$el.find('.dialog-button')[1];
           okButton.classList.add('disabled');
+          input.focus();
           input.addEventListener('input', function(event) {
             if (event.target.value === 'I understand')
               okButton.classList.remove('disabled');
             else if (!okButton.classList.contains('disabled'))
               okButton.classList.add('disabled');
+          });
+          input.addEventListener('change', function(event) {
+            if (event.target.value === 'I understand') {
+              d.close();
+              editCitizenCard();
+            }
           });
         }
       }
