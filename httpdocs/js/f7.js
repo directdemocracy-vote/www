@@ -12,7 +12,7 @@ let mainView = app.views.create('.view-main');
 window.onload = function() {
   const DIRECTDEMOCRACY_VERSION = '0.0.1';
   let citizen = {
-    schema: 'https://directdemocracy.vote/json-schema/' + DIRECTDEMOCRACY_VERSION + '/citizen.schema.json',
+    schema: '',
     key: '',
     signature: '',
     published: 0,
@@ -316,11 +316,13 @@ window.onload = function() {
   });
   document.getElementById('register-button').addEventListener('click', function() {
     console.log("registering...");
+    citizen.schema = 'https://directdemocracy.vote/json-schema/' + DIRECTDEMOCRACY_VERSION + '/citizen.schema.json';
     citizen.key = strippedKey(citizenCrypt.getPublicKey());
     citizen.published = new Date().getTime();
     citizen.expires = new Date(document.getElementById('register-expiration').value + 'T00:00:00Z').getTime();
     citizen.familyName = document.getElementById('register-family-name').value.trim();
     citizen.givenNames = document.getElementById('register-given-names').value.trim();
+    citizen.signature = '';
     citizen.signature = citizenCrypt.sign(JSON.stringify(citizen), CryptoJS.SHA256, 'sha256');
     let xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
@@ -359,7 +361,7 @@ window.onload = function() {
           app.dialog.alert('Citizen error: ' + JSON.stringify(answer.error) + '.<br>Please try again.');
         else {
           citizen = answer.citizen;
-          // citizen.key = strippedKey(citizenCrypt.getPublicKey());
+          citizen.key = strippedKey(citizenCrypt.getPublicKey());
           endorsements = answer.endorsements;
           citizenEndorsements = answer.citizen_endorsements;
           updateCitizenCard();
@@ -377,7 +379,7 @@ window.onload = function() {
     showPage('register');
     document.getElementById('tab-card-title').innerHTML = 'Edit Citizen Card';
     let button = document.getElementById('register-button');
-    button.innerHTML = 'Submit';
+    button.innerHTML = 'Publish';
     disable(button);
     document.getElementById('register-confirm-check').checked = false;
     app.tab.show('#tab-card', true);
