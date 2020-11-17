@@ -45,12 +45,8 @@ window.onload = function() {
     localStorage.setItem('station', station);
   }
   document.getElementById('station').value = station;
-  let privateKey = localStorage.getItem('privateKey');
-  if (privateKey) {
-    citizenCrypt = new JSEncrypt();
-    citizenCrypt.setPrivateKey(privateKey);
-    privateKeyAvailable('complete.');
-  } else {
+
+  function createNewKey() {
     let dt = new Date();
     let time = -(dt.getTime());
     citizenCrypt = new JSEncrypt({
@@ -64,6 +60,13 @@ window.onload = function() {
       privateKeyAvailable('forged in ' + Number(time / 1000).toFixed(2) + ' seconds.');
     });
   }
+
+  let privateKey = localStorage.getItem('privateKey');
+  if (privateKey) {
+    citizenCrypt = new JSEncrypt();
+    citizenCrypt.setPrivateKey(privateKey);
+    privateKeyAvailable('complete.');
+  } else createNewKey();
   const now = new Date();
   let ten = new Date();
   ten.setFullYear(ten.getFullYear() + 10);
@@ -98,9 +101,18 @@ window.onload = function() {
     progress.classList.remove('progressbar-infinite');
     progress.classList.add('progressbar');
     progress.setAttribute('data-progress', '100');
-    let button = document.getElementById('register-button');
-    button.innerHTML = 'Register';
+    document.getElementById('register-button').innerHTML = 'Register';
     document.getElementById('registration-key-generation-status').innerHTML = message;
+    validateRegistration();
+  }
+
+  function privateKeyNotAvailable() {
+    let progress = document.getElementById('register-progressbar');
+    progress.classList.add('progressbar-infinite');
+    progress.classList.remove('progressbar');
+    progress.removeAttribute('data-progress');
+    document.getElementById('register-button').innerHTML = 'Generating cryptographic key...';
+    document.getElementById('registration-key-generation-status').innerHTML = 'please wait...';
     validateRegistration();
   }
 
@@ -375,9 +387,14 @@ window.onload = function() {
     showPage('register');
   }
 
-  function editCitizenCard() {
+  function editCitizenCard(revoke) {
     showPage('register');
-    document.getElementById('tab-card-title').innerHTML = 'Edit Citizen Card';
+    if (revoke) {
+      privateKeyNotAvailable();
+      createNewKey();
+    }
+    document.getElementById('tab-card-title').innerHTML = 'Edit Citizen Card' + (revoke ? ' <small>(revoked key)</small>' :
+      '');
     let button = document.getElementById('register-button');
     button.innerHTML = 'Publish';
     disable(button);
@@ -523,12 +540,28 @@ window.onload = function() {
     });
     */
   }
-  document.getElementById('edit').addEventListener('click', function(event) {
+
+  function editOrRevokeKey(event) {
+    let title, text, revoke;
+    if (event.target.id === 'edit') {
+      title = 'Edit your Citizen Card';
+      text = '<p>You should edit your citizen card only if you move or change your name.</p>' +
+        '<p>As a consequence, you will have to ask others to endorse you again.</p>';
+      revoke = false;
+    } else {
+      title = 'Revoke your Private Key';
+      text = '<p>You should revoke your private key only if you believe that someone compromised it.</p>' +
+        '<p>As a consequence, these publications will be revoked and should be re-created:</p><ul>' +
+        '<li>Your citizen card.</li>' +
+        '<li>Given endorsements.</li>' +
+        '<li>Received endorsements.</li></ul>';
+      revoke = true;
+    }
+    text += '<p>Please type <b>I understand</b> here:</p>';
+
     app.dialog.create({
-      title: 'Edit your citizen card',
-      text: '<p>You should edit your citizen card only if you move or change your name.</p>' +
-        '<p>As a consequence, you will have to ask others to endorse you again.</p>' +
-        '<p>Please type <b>I understand</b> here:</p>',
+      title: title,
+      text: text,
       content: '<div class="dialog-input-field item-input"><div class="item-input-wrap">' +
         '<input type="text" class="dialog-input"></div></div>',
       buttons: [{
@@ -543,7 +576,7 @@ window.onload = function() {
       destroyOnClose: true,
       onClick: function(dialog, index) {
         if (index === 1) // OK
-          editCitizenCard();
+          editCitizenCard(revoke);
       },
       on: {
         open: function(d) {
@@ -560,11 +593,13 @@ window.onload = function() {
           input.addEventListener('change', function(event) {
             if (event.target.value === 'I understand') {
               d.close();
-              editCitizenCard();
+              editCitizenCard(revoke);
             }
           });
         }
       }
     }).open();
-  });
+  }
+  document.getElementById('edit').addEventListener('click', editOrRevokeKey);
+  document.getElementById('revoke-key').addEventListener('click', editOrRevokeKey);
 };
