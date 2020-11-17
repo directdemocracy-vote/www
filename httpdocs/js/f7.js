@@ -417,7 +417,6 @@ window.onload = function() {
     let expires = new Date(citizen.expires);
     document.getElementById('citizen-published').innerHTML = published.toISOString().slice(0, 10);
     document.getElementById('citizen-expires').innerHTML = expires.toISOString().slice(0, 10);
-    document.getElementById('register-expiration').value = expires.toISOString().slice(0, 10);
     let citizenFingerprint = CryptoJS.SHA1(citizen.signature).toString();
     let qrImage = document.getElementById('citizen-qr-code');
     const rect = qrImage.getBoundingClientRect();
