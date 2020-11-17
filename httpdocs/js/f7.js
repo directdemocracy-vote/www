@@ -106,8 +106,7 @@ window.onload = function() {
 
   function validateRegistration() {
     let button = document.getElementById('register-button');
-    if (!button.classList.contains('disabled'))
-      button.classList.add('disabled');
+    disable(button);
     if (document.getElementById('register-family-name').value.trim() == '')
       return;
     if (document.getElementById('register-given-names').value.trim() == '')
@@ -118,19 +117,30 @@ window.onload = function() {
       return;
     if (!document.getElementById('register-confirm-check').checked)
       return;
-    button.classList.remove('disabled');
+    enable(button);
   }
 
   function uploadPicture() {
     document.getElementById('register-picture-upload').click();
   }
+
+  function enable(item) {
+    let i = (typeof item === 'string') ? document.getElementById(item) : item;
+    i.classList.remove('disabled');
+  }
+
+  function disable(item) {
+    let i = (typeof item === 'string') ? document.getElementById(item) : item;
+    if (i.classList.contains('disabled'))
+      return;
+    i.classList.add('disabled');
+  }
+
   document.getElementById('register-family-name').addEventListener('input', validateRegistration);
   document.getElementById('register-given-names').addEventListener('input', validateRegistration);
   document.getElementById('register-confirm-check').addEventListener('input', validateRegistration);
-
   document.getElementById('register-upload-button').addEventListener('click', uploadPicture);
   document.getElementById('register-picture').addEventListener('click', uploadPicture);
-
   document.getElementById('register-picture-upload').addEventListener('change', function(event) {
     let content = {};
     content.innerHTML =
@@ -225,7 +235,6 @@ window.onload = function() {
       content: content.innerHTML,
       on: {
         opened: function() {
-          console.log('Sheet opened');
           let geolocation = false;
 
           function updateLocation() {
@@ -306,6 +315,7 @@ window.onload = function() {
     sheet.open();
   });
   document.getElementById('register-button').addEventListener('click', function() {
+    console.log("registering...");
     citizen.key = strippedKey(citizenCrypt.getPublicKey());
     citizen.published = new Date().getTime();
     citizen.expires = new Date(document.getElementById('register-expiration').value + 'T00:00:00Z').getTime();
@@ -329,8 +339,6 @@ window.onload = function() {
           document.getElementById('edit').removeAttribute('disabled');
           $('.nav-tabs a[href="#citizen"]').tab('show');
           */
-          document.getElementById('register-page').style.display = 'none';
-          document.getElementById('card-page').style.display = '';
           updateCitizenCard();
           app.dialog.alert('Congratulation: Your citizen card was just published!');
           window.localStorage.setItem('registered', true);
@@ -354,8 +362,6 @@ window.onload = function() {
           // citizen.key = strippedKey(citizenCrypt.getPublicKey());
           endorsements = answer.endorsements;
           citizenEndorsements = answer.citizen_endorsements;
-          document.getElementById('splash-page').style.display = 'none';
-          document.getElementById('card-page').style.display = '';
           updateCitizenCard();
         }
       }
@@ -363,21 +369,40 @@ window.onload = function() {
     xhttp.open('POST', publisher + '/citizen.php', true);
     xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhttp.send('key=' + encodeURIComponent(strippedKey(citizenCrypt.getPublicKey())));
+  } else {
+    showPage('register');
   }
 
   function editCitizenCard() {
-    document.getElementById('card-page').style.display = 'none';
-    document.getElementById('register-page').style.display = '';
+    showPage('register');
     document.getElementById('tab-card-title').innerHTML = 'Edit Citizen Card';
     let button = document.getElementById('register-button');
     button.innerHTML = 'Submit';
-    if (!button.classList.contains('disabled'))
-      button.classList.add('disabled');
+    disable(button);
     document.getElementById('register-confirm-check').checked = false;
     app.tab.show('#tab-card', true);
   }
 
+  function showPage(page) {
+    const pages = ['splash', 'register', 'card'];
+    if (!pages.includes(page))
+      return;
+    document.getElementById(page + '-page').style.display = '';
+    pages.forEach(function(p) {
+      if (p !== page)
+        document.getElementById(p + '-page').style.display = 'none';
+    });
+    const cardItems = ['tabbar-endorse', 'tab-endorse', 'tabbar-vote', 'tab-vote', 'edit', 'revoke-key'];
+    cardItems.forEach(function(i) {
+      if (page === 'card')
+        enable(i);
+      else
+        disable(i);
+    });
+  }
+
   function updateCitizenCard() {
+    showPage('card');
     document.getElementById('citizen-picture').setAttribute('src', citizen.picture);
     document.getElementById('register-picture').setAttribute('src', citizen.picture);
     document.getElementById('citizen-family-name').innerHTML = citizen.familyName;
@@ -523,13 +548,13 @@ window.onload = function() {
         open: function(d) {
           let input = d.$el.find('.dialog-input')[0];
           let okButton = d.$el.find('.dialog-button')[1];
-          okButton.classList.add('disabled');
+          disable(okButton);
           input.focus();
           input.addEventListener('input', function(event) {
             if (event.target.value === 'I understand')
-              okButton.classList.remove('disabled');
-            else if (!okButton.classList.contains('disabled'))
-              okButton.classList.add('disabled');
+              enable(okButton);
+            else
+              disable(okButton);
           });
           input.addEventListener('change', function(event) {
             if (event.target.value === 'I understand') {
