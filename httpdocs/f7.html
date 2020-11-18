@@ -134,11 +134,11 @@
                   </div>
                 </div>
                 <div id="card-page" style="display:none">
-                  <div class="card no-margin-left no-margin-right no-margin-top no-margin-bottom">
+                  <div class="card no-margin">
                     <div class="card-content">
                       <div class="list media-list">
                         <ul>
-                          <li class="item-content no-padding-left no-padding-right">
+                          <li class="item-content">
                             <div class="item-media">
                               <img class="col-50" id="citizen-picture" style="width:150px;height:200px">
                             </div>
@@ -147,26 +147,31 @@
                                 <div class="item-subtitle">Family name:</div>
                               </div>
                               <div class="item-title"><b id="citizen-family-name"></b></div>
-                              <div class="item-title-row padding-top-half">
+                              <div class="item-title-row">
                                 <div class="item-subtitle">Given name(s):</div>
                               </div>
                               <div class="item-title"><b id="citizen-given-names"></b></div>
-                              <div class="item-title-row padding-top-half">
+                              <div class="item-title-row">
                                 <div class="item-subtitle">Latitude, longitude:</div>
                               </div>
                               <div class="item-title"><b id="citizen-coords"></b></div>
-                              <div class="item-title-row padding-top-half">
+                              <div class="item-row">
                                 <div class="item-subtitle">Created: <b id="citizen-published">2020-05-03</b></div>
                               </div>
-                              <div class="item-title-row">
+                              <div class="item-row">
                                 <div class="item-subtitle">Expires: <b id="citizen-expires">2020-05-03</b></div>
+                              </div>
+                              <div class="item-row">
+                                <div class="item-subtitle">Reputation: <span id="citizen-reputation">...</span></div>
                               </div>
                             </div>
                           </li>
-                          <li class="item-content">
-                            <img id="citizen-qr-code">
-                          </li>
                         </ul>
+                      </div>
+                    </div>
+                    <div class="list media-list">
+                      <div class="item-media">
+                        <img id="citizen-qr-code">
                       </div>
                     </div>
                   </div>

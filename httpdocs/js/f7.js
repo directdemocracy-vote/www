@@ -462,7 +462,6 @@ window.onload = function() {
     });
     document.getElementById('citizen-qr-code').style.width = size + 'px';
     document.getElementById('citizen-qr-code').style.height = size + 'px';
-    /*
     // get reputation from trustee
     let xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
@@ -470,15 +469,16 @@ window.onload = function() {
         let reputation = document.getElementById('citizen-reputation');
         let answer = JSON.parse(this.responseText);
         if (answer.error)
-          reputation.innerHTML = 'Reputation error: <span style="color:red">' + answer.error + "</span>";
+          reputation.innerHTML = '<span style="font-weight:bold;color:red">' + answer.error + "</span>";
         else {
           const color = answer.endorsed ? 'green' : 'red';
-          reputation.innerHTML = 'Reputation: <span style="color:' + color + '">' + answer.reputation + '</span>';
+          reputation.innerHTML = '<span style="font-weight:bold;color:' + color + '">' + answer.reputation + '</span>';
         }
       }
     };
     xhttp.open('GET', trustee + '/reputation.php?key=' + encodeURIComponent(citizen.key), true);
     xhttp.send();
+    /*
     let list = document.getElementById('citizen-endorsements-list');
     if (citizen_endorsements.length == 0) {
       list.innertHTML = '<br><h4>Your citizen card no endorsement</h4>You should ask to other citizen to endorse you.';
