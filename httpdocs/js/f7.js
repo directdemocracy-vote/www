@@ -33,18 +33,27 @@ window.onload = function() {
     localStorage.setItem('publisher', publisher);
   }
   document.getElementById('publisher').value = publisher;
+  document.getElementById('publisher').addEventListener('input', function(event) {
+    localStorage.setItem('publisher', event.target.value);
+  });
   let trustee = localStorage.getItem('trustee');
   if (!trustee) {
     trustee = 'https://trustee.directdemocracy.vote';
     localStorage.setItem('trustee', trustee);
   }
   document.getElementById('trustee').value = trustee;
+  document.getElementById('trustee').addEventListener('input', function(event) {
+    localStorage.setItem('trustee', event.target.value);
+  });
   let station = localStorage.getItem('station');
   if (!station) {
     station = 'https://station.directdemocracy.vote';
     localStorage.setItem('station', station);
   }
   document.getElementById('station').value = station;
+  document.getElementById('station').addEventListener('input', function(event) {
+    localStorage.setItem('station', event.target.value);
+  });
 
   function createNewKey() {
     let dt = new Date();
