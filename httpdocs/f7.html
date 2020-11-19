@@ -12,16 +12,6 @@
     <link rel="stylesheet" href="css/croppie.css">
     <link rel="stylesheet" href="css/f7.css">
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/framework7-icons@3.0.1/css/framework7-icons.css" integrity="sha256-uJbRUvrppzfsjQXY+Y+CIgD174URWIbtAbYKbvoCphg=" crossorigin="anonymous">
-    <style> div[class*="col"] {
-      background: #fff;
-      text-align: center;
-      color: #000;
-      border: 1px solid #ddd;
-      padding: 0;
-      margin: 0;
-      font-size: 12px;
-    }
-</style>
   </head>
 
   <body>
@@ -144,98 +134,27 @@
                   </div>
                 </div>
                 <div id="card-page" style="display:none">
-                  <div class="card no-margin">
-                    <div class="card-content">
-                      <div class="list media-list">
-                        <ul>
-                          <li class="item-content">
-                            <div class="item-media">
-                              <img class="col-50" id="citizen-picture" style="width:150px;height:200px">
-                            </div>
-                            <div class="item-inner margin-left-half">
-                              <div class="item-title-row">
-                                <div class="item-subtitle">Family name:</div>
-                              </div>
-                              <div class="item-title"><b id="citizen-family-name"></b></div>
-                              <div class="item-title-row">
-                                <div class="item-subtitle">Given name(s):</div>
-                              </div>
-                              <div class="item-title"><b id="citizen-given-names"></b></div>
-                              <div class="item-title-row">
-                                <div class="item-subtitle">Latitude, longitude:</div>
-                              </div>
-                              <div class="item-title"><b id="citizen-coords"></b></div>
-                              <div class="item-row">
-                                <div class="item-subtitle">Created: <b id="citizen-published">2020-05-03</b></div>
-                              </div>
-                              <div class="item-row">
-                                <div class="item-subtitle">Expires: <b id="citizen-expires">2020-05-03</b></div>
-                              </div>
-                              <div class="item-row">
-                                <div class="item-subtitle">Reputation: <span id="citizen-reputation">...</span></div>
-                              </div>
-                            </div>
-                          </li>
-                        </ul>
-                      </div>
+                  <div class="row">
+                    <div class="col text-align-right"><img id="citizen-picture" style="width:150px;height:200px"></div>
+                    <div class="col">
+                      <div class="item-subtitle">Family name:</div>
+                      <div class="item-title"><b id="citizen-family-name"></b></div>
+                      <div class="item-subtitle">Given name(s):</div>
+                      <div class="item-title"><b id="citizen-given-names"></b></div>
+                      <div class="item-subtitle margin-top-half">Latitude, longitude:</div>
+                      <div class="item-title"><b id="citizen-coords"></b></div>
+                      <div class="item-subtitle">Created: <b id="citizen-published"></b></div>
+                      <div class="item-subtitle">Expires: <b id="citizen-expires"></b></div>
+                      <div class="item-subtitle">Reputation: <span id="citizen-reputation">...</span></div>
                     </div>
-                    <div class="list media-list">
-                      <div class="item-media">
-                        <img id="citizen-qr-code">
-                      </div>
-                    </div>
+                  </div>
+                  <div class="row no-gap">
+                    <div class="col text-align-center"><img id="citizen-qr-code" style="width:100%"></div>
                   </div>
                 </div>
               </div>
               <div class="page-content tab" id="tab-endorse">Endorse</div>
-              <div class="page-content tab" id="tab-vote">
-                <div class="block-title">No gap between columns</div>
-                <div class="block">
-                  <div class="row no-gap">
-                    <div class="col">50% (.col)</div>
-                    <div class="col">50% (.col)</div>
-                  </div>
-                  <div class="row no-gap">
-                    <div class="col">25% (.col)</div>
-                    <div class="col">25% (.col)</div>
-                    <div class="col">25% (.col)</div>
-                    <div class="col">25% (.col)</div>
-                  </div>
-                  <div class="row no-gap">
-                    <div class="col">33% (.col)</div>
-                    <div class="col">33% (.col)</div>
-                    <div class="col">33% (.col)</div>
-                  </div>
-                  <div class="row no-gap">
-                    <div class="col">20% (.col)</div>
-                    <div class="col">20% (.col)</div>
-                    <div class="col">20% (.col)</div>
-                    <div class="col">20% (.col)</div>
-                    <div class="col">20% (.col)</div>
-                  </div>
-                  <div class="row no-gap">
-                    <div class="col-33">33% (.col-33)</div>
-                    <div class="col-66">66% (.col-66)</div>
-                  </div>
-                  <div class="row no-gap">
-                    <div class="col-25">25% (.col-25)</div>
-                    <div class="col-25">25% (.col-25)</div>
-                    <div class="col-50">50% (.col-50)</div>
-                  </div>
-                  <div class="row no-gap">
-                    <div class="col-75">75% (.col-75)</div>
-                    <div class="col-25">25% (.col-25)</div>
-                  </div>
-                  <div class="row no-gap">
-                    <div class="col-80">80% (.col-80)</div>
-                    <div class="col-20">20% (.col-20)</div>
-                  </div>
-                  <div class="row no-gap">
-                    <div class="col-60">60% (.col-60)</div>
-                    <div class="col-40">40% (.col-40)</div>
-                  </div>
-                </div>
-              </div>
+              <div class="page-content tab" id="tab-vote">Vote</div>
               <div class="page-content tab" id="tab-settings">
                 <div class="block-title block-title-medium">URLs</div>
                 <div class="list no-hairlines-md">
