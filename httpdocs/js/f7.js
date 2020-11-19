@@ -373,7 +373,6 @@ window.onload = function() {
     return false;
   });
   if (window.localStorage.getItem('registered')) {
-    console.log('registered');
     let xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
       if (this.status == 200) {
