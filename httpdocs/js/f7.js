@@ -448,8 +448,8 @@ window.onload = function() {
     let qrImage = document.getElementById('citizen-qr-code');
     const rect = qrImage.getBoundingClientRect();
     const rect2 = document.getElementById('tabbar').getBoundingClientRect();
-    const height = rect2.top - rect.top + 20;
-    const width = screen.width * 0.9;
+    const height = rect2.top - rect.top + 40;
+    const width = screen.width * 0.95;
     const size = width > height ? height : width;
     let qr = new QRious({
       element: qrImage,
