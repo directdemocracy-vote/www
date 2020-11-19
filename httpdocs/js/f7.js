@@ -450,7 +450,7 @@ window.onload = function() {
     const rect = qrImage.getBoundingClientRect();
     const rect2 = document.getElementById('tabbar').getBoundingClientRect();
     const height = rect2.top - rect.top + 20;
-    const width = screen.width * 0.9;
+    const width = screen.width * 0.7;
     const size = width > height ? height : width;
     console.log("width = " + width + " height = " + height + " => size = " + size);
     let qr = new QRious({
