@@ -791,9 +791,9 @@ window.onload = function() {
           app.dialog.alert('You successfully endorsed ' + endorsed.givenNames + ' ' + endorsed.familyName,
             'Endorsement Success');
           endorsements = answer;
-          resetEndorse();
           updateEndorsements();
         }
+        resetEndorse();
       }
     };
     xhttp.open('POST', publisher + '/publish.php', true);
@@ -837,6 +837,8 @@ window.onload = function() {
       a.appendChild(b);
       a.appendChild(document.createTextNode(' ' + endorsement.givenNames));
       tr = document.createElement('tr');
+      if (endorsement.revoke)
+        tr.classList.add('revoked');
       tr.style.lineHeight = '1';
       tr.style.fontSize = '90%';
       table.appendChild(tr);
