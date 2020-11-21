@@ -26,12 +26,18 @@ window.onload = function() {
   let endorsements = [];
   let citizenEndorsements = [];
   let citizenCrypt = null;
-
+  let citizenFingerprint = null;
+  let endorseMessage = "Scan the QR code of another citizen's card to endorse her.";
+  let endorseMap = null;
+  let endorseMarker = null;
+  let scanner = null;
+  let endorsed = null;
   let publisher = localStorage.getItem('publisher');
   if (!publisher) {
     publisher = 'https://publisher.directdemocracy.vote';
     localStorage.setItem('publisher', publisher);
   }
+  document.getElementById('endorse-message').innerHTML = endorseMessage;
   document.getElementById('publisher').value = publisher;
   document.getElementById('publisher').addEventListener('input', function(event) {
     localStorage.setItem('publisher', event.target.value);
@@ -93,6 +99,15 @@ window.onload = function() {
       from: ten
     }]
   });
+
+  function publicKey(key) {
+    let pkey = '-----BEGIN PUBLIC KEY-----\n';
+    const l = key.length;
+    for (let i = 0; i < l; i += 64)
+      pkey += key.substr(i, 64) + '\n';
+    pkey += '-----END PUBLIC KEY-----';
+    return pkey;
+  }
 
   function strippedKey(publicKey) {
     let stripped = '';
@@ -350,11 +365,10 @@ window.onload = function() {
       if (this.status == 200) {
         let answer = JSON.parse(this.responseText);
         if (answer.error)
-          app.dialog.alert('Publication error: ' + JSON.stringify(answer.error) + '.<br>Please try again.');
+          app.dialog.alert(JSON.stringify(answer.error) + '.<br>Please try again.', 'Publication Error');
         else {
           /*
           localStorage.setItem('privateKey', private_key);
-          updateCitizenCard();
           document.getElementById('citizen-nav').style.display = '';
           document.getElementById('endorsements-nav').style.display = '';
           document.getElementById('register-nav').style.display = 'none';
@@ -363,7 +377,7 @@ window.onload = function() {
           $('.nav-tabs a[href="#citizen"]').tab('show');
           */
           updateCitizenCard();
-          app.dialog.alert('Congratulation: Your citizen card was just published!');
+          app.dialog.alert('Your citizen card was just published.', 'Congratulation!');
           window.localStorage.setItem('registered', true);
         }
       }
@@ -378,13 +392,14 @@ window.onload = function() {
       if (this.status == 200) {
         let answer = JSON.parse(this.responseText);
         if (answer.error)
-          app.dialog.alert('Citizen error: ' + JSON.stringify(answer.error) + '.<br>Please try again.');
+          app.dialog.alert(JSON.stringify(answer.error) + '.<br>Please try again.', 'Citizen Error');
         else {
           citizen = answer.citizen;
           citizen.key = strippedKey(citizenCrypt.getPublicKey());
           endorsements = answer.endorsements;
           citizenEndorsements = answer.citizen_endorsements;
           updateCitizenCard();
+          updateEndorsements();
         }
       }
     };
@@ -419,7 +434,7 @@ window.onload = function() {
       if (p !== page)
         document.getElementById(p + '-page').style.display = 'none';
     });
-    const cardItems = ['tabbar-endorse', 'tab-endorse', 'tabbar-vote', 'tab-vote', 'edit', 'revoke-key'];
+    const cardItems = ['tabbar-endorse', 'tab-endorse', 'endorse', 'tabbar-vote', 'tab-vote', 'edit', 'revoke-key'];
     cardItems.forEach(function(i) {
       if (page === 'card')
         enable(i);
@@ -444,7 +459,7 @@ window.onload = function() {
     let expires = new Date(citizen.expires);
     document.getElementById('citizen-published').innerHTML = published.toISOString().slice(0, 10);
     document.getElementById('citizen-expires').innerHTML = expires.toISOString().slice(0, 10);
-    let citizenFingerprint = CryptoJS.SHA1(citizen.signature).toString();
+    citizenFingerprint = CryptoJS.SHA1(citizen.signature).toString();
     let qrImage = document.getElementById('citizen-qr-code');
     const rect = qrImage.getBoundingClientRect();
     const rect2 = document.getElementById('tabbar').getBoundingClientRect();
@@ -458,6 +473,7 @@ window.onload = function() {
       size,
       padding: 0
     });
+    console.log(citizenFingerprint);
     document.getElementById('citizen-qr-code').style.width = size + 'px';
     document.getElementById('citizen-qr-code').style.height = size + 'px';
     // get reputation from trustee
@@ -609,4 +625,343 @@ window.onload = function() {
   }
   document.getElementById('edit').addEventListener('click', editOrRevokeKey);
   document.getElementById('revoke-key').addEventListener('click', editOrRevokeKey);
+  document.getElementById('endorse').addEventListener('click', function(event) {
+    console.log('endorse');
+    const button = event.target;
+    const video = document.getElementById('endorse-qr-video');
+    const list = document.getElementById('endorsements-list');
+    const message = document.getElementById('endorse-message');
+
+    if (scanner) { // Cancel pressed
+      button.innerHTML = 'Endorse a Citizen';
+      video.style.display = 'none';
+      list.style.display = '';
+      scanner.destroy();
+      scanner = null;
+      return;
+    }
+
+    function setResult(fingerprint) {
+      const pattern = /^[0-9a-f]{40}$/g;
+      if (!pattern.test(fingerprint)) {
+        message.innerHTML = 'Wrong QR code reading: <b>' + fingerprint + '</b>';
+        setTimeout(function() {
+          message.innerHTML = endorseMessage;
+        }, 10000);
+        return;
+      }
+      if (fingerprint == citizenFingerprint) {
+        message.innerHTML = 'You should not endorse yourself!';
+        setTimeout(function() {
+          message.innerHTML = endorseMessage;
+        }, 10000);
+        return;
+      }
+      message.innerHTML = 'Read: <b>' + fingerprint + '</b>';
+      /* endorsedFingerprint = fingerprint; */
+      scanner.destroy();
+      scanner = null;
+      video.style.display = 'none';
+      list.style.display = '';
+      button.classList.add('disabled');
+      let xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          endorsed = JSON.parse(this.responseText);
+          if (endorsed.hasOwnProperty('error')) {
+            message.innerHTML = endorsed.error;
+            setTimeout(function() {
+              message.innerHTML = endorseMessage;
+            }, 10000);
+            return;
+          }
+          // verify signature of endorsed
+          let signature = endorsed.signature;
+          endorsed.signature = '';
+          let verify = new JSEncrypt();
+          verify.setPublicKey(publicKey(endorsed.key));
+          if (!verify.verify(JSON.stringify(endorsed), signature, CryptoJS.SHA256)) {
+            message.innerHTML = 'Cannot verify citizen signature';
+            endorsed.signature = signature;
+            setTimeout(function() {
+              message.innerHTML = endorseMessage;
+            }, 10000);
+            return;
+          }
+          endorsed.signature = signature;
+          message.innerHTML = endorseMessage;
+          button.style.display = 'none';
+          button.classList.remove('disabled');
+          message.style.display = 'none';
+          document.getElementById('endorse-picture-check').checked = false;
+          document.getElementById('endorse-name-check').checked = false;
+          document.getElementById('endorse-coords-check').checked = false;
+          document.getElementById('endorse-citizen').style.display = '';
+          document.getElementById('endorse-picture').src = endorsed.picture;
+          document.getElementById('endorse-family-name').innerHTML = endorsed.familyName;
+          document.getElementById('endorse-given-names').innerHTML = endorsed.givenNames;
+          const lat = endorsed.latitude;
+          const lon = endorsed.longitude;
+          document.getElementById('endorse-coords').innerHTML = lat + ', ' + lon;
+          let published = new Date(endorsed.published);
+          let expires = new Date(endorsed.expires);
+          document.getElementById('endorse-published').innerHTML = published.toISOString().slice(0, 10);
+          document.getElementById('endorse-expires').innerHTML = expires.toISOString().slice(0, 10);
+          if (endorseMap == null) {
+            endorseMap = L.map('endorse-map');
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+              attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(endorseMap);
+            endorseMarker = L.marker([lat, lon]).addTo(endorseMap);
+          } else
+            endorseMarker.setLatLng([lat, lon]);
+          endorseMarker.bindPopup(lat + ', ' + lon);
+          endorseMap.setView([lat, lon], 18);
+          endorseMap.on('contextmenu', function(event) {
+            return false;
+          });
+          let xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+              const a = JSON.parse(this.responseText);
+              const address = a.display_name;
+              endorseMarker.setPopupContent(address + '<br><br><center style="color:#999">(' +
+                lat + ', ' + lon + ')</center>').openPopup();
+            }
+          };
+          xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' + lat + '&lon=' + lon +
+            '&zoom=10', true);
+          xhttp.send();
+        }
+      };
+      xhttp.open('GET', publisher + '/publication.php?fingerprint=' + fingerprint, true);
+      xhttp.send();
+    }
+    video.style.display = '';
+    button.innerHTML = 'Cancel';
+    scanner = new QrScanner(video, fingerprint => setResult(fingerprint));
+    scanner.start();
+  });
+
+  function updateEndorseConfirmButton() {
+    let button = document.getElementById('endorse-confirm');
+    if (document.getElementById('endorse-picture-check').checked &&
+      document.getElementById('endorse-name-check').checked &&
+      document.getElementById('endorse-coords-check').checked)
+      enable('endorse-confirm');
+    else
+      disable('endorse-confirm');
+  }
+  document.getElementById('endorse-picture-check').addEventListener('change', updateEndorseConfirmButton);
+  document.getElementById('endorse-name-check').addEventListener('change', updateEndorseConfirmButton);
+  document.getElementById('endorse-coords-check').addEventListener('change', updateEndorseConfirmButton);
+
+  function resetEndorse() {
+    document.getElementById('endorse-citizen').style.display = 'none';
+    document.getElementById('endorse-message').style.display = '';
+    let button = document.getElementById('endorse');
+    button.style.display = '';
+    button.innerHTML = 'Endorse a Citizen';
+  }
+  document.getElementById('endorse-cancel').addEventListener('click', function(event) {
+    resetEndorse();
+  });
+  document.getElementById('endorse-confirm').addEventListener('click', function(event) {
+    disable('endorse-confirm');
+    disable('endorse-cancel');
+    let endorsement = {
+      schema: 'https://directdemocracy.vote/json-schema/' + DIRECTDEMOCRACY_VERSION + '/endorsement.schema.json',
+      key: citizen.key,
+      signature: '',
+      published: new Date().getTime(),
+      expires: endorsed.expires,
+      publication: {
+        key: endorsed.key,
+        signature: endorsed.signature
+      }
+    };
+    endorsement.signature = citizenCrypt.sign(JSON.stringify(endorsement), CryptoJS.SHA256, 'sha256');
+    let xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+      if (this.status == 200) {
+        let answer = JSON.parse(this.responseText);
+        if (answer.error)
+          app.dialog.alert(JSON.stringify(answer.error) + '.<br>Please try again.', 'Endorsement Error');
+        else {
+          app.dialog.alert('You successfully endorsed ' + endorsed.givenNames + ' ' + endorsed.familyName,
+            'Endorsement Success');
+          endorsements = answer;
+          resetEndorse();
+          updateEndorsements();
+        }
+      }
+    };
+    xhttp.open('POST', publisher + '/publish.php', true);
+    xhttp.send(JSON.stringify(endorsement));
+  });
+
+  function updateEndorsements() {
+    let list = document.getElementById('endorsements-list');
+    list.innerHTML = ''; // clear
+    let table = document.createElement('table');
+    table.setAttribute('id', 'endorsements-table');
+    table.classList.add('table');
+    table.style.width = '100%';
+    table.style.maxWidth = '400px';
+    list.appendChild(table);
+    endorsements.forEach(function(endorsement) {
+      let tr = document.createElement('tr');
+      table.appendChild(tr);
+      if (endorsement.revoke)
+        tr.classList.add('revoked');
+      let td = document.createElement('td');
+      tr.appendChild(td);
+      let img = document.createElement('img');
+      td.setAttribute('rowspan', endorsement.revoke ? '2' : '3');
+      td.appendChild(img);
+      img.src = endorsement.picture;
+      img.style.width = '45px';
+      img.style.height = '60px';
+      td = document.createElement('td');
+      if (endorsement.revoke) {
+        td.style.fontStyle = 'italic';
+      }
+      td.setAttribute('colspan', '3');
+      tr.appendChild(td);
+      let a = document.createElement('a');
+      td.appendChild(a);
+      a.href = publisher + '/publication.php?fingerprint=' + CryptoJS.SHA1(endorsement.signature).toString();
+      a.target = '_blank';
+      let b = document.createElement('b');
+      b.appendChild(document.createTextNode(endorsement.familyName));
+      a.appendChild(b);
+      a.appendChild(document.createTextNode(' ' + endorsement.givenNames));
+      tr = document.createElement('tr');
+      tr.style.lineHeight = '1';
+      tr.style.fontSize = '90%';
+      table.appendChild(tr);
+      td = document.createElement('td');
+      tr.appendChild(td);
+      td.classList.add('citizen-label');
+      td.appendChild(document.createTextNode(endorsement.revoke ? 'Revoked:' : 'Endorsed:'));
+      td.style.paddingRight = '10px';
+      td = document.createElement('td');
+      tr.appendChild(td);
+      let t = new Date(endorsement.published).toISOString().slice(0, 10);
+      td.classList.add('citizen-date');
+      td.appendChild(document.createTextNode(t));
+      td = document.createElement('td');
+      td.setAttribute('rowspan', endorsement.revoke ? '1' : '2');
+      td.style.verticalAlign = 'middle';
+      td.style.textAlign = 'center';
+      td.style.width = '50px';
+      tr.appendChild(td);
+      let button = null;
+      if (!endorsement.revoke) {
+        button = document.createElement('button');
+        button.classList.add('button');
+        button.classList.add('button-fill');
+        button.classList.add('color-blue');
+        button.appendChild(document.createTextNode('Revoke'));
+        td.appendChild(button);
+      }
+      tr = document.createElement('tr');
+      if (endorsement.revoke)
+        tr.style.display = 'none';
+      tr.style.lineHeight = '1';
+      tr.style.fontSize = '90%';
+      table.appendChild(tr);
+      td = document.createElement('td');
+      tr.appendChild(td);
+      td.classList.add('citizen-label');
+      td.appendChild(document.createTextNode('Expires:'));
+      td.style.paddingRight = '10px';
+      td = document.createElement('td');
+      tr.appendChild(td);
+      t = new Date(endorsement.expires).toISOString().slice(0, 10);
+      td.classList.add('citizen-date');
+      tr.style.lineHeight = '1';
+      td.appendChild(document.createTextNode(t));
+      if (!endorsement.revoke)
+        button.addEventListener('click', function() {
+          function revoke() {
+            let e = {
+              schema: 'https://directdemocracy.vote/json-schema/' + DIRECTDEMOCRACY_VERSION +
+                '/endorsement.schema.json',
+              key: citizen.key,
+              signature: '',
+              published: new Date().getTime(),
+              expires: endorsement.expires,
+              revoke: true,
+              publication: {
+                key: endorsement.key,
+                signature: endorsement.signature
+              }
+            };
+            e.signature = citizenCrypt.sign(JSON.stringify(e), CryptoJS.SHA256, 'sha256');
+            let xhttp = new XMLHttpRequest();
+            xhttp.onload = function() {
+              if (this.status == 200) {
+                let answer = JSON.parse(this.responseText);
+                if (answer.error)
+                  app.dialog.alert(JSON.stringify(answer.error) + '.<br>Please try again.', 'Revocation error');
+                else {
+                  app.dialog.alert('You successfully revoked ' + endorsement.givenNames + ' ' +
+                    endorsement.familyName, 'Revocation success');
+                  endorsements = answer;
+                  updateEndorsements();
+                }
+              }
+            };
+            xhttp.open('POST', publisher + '/publish.php', true);
+            xhttp.send(JSON.stringify(e));
+          }
+          const text = "<p>You should revoke a citizen only if the citizen has moved, " +
+            "has changed her name or is using a newer citizen card.</p>" +
+            "<p>Revoking a citizen will contribute to lower its trust and might prevent her from voting.</p>" +
+            "<p>Do you really want to revoke <b>" + endorsement.givenNames + ' ' + endorsement.familyName + "</b>?</p>" +
+            "<p>Please type <b>I understand</b> here:</p>";
+          app.dialog.create({
+            title: 'Revoke Citizen',
+            text,
+            content: '<div class="dialog-input-field item-input"><div class="item-input-wrap">' +
+              '<input type="text" class="dialog-input"></div></div>',
+            buttons: [{
+                text: app.params.dialog.buttonCancel,
+                keyCodes: app.keyboardActions ? [27] : null
+              },
+              {
+                text: app.params.dialog.buttonOk,
+                bold: true,
+                keyCodes: app.keyboardActions ? [13] : null
+              }],
+            destroyOnClose: true,
+            onClick: function(dialog, index) {
+              if (index === 1) // OK
+                revoke();
+            },
+            on: {
+              open: function(d) {
+                let input = d.$el.find('.dialog-input')[0];
+                let okButton = d.$el.find('.dialog-button')[1];
+                disable(okButton);
+                input.focus();
+                input.addEventListener('input', function(event) {
+                  if (event.target.value === 'I understand')
+                    enable(okButton);
+                  else
+                    disable(okButton);
+                });
+                input.addEventListener('change', function(event) {
+                  if (event.target.value === 'I understand') {
+                    d.close();
+                    revoke();
+                  }
+                });
+              }
+            }
+          }).open();
+        });
+    });
+  }
 };

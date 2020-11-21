@@ -155,8 +155,66 @@
                   </div>
                 </div>
               </div>
-              <div class=" page-content
-                          tab" id="tab-endorse">Endorse</div>
+              <div class="page-content tab" id="tab-endorse">
+                <div class="block">
+                  <button id="endorse" class="button button-fill color-blue disabled">Endorse a Citizen</button>
+                  <div id="endorse-message">Scan the QR code of another citizen's card to endorse her.</div>
+                  <video muted playsinline id="endorse-qr-video" style="width:100%;height:400px;display:none"></video>
+                  <div id="endorse-citizen" style="display:none">
+                    <div class="row">
+                      <div class="col text-align-right"><img id="endorse-picture" style="width:150px;height:200px"></div>
+                      <div class="col">
+                        <div>Family name:</div>
+                        <div style="font-size:120%"><b id="endorse-family-name"></b></div>
+                        <div>Given name(s):</div>
+                        <div style="font-size:120%"><b id="endorse-given-names"></b></div>
+                        <div>Latitude, longitude:</div>
+                        <div><b id="endorse-coords"></b></div>
+                        <div>Created: <b id="endorse-published"></b></div>
+                        <div>Expires: <b id="endorse-expires"></b></div>
+                      </div>
+                    </div>
+                    <div id="endorse-map" style="width:100%;height:400px"></div>
+                    <div class="list">
+                      <ul>
+                        <li>
+                          <label class="item-checkbox item-content">
+                            <input id="endorse-picture-check" type="checkbox">
+                            <i class="icon icon-checkbox"></i>
+                            <div class="item-inner">
+                              <div class="item-title">I recognize this person on the picture.</div>
+                            </div>
+                          </label>
+                        </li>
+                        <li>
+                          <label class="item-checkbox item-content">
+                            <input id="endorse-name-check" type="checkbox">
+                            <i class="icon icon-checkbox"></i>
+                            <div class="item-inner">
+                              <div class="item-title">The family and given names are correct.</div>
+                            </div>
+                          </label>
+                        </li>
+                        <li>
+                          <label class="item-checkbox item-content">
+                            <input id="endorse-coords-check" type="checkbox">
+                            <i class="icon icon-checkbox"></i>
+                            <div class="item-inner">
+                              <div class="item-title">The home address is correct.</div>
+                            </div>
+                          </label>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="row">
+                      <button id="endorse-confirm" class="col button button-fill color-green disabled">Endorse</button>
+                      <button id="endorse-cancel" class="col button button-fill color-blue">Cancel</button>
+                      <div>Warning: wrongly endorsing a citizen is likely to affect your own endorsements by trustees.</div>
+                    </div>
+                  </div>
+                  <div id="endorsements-list"></div>
+                </div>
+              </div>
               <div class="page-content tab" id="tab-vote">Vote</div>
               <div class="page-content tab" id="tab-settings">
                 <div class="block-title block-title-medium">URLs</div>
