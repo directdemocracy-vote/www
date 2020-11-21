@@ -456,7 +456,7 @@ window.onload = function() {
       value: citizenFingerprint,
       level: 'M',
       size,
-      padding: 13
+      padding: 0
     });
     document.getElementById('citizen-qr-code').style.width = size + 'px';
     document.getElementById('citizen-qr-code').style.height = size + 'px';
