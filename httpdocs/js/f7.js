@@ -455,7 +455,7 @@ window.onload = function() {
       element: qrImage,
       value: citizenFingerprint,
       level: 'M',
-      size: size,
+      size,
       padding: 13
     });
     document.getElementById('citizen-qr-code').style.width = size + 'px';
@@ -567,8 +567,8 @@ window.onload = function() {
     text += '<p>Please type <b>I understand</b> here:</p>';
 
     app.dialog.create({
-      title: title,
-      text: text,
+      title,
+      text,
       content: '<div class="dialog-input-field item-input"><div class="item-input-wrap">' +
         '<input type="text" class="dialog-input"></div></div>',
       buttons: [{
