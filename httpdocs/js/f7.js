@@ -741,7 +741,22 @@ window.onload = function() {
     video.style.display = '';
     button.innerHTML = 'Cancel';
     scanner = new QrScanner(video, fingerprint => setResult(fingerprint));
-    scanner.start();
+    scanner.start().then(function() {
+      console.log('size: ' + video.clientWidth + ' x ' + video.clientHeight);
+      if (video.clientWidth > video.clientHeight) {
+        const margin = 100 * (video.clientWidth - video.clientHeight) / video.clientWidth;
+        console.log("margin = -" + margin + "%");
+        const size = 2 * margin + 100;
+        video.style.marginLeft = -margin + '%';
+        video.style.width = size + '%';
+      } else {
+        const margin = 100 * (video.clientHeight - video.clientWidth) / video.clientHeight;
+        console.log("margin = -" + margin + "%");
+        const size = 2 * margin + 100;
+        video.style.topLeft = -margin + '%';
+        video.style.height = size + '%';
+      }
+    });
   });
 
   function updateEndorseConfirmButton() {
