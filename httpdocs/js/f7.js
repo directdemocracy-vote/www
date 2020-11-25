@@ -680,9 +680,11 @@ window.onload = function() {
           endorsed.signature = '';
           let verify = new JSEncrypt();
           verify.setPublicKey(publicKey(endorsed.key));
+          button.classList.remove('disabled');
           if (!verify.verify(JSON.stringify(endorsed), signature, CryptoJS.SHA256)) {
             message.innerHTML = 'Cannot verify citizen signature';
-            endorsed.signature = signature;
+            button.innerHTML = 'Endorse a Citizen';
+            endorsed.signature = '';
             setTimeout(function() {
               message.innerHTML = endorseMessage;
             }, 10000);
@@ -691,7 +693,6 @@ window.onload = function() {
           endorsed.signature = signature;
           message.innerHTML = endorseMessage;
           button.style.display = 'none';
-          button.classList.remove('disabled');
           message.style.display = 'none';
           document.getElementById('endorse-picture-check').checked = false;
           document.getElementById('endorse-name-check').checked = false;
