@@ -625,6 +625,22 @@ window.onload = function() {
   }
   document.getElementById('edit').addEventListener('click', editOrRevokeKey);
   document.getElementById('revoke-key').addEventListener('click', editOrRevokeKey);
+
+  document.getElementById('endorse-qr-video').addEventListener('loadedmetadata', function() {
+    if (this.videoWidth > this.videoHeight) {
+      const margin = -100 * (this.videoWidth - this.videoHeight) / this.videoWidth;
+      const size = -2 * margin + 100;
+      this.style.width = size + '%';
+      this.style.marginLeft = margin + '%';
+      this.style.marginRight = margin + '%';
+    } else {
+      const margin = -100 * (3 * this.videoHeight + this.videoWidth) / (4 * this.videoHeight);
+      this.style.width = '100%';
+      this.style.marginTop = margin + '%';
+      this.style.marginBottom = margin + '%';
+    }
+  });
+
   document.getElementById('endorse').addEventListener('click', function(event) {
     console.log('endorse');
     const button = event.target;
@@ -741,23 +757,6 @@ window.onload = function() {
     video.style.display = '';
     button.innerHTML = 'Cancel';
     scanner = new QrScanner(video, fingerprint => setResult(fingerprint));
-    video.addEventListener('loadedmetadata', function() {
-      message.innerHTML = "video = " + this.videoWidth + " x " + this.videoHeight;
-      if (this.videoWidth > this.videoHeight) {
-        const margin = -100 * (this.videoWidth - this.videoHeight) / this.videoWidth;
-        const size = -2 * margin + 100;
-        console.log("margin = " + margin + "% - size = " + size + '%');
-        this.style.width = size + '%';
-        this.style.marginLeft = margin + '%';
-        this.style.marginRight = margin + '%';
-      } else {
-        const margin = -100 * (3 * this.videoHeight + this.videoWidth) / (4 * this.videoHeight);
-        message.innerHTML = "video = " + this.videoWidth + " x " + this.videoHeight + ' margin: ' + margin + '%';
-        this.style.width = '100%';
-        this.style.marginTop = margin + '%';
-        this.style.marginBottom = margin + '%';
-      }
-    });
     scanner.start();
   });
 
