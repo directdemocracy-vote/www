@@ -516,6 +516,9 @@ window.onload = function() {
         revokeCount++;
     });
     let endorsementCount = citizenEndorsements.length - revokeCount;
+    let badge = document.getElementById('endorsed-badge');
+    badge.innerHTML = endorsementCount;
+    badge.style.display = (endorsementCount == 0) ? 'none' : '';
     let title = newElement(list, 'div', 'block-title', 'block-title-medium');
     let plural = (citizenEndorsements.length > 1) ? 'endorsements' : 'endorsement';
     title.innerHTML = endorsementCount + '/' + citizenEndorsements.length + ' ' + plural;
@@ -808,10 +811,13 @@ window.onload = function() {
   function updateEndorsements() {
     let list = document.getElementById('endorsements-list');
     list.innerHTML = ''; // clear
+    let count = 0;
     endorsements.forEach(function(endorsement) {
       let card = newElement(list, 'div', 'card');
       if (endorsement.revoke)
         card.classList.add('revoked');
+      else
+        count++;
       let content = newElement(card, 'div', 'card-content', 'card-content-padding');
       let row = newElement(content, 'div', 'row');
       let col = newElement(row, 'div', 'col-25');
@@ -921,5 +927,8 @@ window.onload = function() {
         });
       }
     });
+    let badge = document.getElementById('endorse-badge');
+    badge.innerHTML = count;
+    badge.style.display = (count == 0) ? 'none' : '';
   }
 };
