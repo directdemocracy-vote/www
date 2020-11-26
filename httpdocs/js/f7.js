@@ -745,6 +745,7 @@ window.onload = function() {
       console.log('size: ' + video.clientWidth + ' x ' + video.clientHeight);
       if (video.clientWidth > video.clientHeight) {
         const margin = 100 * (video.clientWidth - video.clientHeight) / video.clientWidth;
+        message.innerHTML = 'margin = -' + margin + '%';
         const size = 2 * margin + 100;
         video.style.width = size + '%';
         video.style.marginLeft = -margin + '%';
@@ -752,6 +753,7 @@ window.onload = function() {
       } else {
         const margin = 100 * (video.clientHeight - video.clientWidth) / video.clientHeight;
         console.log("margin = -" + margin + "%");
+        message.innerHTML = 'margin = -' + margin + '%';
         video.style.width = '100%';
         video.style.marginTop = -margin + '%';
         video.style.marginBottom = -margin + '%';
