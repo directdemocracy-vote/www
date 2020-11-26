@@ -628,16 +628,13 @@ window.onload = function() {
     // display video as a square centered in the video rectangle
     const message = document.getElementById('endorse-message');
     if (this.videoWidth > this.videoHeight) {
-      const margin = -100 * (this.videoWidth - this.videoHeight) / this.videoWidth;
+      const margin = -100 * Math.round((this.videoWidth - this.videoHeight) / this.videoWidth);
       const size = -2 * margin + 100;
-      message.innerHTML = this.videoHeight + 'x' + this.videoWidth + ' margin = ' + margin + '%';
       this.style.width = size + '%';
       this.style.marginLeft = margin + '%';
       this.style.marginRight = margin + '%';
     } else {
-      let margin = -100 * (3 * this.videoHeight + this.videoWidth) / (4 * this.videoHeight);
-      margin = -40;
-      message.innerHTML = this.videoHeight + 'x' + this.videoWidth + ' margin = ' + margin + '%';
+      let margin = -100 * Math.round((this.videoHeight - this.videoWidth) / (2 * this.videoWidth));
       this.style.width = '100%';
       this.style.marginTop = margin + '%';
       this.style.marginBottom = margin + '%';
