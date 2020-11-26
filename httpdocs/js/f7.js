@@ -821,89 +821,50 @@ window.onload = function() {
   function updateEndorsements() {
     let list = document.getElementById('endorsements-list');
     list.innerHTML = ''; // clear
-    let table = document.createElement('table');
-    table.setAttribute('id', 'endorsements-table');
-    table.classList.add('table');
-    table.style.width = '100%';
-    table.style.maxWidth = '400px';
-    list.appendChild(table);
-    endorsements.forEach(function(endorsement) {
-      let tr = document.createElement('tr');
-      table.appendChild(tr);
-      if (endorsement.revoke)
-        tr.classList.add('revoked');
-      let td = document.createElement('td');
-      tr.appendChild(td);
-      let img = document.createElement('img');
-      td.setAttribute('rowspan', endorsement.revoke ? '2' : '3');
-      td.appendChild(img);
-      img.src = endorsement.picture;
-      img.style.width = '45px';
-      img.style.height = '60px';
-      td = document.createElement('td');
-      if (endorsement.revoke) {
-        td.style.fontStyle = 'italic';
+    function newElement(parent, type, class0, class1) {
+      let element = document.createElement(type);
+      parent.appendChild(element);
+      if (class0) {
+        element.classList.add(class0);
+        if (class1)
+          element.classList.add(class1);
       }
-      td.setAttribute('colspan', '3');
-      tr.appendChild(td);
-      let a = document.createElement('a');
-      td.appendChild(a);
+      return element;
+    }
+    endorsements.forEach(function(endorsement) {
+      let card = newElement(list, 'div', 'card');
+      if (endorsement.revoke)
+        card.classList.add('revoked');
+      let content = newElement(card, 'div', 'card-content', 'card-content-padding');
+      let row = newElement(content, 'div', 'row');
+      let col = newElement(row, 'div', 'col-25');
+      let img = newElement(col, 'img');
+      img.src = endorsement.picture;
+      img.style.width = '100%';
+      col = newElement(row, 'div', 'col-75');
+      let a = newElement(col, 'a');
       a.href = publisher + '/publication.php?fingerprint=' + CryptoJS.SHA1(endorsement.signature).toString();
       a.target = '_blank';
-      let b = document.createElement('b');
+      let b = newElement(a, 'b');
       b.appendChild(document.createTextNode(endorsement.familyName));
-      a.appendChild(b);
       a.appendChild(document.createTextNode(' ' + endorsement.givenNames));
-      tr = document.createElement('tr');
-      if (endorsement.revoke)
-        tr.classList.add('revoked');
-      tr.style.lineHeight = '1';
-      tr.style.fontSize = '90%';
-      table.appendChild(tr);
-      td = document.createElement('td');
-      tr.appendChild(td);
-      td.classList.add('citizen-label');
-      td.appendChild(document.createTextNode(endorsement.revoke ? 'Revoked:' : 'Endorsed:'));
-      td.style.paddingRight = '10px';
-      td = document.createElement('td');
-      tr.appendChild(td);
+      row = newElement(col, 'div', 'row');
+      let c = newElement(row, 'div', 'col');
       let t = new Date(endorsement.published).toISOString().slice(0, 10);
-      td.classList.add('citizen-date');
-      td.appendChild(document.createTextNode(t));
-      td = document.createElement('td');
-      td.setAttribute('rowspan', endorsement.revoke ? '1' : '2');
-      td.style.verticalAlign = 'middle';
-      td.style.textAlign = 'center';
-      td.style.width = '50px';
-      tr.appendChild(td);
-      let button = null;
+      c.innerHTML = (endorsement.revoke ? 'Revoked: ' : 'Endorsed: ') + t;
       if (!endorsement.revoke) {
-        button = document.createElement('button');
-        button.classList.add('button');
-        button.classList.add('button-fill');
-        button.classList.add('color-blue');
-        button.appendChild(document.createTextNode('Revoke'));
-        td.appendChild(button);
-      }
-      tr = document.createElement('tr');
-      if (endorsement.revoke)
-        tr.style.display = 'none';
-      tr.style.lineHeight = '1';
-      tr.style.fontSize = '90%';
-      table.appendChild(tr);
-      td = document.createElement('td');
-      tr.appendChild(td);
-      td.classList.add('citizen-label');
-      td.appendChild(document.createTextNode('Expires:'));
-      td.style.paddingRight = '10px';
-      td = document.createElement('td');
-      tr.appendChild(td);
-      t = new Date(endorsement.expires).toISOString().slice(0, 10);
-      td.classList.add('citizen-date');
-      tr.style.lineHeight = '1';
-      td.appendChild(document.createTextNode(t));
-      if (!endorsement.revoke)
-        button.addEventListener('click', function() {
+        row = newElement(col, 'div', 'row');
+        c = newElement(row, 'div', 'col');
+        t = new Date(endorsement.expires).toISOString().slice(0, 10);
+        c.innerHTML = 'Expires: ' + t;
+        row = newElement(col, 'div', 'row');
+        c = newElement(row, 'div', 'col', 'text-align-right');
+        a = newElement(c, 'a', 'link');
+        a.href = '#';
+        a.style.fontWeight = 'bold';
+        a.style.textTransform = 'uppercase';
+        a.innerHTML = 'Revoke';
+        a.addEventListener('click', function() {
           function revoke() {
             let e = {
               schema: 'https://directdemocracy.vote/json-schema/' + DIRECTDEMOCRACY_VERSION +
@@ -939,7 +900,8 @@ window.onload = function() {
           const text = "<p>You should revoke a citizen only if the citizen has moved, " +
             "has changed her name or is using a newer citizen card.</p>" +
             "<p>Revoking a citizen will contribute to lower its trust and might prevent her from voting.</p>" +
-            "<p>Do you really want to revoke <b>" + endorsement.givenNames + ' ' + endorsement.familyName + "</b>?</p>" +
+            "<p>Do you really want to revoke <b>" + endorsement.givenNames + ' ' + endorsement.familyName +
+            "</b>?</p>" +
             "<p>Please type <b>I understand</b> here:</p>";
           app.dialog.create({
             title: 'Revoke Citizen',
@@ -982,6 +944,7 @@ window.onload = function() {
             }
           }).open();
         });
+      }
     });
   }
 };
