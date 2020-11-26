@@ -627,6 +627,7 @@ window.onload = function() {
   document.getElementById('revoke-key').addEventListener('click', editOrRevokeKey);
 
   document.getElementById('endorse-qr-video').addEventListener('loadedmetadata', function() {
+    // display video as a square centered in the video rectangle
     if (this.videoWidth > this.videoHeight) {
       const margin = -100 * (this.videoWidth - this.videoHeight) / this.videoWidth;
       const size = -2 * margin + 100;
