@@ -14,6 +14,7 @@
   box-shadow: 1px 2px 3px rgba(0,0,0,.3);
   opacity: 0.85;
   text-transform: uppercase;
+  font-family: Verdana, Geneva, sans-serif;
 }
 .revoked {
   background-color: #ddd;
