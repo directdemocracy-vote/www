@@ -752,7 +752,7 @@ window.onload = function() {
         this.style.marginRight = margin + '%';
       } else {
         // const margin = -130 * (this.videoHeight - this.videoWidth) / this.videoHeight;
-        const margin = -80;
+        const margin = -84;
         message.innerHTML = "video = " + this.videoWidth + " x " + this.videoHeight + ' margin: ' + margin + '%';
         this.style.width = '100%';
         this.style.marginTop = margin + '%';
