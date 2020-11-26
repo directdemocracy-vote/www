@@ -818,6 +818,7 @@ window.onload = function() {
           endorsements = answer;
           updateEndorsements();
         }
+        enable('endorse-cancel');
         resetEndorse();
       }
     };
