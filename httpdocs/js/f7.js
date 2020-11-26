@@ -517,15 +517,8 @@ window.onload = function() {
     });
     let endorsementCount = citizenEndorsements.length - revokeCount;
     let title = newElement(list, 'div', 'block-title', 'block-title-medium');
-    let heading = '';
-    if (endorsementCount) {
-      heading += 'Endorsed by ' + endorsementCount;
-      if (revokeCount)
-        heading += '&ndash;';
-    }
-    if (revokeCount)
-      heading += 'Revoked by ' + revokeCount;
-    title.innerHTML = heading;
+    let plural = (endorsementCount > 1) ? 'endorsements' : 'endorsement';
+    title.innerHTML = endorsementCount + '/' + citizenEndorsements.length + ' ' + plural;
     citizenEndorsements.forEach(function(endorsement) {
       let card = newElement(list, 'div', 'card');
       if (endorsement.revoke)
