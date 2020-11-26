@@ -367,15 +367,6 @@ window.onload = function() {
         if (answer.error)
           app.dialog.alert(JSON.stringify(answer.error) + '.<br>Please try again.', 'Publication Error');
         else {
-          /*
-          localStorage.setItem('privateKey', private_key);
-          document.getElementById('citizen-nav').style.display = '';
-          document.getElementById('endorsements-nav').style.display = '';
-          document.getElementById('register-nav').style.display = 'none';
-          document.getElementById('revoke-key').removeAttribute('disabled');
-          document.getElementById('edit').removeAttribute('disabled');
-          $('.nav-tabs a[href="#citizen"]').tab('show');
-          */
           updateCitizenCard();
           app.dialog.alert('Your citizen card was just published.', 'Congratulation!');
           window.localStorage.setItem('registered', true);
