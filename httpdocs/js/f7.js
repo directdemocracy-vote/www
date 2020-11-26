@@ -744,20 +744,18 @@ window.onload = function() {
     video.addEventListener('loadedmetadata', function() {
       message.innerHTML = "video = " + this.videoWidth + " x " + this.videoHeight;
       if (this.videoWidth > this.videoHeight) {
-        const margin = 100 * (this.videoWidth - this.videoHeight) / this.videoWidth;
-        const size = 2 * margin + 100;
-        console.log("margin = " + margin + " - size = " + size);
+        const margin = -100 * (this.videoWidth - this.videoHeight) / this.videoWidth;
+        const size = -2 * margin + 100;
+        console.log("margin = " + margin + "% - size = " + size + '%');
         this.style.width = size + '%';
-        this.style.marginLeft = -margin + '%';
-        this.style.marginRight = -margin + '%';
+        this.style.marginLeft = margin + '%';
+        this.style.marginRight = margin + '%';
       } else {
-        const margin = 100 * (this.videoHeight - this.videoWidth) / this.videoHeight;
-        const size = 2 * margin + 100;
-        message.innerHTML = "video = " + this.videoWidth + " x " + this.videoHeight + ' margin: ' + margin +
-          ' size: ' + size;
+        const margin = -140 * (this.videoHeight - this.videoWidth) / this.videoHeight;
+        message.innerHTML = "video = " + this.videoWidth + " x " + this.videoHeight + ' margin: ' + margin + '%';
         this.style.width = '100%';
-        this.style.marginTop = -(margin * 1.5) + '%';
-        this.style.marginBottom = -(margin * 1.5) + '%';
+        this.style.marginTop = margin + '%';
+        this.style.marginBottom = margin + '%';
       }
     });
     scanner.start();
