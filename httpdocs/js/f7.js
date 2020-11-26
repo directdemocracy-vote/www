@@ -516,15 +516,16 @@ window.onload = function() {
         revokeCount++;
     });
     let endorsementCount = citizenEndorsements.length - revokeCount;
+    let title = newElement(list, 'div', 'block-title', 'block-title-medium');
     let heading = '';
     if (endorsementCount) {
-      let title = newElement(list, 'div', 'block-title', 'block-title-medium');
-      title.innerHTML = 'Endorsed by ' + endorsementCount;
+      heading += 'Endorsed by ' + endorsementCount;
+      if (revokeCount)
+        heading += '&ndash;';
     }
-    if (revokeCount) {
-      let title = newElement(list, 'div', 'block-title', 'block-title-medium');
-      title.innerHTML = 'Revoked by ' + revokeCount;
-    }
+    if (revokeCount)
+      heading += 'Revoked by ' + revokeCount;
+    title.innerHTML = heading;
     citizenEndorsements.forEach(function(endorsement) {
       let card = newElement(list, 'div', 'card');
       if (endorsement.revoke)
@@ -545,7 +546,7 @@ window.onload = function() {
       row = newElement(col, 'div', 'row');
       let c = newElement(row, 'div', 'col');
       let t = new Date(endorsement.published).toISOString().slice(0, 10);
-      c.innerHTML = (endorsement.revoke ? 'Revoked: ' : 'Endorsed: ') + t;
+      c.innerHTML = (endorsement.revoke ? 'Revoked you on: ' : 'Endorsed you on: ') + t;
     });
   }
 
