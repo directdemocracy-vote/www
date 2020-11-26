@@ -517,7 +517,7 @@ window.onload = function() {
     });
     let endorsementCount = citizenEndorsements.length - revokeCount;
     let title = newElement(list, 'div', 'block-title', 'block-title-medium');
-    let plural = (endorsementCount > 1) ? 'endorsements' : 'endorsement';
+    let plural = (citizenEndorsements.length > 1) ? 'endorsements' : 'endorsement';
     title.innerHTML = endorsementCount + '/' + citizenEndorsements.length + ' ' + plural;
     citizenEndorsements.forEach(function(endorsement) {
       let card = newElement(list, 'div', 'card');
