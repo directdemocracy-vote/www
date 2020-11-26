@@ -756,8 +756,8 @@ window.onload = function() {
         message.innerHTML = "video = " + this.videoWidth + " x " + this.videoHeight + ' margin: ' + margin +
           ' size: ' + size;
         this.style.width = '100%';
-        this.style.marginTop = -margin + '%';
-        this.style.marginBottom = -margin + '%';
+        this.style.marginTop = -(margin * 1.5) + '%';
+        this.style.marginBottom = -(margin * 1.5) + '%';
       }
     });
     scanner.start();
