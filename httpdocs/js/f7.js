@@ -751,7 +751,7 @@ window.onload = function() {
         this.style.marginLeft = margin + '%';
         this.style.marginRight = margin + '%';
       } else {
-        const margin = -140 * (this.videoHeight - this.videoWidth) / this.videoHeight;
+        const margin = -130 * (this.videoHeight - this.videoWidth) / this.videoHeight;
         message.innerHTML = "video = " + this.videoWidth + " x " + this.videoHeight + ' margin: ' + margin + '%';
         this.style.width = '100%';
         this.style.marginTop = margin + '%';
