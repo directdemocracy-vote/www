@@ -635,9 +635,9 @@ window.onload = function() {
       this.style.marginLeft = margin + '%';
       this.style.marginRight = margin + '%';
     } else {
-      const margin = -100 * (3 * this.videoHeight + this.videoWidth) / (4 * this.videoHeight);
+      let margin = -100 * (3 * this.videoHeight + this.videoWidth) / (4 * this.videoHeight);
+      margin = -60;
       message.innerHTML = this.videoHeight + 'x' + this.videoWidth + ' margin = ' + margin + '%';
-      margin = -70;
       this.style.width = '100%';
       this.style.marginTop = margin + '%';
       this.style.marginBottom = margin + '%';
