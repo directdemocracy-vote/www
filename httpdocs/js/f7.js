@@ -751,7 +751,7 @@ window.onload = function() {
         this.style.marginLeft = -margin + '%';
         this.style.marginRight = -margin + '%';
       } else {
-        const margin = 100 * (this.videoWidth - this.videoHeight) / this.videoWidth;
+        const margin = 100 * (this.videoHeight - this.videoWidth) / this.videoHeight;
         const size = 2 * margin + 100;
         message.innerHTML = "video = " + this.videoWidth + " x " + this.videoHeight + ' margin: ' + margin +
           ' size: ' + size;
