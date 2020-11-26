@@ -606,7 +606,6 @@ window.onload = function() {
           let input = d.$el.find('.dialog-input')[0];
           let okButton = d.$el.find('.dialog-button')[1];
           disable(okButton);
-          // input.focus();
           input.addEventListener('input', function(event) {
             if (event.target.value === 'I understand')
               enable(okButton);
@@ -905,7 +904,7 @@ window.onload = function() {
             xhttp.open('POST', publisher + '/publish.php', true);
             xhttp.send(JSON.stringify(e));
           }
-          const text = "<p>You should revoke a citizen who has moved or " +
+          const text = "<p>You should revoke only a citizen who has moved or " +
             "changed her citizen card. This might affect her ability to vote.</p>" +
             "<p>Do you really want to revoke <b>" + endorsement.givenNames + ' ' + endorsement.familyName +
             "</b>?</p>" +
@@ -934,7 +933,6 @@ window.onload = function() {
                 let input = d.$el.find('.dialog-input')[0];
                 let okButton = d.$el.find('.dialog-button')[1];
                 disable(okButton);
-                // input.focus();
                 input.addEventListener('input', function(event) {
                   if (event.target.value === 'I understand')
                     enable(okButton);
