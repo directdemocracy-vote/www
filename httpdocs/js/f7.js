@@ -492,27 +492,26 @@ window.onload = function() {
     };
     xhttp.open('GET', trustee + '/reputation.php?key=' + encodeURIComponent(citizen.key), true);
     xhttp.send();
-    /*
     let list = document.getElementById('citizen-endorsements-list');
-    if (citizen_endorsements.length == 0) {
-      list.innertHTML = '<br><h4>Your citizen card no endorsement</h4>You should ask to other citizen to endorse you.';
+    if (citizenEndorsements.length == 0) {
+      list.innerHTML =
+        '<div class="block-title block-title-medium">Not endorsed</div>' +
+        '<div class="block">You should ask to other citizens to endorse you.</div>';
       return;
     }
-    let revoke_count = 0;
-    citizen_endorsements.forEach(function(endorsement) {
+    let revokeCount = 0;
+    citizenEndorsements.forEach(function(endorsement) {
       if (endorsement.revoke)
-        revoke_count++;
+        revokeCount++;
     });
-    let endorsement_count = citizen_endorsements.length - revoke_count;
+    let endorsementCount = citizenEndorsements.length - revokeCount;
     let heading = '';
-    if (endorsement_count) {
-      heading += 'Endorsed by ' + endorsement_count;
-      if (revoke_count)
-        heading += ' &ndash; ';
-    }
-    if (revoke_count)
-      heading += 'Revoked by ' + revoke_count;
-    list.innerHTML = '<br><h4>' + heading + ':</h4>';
+    if (endorsementCount)
+      heading += '<div class="block-title block-title-medium">Endorsed by ' + endorsementCount + '</div>';
+    if (revokeCount)
+      heading += '<div class="block-title block-title-medium">Revoked by ' + revokeCount + '</div>';
+    list.innerHTML = heading;
+    /*
     let table = document.createElement('table');
     table.classList.add('table');
     table.style.width = '100%';
@@ -627,14 +626,17 @@ window.onload = function() {
 
   document.getElementById('endorse-qr-video').addEventListener('loadedmetadata', function() {
     // display video as a square centered in the video rectangle
+    const message = document.getElementById('endorse-message');
     if (this.videoWidth > this.videoHeight) {
       const margin = -100 * (this.videoWidth - this.videoHeight) / this.videoWidth;
       const size = -2 * margin + 100;
+      message.innerHTML = this.videoHeight + 'x' + this.videoWidth + ' margin = ' + margin + '%';
       this.style.width = size + '%';
       this.style.marginLeft = margin + '%';
       this.style.marginRight = margin + '%';
     } else {
       const margin = -100 * (3 * this.videoHeight + this.videoWidth) / (4 * this.videoHeight);
+      message.innerHTML = this.videoHeight + 'x' + this.videoWidth + ' margin = ' + margin + '%';
       this.style.width = '100%';
       this.style.marginTop = margin + '%';
       this.style.marginBottom = margin + '%';
