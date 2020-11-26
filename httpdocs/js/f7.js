@@ -443,6 +443,17 @@ window.onload = function() {
     });
   }
 
+  function newElement(parent, type, class0, class1) {
+    let element = document.createElement(type);
+    parent.appendChild(element);
+    if (class0) {
+      element.classList.add(class0);
+      if (class1)
+        element.classList.add(class1);
+    }
+    return element;
+  }
+
   function updateCitizenCard() {
     showPage('card');
     document.getElementById('citizen-picture').setAttribute('src', citizen.picture);
@@ -506,61 +517,36 @@ window.onload = function() {
     });
     let endorsementCount = citizenEndorsements.length - revokeCount;
     let heading = '';
-    if (endorsementCount)
-      heading += '<div class="block-title block-title-medium">Endorsed by ' + endorsementCount + '</div>';
-    if (revokeCount)
-      heading += '<div class="block-title block-title-medium">Revoked by ' + revokeCount + '</div>';
-    list.innerHTML = heading;
-    /*
-    let table = document.createElement('table');
-    table.classList.add('table');
-    table.style.width = '100%';
-    table.style.maxWidth = '400px';
-    list.appendChild(table);
-    citizen_endorsements.forEach(function(endorsement) {
-      let tr = document.createElement('tr');
-      table.appendChild(tr);
-      let td = document.createElement('td');
-      tr.appendChild(td);
-      let img = document.createElement('img');
-      td.setAttribute('rowspan', '2');
-      td.appendChild(img);
-      img.src = endorsement.picture;
-      img.style.width = '45px';
-      img.style.height = '60px';
-      td = document.createElement('td');
+    if (endorsementCount) {
+      let title = createElement(list, 'div', 'block-title', 'block-title-medium');
+      title.innerHTML = 'Endorsed by ' + endorsementCount;
+    }
+    if (revokeCount) {
+      let title = createElement(list, 'div', 'block-title', 'block-title-medium');
+      title.innerHTML = 'Revoked by ' + revokeCount;
+    }
+    citizenEndorsements.forEach(function(endorsement) {
+      let card = createElement(list, 'div', 'card');
       if (endorsement.revoke)
-        td.style.fontStyle = 'italic';
-      td.setAttribute('colspan', '2');
-      tr.appendChild(td);
-      let a = document.createElement('a');
-      td.appendChild(a);
-      a.href = publisher + '/publication.php?fingerprint=' + endorsement.fingerprint;
+        card.classList.add('revoked');
+      let content = newElement(card, 'div', 'card-content', 'card-content-padding');
+      let row = newElement(content, 'div', 'row');
+      let col = newElement(row, 'div', 'col-25');
+      let img = newElement(col, 'img');
+      img.src = endorsement.picture;
+      img.style.width = '100%';
+      col = newElement(row, 'div', 'col-75');
+      let a = newElement(col, 'a');
+      a.href = publisher + '/publication.php?fingerprint=' + CryptoJS.SHA1(endorsement.signature).toString();
       a.target = '_blank';
-      let b = document.createElement('b');
+      let b = newElement(a, 'b');
       b.appendChild(document.createTextNode(endorsement.familyName));
-      a.appendChild(b);
       a.appendChild(document.createTextNode(' ' + endorsement.givenNames));
-      tr = document.createElement('tr');
-      tr.style.lineHeight = '1';
-      tr.style.fontSize = '90%';
-      table.appendChild(tr);
-      td = document.createElement('td');
-      tr.appendChild(td);
-      td.classList.add('citizen-label');
-      if (endorsement.revoke) {
-        td.style.color = 'red';
-        td.style.fontWeight = 'bold';
-      }
-      td.appendChild(document.createTextNode(endorsement.revoke ? 'Revoked you on:' : 'Endorsed you on:'));
-      td.style.paddingRight = '10px';
-      td = document.createElement('td');
-      tr.appendChild(td);
+      row = newElement(col, 'div', 'row');
+      let c = newElement(row, 'div', 'col');
       let t = new Date(endorsement.published).toISOString().slice(0, 10);
-      td.classList.add('citizen-date');
-      td.appendChild(document.createTextNode(t));
+      c.innerHTML = (endorsement.revoke ? 'Revoked: ' : 'Endorsed: ') + t;
     });
-    */
   }
 
   function editOrRevokeKey(event) {
@@ -828,16 +814,6 @@ window.onload = function() {
   function updateEndorsements() {
     let list = document.getElementById('endorsements-list');
     list.innerHTML = ''; // clear
-    function newElement(parent, type, class0, class1) {
-      let element = document.createElement(type);
-      parent.appendChild(element);
-      if (class0) {
-        element.classList.add(class0);
-        if (class1)
-          element.classList.add(class1);
-      }
-      return element;
-    }
     endorsements.forEach(function(endorsement) {
       let card = newElement(list, 'div', 'card');
       if (endorsement.revoke)
