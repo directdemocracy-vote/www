@@ -726,7 +726,9 @@ window.onload = function() {
           document.getElementById('endorse-published').innerHTML = published.toISOString().slice(0, 10);
           document.getElementById('endorse-expires').innerHTML = expires.toISOString().slice(0, 10);
           if (endorseMap == null) {
-            endorseMap = L.map('endorse-map');
+            endorseMap = L.map('endorse-map', {
+              dragging: false
+            });
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
               attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>'
             }).addTo(endorseMap);
