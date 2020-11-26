@@ -745,16 +745,16 @@ window.onload = function() {
       console.log('size: ' + video.clientWidth + ' x ' + video.clientHeight);
       if (video.clientWidth > video.clientHeight) {
         const margin = 100 * (video.clientWidth - video.clientHeight) / video.clientWidth;
-        console.log("margin = -" + margin + "%");
         const size = 2 * margin + 100;
-        video.style.marginLeft = -margin + '%';
         video.style.width = size + '%';
+        video.style.marginLeft = -margin + '%';
+        video.style.marginRight = -margin + '%';
       } else {
         const margin = 100 * (video.clientHeight - video.clientWidth) / video.clientHeight;
         console.log("margin = -" + margin + "%");
-        const size = 2 * margin + 100;
-        video.style.topLeft = -margin + '%';
-        video.style.height = size + '%';
+        video.style.width = '100%';
+        video.style.marginTop = -margin + '%';
+        video.style.marginBottom = -margin + '%';
       }
     });
   });
