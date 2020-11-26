@@ -729,6 +729,12 @@ window.onload = function() {
             endorseMap = L.map('endorse-map', {
               dragging: false
             });
+            endorseMap.whenReady(function() {
+              setTimeout(() => {
+                this.invalidateSize();
+              }, 0);
+            });
+
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
               attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>'
             }).addTo(endorseMap);
