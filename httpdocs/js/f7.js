@@ -905,9 +905,8 @@ window.onload = function() {
             xhttp.open('POST', publisher + '/publish.php', true);
             xhttp.send(JSON.stringify(e));
           }
-          const text = "<p>You should revoke a citizen only if the citizen has moved, " +
-            "has changed her name or is using a newer citizen card.</p>" +
-            "<p>Revoking a citizen will contribute to lower its trust and might prevent her from voting.</p>" +
+          const text = "<p>You should revoke a citizen only if she has moved or " +
+            "changed her citizen card.</p>" +
             "<p>Do you really want to revoke <b>" + endorsement.givenNames + ' ' + endorsement.familyName +
             "</b>?</p>" +
             "<p>Please type <b>I understand</b> here:</p>";
