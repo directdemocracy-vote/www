@@ -636,7 +636,7 @@ window.onload = function() {
       this.style.marginRight = margin + '%';
     } else {
       let margin = -100 * (3 * this.videoHeight + this.videoWidth) / (4 * this.videoHeight);
-      margin = -60;
+      margin = -40;
       message.innerHTML = this.videoHeight + 'x' + this.videoWidth + ' margin = ' + margin + '%';
       this.style.width = '100%';
       this.style.marginTop = margin + '%';
