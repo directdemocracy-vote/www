@@ -741,23 +741,26 @@ window.onload = function() {
     video.style.display = '';
     button.innerHTML = 'Cancel';
     scanner = new QrScanner(video, fingerprint => setResult(fingerprint));
-    scanner.start().then(function() {
-      console.log('size: ' + video.clientWidth + ' x ' + video.clientHeight);
-      if (video.clientWidth > video.clientHeight) {
-        const margin = 100 * (video.clientWidth - video.clientHeight) / video.clientWidth;
-        message.innerHTML = "client1 = " + video.clientWidth + " x " + video.clientHeight;
+    video.addEventListener('loadedmetadata', function() {
+      message.innerHTML = "video = " + this.videoWidth + " x " + this.videoHeight;
+      if (this.videoWidth > this.videoHeight) {
+        const margin = 100 * (this.videoWidth - this.videoHeight) / this.videoWidth;
         const size = 2 * margin + 100;
-        video.style.width = size + '%';
-        video.style.marginLeft = -margin + '%';
-        video.style.marginRight = -margin + '%';
+        console.log("margin = " + margin + " - size = " + size);
+        this.style.width = size + '%';
+        this.style.marginLeft = -margin + '%';
+        this.style.marginRight = -margin + '%';
       } else {
-        const margin = 100 * (video.clientHeight - video.clientWidth) / video.clientHeight;
-        message.innerHTML = "client2 = " + video.clientWidth + " x " + video.clientHeight;
-        video.style.width = '100%';
-        video.style.marginTop = -margin + '%';
-        video.style.marginBottom = -margin + '%';
+        const margin = 100 * (this.videoWidth - this.videoHeight) / this.videoWidth;
+        const size = 2 * margin + 100;
+        message.innerHTML = "video = " + this.videoWidth + " x " + this.videoHeight + ' margin: ' + margin +
+          ' size: ' + size;
+        this.style.width = '100%';
+        this.style.marginTop = -margin + '%';
+        this.style.marginBottom = -margin + '%';
       }
     });
+    scanner.start();
   });
 
   function updateEndorseConfirmButton() {
