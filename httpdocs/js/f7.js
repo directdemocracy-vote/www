@@ -518,15 +518,15 @@ window.onload = function() {
     let endorsementCount = citizenEndorsements.length - revokeCount;
     let heading = '';
     if (endorsementCount) {
-      let title = createElement(list, 'div', 'block-title', 'block-title-medium');
+      let title = newElement(list, 'div', 'block-title', 'block-title-medium');
       title.innerHTML = 'Endorsed by ' + endorsementCount;
     }
     if (revokeCount) {
-      let title = createElement(list, 'div', 'block-title', 'block-title-medium');
+      let title = newElement(list, 'div', 'block-title', 'block-title-medium');
       title.innerHTML = 'Revoked by ' + revokeCount;
     }
     citizenEndorsements.forEach(function(endorsement) {
-      let card = createElement(list, 'div', 'card');
+      let card = newElement(list, 'div', 'card');
       if (endorsement.revoke)
         card.classList.add('revoked');
       let content = newElement(card, 'div', 'card-content', 'card-content-padding');
