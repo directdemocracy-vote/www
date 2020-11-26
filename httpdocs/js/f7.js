@@ -484,11 +484,17 @@ window.onload = function() {
       if (this.status == 200) {
         let reputation = document.getElementById('citizen-reputation');
         let answer = JSON.parse(this.responseText);
-        if (answer.error)
+        let badge = document.getElementById('endorsed-badge');
+        if (answer.error) {
           reputation.innerHTML = '<span style="font-weight:bold;color:red">' + answer.error + "</span>";
-        else {
+          badge.classList.remove('color-green');
+          badge.classList.add('color-red');
+        } else {
           const color = answer.endorsed ? 'green' : 'red';
           reputation.innerHTML = '<span style="font-weight:bold;color:' + color + '">' + answer.reputation + '</span>';
+          badge.classList.remove('color-red');
+          badge.classList.remove('color-green');
+          badge.classList.add('color-' + color);
         }
       }
     };
@@ -509,7 +515,7 @@ window.onload = function() {
     let endorsementCount = citizenEndorsements.length - revokeCount;
     let badge = document.getElementById('endorsed-badge');
     badge.innerHTML = endorsementCount;
-    badge.style.display = (endorsementCount == 0) ? 'none' : '';
+    badge.style.display = '';
     let title = newElement(list, 'div', 'block-title', 'block-title-medium');
     let plural = (citizenEndorsements.length > 1) ? 'endorsements' : 'endorsement';
     title.innerHTML = endorsementCount + '/' + citizenEndorsements.length + ' ' + plural;
