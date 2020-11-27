@@ -324,6 +324,11 @@ window.onload = function() {
           L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>'
           }).addTo(registerMap);
+          registerMap.whenReady(function() {
+            setTimeout(() => {
+              this.invalidateSize();
+            }, 0);
+          });
           let registerMarker = L.marker([citizen.latitude, citizen.longitude]).addTo(registerMap)
             .bindPopup(citizen.latitude + ',' + citizen.longitude);
           let e = document.getElementById('register-map');
