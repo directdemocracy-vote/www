@@ -32,11 +32,30 @@ window.onload = function() {
   let endorseMarker = null;
   let scanner = null;
   let endorsed = null;
+  let referendums = null;
+  let votes = JSON.parse(localStorage.getItem('votes'));
+  if (votes === null)
+    votes = [];
+
+  function unix_time_to_text(unix_timestamp) {
+    const a = new Date(unix_timestamp * 1000);
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const year = a.getFullYear();
+    const month = months[a.getMonth()];
+    const date = a.getDate();
+    const hour = a.getHours();
+    const minute = '0' + a.getMinutes();
+    const second = '0' + a.getSeconds();
+    const time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + minute.substr(-2) + ':' + second.substr(-2);
+    return time;
+  }
+
   let publisher = localStorage.getItem('publisher');
   if (!publisher) {
     publisher = 'https://publisher.directdemocracy.vote';
     localStorage.setItem('publisher', publisher);
   }
+
   document.getElementById('endorse-message').innerHTML = endorseMessage;
   document.getElementById('publisher').value = publisher;
   document.getElementById('publisher').addEventListener('input', function(event) {
@@ -396,6 +415,7 @@ window.onload = function() {
           citizenEndorsements = answer.citizen_endorsements;
           updateCitizenCard();
           updateEndorsements();
+          updateVote();
         }
       }
     };
@@ -929,5 +949,439 @@ window.onload = function() {
     let badge = document.getElementById('endorse-badge');
     badge.innerHTML = count;
     badge.style.display = (count == 0) ? 'none' : '';
+  }
+
+  function updateVote() {
+    let xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        const a = JSON.parse(this.responseText);
+        const address = a.address;
+        let type = [];
+        let name = [];
+
+        function addAdminLevel(level) {
+          if (level in address) {
+            type.push(level);
+            name.push(address[level]);
+          }
+        }
+        const admin = ['block', 'neighbourhood', 'quarter',
+          'suburb', 'borough',
+          'hamlet', 'village', 'town',
+          'city',
+          'municipality',
+          'county', 'district',
+          'region', 'province', 'state',
+          'country'
+        ];
+        admin.forEach(function(item) {
+          addAdminLevel(item);
+        });
+        const countryCode = address.country_code.toUpperCase();
+        if (['GB', 'DE', 'FR', 'IT', 'SE', 'PL', 'RO', 'HR', 'ES', 'NL', 'IE', 'BG', 'DK', 'GR',
+            'AT', 'HU', 'FI', 'CZ', 'PT', 'BE', 'MT', 'CY', 'LU', 'SI', 'LU', 'SK', 'EE', 'LV'
+          ]
+          .indexOf(countryCode) >= 0) {
+          type.push('union');
+          name.push('European Union');
+        }
+        let area = '';
+        name.forEach(function(n, i) {
+          area += type[i] + '=' + name[i] + '\n';
+        });
+        let xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+          if (this.status == 200) {
+            referendums = JSON.parse(this.responseText);
+            let tab = document.getElementById('tab-vote');
+            if (referendums.length == 0) {
+              tab.innerHTML =
+                '<div class="block-title block-title-medium">No referendum is currently available in your area.</div>';
+              return;
+            }
+            let title = newElement(tab, 'div', 'block-title');
+            title.innerHTML = 'Referendums';
+            let list = newElement(tab, 'div', 'list', 'accordion-list');
+            let ul = newElement(list, 'ul');
+            referendums.forEach(function(referendum, index) {
+              let vote = votes.find(vote => vote.referendum === referendum.key);
+              if (vote === undefined) {
+                vote = {
+                  referendum: referendum.key
+                };
+                votes.push(vote);
+              }
+              if (!vote.hasOwnProperty('private') && !vote.hasOwnProperty('public')) {
+                let crypt = new JSEncrypt({
+                  default_key_size: 2048
+                });
+                crypt.getKey(function() {
+                  vote.private = crypt.getPrivateKey();
+                  localStorage.setItem('votes', JSON.stringify(votes));
+                  updateVoteKey(index, vote);
+                });
+              }
+              let li = newElement(ul, 'li', 'accordion-item');
+              let a = newElement(li, 'a', 'item-content', 'item-link');
+              a.href = '#';
+              let item = newElement(a, 'item-inner');
+              title = newElement(item, 'item-title');
+              title.innerHTML = referendum.title;
+              let content = newElement(li, 'div', 'accordion-item-content');
+              let block = newElement(content, 'div', 'block');
+              let p = newElement(block, 'p');
+              let days = Math.round((referendum.deadline - new Date().getTime()) / 86400000);
+              const first_equal = referendum.area.indexOf('=');
+              const first_newline = referendum.area.indexOf('\n');
+              let area_name = referendum.area.substr(first_equal + 1, first_newline - first_equal);
+              let area_type = referendum.area.substr(0, first_equal);
+              const area_array = referendum.area.split('\n');
+              let area_query = '';
+              area_array.forEach(function(argument) {
+                const eq = argument.indexOf('=');
+                const type = argument.substr(0, eq);
+                const name = argument.substr(eq + 1);
+                if (type)
+                  area_query += type + '=' + encodeURIComponent(name) + '&';
+              });
+              area_query = area_query.slice(0, -1);
+              let area_url;
+              if (!area_type) {
+                area_type = 'world';
+                area_name = 'Earth';
+                area_url = 'https://en.wikipedia.org/wiki/Earth';
+              } else if (area_type == 'union')
+                area_url = 'https://en.wikipedia.org/wiki/European_Union';
+              else
+                area_url = 'https://nominatim.openstreetmap.org/search.php?' + area_query + '&polygon_geojson=1';
+              let results_url = publisher + '/referendum.html?fingerprint=' + CryptoJS.SHA1(referendum.signature).toString();
+              p.innerHTML = '<b>Published:</b> ' + days + 'days.';
+              p = newElement(block, 'p');
+              p.innerHTML = '<b>Area:</b> ' + '<a target="_blank" href="' + area_url + '">' + area_name + '</a> (' +
+                area_type + ')';
+              p = newElement(block, 'p');
+              p.innerHTML = '<b>Deadline:</b> ' + unix_time_to_text(referendum.deadline / 1000);
+              p = newElement(block, 'p');
+              p.innerHTML = '<b>Results:</b> <a href="' + results_url + '" target="_blank">here</a></small>';
+              p = newElement(block, 'p');
+              p.innerHTML = referendum.description;
+              p = newElement(block, 'p');
+              p.innerHTML = '<b>Question:</b>' + referendum.question;
+              p = newElement(block, 'p');
+              p.innerHTML = '<b>Answers:</b>';
+              ul = newElement(block, 'ul');
+              const answers = referendum.answers.split('\n');
+              let count = 0;
+              answers.forEach(function(answer) {
+                count++;
+                li = newElement(ul, 'li');
+                li.innerHTML = answer;
+                /*
+                div.setAttribute('class', 'form-check');
+                let input = document.createElement('input');
+                input.setAttribute('name', 'answer-' + index);
+                input.setAttribute('id', 'answer-' + index + '-' + count);
+                input.setAttribute('value', answer);
+                input.addEventListener('click', function() {
+                  updateVoteKey(index, vote);
+                });
+                */
+              });
+              updateVoteKey(index, vote);
+              let button = newElement(block, 'div', 'button');
+              button.innerHTML = 'Vote';
+              button.addEventListener('click', function(event) {
+                let button = event.target;
+                button.innerHTML =
+                  `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Voting...`;
+                button.setAttribute('disabled', '');
+                let xhttp = new XMLHttpRequest();
+                xhttp.onload = function() {
+                  if (this.status != 200) {
+                    console.log('Station not responding: ' + this.status);
+                    // FIXME: allow to try to vote again
+                  } else {
+                    let response = JSON.parse(this.responseText);
+                    if (response.error) {
+                      app.dialog.alert(JSON.stringify(response.error), 'Register error');
+                      return;
+                    }
+                    if (!response.hasOwnProperty('ballot')) {
+                      app.dialog.alert('Missing ballot in station response.', 'Register error');
+                      return;
+                    }
+                    if (!response.hasOwnProperty('registration')) {
+                      app.dialog.alert('Missing registration in station response.', 'Register error');
+                      return;
+                    }
+                    let ballot = response.ballot;
+                    let registration = response.registration;
+                    // verify the fields of the ballot didn't change.
+                    let keys = Object.keys(ballot);
+                    if (!keys.includes('schema') || !keys.includes('key') || !keys.includes('signature') ||
+                      !keys.includes('published') || !keys.includes('expires') || !keys.includes('referendum') ||
+                      !keys.includes('station')) {
+                      app.dialog.alert('Missing field in ballot.', 'Register error');
+                      return false;
+                    }
+                    if (keys.length != 7) {
+                      app.dialog.alert('Extra fields in ballot.', 'Register error');
+                      return false;
+                    }
+                    if (ballot.schema != 'https://directdemocracy.vote/json-schema/' + directdemocracy_version +
+                      '/ballot.schema.json') {
+                      app.dialog.alert('Wrong schema in ballot.', 'Register error');
+                      return;
+                    }
+                    let verify = new JSEncrypt();
+                    verify.setPrivateKey(vote.private);
+                    if (ballot.key != stripped_key(verify.getPublicKey())) {
+                      app.dialog.alert('Wrong ballot key.', 'Register error');
+                      return;
+                    }
+                    if (ballot.signature !== '') {
+                      app.dialog.alert('Ballot signature should be empty.', 'Register error');
+                      return;
+                    }
+                    if (ballot.published != referendum.deadline) {
+                      app.dialog.alert('Wrong published date in ballot.', 'Register error');
+                      return;
+                    }
+                    if (ballot.expires != referendum.deadline + 365.25 * 24 * 60 * 60 * 1000) {
+                      app.dialog.alert('Wrong expires date in ballot.', 'Register error');
+                      return;
+                    }
+                    if (ballot.referendum != referendum.key) {
+                      app.dialog.alert('Wrong referendum key in ballot.', 'Register error');
+                      return;
+                    }
+                    keys = Object.keys(ballot.station);
+                    if (!keys.includes('key') || !keys.includes('signature')) {
+                      app.dialog.alert('Missing station key or signature in ballot.', 'Register error');
+                      return;
+                    }
+                    if (keys.length > 2) {
+                      app.dialog.alert('Extra station fields in ballot.', 'Register error');
+                      return;
+                    }
+                    if (ballot.station.key != station_key) {
+                      app.dialog.alert('Wrong station key in ballot.', 'Register error');
+                      return;
+                    }
+                    // check the signature of the station
+                    const ballot_station_signature = ballot.station.signature;
+                    delete ballot.station.signature;
+                    verify = new JSEncrypt();
+                    verify.setPublicKey(public_key(ballot.station.key));
+                    if (!verify.verify(JSON.stringify(ballot), ballot_station_signature, CryptoJS.SHA256)) {
+                      app.dialog.alert('Wrong station signature for ballot.', 'Register error');
+                      return;
+                    }
+                    ballot.station.signature = ballot_station_signature;
+
+                    // verify the key of the registration didn't change
+                    if (!registration.hasOwnProperty('key')) {
+                      app.dialog.alert('Missing key in registration.', 'Register error');
+                      return;
+                    }
+                    if (registration.key != citizen.key) {
+                      app.dialog.alert('The key in registration is wrong.', 'Register error');
+                      return;
+                    }
+                    // verify the station signature in the registration
+                    if (!registration.hasOwnProperty('station')) {
+                      app.dialog.alert('Missing station in registration.', 'Register error');
+                      return;
+                    }
+                    if (!registration.station.hasOwnProperty('key')) {
+                      app.dialog.alert('Missing station key in registration.', 'Register error');
+                      return;
+                    }
+                    if (!registration.station.hasOwnProperty('signature')) {
+                      app.dialog.alert('Missing station signature in registration.', 'Register error');
+                      return;
+                    }
+                    const registration_station_signature = registration.station.signature;
+                    delete registration.station.signature;
+                    verify = new JSEncrypt();
+                    verify.setPublicKey(public_key(registration.station.key));
+                    if (!verify.verify(JSON.stringify(registration), registration_station_signature, CryptoJS.SHA256)) {
+                      app.dialog.alert('Wrong station signature for registration.', 'Register error');
+                      return;
+                    }
+                    // verify the registration signature
+                    if (!registration.hasOwnProperty('signature')) {
+                      app.dialog.alert('Missing signature in registration.', 'Register error');
+                      return;
+                    }
+                    const registration_signature = registration.signature;
+                    registration.signature = '';
+                    verify = new JSEncrypt();
+                    verify.setPublicKey(public_key(registration.key));
+                    if (!verify.verify(JSON.stringify(registration), registration_signature, CryptoJS.SHA256)) {
+                      app.dialog.alert('Wrong registration signature.', 'Register error');
+                      return;
+                    }
+                    // restore signatures
+                    registration.signature = registration_signature;
+                    registration.station.signature = registration_station_signature;
+                    // check match between ballot and registration
+                    if (ballot.referendum != registration.referendum) {
+                      app.dialog.alert('Mismatching referendum in ballot and registration.', 'Register error');
+                      return;
+                    }
+                    if (ballot.station.key != registration.station.key) {
+                      app.dialog.alert('Mismatching referendum in ballot and registration.', 'Register error');
+                      return;
+                    }
+                    // save registration (can be a proof against cheating station)
+                    registrations.push(registration);
+                    localStorage.setItem('registrations', JSON.stringify(registrations));
+                    // proceed to vote
+                    vote_message.innerHTML = "Registration success";
+                    let radios = document.getElementsByName('answer-' + index);
+                    let answer = '';
+                    for (let i = 0, length = radios.length; i < length; i++)
+                      if (radios[i].checked) {
+                        answer = radios[i].value;
+                        break;
+                      }
+                    console.log("voting: " + answer);
+                    let crypt = new JSEncrypt();
+                    crypt.setPrivateKey(vote.private);
+                    ballot.answer = answer;
+                    ballot.signature = crypt.sign(JSON.stringify(ballot), CryptoJS.SHA256, 'sha256');
+                    let xhttp = new XMLHttpRequest();
+                    xhttp.onload = function() {
+                      if (this.status == 200) {
+                        let response = JSON.parse(this.responseText);
+                        if (response.error) {
+                          app.dialog.alert(JSON.stringify(response.error), 'Vote error');
+                          return;
+                        }
+                        console.log("Ballot fingerprint: " + response.fingerprint);
+                        button.innerHTML = 'Voted';
+                        button.setAttribute('class', 'btn btn-success');
+                        const now = Math.round(new Date().getTime() / 1000);
+                        vote_message.innerHTML = unix_time_to_text(now);
+                        delete vote.private;
+                        vote.public = stripped_key(crypt.getPublicKey());
+                        vote.date = now;
+                        localStorage.setItem('votes', JSON.stringify(votes));
+                      }
+                    };
+                    xhttp.open('POST', publisher + '/publish.php', true);
+                    xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                    xhttp.send(JSON.stringify(ballot));
+                  }
+                };
+                let crypt = new JSEncrypt();
+                crypt.setPrivateKey(vote.private);
+                let ballot = {
+                  schema: 'https://directdemocracy.vote/json-schema/' + directdemocracy_version +
+                    '/ballot.schema.json',
+                  key: stripped_key(crypt.getPublicKey()),
+                  signature: '',
+                  published: referendum.deadline,
+                  expires: referendum.deadline + 365.25 * 24 * 60 * 60 * 1000, // 1 year
+                  referendum: referendum.key,
+                  station: {
+                    key: station_key
+                  }
+                };
+                ballot.signature = crypt.sign(JSON.stringify(ballot), CryptoJS.SHA256, 'sha256');
+                const now = new Date().getTime();
+                let registration = {
+                  schema: 'https://directdemocracy.vote/json-schema/' + directdemocracy_version +
+                    '/registration.schema.json',
+                  key: citizen.key,
+                  signature: '',
+                  published: now,
+                  expires: now + 365.25 * 24 * 60 * 60 * 1000, // 1 year
+                  referendum: referendum.key,
+                  station: {
+                    key: station_key
+                  }
+                };
+                registration.signature = citizen_crypt.sign(JSON.stringify(registration), CryptoJS.SHA256,
+                  'sha256');
+                let request = {
+                  ballot: ballot,
+                  registration: registration
+                };
+                xhttp.open('POST', station + '/register.php', true);
+                xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhttp.send(JSON.stringify(request));
+              });
+            });
+            let propose = newElement(tab, 'div', 'block-title');
+            propose.innerHTML = 'Propose <a href="referendum.html" target="_blank">new referendum</a>';
+          }
+        };
+        xhttp.open('POST', publisher + '/referendum.php', true);
+        xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhttp.send('area=' + encodeURIComponent(area));
+      }
+    };
+    xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' +
+      citizen.latitude + '&lon=' + citizen.longitude + '&zoom=10', true);
+    xhttp.send();
+  }
+
+  function updateVoteKey(index, vote) {
+    let button = document.getElementById('vote-button-' + index);
+    let message = document.getElementById('vote-message-' + index);
+    if (button === null || message === null)
+      return;
+    if (station_key === '') {
+      message.innerHTML = 'Getting station key...';
+      button.setAttribute('disabled', '');
+    } else if (vote.hasOwnProperty('private')) {
+      message.innerHTML = 'Think twice before you vote, afterwards no change is possible.';
+      if (document.querySelector('input[name="answer-' + index + '"]:checked'))
+        button.removeAttribute('disabled');
+      else
+        button.setAttribute('disabled', '');
+    } else {
+      button.setAttribute('disabled', '');
+      if (vote.hasOwnProperty('public')) {
+        button.setAttribute('class', 'btn btn-success');
+        button.innerHTML = 'Voted';
+        message.innerHTML = unix_time_to_text(vote.date);
+        let radios = document.getElementsByName('answer-' + index);
+        let answer = '';
+        for (let i = 0, length = radios.length; i < length; i++) {
+          radios[i].disabled = true;
+          if (radios[i].checked) {
+            answer = radios[i].value;
+            break;
+          }
+        }
+        const now = new Date().getTime();
+        if (answer == '' && referendums[index].deadline < now) { // query publisher to get verification
+          let xhttp = new XMLHttpRequest();
+          xhttp.onload = function() {
+            if (this.status == 200) {
+              let response = JSON.parse(this.responseText);
+              if (response.error)
+                app.dialog.alert(JSON.stringify(response.error), 'Vote verification error');
+              else {
+                answer = response.answer;
+                for (let i = 0, length = radios.length; i < length; i++)
+                  if (radios[i].value == answer) {
+                    radios[i].checked = true;
+                    break;
+                  }
+              }
+            }
+          };
+          xhttp.open('POST', publisher + '/publication.php', true);
+          xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+          xhttp.send('key=' + encodeURIComponent(vote.public));
+        }
+      } else
+        message.innerHTML = 'forging key for this vote, please wait...';
+    }
   }
 };
