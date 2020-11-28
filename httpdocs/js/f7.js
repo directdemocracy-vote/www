@@ -554,6 +554,9 @@ window.onload = function() {
       list.innerHTML =
         '<div class="block-title block-title-medium">Not endorsed</div>' +
         '<div class="block">You should ask to other citizens to endorse you.</div>';
+      let badge = document.getElementById('endorsed-badge');
+      badge.style.background = 'red';
+      badge.innerHTML = '0';
       return;
     }
     let revokeCount = 0;
@@ -564,7 +567,6 @@ window.onload = function() {
     let endorsementCount = citizenEndorsements.length - revokeCount;
     let badge = document.getElementById('endorsed-badge');
     badge.innerHTML = endorsementCount;
-    badge.style.display = '';
     let title = newElement(list, 'div', 'block-title block-title-medium');
     let plural = (citizenEndorsements.length > 1) ? 'endorsements' : 'endorsement';
     title.innerHTML = endorsementCount + '/' + citizenEndorsements.length + ' ' + plural;
@@ -1030,6 +1032,7 @@ window.onload = function() {
             let previousAreaName = '';
             let previousAreaType = '';
             let ul = null;
+            let availableReferendum = 0;
             referendums.forEach(function(referendum, index) {
               let vote = votes.find(vote => vote.referendum === referendum.key);
               if (vote === undefined) {
@@ -1088,6 +1091,7 @@ window.onload = function() {
               title.innerHTML = referendum.title;
               const days = Math.round((referendum.deadline - new Date().getTime()) / 86400000);
               if (days >= 0) {
+                availableReferendum++;
                 let after = newElement(item, 'div', 'item-after');
                 let badge = newElement(after, 'span', 'badge');
                 if (days <= 3)
@@ -1363,6 +1367,11 @@ window.onload = function() {
                 xhttp.send(JSON.stringify(request));
               });
             });
+            let badge = document.getElementById('vote-badge');
+            if (availableReferendum) {
+              badge.innerHTML = availableReferendum;
+              badge.style.display = '';
+            } else badge.style.display = 'none';
             let propose = newElement(tab, 'div', 'block-title');
             propose.innerHTML =
               'Propose <a href="referendum.html" target="_blank">new referendum</a>';
