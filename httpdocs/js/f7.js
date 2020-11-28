@@ -91,7 +91,7 @@ window.onload = function() {
         if (this.status == 200) {
           let answer = JSON.parse(this.responseText);
           if (answer.error)
-            app.dialog.alert(JSON.stringify(answer.error), 'Station key');
+            app.dialog.alert(answer.error, 'Station key');
           else {
             stationKey = answer.key;
             votes.forEach(function(vote, index) {
@@ -415,7 +415,7 @@ window.onload = function() {
       if (this.status == 200) {
         let answer = JSON.parse(this.responseText);
         if (answer.error)
-          app.dialog.alert(JSON.stringify(answer.error) + '.<br>Please try again.', 'Publication Error');
+          app.dialog.alert(answer.error + '.<br>Please try again.', 'Publication Error');
         else {
           updateCitizenCard();
           app.dialog.alert('Your citizen card was just published.', 'Congratulation!');
@@ -433,7 +433,7 @@ window.onload = function() {
       if (this.status == 200) {
         let answer = JSON.parse(this.responseText);
         if (answer.error)
-          app.dialog.alert(JSON.stringify(answer.error) + '.<br>Please try again.', 'Citizen Error');
+          app.dialog.alert(answer.error + '.<br>Please try again.', 'Citizen Error');
         else {
           citizen = answer.citizen;
           citizen.key = strippedKey(citizenCrypt.getPublicKey());
@@ -505,7 +505,8 @@ window.onload = function() {
     document.getElementById('register-family-name').value = citizen.familyName;
     document.getElementById('citizen-given-names').innerHTML = citizen.givenNames;
     document.getElementById('register-given-names').value = citizen.givenNames;
-    document.getElementById('citizen-coords').innerHTML = '<a target="_blank" href="https://openstreetmap.org/?mlat=' +
+    document.getElementById('citizen-coords').innerHTML =
+      '<a class="link external" target="_blank" href="https://openstreetmap.org/?mlat=' +
       citizen.latitude + '&mlon=' + citizen.longitude + '&zoom=12">' +
       citizen.latitude + ', ' + citizen.longitude + '</a>';
     document.getElementById('register-location').value = citizen.latitude + ', ' + citizen.longitude;
@@ -581,7 +582,7 @@ window.onload = function() {
       img.src = endorsement.picture;
       img.style.width = '100%';
       col = newElement(row, 'div', 'col-75');
-      let a = newElement(col, 'a');
+      let a = newElement(col, 'a', 'link external');
       a.href = publisher + '/publication.php?fingerprint=' + CryptoJS.SHA1(endorsement.signature).toString();
       a.target = '_blank';
       let b = newElement(a, 'b');
@@ -841,7 +842,7 @@ window.onload = function() {
       if (this.status == 200) {
         let answer = JSON.parse(this.responseText);
         if (answer.error)
-          app.dialog.alert(JSON.stringify(answer.error) + '.<br>Please try again.', 'Endorsement Error');
+          app.dialog.alert(answer.error + '.<br>Please try again.', 'Endorsement Error');
         else {
           app.dialog.alert('You successfully endorsed ' + endorsed.givenNames + ' ' + endorsed.familyName,
             'Endorsement Success');
@@ -873,7 +874,7 @@ window.onload = function() {
       img.src = endorsement.picture;
       img.style.width = '100%';
       col = newElement(row, 'div', 'col-75');
-      let a = newElement(col, 'a');
+      let a = newElement(col, 'a', 'link external');
       a.href = publisher + '/publication.php?fingerprint=' + CryptoJS.SHA1(endorsement.signature).toString();
       a.target = '_blank';
       let b = newElement(a, 'b');
@@ -916,7 +917,7 @@ window.onload = function() {
               if (this.status == 200) {
                 let answer = JSON.parse(this.responseText);
                 if (answer.error)
-                  app.dialog.alert(JSON.stringify(answer.error) + '.<br>Please try again.', 'Revocation error');
+                  app.dialog.alert(answer.error + '.<br>Please try again.', 'Revocation error');
                 else {
                   app.dialog.alert('You successfully revoked ' + endorsement.givenNames + ' ' +
                     endorsement.familyName, 'Revocation success');
@@ -1079,7 +1080,7 @@ window.onload = function() {
               if (previousAreaName != area_name && previousAreaType != area_type) {
                 let title = newElement(tab, 'div', 'block-title');
                 title.innerHTML =
-                  `<a href="${area_url}" target="_blank">${area_name}</a> <small>(${area_type})</small>`;
+                  `<a class="link external" href="${area_url}" target="_blank">${area_name}</a> <small>(${area_type})</small>`;
                 let list = newElement(tab, 'div', 'list accordion-list');
                 ul = newElement(list, 'ul');
               }
@@ -1137,7 +1138,8 @@ window.onload = function() {
               let left = newElement(bottom, 'div', 'float-left');
               left.innerHTML = 'Deadline: <i>' + unix_time_to_text(referendum.deadline / 1000) + '</i>';
               let right = newElement(bottom, 'div', 'float-right padding-bottom');
-              right.innerHTML = '<a href="' + results_url + '" target="_blank">Results</a></small>';
+              right.innerHTML = '<a class="link external" href="' + results_url +
+                '" target="_blank">Results</a></small>';
               button.addEventListener('click', function(event) {
                 let button = event.target;
                 app.preloader.show();
@@ -1154,7 +1156,7 @@ window.onload = function() {
                   } else {
                     let response = JSON.parse(this.responseText);
                     if (response.error) {
-                      app.dialog.alert(JSON.stringify(response.error), 'Register error');
+                      app.dialog.alert(response.error, 'Register error');
                       return;
                     }
                     if (!response.hasOwnProperty('ballot')) {
@@ -1309,7 +1311,7 @@ window.onload = function() {
                       if (this.status == 200) {
                         let response = JSON.parse(this.responseText);
                         if (response.error) {
-                          app.dialog.alert(JSON.stringify(response.error), 'Vote error');
+                          app.dialog.alert(response.error, 'Vote error');
                           return;
                         }
                         console.log("Ballot fingerprint: " + response.fingerprint);
@@ -1374,7 +1376,7 @@ window.onload = function() {
             } else badge.style.display = 'none';
             let propose = newElement(tab, 'div', 'block-title');
             propose.innerHTML =
-              'Propose <a href="referendum.html" target="_blank">new referendum</a>';
+              'Propose a <a class="link external" href="referendum.html" target="_blank">new referendum</a>';
           }
         };
         xhttp.open('POST', publisher + '/referendum.php', true);
@@ -1423,7 +1425,7 @@ window.onload = function() {
             if (this.status == 200) {
               let response = JSON.parse(this.responseText);
               if (response.error)
-                app.dialog.alert(JSON.stringify(response.error), 'Vote verification error');
+                app.dialog.alert(response.error, 'Vote verification error');
               else {
                 answer = response.answer;
                 for (let i = 0, length = radios.length; i < length; i++)
