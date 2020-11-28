@@ -583,11 +583,10 @@ window.onload = function() {
       img.style.width = '100%';
       col = newElement(row, 'div', 'col-75');
       let a = newElement(col, 'a', 'link external');
-      a.href = publisher + '/publication.php?fingerprint=' + CryptoJS.SHA1(endorsement.signature).toString();
+      a.href = `https://www.openstreetmap.org/?mlat=${endorsement.latitude}&mlon=${endorsement.longitude}&zoom=12`;
       a.target = '_blank';
-      let b = newElement(a, 'b');
-      b.appendChild(document.createTextNode(endorsement.familyName));
-      a.appendChild(document.createTextNode(' ' + endorsement.givenNames));
+      a.innerHTML =
+        `<span style="font-weight:bold">${endorsement.familyName}</span> <span>${endorsement.givenNames}</span>`;
       row = newElement(col, 'div', 'row');
       let c = newElement(row, 'div', 'col');
       let t = new Date(endorsement.published).toISOString().slice(0, 10);
@@ -875,11 +874,10 @@ window.onload = function() {
       img.style.width = '100%';
       col = newElement(row, 'div', 'col-75');
       let a = newElement(col, 'a', 'link external');
-      a.href = publisher + '/publication.php?fingerprint=' + CryptoJS.SHA1(endorsement.signature).toString();
+      a.href = `https://www.openstreetmap.org/?mlat=${endorsement.latitude}&mlon=${endorsement.longitude}&zoom=12`;
       a.target = '_blank';
-      let b = newElement(a, 'b');
-      b.appendChild(document.createTextNode(endorsement.familyName));
-      a.appendChild(document.createTextNode(' ' + endorsement.givenNames));
+      a.innerHTML =
+        `<span style="font-weight:bold">${endorsement.familyName}</span> <span>${endorsement.givenNames}</span>`;
       row = newElement(col, 'div', 'row');
       let c = newElement(row, 'div', 'col');
       let t = new Date(endorsement.published).toISOString().slice(0, 10);
@@ -1105,7 +1103,6 @@ window.onload = function() {
               }
               let content = newElement(li, 'div', 'accordion-item-content');
               let block = newElement(content, 'div', 'block');
-              let results_url = publisher + '/referendum.html?fingerprint=' + CryptoJS.SHA1(referendum.signature).toString();
               let p = newElement(block, 'p');
               p.innerHTML = referendum.description;
               p = newElement(block, 'p');
@@ -1138,6 +1135,7 @@ window.onload = function() {
               let left = newElement(bottom, 'div', 'float-left');
               left.innerHTML = 'Deadline: <i>' + unix_time_to_text(referendum.deadline / 1000) + '</i>';
               let right = newElement(bottom, 'div', 'float-right padding-bottom');
+              const results_url = publisher + '/referendum.html?fingerprint=' + CryptoJS.SHA1(referendum.signature).toString();
               right.innerHTML = '<a class="link external" href="' + results_url +
                 '" target="_blank">Results</a></small>';
               button.addEventListener('click', function(event) {
