@@ -543,11 +543,14 @@ window.onload = function() {
         let badge = document.getElementById('endorsed-badge');
         if (answer.error) {
           reputation.innerHTML = '<span style="font-weight:bold;color:red">' + answer.error + "</span>";
-          badge.style.background = 'red';
+          badge.classList.remove('color-green');
+          badge.classList.add('color-red');
         } else {
           const color = answer.endorsed ? 'green' : 'red';
           reputation.innerHTML = '<span style="font-weight:bold;color:' + color + '">' + answer.reputation + '</span>';
-          badge.style.background = color;
+          badge.classList.remove('color-red');
+          badge.classList.remove('color-green');
+          badge.classList.add('color-' + color);
         }
       }
     };
