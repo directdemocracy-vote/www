@@ -1095,12 +1095,10 @@ window.onload = function() {
               let item = newElement(a, 'div', 'item-inner');
               let title = newElement(item, 'div', 'item-title');
               title.innerHTML = referendum.title;
-              const days = Math.round((referendum.deadline - new Date().getTime()) / 86400000);
               let after = newElement(item, 'div', 'item-after');
-              let badge = newElement(after, 'div', 'badge color-purple margin-right-half');
-              badge.innerHTML = '322';
-              after.appendChild(document.createTextNode(' '));
-              badge = newElement(after, 'div', 'badge');
+              let badge = newElement(after, 'div', 'badge');
+              badge.innerHTML = referendum.participation;
+              const days = Math.floor((referendum.deadline - new Date().getTime()) / 86400000);
               if (days >= 0) {
                 if (vote.hasOwnProperty('public'))
                   badge.classList.add('color-blue');
@@ -1114,7 +1112,6 @@ window.onload = function() {
                     badge.classList.add('color-green');
                 }
               } else badge.classList.add('color-gray');
-              badge.innerHTML = days + 'd';
               let content = newElement(li, 'div', 'accordion-item-content');
               let block = newElement(content, 'div', 'block');
               let p = newElement(block, 'p');
@@ -1398,6 +1395,7 @@ window.onload = function() {
         xhttp.open('POST', publisher + '/referendum.php', true);
         xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhttp.send('area=' + encodeURIComponent(area));
+        console.log('area = ' + area);
       }
     };
     xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' +
