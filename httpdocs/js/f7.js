@@ -1097,7 +1097,9 @@ window.onload = function() {
                 availableReferendum++;
                 let after = newElement(item, 'div', 'item-after');
                 let badge = newElement(after, 'span', 'badge');
-                if (days <= 3)
+                if (vote.hasOwnProperty('public'))
+                  badge.classList.add('color-gray');
+                else if (days <= 3)
                   badge.classList.add('color-red');
                 else if (days < 7)
                   badge.classList.add('color-orange');
