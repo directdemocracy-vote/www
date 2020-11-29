@@ -1093,9 +1093,9 @@ window.onload = function() {
               let title = newElement(item, 'div', 'item-title');
               title.innerHTML = referendum.title;
               const days = Math.round((referendum.deadline - new Date().getTime()) / 86400000);
+              let after = newElement(item, 'div', 'item-after');
+              let badge = newElement(after, 'span', 'badge');
               if (days >= 0) {
-                let after = newElement(item, 'div', 'item-after');
-                let badge = newElement(after, 'span', 'badge');
                 if (vote.hasOwnProperty('public'))
                   badge.classList.add('color-blue');
                 else {
@@ -1106,9 +1106,9 @@ window.onload = function() {
                     badge.classList.add('color-orange');
                   else
                     badge.classList.add('color-green');
-                  badge.innerHTML = days + 'd';
                 }
-              }
+              } else badge.classList.add('color-gray');
+              badge.innerHTML = days + 'd';
               let content = newElement(li, 'div', 'accordion-item-content');
               let block = newElement(content, 'div', 'block');
               let p = newElement(block, 'p');
