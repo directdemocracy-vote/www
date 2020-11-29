@@ -498,7 +498,8 @@ window.onload = function() {
         element.classList.add(c);
       });
     }
-    element.innerHTML = innerHTML;
+    if (innerHTML)
+      element.innerHTML = innerHTML;
     return element;
   }
 
