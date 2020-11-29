@@ -1298,7 +1298,7 @@ window.onload = function() {
                     registrations.push(registration);
                     localStorage.setItem('registrations', JSON.stringify(registrations));
                     // proceed to vote
-                    vote_message.innerHTML = "Registration success";
+                    document.getElementById('vote-message-' + index).innerHTML = "Registration success";
                     let radios = document.getElementsByName('answer-' + index);
                     let answer = '';
                     for (let i = 0, length = radios.length; i < length; i++)
@@ -1324,7 +1324,7 @@ window.onload = function() {
                         button.classList.remove('color-green');
                         button.classList.add('color-blue');
                         const now = Math.round(new Date().getTime() / 1000);
-                        vote_message.innerHTML = unix_time_to_text(now);
+                        document.getElementById('vote-message-' + index).innerHTML = unix_time_to_text(now);
                         delete vote.private;
                         vote.public = strippedKey(crypt.getPublicKey());
                         vote.date = now;
