@@ -559,7 +559,7 @@ window.onload = function() {
     let list = document.getElementById('citizen-endorsements-list');
     if (citizenEndorsements.length == 0) {
       list.innerHTML =
-        '<div class="block-title block-title-medium">Not endorsed</div>' +
+        '<div class="block-title">Not endorsed</div>' +
         '<div class="block">You should ask to other citizens to endorse you.</div>';
       let badge = document.getElementById('endorsed-badge');
       badge.style.background = 'red';
@@ -574,7 +574,7 @@ window.onload = function() {
     let endorsementCount = citizenEndorsements.length - revokeCount;
     let badge = document.getElementById('endorsed-badge');
     badge.innerHTML = endorsementCount;
-    let title = newElement(list, 'div', 'block-title block-title-medium');
+    let title = newElement(list, 'div', 'block-title');
     let plural = (citizenEndorsements.length > 1) ? 'endorsements' : 'endorsement';
     title.innerHTML = endorsementCount + '/' + citizenEndorsements.length + ' ' + plural;
     citizenEndorsements.forEach(function(endorsement) {
@@ -1030,8 +1030,8 @@ window.onload = function() {
             referendums = JSON.parse(this.responseText);
             let tab = document.getElementById('tab-vote');
             if (referendums.length == 0) {
-              let title = newElement(tab, 'div', 'block-title block-title-medium');
-              title.innerHTML = 'No referendum is currently available in your areas.';
+              let title = newElement(tab, 'div', 'block-title');
+              title.innerHTML = 'No referendum available';
               return;
             }
             let previousAreaName = '';
