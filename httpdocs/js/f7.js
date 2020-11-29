@@ -709,7 +709,7 @@ window.onload = function() {
       scanner = null;
       video.style.display = 'none';
       list.style.display = '';
-      button.classList.add('disabled');
+      disable(button);
       let xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -726,7 +726,7 @@ window.onload = function() {
           endorsed.signature = '';
           let verify = new JSEncrypt();
           verify.setPublicKey(publicKey(endorsed.key));
-          button.classList.remove('disabled');
+          enable(button);
           if (!verify.verify(JSON.stringify(endorsed), signature, CryptoJS.SHA256)) {
             message.innerHTML = 'Cannot verify citizen signature';
             button.innerHTML = 'Endorse a Citizen';
@@ -1047,6 +1047,7 @@ window.onload = function() {
                 crypt.getKey(function() {
                   vote.private = crypt.getPrivateKey();
                   localStorage.setItem('votes', JSON.stringify(votes));
+                  console.log('got key for ' + index);
                   updateVoteKey(index, vote);
                 });
               }
@@ -1117,7 +1118,7 @@ window.onload = function() {
                 let label = newElement(li, 'label', 'item-radio item-radio-icon-start item-content');
                 let input = newElement(label, 'input');
                 input.type = 'radio';
-                input.name = 'answer';
+                input.name = 'answer-' + index;
                 input.value = answer;
                 if (count == 1)
                   input.checked = true;
@@ -1128,9 +1129,12 @@ window.onload = function() {
                   updateVoteKey(index, vote);
                 });
               });
-              updateVoteKey(index, vote);
               let button = newElement(block, 'div', 'button button-fill');
+              button.id = 'vote-button-' + index;
               button.innerHTML = 'Vote';
+              let message = newElement(block, 'div', 'item-label text-align-center');
+              message.id = 'vote-message-' + index;
+              updateVoteKey(index, vote);
               let bottom = newElement(block, 'div', 'padding-top');
               let left = newElement(bottom, 'div', 'float-left');
               left.innerHTML = 'Deadline: <i>' + unix_time_to_text(referendum.deadline / 1000) + '</i>';
@@ -1224,7 +1228,7 @@ window.onload = function() {
                     const ballot_station_signature = ballot.station.signature;
                     delete ballot.station.signature;
                     verify = new JSEncrypt();
-                    verify.setPublicKey(public_key(ballot.station.key));
+                    verify.setPublicKey(publicKey(ballot.station.key));
                     if (!verify.verify(JSON.stringify(ballot), ballot_station_signature, CryptoJS.SHA256)) {
                       app.dialog.alert('Wrong station signature for ballot.', 'Register error');
                       return;
@@ -1256,7 +1260,7 @@ window.onload = function() {
                     const registration_station_signature = registration.station.signature;
                     delete registration.station.signature;
                     verify = new JSEncrypt();
-                    verify.setPublicKey(public_key(registration.station.key));
+                    verify.setPublicKey(publicKey(registration.station.key));
                     if (!verify.verify(JSON.stringify(registration), registration_station_signature, CryptoJS
                         .SHA256)) {
                       app.dialog.alert('Wrong station signature for registration.', 'Register error');
@@ -1270,7 +1274,7 @@ window.onload = function() {
                     const registration_signature = registration.signature;
                     registration.signature = '';
                     verify = new JSEncrypt();
-                    verify.setPublicKey(public_key(registration.key));
+                    verify.setPublicKey(publicKey(registration.key));
                     if (!verify.verify(JSON.stringify(registration), registration_signature, CryptoJS.SHA256)) {
                       app.dialog.alert('Wrong registration signature.', 'Register error');
                       return;
@@ -1314,7 +1318,8 @@ window.onload = function() {
                         }
                         console.log("Ballot fingerprint: " + response.fingerprint);
                         button.innerHTML = 'Voted';
-                        button.setAttribute('class', 'btn btn-success');
+                        button.classList.remove('color-green');
+                        button.classList.add('color-blue');
                         const now = Math.round(new Date().getTime() / 1000);
                         vote_message.innerHTML = unix_time_to_text(now);
                         delete vote.private;
@@ -1390,34 +1395,40 @@ window.onload = function() {
   function updateVoteKey(index, vote) {
     let button = document.getElementById('vote-button-' + index);
     let message = document.getElementById('vote-message-' + index);
+    const expired = referendums ? new Date().getTime() > referendums[index].deadline : true;
     if (button === null || message === null)
       return;
-    if (stationKey === '') {
-      message.innerHTML = 'Getting station key...';
-      button.setAttribute('disabled', '');
+    if (expired) {
+      message.innerHTML = 'Deadline has passed.';
+      disable(button);
+    } else if (stationKey === '') {
+      message.innerHTML = 'Getting station key, please wait...';
+      disable(button);
     } else if (vote.hasOwnProperty('private')) {
-      message.innerHTML = 'Think twice before you vote, afterwards no change is possible.';
-      if (document.querySelector('input[name="answer-' + index + '"]:checked'))
-        button.removeAttribute('disabled');
-      else
-        button.setAttribute('disabled', '');
+      if (document.querySelector('input[name="answer-' + index + '"]:checked')) {
+        message.innerHTML = 'Think twice before you vote, afterwards no change is possible.';
+        enable(button);
+      } else {
+        message.innerHTML = 'Select an answer to vote.';
+        disable(button);
+      }
     } else {
-      button.setAttribute('disabled', '');
+      disable(button);
       if (vote.hasOwnProperty('public')) {
-        button.setAttribute('class', 'btn btn-success');
+        button.classList.remove('color-green');
+        button.classList.add('color-blue');
         button.innerHTML = 'Voted';
         message.innerHTML = unix_time_to_text(vote.date);
         let radios = document.getElementsByName('answer-' + index);
         let answer = '';
         for (let i = 0, length = radios.length; i < length; i++) {
-          radios[i].disabled = true;
+          disable(radios[i]);
           if (radios[i].checked) {
             answer = radios[i].value;
             break;
           }
         }
-        const now = new Date().getTime();
-        if (answer == '' && referendums[index].deadline < now) { // query publisher to get verification
+        if (answer == '' && !expired) { // query publisher to get verification
           let xhttp = new XMLHttpRequest();
           xhttp.onload = function() {
             if (this.status == 200) {
@@ -1439,7 +1450,7 @@ window.onload = function() {
           xhttp.send('key=' + encodeURIComponent(vote.public));
         }
       } else
-        message.innerHTML = 'forging key for this vote, please wait...';
+        message.innerHTML = 'Forging key for this vote, please wait...';
     }
   }
 };

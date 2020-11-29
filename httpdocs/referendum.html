@@ -65,7 +65,6 @@
         <div class="form-group">
           <label for="description">Description:</label>
           <textarea class="form-control" id="description" placeholder="Enter the description of your referendum" rows="5" required></textarea>
-          <small class="form-text text-muted">You may use simple text or <a target="_blank" href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> <i class="fa fa-external-link"></i> format here.</small>
         </div>
         <div class="form-group">
           <label for="question">Question:</label>
@@ -93,7 +92,7 @@ Abstain" required></textarea>
             <div id="referendum-forging-spinner" class="spinner-border" role="status"><span class="sr-only">Forging...</span></div>
           </label>
           <input type="hidden" class="form-control" id="referendum-private-key">
-          <small class="form-text text-muted" id="referendum-private-key-message">Forging a new private key, please wait...</small>
+          <small class="form-text text-muted" id="referendum-private-key-message">Forging a new private key for your referendum, please wait...</small>
         </div>
         <div class="form-group">
           <button class="btn btn-primary" id="publish-button" role="button" disabled="disabled">Publish your referendum</button>
