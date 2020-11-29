@@ -1094,18 +1094,20 @@ window.onload = function() {
               title.innerHTML = referendum.title;
               const days = Math.round((referendum.deadline - new Date().getTime()) / 86400000);
               if (days >= 0) {
-                availableReferendum++;
                 let after = newElement(item, 'div', 'item-after');
                 let badge = newElement(after, 'span', 'badge');
                 if (vote.hasOwnProperty('public'))
                   badge.classList.add('color-gray');
-                else if (days <= 3)
-                  badge.classList.add('color-red');
-                else if (days < 7)
-                  badge.classList.add('color-orange');
-                else
-                  badge.classList.add('color-green');
-                badge.innerHTML = days + 'd';
+                else {
+                  availableReferendum++;
+                  if (days <= 3)
+                    badge.classList.add('color-red');
+                  else if (days < 7)
+                    badge.classList.add('color-orange');
+                  else
+                    badge.classList.add('color-green');
+                  badge.innerHTML = days + 'd';
+                }
               }
               let content = newElement(li, 'div', 'accordion-item-content');
               let block = newElement(content, 'div', 'block');
