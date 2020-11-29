@@ -37,6 +37,9 @@ window.onload = function() {
   let votes = JSON.parse(localStorage.getItem('votes'));
   if (votes === null)
     votes = [];
+  let registrations = JSON.parse(localStorage.getItem('registrations'));
+  if (registrations === null)
+    registrations = [];
 
   function unix_time_to_text(unix_timestamp) {
     const a = new Date(unix_timestamp * 1000);
