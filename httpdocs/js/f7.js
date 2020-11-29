@@ -1097,7 +1097,10 @@ window.onload = function() {
               title.innerHTML = referendum.title;
               const days = Math.round((referendum.deadline - new Date().getTime()) / 86400000);
               let after = newElement(item, 'div', 'item-after');
-              let badge = newElement(after, 'span', 'badge');
+              let badge = newElement(after, 'div', 'badge color-purple margin-right-half');
+              badge.innerHTML = '322';
+              after.appendChild(document.createTextNode(' '));
+              badge = newElement(after, 'div', 'badge');
               if (days >= 0) {
                 if (vote.hasOwnProperty('public'))
                   badge.classList.add('color-blue');
