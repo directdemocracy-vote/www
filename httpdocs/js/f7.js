@@ -1026,7 +1026,7 @@ window.onload = function() {
               'Propose a <a class="link external" href="referendum.html" target="_blank">new referendum</a>');
             if (referendums.length == 0) {
               newElement(tab, 'div', 'block-title', 'No referendum available');
-              tab.addChildren(propose);
+              tab.appendChild(propose);
               return;
             }
             let previousAreaName = '';
@@ -1381,7 +1381,7 @@ window.onload = function() {
               badge.innerHTML = availableReferendum;
               badge.style.display = '';
             } else badge.style.display = 'none';
-            tab.addChildren(propose);
+            tab.appendChild(propose);
           }
         };
         xhttp.open('POST', publisher + '/referendum.php', true);
