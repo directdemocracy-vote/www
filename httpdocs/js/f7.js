@@ -1408,6 +1408,14 @@ window.onload = function() {
     xhttp.send();
   }
 
+  function disableAnswer(index) {
+    let answers = document.getElementsByName('answer-' + index);
+    answers.forEach(function(answer) {
+      answer.checked = false;
+      disable(answer);
+    });
+  }
+
   function updateVoteKey(index, vote) {
     let button = document.getElementById('vote-button-' + index);
     let message = document.getElementById('vote-message-' + index);
@@ -1417,6 +1425,7 @@ window.onload = function() {
     if (expired) {
       message.innerHTML = 'Deadline has passed.';
       disable(button);
+      disableAnswer(index);
     } else if (stationKey === '') {
       message.innerHTML = 'Getting station key, please wait...';
       disable(button);
@@ -1430,6 +1439,7 @@ window.onload = function() {
       }
     } else {
       disable(button);
+      disableAnswer(index);
       if (vote.hasOwnProperty('public')) {
         button.classList.remove('color-green');
         button.classList.add('color-blue');
