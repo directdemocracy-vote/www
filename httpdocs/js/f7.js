@@ -488,15 +488,17 @@ window.onload = function() {
     });
   }
 
-  function newElement(parent, type, classes) {
+  function newElement(parent, type, classes, innerHTML) {
     let element = document.createElement(type);
-    parent.appendChild(element);
+    if (parent)
+      parent.appendChild(element);
     if (classes) {
       const classArray = classes.split(' ');
       classArray.forEach(function(c) {
         element.classList.add(c);
       });
     }
+    element.innerHTML = innerHTML;
     return element;
   }
 
@@ -572,11 +574,9 @@ window.onload = function() {
         revokeCount++;
     });
     let endorsementCount = citizenEndorsements.length - revokeCount;
-    let badge = document.getElementById('endorsed-badge');
-    badge.innerHTML = endorsementCount;
-    let title = newElement(list, 'div', 'block-title');
-    let plural = (citizenEndorsements.length > 1) ? 'endorsements' : 'endorsement';
-    title.innerHTML = endorsementCount + '/' + citizenEndorsements.length + ' ' + plural;
+    let badge = document.getElementById('endorsed-badge', endorsementCount);
+    const plural = (citizenEndorsements.length > 1) ? 'endorsements' : 'endorsement';
+    let title = newElement(list, 'div', 'block-title', endorsementCount + '/' + citizenEndorsements.length + ' ' + plural);
     citizenEndorsements.forEach(function(endorsement) {
       let card = newElement(list, 'div', 'card');
       if (endorsement.revoke)
@@ -588,15 +588,13 @@ window.onload = function() {
       img.src = endorsement.picture;
       img.style.width = '100%';
       col = newElement(row, 'div', 'col-75');
-      let a = newElement(col, 'a', 'link external');
+      let a = newElement(col, 'a', 'link external',
+        `<span style="font-weight:bold">${endorsement.familyName}</span> <span>${endorsement.givenNames}</span>`);
       a.href = `https://www.openstreetmap.org/?mlat=${endorsement.latitude}&mlon=${endorsement.longitude}&zoom=12`;
       a.target = '_blank';
-      a.innerHTML =
-        `<span style="font-weight:bold">${endorsement.familyName}</span> <span>${endorsement.givenNames}</span>`;
       row = newElement(col, 'div', 'row');
-      let c = newElement(row, 'div', 'col');
-      let t = new Date(endorsement.published).toISOString().slice(0, 10);
-      c.innerHTML = (endorsement.revoke ? 'Revoked you on: ' : 'Endorsed you on: ') + t;
+      const t = new Date(endorsement.published).toISOString().slice(0, 10);
+      newElement(row, 'div', 'col', (endorsement.revoke ? 'Revoked you on: ' : 'Endorsed you on: ') + t);
     });
   }
 
@@ -879,27 +877,22 @@ window.onload = function() {
       img.src = endorsement.picture;
       img.style.width = '100%';
       col = newElement(row, 'div', 'col-75');
-      let a = newElement(col, 'a', 'link external');
+      let a = newElement(col, 'a', 'link external',
+        `<span style="font-weight:bold">${endorsement.familyName}</span> <span>${endorsement.givenNames}</span>`);
       a.href = `https://www.openstreetmap.org/?mlat=${endorsement.latitude}&mlon=${endorsement.longitude}&zoom=12`;
       a.target = '_blank';
-      a.innerHTML =
-        `<span style="font-weight:bold">${endorsement.familyName}</span> <span>${endorsement.givenNames}</span>`;
       row = newElement(col, 'div', 'row');
-      let c = newElement(row, 'div', 'col');
-      let t = new Date(endorsement.published).toISOString().slice(0, 10);
-      c.innerHTML = (endorsement.revoke ? 'Revoked: ' : 'Endorsed: ') + t;
+      const t = new Date(endorsement.published).toISOString().slice(0, 10);
+      newElement(row, 'div', 'col', (endorsement.revoke ? 'Revoked: ' : 'Endorsed: ') + t);
       if (!endorsement.revoke) {
         row = newElement(col, 'div', 'row');
-        c = newElement(row, 'div', 'col');
-        t = new Date(endorsement.expires).toISOString().slice(0, 10);
-        c.innerHTML = 'Expires: ' + t;
+        newElement(row, 'div', 'col', 'Expires: ' + new Date(endorsement.expires).toISOString().slice(0, 10));
         row = newElement(col, 'div', 'row');
-        c = newElement(row, 'div', 'col text-align-right');
-        a = newElement(c, 'a', 'link');
+        let c = newElement(row, 'div', 'col text-align-right');
+        a = newElement(c, 'a', 'link', 'Revoke');
         a.href = '#';
         a.style.fontWeight = 'bold';
         a.style.textTransform = 'uppercase';
-        a.innerHTML = 'Revoke';
         a.addEventListener('click', function() {
           function revoke() {
             let e = {
@@ -1029,9 +1022,11 @@ window.onload = function() {
           if (this.status == 200) {
             referendums = JSON.parse(this.responseText);
             let tab = document.getElementById('tab-vote');
+            let propose = newElement(null, 'div', 'block-title',
+              'Propose a <a class="link external" href="referendum.html" target="_blank">new referendum</a>');
             if (referendums.length == 0) {
-              let title = newElement(tab, 'div', 'block-title');
-              title.innerHTML = 'No referendum available';
+              newElement(tab, 'div', 'block-title', 'No referendum available');
+              tab.addChildren(propose);
               return;
             }
             let previousAreaName = '';
@@ -1085,9 +1080,9 @@ window.onload = function() {
                 area_url = 'https://nominatim.openstreetmap.org/search.php?' + area_query + '&polygon_geojson=1';
 
               if (previousAreaName != area_name && previousAreaType != area_type) {
-                let title = newElement(tab, 'div', 'block-title');
-                title.innerHTML =
-                  `<a class="link external" href="${area_url}" target="_blank">${area_name}</a> <small>(${area_type})</small>`;
+                newElement(tab, 'div', 'block-title',
+                  `<a class="link external" href="${area_url}" target="_blank">${area_name}</a> <small>(${area_type})</small>`
+                );
                 let list = newElement(tab, 'div', 'list accordion-list');
                 ul = newElement(list, 'ul');
               }
@@ -1095,11 +1090,9 @@ window.onload = function() {
               let li = newElement(ul, 'li', 'accordion-item');
               let a = newElement(li, 'a', 'item-content item-link');
               let item = newElement(a, 'div', 'item-inner');
-              let title = newElement(item, 'div', 'item-title');
-              title.innerHTML = referendum.title;
+              newElement(item, 'div', 'item-title', referendum.title);
               let after = newElement(item, 'div', 'item-after');
-              let badge = newElement(after, 'div', 'badge');
-              badge.innerHTML = referendum.participation;
+              let badge = newElement(after, 'div', 'badge', referendum.participation);
               const days = Math.floor((referendum.deadline - new Date().getTime()) / 86400000);
               if (days >= 0) {
                 if (vote.hasOwnProperty('public'))
@@ -1116,15 +1109,12 @@ window.onload = function() {
               } else badge.classList.add('color-gray');
               let content = newElement(li, 'div', 'accordion-item-content');
               let block = newElement(content, 'div', 'block');
-              let p = newElement(block, 'p');
-              p.innerHTML = referendum.description;
+              newElement(block, 'p', referendum.description);
               if (referendum.website) {
-                p = newElement(block, 'p');
-                p.innerHTML =
-                  `<a class="link external" href="${referendum.website}" target="_blank">Official web site</a>.`;
+                newElement(block, 'p',
+                  `<a class="link external" href="${referendum.website}" target="_blank">Official web site</a>.`);
               }
-              p = newElement(block, 'p');
-              p.innerHTML = '<i>' + referendum.question + '</i>';
+              newElement(block, 'p', '<i>' + referendum.question + '</i>');
               let list = newElement(block, 'div', 'list');
               ul = newElement(list, 'ul');
               const answers = referendum.answers.split('\n');
@@ -1140,25 +1130,22 @@ window.onload = function() {
                 if (count == 1)
                   input.checked = true;
                 newElement(label, 'i', 'icon icon-radio');
-                let option = newElement(label, 'div', 'item-inner');
-                option.innerHTML = answer;
+                newElement(label, 'div', 'item-inner', answer);
                 input.addEventListener('click', function() {
                   updateVoteKey(index, vote);
                 });
               });
-              let button = newElement(block, 'div', 'button button-fill');
+              let button = newElement(block, 'div', 'button button-fill', 'Vote');
               button.id = 'vote-button-' + index;
-              button.innerHTML = 'Vote';
               let message = newElement(block, 'div', 'item-label text-align-center');
               message.id = 'vote-message-' + index;
               updateVoteKey(index, vote);
               let bottom = newElement(block, 'div', 'padding-top');
-              let left = newElement(bottom, 'div', 'float-left');
-              left.innerHTML = 'Deadline: <i>' + unix_time_to_text(referendum.deadline / 1000) + '</i>';
-              let right = newElement(bottom, 'div', 'float-right padding-bottom');
+              newElement(bottom, 'div', 'float-left', 'Deadline: <i>' + unix_time_to_text(referendum.deadline / 1000) +
+                '</i>');
               const results_url = publisher + '/referendum.html?fingerprint=' + CryptoJS.SHA1(referendum.signature).toString();
-              right.innerHTML = '<a class="link external" href="' + results_url +
-                '" target="_blank">Results</a></small>';
+              newElement(bottom, 'div', 'float-right padding-bottom', '<a class="link external" href="' + results_url +
+                '" target="_blank">Results</a></small>');
               button.addEventListener('click', function(event) {
                 let button = event.target;
                 app.preloader.show();
@@ -1394,9 +1381,7 @@ window.onload = function() {
               badge.innerHTML = availableReferendum;
               badge.style.display = '';
             } else badge.style.display = 'none';
-            let propose = newElement(tab, 'div', 'block-title');
-            propose.innerHTML =
-              'Propose a <a class="link external" href="referendum.html" target="_blank">new referendum</a>';
+            tab.addChildren(propose);
           }
         };
         xhttp.open('POST', publisher + '/referendum.php', true);
