@@ -1066,7 +1066,9 @@ window.onload = function() {
               let area_query = '';
               area_array.forEach(function(argument) {
                 const eq = argument.indexOf('=');
-                const type = argument.substr(0, eq);
+                let type = argument.substr(0, eq);
+                if (type === 'village')
+                  type = 'city';
                 const name = argument.substr(eq + 1);
                 if (type)
                   area_query += type + '=' + encodeURIComponent(name) + '&';
@@ -1119,7 +1121,7 @@ window.onload = function() {
               if (referendum.website) {
                 p = newElement(block, 'p');
                 p.innerHTML =
-                  `<a class="link external" href="Official web site" target="_blank">${referendum.website}</a>.`;
+                  `<a class="link external" href="${referendum.website}" target="_blank">Official web site</a>.`;
               }
               p = newElement(block, 'p');
               p.innerHTML = '<i>' + referendum.question + '</i>';

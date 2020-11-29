@@ -247,7 +247,7 @@ window.onload = function() {
               else
                 showModal('Publication success',
                   'Your referendum was just published!<br>Check it <a target="_blank" href="' +
-                  publisher + '/publication.php?fingerprint=' + answer.fingerprint + '">here</a>.<br>');
+                  publisher + '/referendum.html?fingerprint=' + answer.fingerprint + '">here</a>.<br>');
             }
           };
           xhttp.open('POST', publisher + '/publish.php', true);
