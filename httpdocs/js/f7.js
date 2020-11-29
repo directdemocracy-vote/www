@@ -1116,6 +1116,11 @@ window.onload = function() {
               let block = newElement(content, 'div', 'block');
               let p = newElement(block, 'p');
               p.innerHTML = referendum.description;
+              if (referendum.website) {
+                p = newElement(block, 'p');
+                p.innerHTML =
+                  `<a class="link external" href="Official web site" target="_blank">${referendum.website}</a>.`;
+              }
               p = newElement(block, 'p');
               p.innerHTML = '<i>' + referendum.question + '</i>';
               let list = newElement(block, 'div', 'list');
