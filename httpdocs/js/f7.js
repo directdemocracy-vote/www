@@ -1113,7 +1113,7 @@ window.onload = function() {
               let block = newElement(content, 'div', 'block');
               newElement(block, 'p', '', referendum.description);
               if (referendum.website) {
-                newElement(block, 'p', ''
+                newElement(block, 'p', '',
                   `<a class="link external" href="${referendum.website}" target="_blank">Official web site</a>.`);
               }
               newElement(block, 'p', '', '<i>' + referendum.question + '</i>');
