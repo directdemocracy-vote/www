@@ -235,14 +235,14 @@ window.onload = function() {
     let xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
       if (this.status == 200) {
-        let answer = JSON.parse(this.responseText);
+        const answer = JSON.parse(this.responseText);
         if (answer.error)
           showModal('Area publication error', JSON.stringify(answer.error));
         else {
           let xhttp = new XMLHttpRequest();
           xhttp.onload = function() {
             if (this.status == 200) {
-              console.log(answer);
+              const answer = JSON.parse(this.responseText);
               if (answer.error)
                 showModal('Referendum publication error', JSON.stringify(answer.error));
               else
