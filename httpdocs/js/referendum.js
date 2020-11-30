@@ -242,6 +242,7 @@ window.onload = function() {
           let xhttp = new XMLHttpRequest();
           xhttp.onload = function() {
             if (this.status == 200) {
+              console.log(answer);
               if (answer.error)
                 showModal('Referendum publication error', JSON.stringify(answer.error));
               else
