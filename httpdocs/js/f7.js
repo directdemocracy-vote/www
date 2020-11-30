@@ -560,11 +560,11 @@ window.onload = function() {
     xhttp.open('GET', trustee + '/reputation.php?key=' + encodeURIComponent(citizen.key), true);
     xhttp.send();
     let list = document.getElementById('citizen-endorsements-list');
+    let badge = document.getElementById('endorsed-badge');
     if (citizenEndorsements.length == 0) {
       list.innerHTML =
         '<div class="block-title">Not endorsed</div>' +
         '<div class="block">You should ask to other citizens to endorse you.</div>';
-      let badge = document.getElementById('endorsed-badge');
       badge.style.background = 'red';
       badge.innerHTML = '0';
       return;
@@ -575,7 +575,7 @@ window.onload = function() {
         revokeCount++;
     });
     let endorsementCount = citizenEndorsements.length - revokeCount;
-    let badge = document.getElementById('endorsed-badge', endorsementCount);
+    badge.innerHTML = endorsementCount;
     const plural = (citizenEndorsements.length > 1) ? 'endorsements' : 'endorsement';
     let title = newElement(list, 'div', 'block-title', endorsementCount + '/' + citizenEndorsements.length + ' ' + plural);
     citizenEndorsements.forEach(function(endorsement) {
