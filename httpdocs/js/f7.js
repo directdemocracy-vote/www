@@ -498,7 +498,7 @@ window.onload = function() {
         element.classList.add(c);
       });
     }
-    if (innerHTML)
+    if (typeof innerHTML !== 'undefined')
       element.innerHTML = innerHTML;
     return element;
   }
@@ -1032,7 +1032,7 @@ window.onload = function() {
             }
             let previousAreaName = '';
             let previousAreaType = '';
-            let ul = null;
+            let topUl = null;
             let availableReferendum = 0;
             referendums.forEach(function(referendum, index) {
               let vote = votes.find(vote => vote.referendum === referendum.key);
@@ -1085,10 +1085,11 @@ window.onload = function() {
                   `<a class="link external" href="${area_url}" target="_blank">${area_name}</a> <small>(${area_type})</small>`
                 );
                 let list = newElement(tab, 'div', 'list accordion-list');
-                ul = newElement(list, 'ul');
+                topUl = newElement(list, 'ul');
               }
-
-              let li = newElement(ul, 'li', 'accordion-item');
+              previousAreaName = area_name;
+              previousAreaType = area_type;
+              let li = newElement(topUl, 'li', 'accordion-item');
               let a = newElement(li, 'a', 'item-content item-link');
               let item = newElement(a, 'div', 'item-inner');
               newElement(item, 'div', 'item-title', referendum.title);
@@ -1110,14 +1111,14 @@ window.onload = function() {
               } else badge.classList.add('color-gray');
               let content = newElement(li, 'div', 'accordion-item-content');
               let block = newElement(content, 'div', 'block');
-              newElement(block, 'p', referendum.description);
+              newElement(block, 'p', '', referendum.description);
               if (referendum.website) {
-                newElement(block, 'p',
+                newElement(block, 'p', ''
                   `<a class="link external" href="${referendum.website}" target="_blank">Official web site</a>.`);
               }
-              newElement(block, 'p', '<i>' + referendum.question + '</i>');
+              newElement(block, 'p', '', '<i>' + referendum.question + '</i>');
               let list = newElement(block, 'div', 'list');
-              ul = newElement(list, 'ul');
+              let ul = newElement(list, 'ul');
               const answers = referendum.answers.split('\n');
               let count = 0;
               answers.forEach(function(answer) {
