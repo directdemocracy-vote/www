@@ -87,6 +87,22 @@ window.onload = function() {
     updateStationKey();
   });
 
+  document.getElementById('referendum-paste').addEventListener('click', function(event) {
+    console.log("paste");
+    navigator.clipboard.readText().then(text => {
+      let input = document.getElementById('referendum-reference');
+      input.select();
+      input.value = text;
+      input.dispatchEvent(new KeyboardEvent('keypress', {
+        bubbles: true,
+        cancelable: false,
+        keyCode: 78
+      }));
+    });
+
+    //input.blur();
+  });
+
   function updateStationKey() {
     if (station) {
       let xhttp = new XMLHttpRequest();
