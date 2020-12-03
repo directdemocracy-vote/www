@@ -534,9 +534,10 @@ window.onload = function() {
       size,
       padding: 0
     });
-    console.log(citizenFingerprint);
+    /*
     document.getElementById('citizen-qr-code').style.width = size + 'px';
     document.getElementById('citizen-qr-code').style.height = size + 'px';
+    */
     // get reputation from trustee
     let xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
