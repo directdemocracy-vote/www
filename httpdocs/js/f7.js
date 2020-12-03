@@ -95,6 +95,33 @@ window.onload = function() {
     });
   });
 
+  document.getElementById('referendum-scan').addEventListener('click', function(event) {
+    const button = event.target;
+    const video = document.getElementById('referendum-qr-video');
+    const videoBlock = document.getElementById('referendum-qr-video-block');
+    const scannedReferendum = document.getElementById('scanned-referendum');
+    const scannedReferendumTitle = document.getElementById('scanned-referendum-title');
+
+    if (scanner) { // Cancel pressed
+      button.classList.remove('color-red');
+      button.classList.add('color-blue');
+      videoBlock.style.display = 'none';
+      scannedReferendum.style.display = '';
+      scannedReferendumTitle.style.display = '';
+      scanner.destroy();
+      scanner = null;
+      return;
+    }
+    scannedReferendum.style.display = 'none';
+    scannedReferendumTitle.style.display = 'none';
+    videoBlock.style.display = '';
+    button.classList.remove('color-blue');
+    button.classList.add('color-red');
+    scanner = new QrScanner(video, fingerprint => setResult(fingerprint));
+    scanner.start();
+
+  });
+
   function updateStationKey() {
     if (station) {
       let xhttp = new XMLHttpRequest();
@@ -145,7 +172,8 @@ window.onload = function() {
     '-' + String(ten.getDate()).padStart(2, '0');
   let date = document.getElementById('register-expiration');
   date.setAttribute('placeholder', inTenYears);
-  date.value = inTenYears;
+  date.value =
+    inTenYears;
   let calendar = app.calendar.create({
     inputEl: '#register-expiration',
     dateFormat: 'yyyy-mm-dd',
@@ -229,10 +257,14 @@ window.onload = function() {
   }
 
   document.getElementById('register-family-name').addEventListener('input', validateRegistration);
-  document.getElementById('register-given-names').addEventListener('input', validateRegistration);
-  document.getElementById('register-confirm-check').addEventListener('input', validateRegistration);
-  document.getElementById('register-upload-button').addEventListener('click', uploadPicture);
-  document.getElementById('register-picture').addEventListener('click', uploadPicture);
+  document.getElementById(
+    'register-given-names').addEventListener('input', validateRegistration);
+  document.getElementById(
+    'register-confirm-check').addEventListener('input', validateRegistration);
+  document.getElementById(
+    'register-upload-button').addEventListener('click', uploadPicture);
+  document.getElementById('register-picture').addEventListener(
+    'click', uploadPicture);
   document.getElementById('register-picture-upload').addEventListener('change', function(event) {
     let content = {};
     content.innerHTML =
@@ -469,7 +501,8 @@ window.onload = function() {
       privateKeyNotAvailable();
       createNewKey();
     }
-    document.getElementById('tab-card-title').innerHTML = 'Edit Citizen Card' + (revoke ? ' <small>(revoked key)</small>' :
+    document.getElementById('tab-card-title').innerHTML = 'Edit Citizen Card' + (revoke ?
+      ' <small>(revoked key)</small>' :
       '');
     let button = document.getElementById('register-button');
     button.innerHTML = 'Publish';
@@ -555,7 +588,8 @@ window.onload = function() {
           badge.classList.add('color-red');
         } else {
           const color = answer.endorsed ? 'blue' : 'red';
-          reputation.innerHTML = '<span style="font-weight:bold;color:' + color + '">' + answer.reputation + '</span>';
+          reputation.innerHTML = '<span style="font-weight:bold;color:' + color + '">' + answer.reputation +
+            '</span>';
           badge.classList.remove('color-red');
           badge.classList.remove('color-blue');
           badge.classList.add('color-' + color);
@@ -582,7 +616,8 @@ window.onload = function() {
     let endorsementCount = citizenEndorsements.length - revokeCount;
     badge.innerHTML = endorsementCount;
     const plural = (citizenEndorsements.length > 1) ? 'endorsements' : 'endorsement';
-    let title = newElement(list, 'div', 'block-title', endorsementCount + '/' + citizenEndorsements.length + ' ' + plural);
+    let title = newElement(list, 'div', 'block-title', endorsementCount + '/' + citizenEndorsements.length + ' ' +
+      plural);
     citizenEndorsements.forEach(function(endorsement) {
       let card = newElement(list, 'div', 'card');
       if (endorsement.revoke)
@@ -663,9 +698,13 @@ window.onload = function() {
     }).open();
   }
   document.getElementById('edit').addEventListener('click', editOrRevokeKey);
-  document.getElementById('revoke-key').addEventListener('click', editOrRevokeKey);
+  document.getElementById('revoke-key').addEventListener(
+    'click', editOrRevokeKey);
 
-  document.getElementById('endorse-qr-video').addEventListener('loadedmetadata', function() {
+  document.getElementById('endorse-qr-video').addEventListener('loadedmetadata', qrVideo);
+  document.getElementById('referendum-qr-video').addEventListener('loadedmetadata', qrVideo);
+
+  function qrVideo() {
     // display video as a square centered in the video rectangle
     if (this.videoWidth > this.videoHeight) {
       const margin = Math.round(-10000 * (this.videoWidth - this.videoHeight) / this.videoWidth) / 100.0;
@@ -679,10 +718,9 @@ window.onload = function() {
       this.style.marginTop = margin + '%';
       this.style.marginBottom = margin + '%';
     }
-  });
+  }
 
   document.getElementById('endorse').addEventListener('click', function(event) {
-    console.log('endorse');
     const button = event.target;
     const video = document.getElementById('endorse-qr-video');
     const list = document.getElementById('endorsements-list');
@@ -794,7 +832,8 @@ window.onload = function() {
                 lat + ', ' + lon + ')</center>').openPopup();
             }
           };
-          xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' + lat + '&lon=' + lon +
+          xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' + lat + '&lon=' +
+            lon +
             '&zoom=10', true);
           xhttp.send();
         }
@@ -818,8 +857,10 @@ window.onload = function() {
       disable('endorse-confirm');
   }
   document.getElementById('endorse-picture-check').addEventListener('change', updateEndorseConfirmButton);
-  document.getElementById('endorse-name-check').addEventListener('change', updateEndorseConfirmButton);
-  document.getElementById('endorse-coords-check').addEventListener('change', updateEndorseConfirmButton);
+  document.getElementById(
+    'endorse-name-check').addEventListener('change', updateEndorseConfirmButton);
+  document.getElementById(
+    'endorse-coords-check').addEventListener('change', updateEndorseConfirmButton);
 
   function resetEndorse() {
     document.getElementById('endorse-citizen').style.display = 'none';
@@ -1083,7 +1124,8 @@ window.onload = function() {
               } else if (area_type == 'union')
                 area_url = 'https://en.wikipedia.org/wiki/European_Union';
               else
-                area_url = 'https://nominatim.openstreetmap.org/search.php?' + area_query + '&polygon_geojson=1';
+                area_url = 'https://nominatim.openstreetmap.org/search.php?' + area_query +
+                '&polygon_geojson=1';
 
               if (previousAreaName != area_name && previousAreaType != area_type) {
                 newElement(tab, 'div', 'block-title',
@@ -1119,7 +1161,8 @@ window.onload = function() {
               newElement(block, 'p', '', referendum.description);
               if (referendum.website) {
                 newElement(block, 'p', '',
-                  `<a class="link external" href="${referendum.website}" target="_blank">Official web site</a>.`);
+                  `<a class="link external" href="${referendum.website}" target="_blank">Official web site</a>.`
+                );
               }
               newElement(block, 'p', '', '<i>' + referendum.question + '</i>');
               let list = newElement(block, 'div', 'list');
@@ -1142,17 +1185,23 @@ window.onload = function() {
                   updateVoteKey(index, vote);
                 });
               });
-              let button = newElement(block, 'div', 'button button-fill', 'Vote');
+              let row = newElement(block, 'div', 'row');
+              let col = newElement(row, 'div', 'col-80');
+              let button = newElement(col, 'div', 'button button-fill', 'Vote');
+              let message = newElement(col, 'div', 'item-label text-align-center');
               button.id = 'vote-button-' + index;
-              let message = newElement(block, 'div', 'item-label text-align-center');
+              let trash = newElement(row, 'div', 'col-20 button', '<i class="icon f7-icons">trash</i>');
+              //              let message = newElement(block, 'div', 'item-label text-align-center');
               message.id = 'vote-message-' + index;
               updateVoteKey(index, vote);
               let bottom = newElement(block, 'div', 'padding-top');
-              newElement(bottom, 'div', 'float-left', 'Deadline: <i>' + unix_time_to_text(referendum.deadline / 1000) +
+              newElement(bottom, 'div', 'float-left', 'Deadline: <i>' + unix_time_to_text(referendum.deadline /
+                  1000) +
                 '</i>');
-              const results_url = publisher + '/referendum.html?fingerprint=' + CryptoJS.SHA1(referendum.signature).toString();
-              newElement(bottom, 'div', 'float-right padding-bottom', '<a class="link external" href="' + results_url +
-                '" target="_blank">Results</a></small>');
+              const results_url = publisher + '/referendum.html?fingerprint=' + CryptoJS.SHA1(referendum.signature)
+                .toString();
+              newElement(bottom, 'div', 'float-right padding-bottom', '<a class="link external" href="' +
+                results_url + '" target="_blank">Results</a>');
               button.addEventListener('click', function(event) {
                 let button = event.target;
                 app.preloader.show();
@@ -1185,7 +1234,8 @@ window.onload = function() {
                     // verify the fields of the ballot didn't change.
                     let keys = Object.keys(ballot);
                     if (!keys.includes('schema') || !keys.includes('key') || !keys.includes('signature') ||
-                      !keys.includes('published') || !keys.includes('expires') || !keys.includes('referendum') ||
+                      !keys.includes('published') || !keys.includes('expires') || !keys.includes(
+                        'referendum') ||
                       !keys.includes('station')) {
                       app.dialog.alert('Missing field in ballot.', 'Register error');
                       return false;
@@ -1272,7 +1322,8 @@ window.onload = function() {
                     delete registration.station.signature;
                     verify = new JSEncrypt();
                     verify.setPublicKey(publicKey(registration.station.key));
-                    if (!verify.verify(JSON.stringify(registration), registration_station_signature, CryptoJS
+                    if (!verify.verify(JSON.stringify(registration), registration_station_signature,
+                        CryptoJS
                         .SHA256)) {
                       app.dialog.alert('Wrong station signature for registration.', 'Register error');
                       return;
@@ -1295,11 +1346,13 @@ window.onload = function() {
                     registration.station.signature = registration_station_signature;
                     // check match between ballot and registration
                     if (ballot.referendum != registration.referendum) {
-                      app.dialog.alert('Mismatching referendum in ballot and registration.', 'Register error');
+                      app.dialog.alert('Mismatching referendum in ballot and registration.',
+                        'Register error');
                       return;
                     }
                     if (ballot.station.key != registration.station.key) {
-                      app.dialog.alert('Mismatching referendum in ballot and registration.', 'Register error');
+                      app.dialog.alert('Mismatching referendum in ballot and registration.',
+                        'Register error');
                       return;
                     }
                     // save registration (can be a proof against cheating station)
@@ -1332,7 +1385,8 @@ window.onload = function() {
                         button.classList.remove('color-green');
                         button.classList.add('color-blue');
                         const now = Math.round(new Date().getTime() / 1000);
-                        document.getElementById('vote-message-' + index).innerHTML = unix_time_to_text(now);
+                        document.getElementById('vote-message-' + index).innerHTML = unix_time_to_text(
+                          now);
                         delete vote.private;
                         vote.public = strippedKey(crypt.getPublicKey());
                         vote.date = now;
