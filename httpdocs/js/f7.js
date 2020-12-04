@@ -5,6 +5,13 @@ let app = new Framework7({
   root: '#app',
   name: 'directdemocracy.vote',
   id: 'directdemocracy.vote',
+  routes: [{
+    path: '/info/',
+    pageName: 'info'
+  }, {
+    path: '/',
+    pageName: 'home'
+  }]
 });
 
 let mainView = app.views.create('.view-main');
