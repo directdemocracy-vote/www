@@ -62,8 +62,8 @@
             <div class="block-title">Private Key</div>
             <div class="block">
               <p>In <em>directdemocracy</em>, each citizen has a private key. This is a file that contains your personnal cryptographic information. It allows you to vote and perform other operations involving electronic signature. It is created
-                during the registration process and stored only in the app used for registering. You can however export this file to a different phone running a directdemocracy app. Beware to keep this file strictly confidential. If someone else
-                could access this file and your password, this person would be able to usurpate your identity, vote for you and sign documents for you.</p>
+                during the registration process and stored only in the app. You can however export this file to a different phone running a directdemocracy app. Beware to keep this file strictly confidential. If someone else could access this file
+                and your password, this person would be able to vote and sign for you.</p>
             </div>
             <div class="block-title block-title-medium">Contribute</div>
             <div class="block">
@@ -287,7 +287,7 @@
                 </div>
               </div>
               <div class="page-content tab" id="tab-vote">
-                <div class="list ">
+                <div class="list" style="margin-bottom:0">
                   <ul>
                     <li class="item-content item-input item-input-outline">
                       <div class="item-inner">
@@ -306,14 +306,13 @@
                     </li>
                   </ul>
                 </div>
-                <div class="block" id="referendum-qr-video-block" style="display:none">
-                  <div style="width:100%;text-align:center;overflow:hidden">
-                    <video muted playsinline id="referendum-qr-video"></video>
-                  </div>
+                <div style="width:100%;text-align:center;overflow:hidden;background:white;display:none">
+                  <video muted playsinline id="referendum-qr-video"></video>
                 </div>
-                <div id="scanned-referendum-title" class="block-title"><a class="link external" href="https://nominatim.openstreetmap.org/search.php?city=Vullierens&amp;county=District%20de%20Morges&amp;state=Vaud&amp;country=Switzerland&amp;polygon_geojson=1"
-                    target="_blank">Vullierens </a> <small>(village - test)</small></div>
-                <div id="scanned-referendum" class="list accordion-list">
+                <div id="scanned-referendum-title" class="block-title" style="background:white;margin:0;padding:15px;display:none">
+                  <a class="link external" href="https://nominatim.openstreetmap.org/search.php?city=Vullierens&amp;county=District%20de%20Morges&amp;state=Vaud&amp;country=Switzerland&amp;polygon_geojson=1" target="_blank">Vullierens </a> <small>(village
+                    - test)</small></div>
+                <div id="scanned-referendum" class="list accordion-list" style="display:none">
                   <ul>
                     <li class="accordion-item"><a class="item-content item-link">
                         <div class="item-inner">
