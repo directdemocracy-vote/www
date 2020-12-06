@@ -100,7 +100,12 @@ window.onload = function() {
       let input = document.getElementById('referendum-reference');
       input.value = text;
       app.input.checkEmptyState(input);
+      showReferendum(text);
     });
+  });
+
+  document.getElementById('referendum-reference').addEventListener('input', function(event) {
+    showReferendum(event.target.value);
   });
 
   document.getElementById('referendum-scan').addEventListener('click', function(event) {
@@ -133,33 +138,43 @@ window.onload = function() {
       button.classList.add('color-blue');
       scanner.destroy();
       scanner = null;
-      showReferendum();
-    }
-
-    function showReferendum() {
-      let xhttp = new XMLHttpRequest();
-      xhttp.open('POST', publisher + '/publication.php', true);
-      xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      xhttp.send('fingerprint=' + encodeURIComponent(input.value));
-      xhttp.onload = function() {
-        if (this.status == 200) {
-          let answer = JSON.parse(this.responseText);
-          if (answer.error)
-            app.dialog.alert(answer.error, 'Not Found');
-          else {
-            console.log(answer);
-            let state = {
-              previousAreaName: '',
-              previousAreaType: '',
-              topUp: null
-            };
-            parent = document.getElementById('scanned-referendum');
-            addReferendum(parent, answer, availableReferendum, state, true);
-          }
-        }
-      };
+      showReferendum(fingerprint);
     }
   });
+
+  function showReferendum(reference) {
+    let value = reference.toLowerCase();
+    if (value.length !== 40)
+      return;
+    const regexp = /^[0-9a-f]+$/;
+    if (!regexp.test(value)) {
+      app.dialog.alert('The reference format for a referendum is wrong, please double-check your input',
+        'Wrong Referendum Reference');
+      return;
+    }
+    let xhttp = new XMLHttpRequest();
+    xhttp.open('POST', publisher + '/referendum.php', true);
+    xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhttp.send('fingerprint=' + encodeURIComponent(value));
+    xhttp.onload = function() {
+      if (this.status == 200) {
+        let answer = JSON.parse(this.responseText);
+        parent = document.getElementById('scanned-referendum');
+        parent.innerHTML = '';
+        if (answer.error)
+          app.dialog.alert(answer.error, 'Referendum Not Found');
+        else {
+          console.log(answer);
+          let state = {
+            previousAreaName: '',
+            previousAreaType: '',
+            topUp: null
+          };
+          addReferendum(parent, answer, availableReferendum, state, true);
+        }
+      }
+    };
+  }
 
   function updateStationKey() {
     if (station) {
