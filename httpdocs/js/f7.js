@@ -30,6 +30,7 @@ window.onload = function() {
     latitude: 0,
     longitude: 0
   };
+  let area = '';
   let endorsements = [];
   let citizenEndorsements = [];
   let citizenCrypt = null;
@@ -155,7 +156,7 @@ window.onload = function() {
     let xhttp = new XMLHttpRequest();
     xhttp.open('POST', publisher + '/referendum.php', true);
     xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhttp.send('fingerprint=' + encodeURIComponent(value));
+    xhttp.send('fingerprint=' + encodeURIComponent(value) + '&area=' + encodeURIComponent(area));
     xhttp.onload = function() {
       if (this.status == 200) {
         let answer = JSON.parse(this.responseText);
@@ -538,7 +539,7 @@ window.onload = function() {
           citizenEndorsements = answer.citizen_endorsements;
           updateCitizenCard();
           updateEndorsements();
-          updateVote();
+          updateArea();
         }
       }
     };
@@ -1443,8 +1444,11 @@ window.onload = function() {
     });
   }
 
-  function updateVote() {
+  function updateArea() {
     let xhttp = new XMLHttpRequest();
+    xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' +
+      citizen.latitude + '&lon=' + citizen.longitude + '&zoom=10', true);
+    xhttp.send();
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
         const a = JSON.parse(this.responseText);
@@ -1478,50 +1482,54 @@ window.onload = function() {
           type.push('union');
           name.push('European Union');
         }
-        let area = '';
+        area = '';
         name.forEach(function(n, i) {
           area += type[i] + '=' + name[i] + '\n';
         });
-        let xhttp = new XMLHttpRequest();
-        xhttp.onload = function() {
-          if (this.status == 200) {
-            referendums = JSON.parse(this.responseText);
-            let tab = document.getElementById('tab-vote');
-            let propose = newElement(null, 'div', 'block-title',
-              'Propose a <a class="link external" href="referendum.html" target="_blank">new referendum</a>');
-            if (referendums.length == 0) {
-              newElement(tab, 'div', 'block-title', 'No referendum available');
-              tab.appendChild(propose);
-              return;
-            }
-            let previousAreaName = '';
-            let previousAreaType = '';
-            let topUl = null;
-            availableReferendum = 0;
-            let state = {
-              previousAreaName: '',
-              previousAreaType: '',
-              topUp: null
-            };
-            referendums.forEach(function(referendum, index) {
-              addReferendum(tab, referendum, index, state, false);
-            });
-            let badge = document.getElementById('vote-badge');
-            if (availableReferendum) {
-              badge.innerHTML = availableReferendum;
-              badge.style.display = '';
-            } else badge.style.display = 'none';
-            tab.appendChild(propose);
-          }
-        };
-        xhttp.open('POST', publisher + '/referendum.php', true);
-        xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhttp.send('area=' + encodeURIComponent(area));
+        updateVote();
+        document.getElementById('referendum-reference').classList.remove('disabled');
+        document.getElementById('referendum-scan').classList.remove('disabled');
+        document.getElementById('referendum-paste').classList.remove('disabled');
       }
     };
-    xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' +
-      citizen.latitude + '&lon=' + citizen.longitude + '&zoom=10', true);
-    xhttp.send();
+  }
+
+  function updateVote() {
+    let xhttp = new XMLHttpRequest();
+    xhttp.open('POST', publisher + '/referendum.php', true);
+    xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhttp.send('area=' + encodeURIComponent(area));
+    xhttp.onload = function() {
+      if (this.status == 200) {
+        referendums = JSON.parse(this.responseText);
+        let tab = document.getElementById('tab-vote');
+        let propose = newElement(null, 'div', 'block-title',
+          'Propose a <a class="link external" href="referendum.html" target="_blank">new referendum</a>');
+        if (referendums.length == 0) {
+          newElement(tab, 'div', 'block-title', 'No referendum available');
+          tab.appendChild(propose);
+          return;
+        }
+        let previousAreaName = '';
+        let previousAreaType = '';
+        let topUl = null;
+        availableReferendum = 0;
+        let state = {
+          previousAreaName: '',
+          previousAreaType: '',
+          topUp: null
+        };
+        referendums.forEach(function(referendum, index) {
+          addReferendum(tab, referendum, index, state, false);
+        });
+        let badge = document.getElementById('vote-badge');
+        if (availableReferendum) {
+          badge.innerHTML = availableReferendum;
+          badge.style.display = '';
+        } else badge.style.display = 'none';
+        tab.appendChild(propose);
+      }
+    };
   }
 
   function disableAnswer(index) {
