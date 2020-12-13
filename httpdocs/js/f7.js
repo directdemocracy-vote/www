@@ -1543,7 +1543,6 @@ window.onload = function() {
         referendums = JSON.parse(this.responseText);
         if (referendums.error)
           console.log(referendums.error);
-        console.log(referendums);
         let tab = document.getElementById('tab-vote');
         let propose = newElement(null, 'div', 'block-title',
           'Propose a <a class="link external" href="referendum.html" target="_blank">new referendum</a>');
@@ -1585,7 +1584,6 @@ window.onload = function() {
   function updateVoteKey(index, vote) {
     let button = document.getElementById('vote-button-' + index);
     let message = document.getElementById('vote-message-' + index);
-    console.log("i=" + index);
     const expired = referendums.length > index ? new Date().getTime() > referendums[index].deadline : true;
     if (button === null || message === null)
       return;
