@@ -560,6 +560,8 @@ window.onload = function() {
           citizen = answer.citizen;
           citizen.key = strippedKey(citizenCrypt.getPublicKey());
           endorsements = answer.endorsements;
+          if (endorsements.error)
+            app.dialog.alert(endorsements.error, 'Citizen Endorsement Error');
           citizenEndorsements = answer.citizen_endorsements;
           updateCitizenCard();
           updateEndorsements();
@@ -1212,7 +1214,6 @@ window.onload = function() {
     let message = newElement(col, 'div', 'item-label text-align-center');
     button.id = 'vote-button-' + index;
     let trash = newElement(row, 'div', 'col-20 button', '<i class="icon f7-icons">trash</i>');
-    //              let message = newElement(block, 'div', 'item-label text-align-center');
     message.id = 'vote-message-' + index;
     updateVoteKey(index, vote);
     let bottom = newElement(block, 'div', 'padding-top');
@@ -1594,54 +1595,54 @@ window.onload = function() {
     } else if (stationKey === '') {
       message.innerHTML = 'Getting station key, please wait...';
       disable(button);
-    } else if (voteKeyPool.length > 0) {
-      if (document.querySelector('input[name="answer-' + index + '"]:checked')) {
-        message.innerHTML = 'Think twice before you vote, afterwards no change is possible.';
-        enable(button);
-      } else {
-        message.innerHTML = 'Select an answer to vote.';
-        disable(button);
-      }
-    } else {
+    } else if (voteKeyPool.length == 0) {
+      message.innerHTML = 'Forging vote key, please wait...';
+      disable(button);
+    } else if (vote.hasOwnProperty('public')) {
       disable(button);
       disableAnswer(index);
-      if (vote.hasOwnProperty('public')) {
-        button.classList.remove('color-green');
-        button.classList.add('color-blue');
-        button.innerHTML = 'Voted';
-        message.innerHTML = unix_time_to_text(vote.date);
-        let radios = document.getElementsByName('answer-' + index);
-        let answer = '';
-        for (let i = 0, length = radios.length; i < length; i++) {
-          disable(radios[i]);
-          if (radios[i].checked) {
-            answer = radios[i].value;
-            break;
-          }
+      message.innerHTML = new Date(vote.date * 1000).toLocaleString().slice(0, -3);
+      button.classList.remove('color-green');
+      button.classList.add('color-blue');
+      button.innerHTML = 'Voted';
+      let radios = document.getElementsByName('answer-' + index);
+      let answer = '';
+      for (let i = 0, length = radios.length; i < length; i++) {
+        disable(radios[i]);
+        if (radios[i].checked) {
+          answer = radios[i].value;
+          break;
         }
-        if (answer == '' && !expired) { // query publisher to get verification
-          let xhttp = new XMLHttpRequest();
-          xhttp.onload = function() {
-            if (this.status == 200) {
-              let response = JSON.parse(this.responseText);
-              if (response.error)
-                app.dialog.alert(response.error, 'Vote verification error');
-              else {
-                answer = response.answer;
-                for (let i = 0, length = radios.length; i < length; i++)
-                  if (radios[i].value == answer) {
-                    radios[i].checked = true;
-                    break;
-                  }
-              }
+      }
+      if (answer == '' && !expired) { // query publisher to get verification
+        let xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+          if (this.status == 200) {
+            let response = JSON.parse(this.responseText);
+            if (response.error)
+              app.dialog.alert(response.error, 'Vote verification error');
+            else {
+              answer = response.answer;
+              for (let i = 0, length = radios.length; i < length; i++)
+                if (radios[i].value == answer) {
+                  radios[i].checked = true;
+                  break;
+                }
             }
-          };
-          xhttp.open('POST', publisher + '/publication.php', true);
-          xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-          xhttp.send('key=' + encodeURIComponent(vote.public));
+          }
+        };
+        xhttp.open('POST', publisher + '/publication.php', true);
+        xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhttp.send('key=' + encodeURIComponent(vote.public));
+      } else {
+        if (document.querySelector('input[name="answer-' + index + '"]:checked')) {
+          message.innerHTML = 'Think twice before you vote, afterwards no change is possible.';
+          enable(button);
+        } else {
+          message.innerHTML = 'Select an answer to vote.';
+          disable(button);
         }
-      } else
-        message.innerHTML = 'Forging vote key, please wait...';
+      }
     }
   }
 };
