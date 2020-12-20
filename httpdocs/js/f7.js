@@ -1548,11 +1548,12 @@ window.onload = function() {
     };
   }
 
-  function disableAnswer(index) {
+  function disableAnswer(index, erase) {
     console.log("disableAnswer");
     let answers = document.getElementsByName('answer-' + index);
     answers.forEach(function(answer) {
-      answer.checked = false;
+      if (erase)
+        answer.checked = false;
       disable(answer.parentNode);
     });
   }
@@ -1596,7 +1597,7 @@ window.onload = function() {
     button.classList.add('color-blue');
     button.innerHTML = 'Check Vote';
     button.addEventListener('click', checkVote);
-    disableAnswer(index);
+    disableAnswer(index, true);
     enable(button);
   }
 
@@ -1615,7 +1616,7 @@ window.onload = function() {
     } else if (vote.hasOwnProperty('public')) {
       if (vote.hasOwnProperty('private')) {
         disable(button);
-        disableAnswer(index);
+        disableAnswer(index, false);
         button.innerHTML = 'Voting...';
       } else {
         message.innerHTML = 'Vote cast on ' + new Date(vote.date * 1000).toLocaleString().slice(0, -3);
@@ -1624,14 +1625,14 @@ window.onload = function() {
         else {
           button.innerHTML = 'Vote cast!'; // French: "a voté !"
           disable(button);
-          disableAnswer(index);
+          disableAnswer(index, true);
         }
       }
     } else if (expired) {
       button.innerHTML = 'Not Voted';
       message.innerHTML = 'Deadline has passed.';
       disable(button);
-      disableAnswer(index);
+      disableAnswer(index, true);
     } else if (document.querySelector('input[name="answer-' + index + '"]:checked')) {
       button.innerHTML = 'Vote';
       message.innerHTML = 'Think twice before you vote, there is no undo.';
