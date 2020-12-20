@@ -54,19 +54,6 @@ window.onload = function() {
   if (registrations === null)
     registrations = [];
 
-  function unix_time_to_text(unix_timestamp) {
-    const a = new Date(unix_timestamp * 1000);
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const year = a.getFullYear();
-    const month = months[a.getMonth()];
-    const date = a.getDate();
-    const hour = a.getHours();
-    const minute = '0' + a.getMinutes();
-    const second = '0' + a.getSeconds();
-    const time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + minute.substr(-2) + ':' + second.substr(-2);
-    return time;
-  }
-
   let publisher = localStorage.getItem('publisher');
   if (!publisher) {
     publisher = 'https://publisher.directdemocracy.vote';
@@ -1217,8 +1204,7 @@ window.onload = function() {
     message.id = 'vote-message-' + index;
     updateVoteKey(index, vote);
     let bottom = newElement(block, 'div', 'padding-top');
-    newElement(bottom, 'div', 'float-left', 'Deadline: <i>' + unix_time_to_text(referendum.deadline /
-        1000) +
+    newElement(bottom, 'div', 'float-left', 'Deadline: <i>' + new Date(referendum.deadline).toLocaleString() +
       '</i>');
     const results_url = publisher + '/referendum.html?fingerprint=' + CryptoJS.SHA1(referendum.signature)
       .toString();
