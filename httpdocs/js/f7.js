@@ -1561,12 +1561,10 @@ window.onload = function() {
   function checkVote(event) { // query publisher to get verification
     let button = event.target;
     let index = parseInt(button.id.substring(12));
-    console.log('index = ' + index);
     let vote = votes[index];
     let xhttp = new XMLHttpRequest();
     xhttp.open('POST', publisher + '/publication.php', true);
     xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    console.log('publication key = ' + vote.public);
     xhttp.send('key=' + encodeURIComponent(vote.public));
     xhttp.onload = function() {
       if (this.status == 200) {
@@ -1574,14 +1572,16 @@ window.onload = function() {
         if (response.error)
           app.dialog.alert(response.error, 'Vote check error');
         else {
-          answer = response.answer;
-          console.log("answer = " + answer);
+          const answer = response.answer;
           let radios = document.getElementsByName('answer-' + index);
           for (let i = 0, length = radios.length; i < length; i++)
             if (radios[i].value == answer) {
               radios[i].checked = true;
               break;
             }
+          setTimeout(function() {
+            disableAnswer(index, true);
+          }, 2000);
         }
       }
     };
