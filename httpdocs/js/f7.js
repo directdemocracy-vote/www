@@ -1197,7 +1197,7 @@ window.onload = function() {
     });
     let row = newElement(block, 'div', 'row');
     let col = newElement(row, 'div', 'col-80');
-    let button = newElement(col, 'div', 'button button-fill', 'Vote');
+    let button = newElement(col, 'div', 'button button-fill');
     let message = newElement(col, 'div', 'item-label text-align-center');
     button.id = 'vote-button-' + index;
     let trash = newElement(row, 'div', 'col-20 button', '<i class="icon f7-icons">trash</i>');
@@ -1211,15 +1211,13 @@ window.onload = function() {
     newElement(bottom, 'div', 'float-right padding-bottom', '<a class="link external" href="' +
       results_url + '" target="_blank">Results</a>');
     button.addEventListener('click', function(event) {
-      let button = event.target;
-      disable(button);
-      button.innerHTML = 'Voting...';
       app.preloader.show();
       let crypt = new JSEncrypt();
       vote.private = voteKeyPool.shift();
       crypt.setPrivateKey(vote.private);
       vote.public = strippedKey(crypt.getPublicKey());
       localStorage.setItem('voteKeyPool', JSON.stringify(voteKeyPool));
+      updateVoteKey(index, vote);
       createNewVoteKey();
       let ballot = {
         schema: 'https://directdemocracy.vote/json-schema/' + DIRECTDEMOCRACY_VERSION +
@@ -1256,8 +1254,6 @@ window.onload = function() {
       let xhttp = new XMLHttpRequest();
       xhttp.onload = function() {
         app.preloader.hide();
-        enable(button);
-        button.innerHTML = 'Vote';
         if (this.status != 200) {
           console.log('Station not responding: ' + this.status);
           // FIXME: allow to try to vote again
@@ -1441,7 +1437,7 @@ window.onload = function() {
               vote.public = strippedKey(crypt.getPublicKey());
               vote.date = Math.round(new Date().getTime() / 1000);
               localStorage.setItem('votes', JSON.stringify(votes));
-              setCheckVoteButton(index, vote);
+              updateVoteKey(index, vote);
             }
           };
           xhttp.open('POST', publisher + '/publish.php', true);
@@ -1607,23 +1603,29 @@ window.onload = function() {
   function updateVoteKey(index, vote) {
     let button = document.getElementById('vote-button-' + index);
     let message = document.getElementById('vote-message-' + index);
-    if (!button)
+    if (!button || index >= referendums.length)
       return;
-    const expired = referendums.length > index ? new Date().getTime() > referendums[index].deadline : true;
+    const expired = new Date().getTime() > referendums[index].deadline;
     if (stationKey === '') {
       message.innerHTML = 'Getting station key, please wait...';
       disable(button);
     } else if (voteKeyPool.length == 0) {
       message.innerHTML = 'Forging vote key, please wait...';
       disable(button);
-    } else if (vote.hasOwnProperty('public') && !vote.hasOwnProperty('private')) {
-      message.innerHTML = 'Vote cast on ' + new Date(vote.date * 1000).toLocaleString().slice(0, -3);
-      if (expired)
-        setCheckVoteButton(index, vote);
-      else {
-        button.innerHTML = 'Vote cast!'; // French: "a voté !"
+    } else if (vote.hasOwnProperty('public')) {
+      if (vote.hasOwnProperty('private')) {
         disable(button);
         disableAnswer(index);
+        button.innerHTML = 'Voting...';
+      } else {
+        message.innerHTML = 'Vote cast on ' + new Date(vote.date * 1000).toLocaleString().slice(0, -3);
+        if (expired)
+          setCheckVoteButton(index, vote);
+        else {
+          button.innerHTML = 'Vote cast!'; // French: "a voté !"
+          disable(button);
+          disableAnswer(index);
+        }
       }
     } else if (expired) {
       button.innerHTML = 'Not Voted';
@@ -1631,7 +1633,8 @@ window.onload = function() {
       disable(button);
       disableAnswer(index);
     } else if (document.querySelector('input[name="answer-' + index + '"]:checked')) {
-      message.innerHTML = 'Think twice before you vote, afterwards no change is possible.';
+      button.innerHTML = 'Vote';
+      message.innerHTML = 'Think twice before you vote, there is no undo.';
       enable(button);
     } else {
       message.innerHTML = 'Select an answer to vote.';
