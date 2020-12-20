@@ -1549,7 +1549,6 @@ window.onload = function() {
   }
 
   function disableAnswer(index, erase) {
-    console.log("disableAnswer");
     let answers = document.getElementsByName('answer-' + index);
     answers.forEach(function(answer) {
       if (erase)
@@ -1588,7 +1587,6 @@ window.onload = function() {
   }
 
   function setCheckVoteButton(index, vote) {
-    console.log("disabling vote options");
     let button = document.getElementById('vote-button-' + index);
     let newButton = button.cloneNode(false); // remove event listeners
     button.parentNode.replaceChild(newButton, button);
