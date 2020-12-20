@@ -1226,17 +1226,14 @@ window.onload = function() {
       results_url + '" target="_blank">Results</a>');
     button.addEventListener('click', function(event) {
       let button = event.target;
-      app.preloader.show();
-      button.innerHTML = 'Voting...';
       disable(button);
+      button.innerHTML = 'Voting...';
+      app.preloader.show();
       let crypt = new JSEncrypt();
       vote.private = voteKeyPool.shift();
       crypt.setPrivateKey(vote.private);
       vote.public = strippedKey(crypt.getPublicKey());
       localStorage.setItem('voteKeyPool', JSON.stringify(voteKeyPool));
-      votes.forEach(function(vote, index) {
-        updateVoteKey(index, vote);
-      });
       createNewVoteKey();
       let ballot = {
         schema: 'https://directdemocracy.vote/json-schema/' + DIRECTDEMOCRACY_VERSION +
@@ -1427,7 +1424,7 @@ window.onload = function() {
             if (radios[i].checked) {
               answer = radios[i].value;
               break;
-            }
+            } else console.log("Not " + radios[i].checked + " - " + radios[i].value);
           console.log("voting: " + answer);
           let crypt = new JSEncrypt();
           crypt.setPrivateKey(vote.private);
@@ -1442,9 +1439,6 @@ window.onload = function() {
                 return;
               }
               console.log("Ballot fingerprint: " + response.fingerprint);
-              button.innerHTML = 'Voted';
-              button.classList.remove('color-green');
-              button.classList.add('color-blue');
               badge.classList.remove('color-red');
               badge.classList.remove('color-orange');
               badge.classList.remove('color-green');
@@ -1457,13 +1451,11 @@ window.onload = function() {
               if (n == 1)
                 voteBadge.style.display = 'none';
               voteBadge.innerHTML = n - 1;
-              const now = Math.round(new Date().getTime() / 1000);
-              document.getElementById('vote-message-' + index).innerHTML = unix_time_to_text(
-                now);
               delete vote.private;
               vote.public = strippedKey(crypt.getPublicKey());
-              vote.date = now;
+              vote.date = Math.round(new Date().getTime() / 1000);
               localStorage.setItem('votes', JSON.stringify(votes));
+              setCheckVoteButton(index, vote);
             }
           };
           xhttp.open('POST', publisher + '/publish.php', true);
@@ -1575,74 +1567,89 @@ window.onload = function() {
   }
 
   function disableAnswer(index) {
+    console.log("disableAnswer");
     let answers = document.getElementsByName('answer-' + index);
     answers.forEach(function(answer) {
       answer.checked = false;
-      disable(answer);
+      disable(answer.parentNode);
     });
+  }
+
+  function checkVote(event) { // query publisher to get verification
+    let button = event.target;
+    let index = parseInt(button.id.substring(12));
+    console.log('index = ' + index);
+    let vote = votes[index];
+    let xhttp = new XMLHttpRequest();
+    xhttp.open('POST', publisher + '/publication.php', true);
+    xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    console.log('publication key = ' + vote.public);
+    xhttp.send('key=' + encodeURIComponent(vote.public));
+    xhttp.onload = function() {
+      if (this.status == 200) {
+        let response = JSON.parse(this.responseText);
+        if (response.error)
+          app.dialog.alert(response.error, 'Vote check error');
+        else {
+          answer = response.answer;
+          console.log("answer = " + answer);
+          let radios = document.getElementsByName('answer-' + index);
+          for (let i = 0, length = radios.length; i < length; i++)
+            if (radios[i].value == answer) {
+              radios[i].checked = true;
+              break;
+            }
+        }
+      }
+    };
+  }
+
+  function setCheckVoteButton(index, vote) {
+    console.log("disabling vote options");
+    let button = document.getElementById('vote-button-' + index);
+    let newButton = button.cloneNode(false); // remove event listeners
+    button.parentNode.replaceChild(newButton, button);
+    button = newButton;
+    button.classList.remove('color-green');
+    button.classList.add('color-blue');
+    button.innerHTML = 'Check Vote';
+    button.addEventListener('click', checkVote);
+    disableAnswer(index);
+    enable(button);
   }
 
   function updateVoteKey(index, vote) {
     let button = document.getElementById('vote-button-' + index);
     let message = document.getElementById('vote-message-' + index);
-    const expired = referendums.length > index ? new Date().getTime() > referendums[index].deadline : true;
-    if (button === null || message === null)
+    if (!button)
       return;
-    if (expired) {
-      message.innerHTML = 'Deadline has passed.';
-      disable(button);
-      disableAnswer(index);
-    } else if (stationKey === '') {
+    const expired = referendums.length > index ? new Date().getTime() > referendums[index].deadline : true;
+    if (stationKey === '') {
       message.innerHTML = 'Getting station key, please wait...';
       disable(button);
     } else if (voteKeyPool.length == 0) {
       message.innerHTML = 'Forging vote key, please wait...';
       disable(button);
-    } else if (vote.hasOwnProperty('public')) {
+    } else if (vote.hasOwnProperty('public') && !vote.hasOwnProperty('private')) {
+      message.innerHTML = 'Vote cast on ' + new Date(vote.date * 1000).toLocaleString().slice(0, -3);
+      if (expired)
+        setCheckVoteButton(index, vote);
+      else {
+        button.innerHTML = 'Vote cast!'; // French: "a voté !"
+        disable(button);
+        disableAnswer(index);
+      }
+    } else if (expired) {
+      button.innerHTML = 'Not Voted';
+      message.innerHTML = 'Deadline has passed.';
       disable(button);
       disableAnswer(index);
-      message.innerHTML = new Date(vote.date * 1000).toLocaleString().slice(0, -3);
-      button.classList.remove('color-green');
-      button.classList.add('color-blue');
-      button.innerHTML = 'Voted';
-      let radios = document.getElementsByName('answer-' + index);
-      let answer = '';
-      for (let i = 0, length = radios.length; i < length; i++) {
-        disable(radios[i]);
-        if (radios[i].checked) {
-          answer = radios[i].value;
-          break;
-        }
-      }
-      if (answer == '' && !expired) { // query publisher to get verification
-        let xhttp = new XMLHttpRequest();
-        xhttp.onload = function() {
-          if (this.status == 200) {
-            let response = JSON.parse(this.responseText);
-            if (response.error)
-              app.dialog.alert(response.error, 'Vote verification error');
-            else {
-              answer = response.answer;
-              for (let i = 0, length = radios.length; i < length; i++)
-                if (radios[i].value == answer) {
-                  radios[i].checked = true;
-                  break;
-                }
-            }
-          }
-        };
-        xhttp.open('POST', publisher + '/publication.php', true);
-        xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhttp.send('key=' + encodeURIComponent(vote.public));
-      } else {
-        if (document.querySelector('input[name="answer-' + index + '"]:checked')) {
-          message.innerHTML = 'Think twice before you vote, afterwards no change is possible.';
-          enable(button);
-        } else {
-          message.innerHTML = 'Select an answer to vote.';
-          disable(button);
-        }
-      }
+    } else if (document.querySelector('input[name="answer-' + index + '"]:checked')) {
+      message.innerHTML = 'Think twice before you vote, afterwards no change is possible.';
+      enable(button);
+    } else {
+      message.innerHTML = 'Select an answer to vote.';
+      disable(button);
     }
   }
 };
