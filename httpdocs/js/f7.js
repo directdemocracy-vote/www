@@ -1113,7 +1113,7 @@ window.onload = function() {
     area_array.forEach(function(argument) {
       const eq = argument.indexOf('=');
       let type = argument.substr(0, eq);
-      if (type === 'village')
+      if (['village', 'town', 'municipality'].includes(type))
         type = 'city';
       const name = argument.substr(eq + 1);
       if (type)
@@ -1491,7 +1491,10 @@ window.onload = function() {
         }
         area = '';
         name.forEach(function(n, i) {
-          area += type[i] + '=' + name[i] + '\n';
+          let t = type[i];
+          if (['village', 'town', 'municipality'].includes(t))
+            t = 'city';
+          area += t + '=' + name[i] + '\n';
         });
         updateVote();
         document.getElementById('referendum-reference').classList.remove('disabled');
