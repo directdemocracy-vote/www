@@ -1,5 +1,5 @@
 .corner-ribbon {
-  z-index:10;
+  z-index:500;
   position: fixed;
   top: 25px;
   right: -50px;
