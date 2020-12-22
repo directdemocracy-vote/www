@@ -148,7 +148,9 @@ window.onload = function() {
     let query = '';
     for (let i = a.selectedIndex; i < a.length - 1; i++) {
       let type = a.options[i].value;
-      let name = a.options[i].innerHTML;
+      if (['village', 'town', 'municipality'].includes(type))
+        type = 'city';
+      const name = a.options[i].innerHTML;
       area += type + '=' + name + '\n';
       if (type != 'union')
         query += type + '=' + encodeURIComponent(name) + '&';
