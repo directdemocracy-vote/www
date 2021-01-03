@@ -699,7 +699,7 @@ window.onload = function() {
       col = newElement(row, 'div', 'col-75');
       let a = newElement(col, 'a', 'link external',
         `<span style="font-weight:bold">${endorsement.familyName}</span> <span>${endorsement.givenNames}</span>`);
-      a.href = `https://www.openstreetmap.org/?mlat=${endorsement.latitude}&mlon=${endorsement.longitude}&zoom=12`;
+      a.href = `${publisher}/citizen.html?fingerprint=${endorsement.fingerprint}&trustee=${encodeURIComponent(trustee)}`;
       a.target = '_blank';
       row = newElement(col, 'div', 'row');
       const t = new Date(endorsement.published).toISOString().slice(0, 10);
@@ -901,13 +901,12 @@ window.onload = function() {
                 lat + ', ' + lon + ')</center>').openPopup();
             }
           };
-          xhttp.open('GET', 'https://nominatim.openstreetmap.org/reverse.php?format=json&lat=' + lat + '&lon=' +
-            lon +
-            '&zoom=10', true);
+          xhttp.open('GET', `https://nominatim.openstreetmap.org/reverse.php?format=json&lat=${lat}&lon=${lon}&zoom=10`,
+            true);
           xhttp.send();
         }
       };
-      xhttp.open('GET', publisher + '/publication.php?fingerprint=' + fingerprint, true);
+      xhttp.open('GET', `${publisher}/publication.php?fingerprint=${fingerprint}`, true);
       xhttp.send();
     }
     video.style.display = '';
@@ -995,7 +994,7 @@ window.onload = function() {
       col = newElement(row, 'div', 'col-75');
       let a = newElement(col, 'a', 'link external',
         `<span style="font-weight:bold">${endorsement.familyName}</span> <span>${endorsement.givenNames}</span>`);
-      a.href = `https://www.openstreetmap.org/?mlat=${endorsement.latitude}&mlon=${endorsement.longitude}&zoom=12`;
+      a.href = `${publisher}/citizen.html?fingerprint=${endorsement.fingerprint}&trustee=${encodeURIComponent(trustee)}`;
       a.target = '_blank';
       row = newElement(col, 'div', 'row');
       const t = new Date(endorsement.published).toISOString().slice(0, 10);
@@ -1012,8 +1011,7 @@ window.onload = function() {
         a.addEventListener('click', function() {
           function revoke() {
             let e = {
-              schema: 'https://directdemocracy.vote/json-schema/' + DIRECTDEMOCRACY_VERSION +
-                '/endorsement.schema.json',
+              schema: `https://directdemocracy.vote/json-schema/${DIRECTDEMOCRACY_VERSION}/endorsement.schema.json`,
               key: citizen.key,
               signature: '',
               published: new Date().getTime(),
@@ -1128,8 +1126,7 @@ window.onload = function() {
     } else if (areaType == 'union')
       area_url = 'https://en.wikipedia.org/wiki/European_Union';
     else
-      area_url = 'https://nominatim.openstreetmap.org/search.php?' + area_query +
-      '&polygon_geojson=1';
+      area_url = 'https://nominatim.openstreetmap.org/search.php?' + area_query + '&polygon_geojson=1';
 
     if (state.previousAreaName != areaName && state.previousAreaType != areaType) {
       let title = newElement(tab, 'div', 'block-title',
@@ -1234,8 +1231,7 @@ window.onload = function() {
       ballot.signature = crypt.sign(JSON.stringify(ballot), CryptoJS.SHA256, 'sha256');
       const now = new Date().getTime();
       let registration = {
-        schema: 'https://directdemocracy.vote/json-schema/' + DIRECTDEMOCRACY_VERSION +
-          '/registration.schema.json',
+        schema: `https://directdemocracy.vote/json-schema/${DIRECTDEMOCRACY_VERSION}/registration.schema.json`,
         key: citizen.key,
         signature: '',
         published: now,
