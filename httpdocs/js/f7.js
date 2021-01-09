@@ -588,7 +588,8 @@ window.onload = function() {
       if (p !== page)
         document.getElementById(p + '-page').style.display = 'none';
     });
-    const cardItems = ['tabbar-endorse', 'tab-endorse', 'endorse', 'tabbar-vote', 'tab-vote', 'edit', 'revoke-key'];
+    const cardItems = ['tabbar-endorse', 'tab-endorse', 'endorse', 'tabbar-vote', 'tab-vote', 'tabbar-sign', 'tab-sign',
+      'edit', 'revoke-key'];
     cardItems.forEach(function(i) {
       if (page === 'card')
         enable(i);
@@ -671,7 +672,7 @@ window.onload = function() {
     if (citizenEndorsements.length == 0) {
       list.innerHTML =
         '<div class="block-title">Not endorsed</div>' +
-        '<div class="block">You should ask to other citizens to endorse you.</div>';
+        '<div class="block">You should ask other citizens to endorse you.</div>';
       badge.style.background = 'red';
       badge.innerHTML = '0';
       return;
