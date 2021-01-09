@@ -463,7 +463,7 @@ window.onload = function() {
           let xhttp = new XMLHttpRequest();
           xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200 && geolocation == false) {
-              coords = this.responseText.split(',');
+              let coords = this.responseText.split(',');
               getGeolocationPosition({
                 coords: {
                   latitude: coords[0],
