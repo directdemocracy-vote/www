@@ -2,7 +2,7 @@ import QrScanner from './qr-scanner.min.js';
 QrScanner.WORKER_PATH = 'js/qr-scanner-worker.min.js';
 
 let app = new Framework7({
-  root: '#app',
+  el: '#app',
   name: 'directdemocracy.vote',
   id: 'directdemocracy.vote',
   routes: [{
