@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/x-icon" href="//directdemocracy.vote/favicon.ico">
+    <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/directdemocracy.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="//stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="js/jsencrypt.min.js"></script>
+    <script src="js/crypto-js.js"></script>
+    <script src="js/referendum.js"></script>
+    <title>directdemocracy.vote: propose a petition</title>
+  </head>
+
+  <body>
+    <div class="modal" id="modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="modal-title">Title</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body" id="modal-contents">Contents</div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='corner-ribbon' title="This web site is in beta quality: it may have bugs and change without notice. Please, report any problem to info@<?=$base_domain?>.">Beta</div>
+    <main role='main'>
+      <div class="jumbotron directdemocracy-title">
+        <div class="container">
+          <div class="row" style="margin-top:30px;margin-bottom:30px">
+            <div class="col-sd-1" style="margin-right:20px;margin-top:10px"><img class="directdemocracy-title-logo" src="images/directdemocracy-title.png"></div>
+            <div class="col-sd-11">
+              <h1><b>direct</b>democracy</h1>
+              <div style="font-size:150%">propose a petition</div>
+            </div>
+          </div>
+          <div class="directdemocracy-subtitle" style="position:relative;top:0;margin-bottom:40px">
+            <h3>- Select an area and write a petition</h3>
+            <h3>- Set the deadline for signing</h3>
+            <h3>- Publish it and advertise it</h3>
+          </div>
+          <div><br></div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="form-group">
+          <label for="area">Area: <a id="place" target="_blank"></a> <i class="fa fa-external-link"></i></label>
+          <select class="form-control" id="area">
+            <option>Areas are computed automatically from your GPS coordinates</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="title">Title:</label>
+          <input type="text" class="form-control" id="title" placeholder="Enter the title of your petition" required>
+        </div>
+        <div class="form-group">
+          <label for="description">Description:</label>
+          <textarea class="form-control" id="description" placeholder="Enter the description of your petition" rows="5" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="url">Web Site: (optional)</label>
+          <input type="url" class="form-control" id="website" placeholder="Enter the website URL of your petition if any, e.g., https://mypetition.net">
+        </div>
+        <div class="form-group">
+          <label for="deadline-day">Vote Deadline:</label>
+          <div class="form-inline">
+            <input class="form-control" type="date" id="deadline-day" required> &nbsp; at &nbsp; <input class="form-control" style="width:70px" type="number" id="deadline-hour" min="0" max="23" value='20' required> &nbsp; hour </div>
+          <div class="form-inline"> Time zone: UTC &nbsp; <input class="form-control" style="width:80px" type="text" id="deadline-time-zone"> &nbsp; hour</div>
+        </div>
+        <div class="form-group">
+          <label for="petition-private-key">Private key: &nbsp; <img id="petition-private-key-icon" src="images/key.svg" style="display:none;width:32px">
+            <div id="petition-forging-spinner" class="spinner-border" role="status"><span class="sr-only">Forging...</span></div>
+          </label>
+          <input type="hidden" class="form-control" id="petition-private-key">
+          <small class="form-text text-muted" id="petition-private-key-message">Forging a new private key for your petition, please wait...</small>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary" id="publish-button" role="button" disabled="disabled">Publish your petition</button>
+          <small class="form-text text-muted">Warning: nothing can be modifed after publication!</small>
+        </div>
+      </div>
+      </div>
+    </main>
+    <div>
+      <hr>
+      <footer>
+        <p style="text-align:center"><small>Made by citizens for citizens</small></p>
+      </footer>
+    </div>
+  </body>
+
+</html>
