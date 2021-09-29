@@ -1,0 +1,83 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "https://directdemocracy.vote/json-schema/0.0.1/petition.schema.json",
+	"title": "petition",
+	"description": "petition proposing a new law or a change in some existing law",
+	"type": "object",
+	"required": [
+		"schema",
+		"key",
+		"signature",
+		"published",
+		"expires",
+		"trustee",
+		"area",
+		"title",
+		"description",
+		"deadline"
+	],
+	"properties": {
+		"schema": {
+			"const": "https://directdemocracy.vote/json-schema/0.0.1/petition.schema.json"
+		},
+		"key": {
+			"description": "public key of the petition",
+			"type": "string",
+			"maxLength": 512
+		},
+		"signature": {
+			"description": "signature of the petition",
+			"type": "string",
+			"maxLength": 512
+		},
+		"published": {
+			"description": "date of publication (milliseconds since 1970-01-01 00:00:00.000)",
+			"type": "integer",
+			"minimum": 0,
+			"maximum": 999999999999999
+		},
+		"expires": {
+			"description": "date at which this publication expires (milliseconds since 1970-01-01 00:00:00.000)",
+			"type": "integer",
+			"minimum": 0,
+			"maximum": 999999999999999
+		},
+		"trustee": {
+			"description": "public key of trustee that should be used to process this petition",
+			"type": "string",
+			"maxLength": 512,
+			"minLength": 1
+		},
+		"area": {
+			"description": "area of the petition with fields separated by newlines, empty means the whole world, e.g.,\ncountry=France\nstate=Bourgogne-Franche-Comté\ncounty=Saône-et-Loire\ncity=Mâcon",
+			"type": "string",
+			"maxLength": 1024,
+			"minLength": 0
+		},
+		"title": {
+			"description": "title of the petition",
+			"type": "string",
+			"maxLength": 128,
+			"minLength": 1
+		},
+		"description": {
+			"description": "detailed description of the petition (markdown allowed)",
+			"type": "string",
+			"minLength": 1,
+			"maxLength": 4096
+		},
+		"deadline": {
+			"description": "date of signature deadline (milliseconds since 1970-01-01 00:00:00.000)",
+			"type": "integer",
+			"minimum": 0,
+			"maximum": 999999999999999
+		},
+		"website": {
+			"description": "website providing more information about the petition",
+			"type": "string",
+			"format": "uri",
+			"maxLength": 128
+		}
+	},
+  "additionalProperties": false
+}
