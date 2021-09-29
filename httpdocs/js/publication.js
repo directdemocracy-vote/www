@@ -3,12 +3,12 @@ window.onload = function() {
   const publisher = localStorage.getItem('publisher');
   const trustee = localStorage.getItem('trustee');
   const citizen_private_key = localStorage.getItem('privateKey');
-  let referendum_private_key = '';
+  let publication_private_key = '';
   let latitude = 0;
   let longitude = 0;
   let area = '';
   let citizen_crypt = null;
-  let referendum_crypt = null;
+  let publication_crypt = null;
   let trustee_key = '';
   let offset = new Date().getTimezoneOffset();
   let hour = -offset / 60;
@@ -29,22 +29,22 @@ window.onload = function() {
   }
 
   function generateNewKeyPair() {
-    document.getElementById('referendum-forging-spinner').style.display = '';
-    document.getElementById('referendum-private-key-icon').style.display = 'none';
-    document.getElementById('referendum-private-key-message').innerHTML = 'Forging a new private key, please wait...';
+    document.getElementById('publication-forging-spinner').style.display = '';
+    document.getElementById('publication-private-key-icon').style.display = 'none';
+    document.getElementById('publication-private-key-message').innerHTML = 'Forging a new private key, please wait...';
     let dt = new Date();
     let time = -(dt.getTime());
-    referendum_crypt = new JSEncrypt({
+    publication_crypt = new JSEncrypt({
       default_key_size: 2048
     });
-    referendum_crypt.getKey(function() {
+    publication_crypt.getKey(function() {
       dt = new Date();
       time += (dt.getTime());
-      referendum_private_key = referendum_crypt.getPrivateKey();
-      document.getElementById('referendum-forging-spinner').style.display = 'none';
-      document.getElementById('referendum-private-key-icon').style.display = '';
-      document.getElementById('referendum-private-key-message').innerHTML =
-        'A referendum private key was just forged in ' +
+      publication_private_key = publication_crypt.getPrivateKey();
+      document.getElementById('publication-forging-spinner').style.display = 'none';
+      document.getElementById('publication-private-key-icon').style.display = '';
+      document.getElementById('publication-private-key-message').innerHTML =
+        'A publication private key was just forged in ' +
         Number(time / 1000).toFixed(2) + ' seconds.';
       validate();
     });
@@ -171,7 +171,7 @@ window.onload = function() {
     button.setAttribute('disabled', 'disabled');
     if (latitude == 0 && longitude == 0)
       return;
-    if (referendum_private_key === '')
+    if (publication_private_key === '')
       return;
     if (trustee_key == '')
       return;
@@ -215,24 +215,25 @@ window.onload = function() {
   document.getElementById('deadline-hour').addEventListener('input', validate);
   document.getElementById('deadline-time-zone').addEventListener('input', validate);
   document.getElementById('publish-button').addEventListener('click', function() {
-    referendum = {};
-    referendum.schema = 'https://directdemocracy.vote/json-schema/' + directdemocracy_version + '/referendum.schema.json';
-    referendum.key = stripped_key(referendum_crypt.getPublicKey());
-    referendum.signature = '';
-    referendum.published = new Date().getTime();
-    referendum.expires = new Date(new Date().setFullYear(new Date().getFullYear() + 10)).getTime(); // 10 years
-    referendum.trustee = trustee_key;
-    referendum.area = area;
-    referendum.title = document.getElementById('title').value.trim();
-    referendum.description = document.getElementById('description').value.trim();
-    referendum.question = document.getElementById('question').value.trim();
-    referendum.answers = document.getElementById('answers').value.trim();
-    referendum.deadline = deadline;
+    publication = {};
+    publication.schema = 'https://directdemocracy.vote/json-schema/' + directdemocracy_version +
+      '/' + publication_type + '.schema.json';
+    publication.key = stripped_key(publication_crypt.getPublicKey());
+    publication.signature = '';
+    publication.published = new Date().getTime();
+    publication.expires = new Date(new Date().setFullYear(new Date().getFullYear() + 10)).getTime(); // 10 years
+    publication.trustee = trustee_key;
+    publication.area = area;
+    publication.title = document.getElementById('title').value.trim();
+    publication.description = document.getElementById('description').value.trim();
+    publication.question = document.getElementById('question').value.trim();
+    publication.answers = document.getElementById('answers').value.trim();
+    publication.deadline = deadline;
     let website = document.getElementById('website').value.trim();
     if (website)
-      referendum.website = website;
-    let str = JSON.stringify(referendum);
-    referendum.signature = referendum_crypt.sign(str, CryptoJS.SHA256, 'sha256');
+      publication.website = website;
+    let str = JSON.stringify(publication);
+    publication.signature = publication_crypt.sign(str, CryptoJS.SHA256, 'sha256');
 
     let xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
@@ -246,19 +247,19 @@ window.onload = function() {
             if (this.status == 200) {
               const answer = JSON.parse(this.responseText);
               if (answer.error)
-                showModal('Referendum publication error', JSON.stringify(answer.error));
+                showModal('Publication error', JSON.stringify(answer.error));
               else
                 showModal('Publication success',
-                  'Your referendum was just published!<br>Check it <a target="_blank" href="' +
-                  publisher + '/referendum.html?fingerprint=' + answer.fingerprint + '">here</a>.<br>');
+                  'Your ' + publication_type + ' was just published!<br>Check it <a target="_blank" href="' +
+                  publisher + '/' + publication_type + '.html?fingerprint=' + answer.fingerprint + '">here</a>.<br>');
             }
           };
           xhttp.open('POST', publisher + '/publish.php', true);
-          xhttp.send(JSON.stringify(referendum));
+          xhttp.send(JSON.stringify(publication));
         }
       }
     };
-    let query = referendum.area.trim().replace(/(\r\n|\n|\r)/g, "&");
+    let query = publication.area.trim().replace(/(\r\n|\n|\r)/g, "&");
     xhttp.open('GET', trustee + '/publish_area.php?' + query, true);
     xhttp.send();
   });
