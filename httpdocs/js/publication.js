@@ -179,10 +179,12 @@ window.onload = function() {
       return;
     if (document.getElementById('description').value == '')
       return;
-    if (document.getElementById('question').value == '')
-      return;
-    if (document.getElementById('answers').value == '')
-      return;
+    if (publication_type == 'referendum') {
+      if (document.getElementById('question').value == '')
+        return;
+      if (document.getElementById('answers').value == '')
+        return;
+    }
     if (document.getElementById('deadline-day').value == '')
       return;
     if (document.getElementById('deadline-hour').value == '')
@@ -209,8 +211,10 @@ window.onload = function() {
   }
   document.getElementById('title').addEventListener('input', validate);
   document.getElementById('description').addEventListener('input', validate);
-  document.getElementById('question').addEventListener('input', validate);
-  document.getElementById('answers').addEventListener('input', validate);
+  if (publication_type == 'referendum') {
+    document.getElementById('question').addEventListener('input', validate);
+    document.getElementById('answers').addEventListener('input', validate);
+  }
   document.getElementById('deadline-day').addEventListener('input', validate);
   document.getElementById('deadline-hour').addEventListener('input', validate);
   document.getElementById('deadline-time-zone').addEventListener('input', validate);
@@ -226,8 +230,10 @@ window.onload = function() {
     publication.area = area;
     publication.title = document.getElementById('title').value.trim();
     publication.description = document.getElementById('description').value.trim();
-    publication.question = document.getElementById('question').value.trim();
-    publication.answers = document.getElementById('answers').value.trim();
+    if (publication_type == 'referendum') {
+      publication.question = document.getElementById('question').value.trim();
+      publication.answers = document.getElementById('answers').value.trim();
+    }
     publication.deadline = deadline;
     let website = document.getElementById('website').value.trim();
     if (website)
