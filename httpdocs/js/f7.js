@@ -1518,15 +1518,15 @@ window.onload = function() {
             t = 'city';
           area += t + '=' + name[i] + '\n';
         });
-        updateVote();
-        document.getElementById('referendum-reference').classList.remove('disabled');
-        document.getElementById('referendum-scan').classList.remove('disabled');
-        document.getElementById('referendum-paste').classList.remove('disabled');
+        updateVotings('referendum');
+        updateVotings('petition');
       }
     };
   }
 
-  function updateVote() {
+  function updateVotings(type) {
+    const tab_name = (type === 'referendum') ? 'vote' : 'sign';
+    let votings = (type === 'referendum') ? referendums : petitions;
     let fingerprints = '';
     votes.forEach(function(vote) {
       if (vote.public)
@@ -1535,7 +1535,7 @@ window.onload = function() {
     if (fingerprints !== '')
       fingerprints = '&fingerprints=' + encodeURIComponent(fingerprints.slice(0, -1));
     let xhttp = new XMLHttpRequest();
-    xhttp.open('POST', publisher + '/referendum.php', true);
+    xhttp.open('POST', publisher + '/' + type + '.php', true);
     xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhttp.send('area=' + encodeURIComponent(area) + fingerprints);
     xhttp.onload = function() {
@@ -1543,11 +1543,11 @@ window.onload = function() {
         referendums = JSON.parse(this.responseText);
         if (referendums.error)
           console.log(referendums.error);
-        let tab = document.getElementById('tab-vote');
+        let tab = document.getElementById('tab-' + tab_name);
         let propose = newElement(null, 'div', 'block-title',
-          'Propose a <a class="link external" href="referendum.html" target="_blank">new referendum</a>');
-        if (referendums.length == 0) {
-          newElement(tab, 'div', 'block-title', 'No referendum available');
+          'Propose a <a class="link external" href="' + type + '.html" target="_blank">new ' + type + '</a>');
+        if (votings.length == 0) {
+          newElement(tab, 'div', 'block-title', 'No ' + type + ' available');
           tab.appendChild(propose);
           return;
         }
@@ -1560,109 +1560,122 @@ window.onload = function() {
           previousAreaType: '',
           topUp: null
         };
-        referendums.forEach(function(referendum, index) {
-          addReferendum(tab, referendum, index, state, false);
+        votings.forEach(function(voting, index) {
+          if (type === 'referendum')
+            addReferendum(tab, voting, index, state, false);
+          else
+            addPetition(tab, voting, index, state, false);
         });
-        let badge = document.getElementById('vote-badge');
-        if (availableReferendum) {
-          badge.innerHTML = availableReferendum;
+        let badge = document.getElementById(tab_name + '-badge');
+        if (type === 'referendum')
+          if (availableReferendum) {
+            badge.innerHTML = availableReferendum;
+            badge.style.display = '';
+          } else badge.style.display = 'none';
+      } else { // petition
+        if (availablePetition) {
+          badge.innerHTML = availablePetition;
           badge.style.display = '';
         } else badge.style.display = 'none';
-        tab.appendChild(propose);
       }
-    };
-  }
-
-  function disableAnswer(index, erase) {
-    let answers = document.getElementsByName('answer-' + index);
-    answers.forEach(function(answer) {
-      if (erase)
-        answer.checked = false;
-      disable(answer.parentNode);
-    });
-  }
-
-  function checkVote(event) { // query publisher to get verification
-    let button = event.target;
-    let index = parseInt(button.id.substring(12));
-    let vote = votes[index];
-    let xhttp = new XMLHttpRequest();
-    xhttp.open('POST', publisher + '/publication.php', true);
-    xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhttp.send('key=' + encodeURIComponent(vote.public));
-    xhttp.onload = function() {
-      if (this.status == 200) {
-        let response = JSON.parse(this.responseText);
-        if (response.error)
-          app.dialog.alert(response.error, 'Vote check error');
-        else {
-          const answer = response.answer;
-          let radios = document.getElementsByName('answer-' + index);
-          for (let i = 0, length = radios.length; i < length; i++)
-            if (radios[i].value == answer) {
-              radios[i].checked = true;
-              break;
-            }
-          setTimeout(function() {
-            disableAnswer(index, true);
-          }, 2000);
-        }
-      }
-    };
-  }
-
-  function setCheckVoteButton(index, vote) {
-    let button = document.getElementById('vote-button-' + index);
-    let newButton = button.cloneNode(false); // remove event listeners
-    button.parentNode.replaceChild(newButton, button);
-    button = newButton;
-    button.classList.remove('color-green');
-    button.classList.add('color-blue');
-    button.innerHTML = 'Check Vote';
-    button.addEventListener('click', checkVote);
-    disableAnswer(index, true);
-    enable(button);
-  }
-
-  function updateVoteKey(index, vote) {
-    let button = document.getElementById('vote-button-' + index);
-    let message = document.getElementById('vote-message-' + index);
-    if (!button || index >= referendums.length)
-      return;
-    const expired = new Date().getTime() > referendums[index].deadline;
-    if (stationKey === '') {
-      message.innerHTML = 'Getting station key, please wait...';
-      disable(button);
-    } else if (voteKeyPool.length == 0) {
-      message.innerHTML = 'Forging vote key, please wait...';
-      disable(button);
-    } else if (vote.hasOwnProperty('public')) {
-      if (vote.hasOwnProperty('private')) {
-        disable(button);
-        disableAnswer(index, false);
-        button.innerHTML = 'Voting...';
-      } else {
-        message.innerHTML = 'Vote cast on ' + new Date(vote.date * 1000).toLocaleString().slice(0, -3);
-        if (expired)
-          setCheckVoteButton(index, vote);
-        else {
-          button.innerHTML = 'Vote cast!'; // French: "a voté !"
-          disable(button);
-          disableAnswer(index, true);
-        }
-      }
-    } else if (expired) {
-      button.innerHTML = 'Not Voted';
-      message.innerHTML = 'Deadline has passed.';
-      disable(button);
-      disableAnswer(index, true);
-    } else if (document.querySelector('input[name="answer-' + index + '"]:checked')) {
-      button.innerHTML = 'Vote';
-      message.innerHTML = 'Think twice before you vote, there is no undo.';
-      enable(button);
-    } else {
-      message.innerHTML = 'Select an answer to vote.';
-      disable(button);
+      tab.appendChild(propose);
     }
+  };
+  document.getElementById(type + '-reference').classList.remove('disabled');
+  document.getElementById(type + '-scan').classList.remove('disabled');
+  document.getElementById(type + '-paste').classList.remove('disabled');
+}
+
+function disableAnswer(index, erase) {
+  let answers = document.getElementsByName('answer-' + index);
+  answers.forEach(function(answer) {
+    if (erase)
+      answer.checked = false;
+    disable(answer.parentNode);
+  });
+}
+
+function checkVote(event) { // query publisher to get verification
+  let button = event.target;
+  let index = parseInt(button.id.substring(12));
+  let vote = votes[index];
+  let xhttp = new XMLHttpRequest();
+  xhttp.open('POST', publisher + '/publication.php', true);
+  xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhttp.send('key=' + encodeURIComponent(vote.public));
+  xhttp.onload = function() {
+    if (this.status == 200) {
+      let response = JSON.parse(this.responseText);
+      if (response.error)
+        app.dialog.alert(response.error, 'Vote check error');
+      else {
+        const answer = response.answer;
+        let radios = document.getElementsByName('answer-' + index);
+        for (let i = 0, length = radios.length; i < length; i++)
+          if (radios[i].value == answer) {
+            radios[i].checked = true;
+            break;
+          }
+        setTimeout(function() {
+          disableAnswer(index, true);
+        }, 2000);
+      }
+    }
+  };
+}
+
+function setCheckVoteButton(index, vote) {
+  let button = document.getElementById('vote-button-' + index);
+  let newButton = button.cloneNode(false); // remove event listeners
+  button.parentNode.replaceChild(newButton, button);
+  button = newButton;
+  button.classList.remove('color-green');
+  button.classList.add('color-blue');
+  button.innerHTML = 'Check Vote';
+  button.addEventListener('click', checkVote);
+  disableAnswer(index, true);
+  enable(button);
+}
+
+function updateVoteKey(index, vote) {
+  let button = document.getElementById('vote-button-' + index);
+  let message = document.getElementById('vote-message-' + index);
+  if (!button || index >= referendums.length)
+    return;
+  const expired = new Date().getTime() > referendums[index].deadline;
+  if (stationKey === '') {
+    message.innerHTML = 'Getting station key, please wait...';
+    disable(button);
+  } else if (voteKeyPool.length == 0) {
+    message.innerHTML = 'Forging vote key, please wait...';
+    disable(button);
+  } else if (vote.hasOwnProperty('public')) {
+    if (vote.hasOwnProperty('private')) {
+      disable(button);
+      disableAnswer(index, false);
+      button.innerHTML = 'Voting...';
+    } else {
+      message.innerHTML = 'Vote cast on ' + new Date(vote.date * 1000).toLocaleString().slice(0, -3);
+      if (expired)
+        setCheckVoteButton(index, vote);
+      else {
+        button.innerHTML = 'Vote cast!'; // French: "a voté !"
+        disable(button);
+        disableAnswer(index, true);
+      }
+    }
+  } else if (expired) {
+    button.innerHTML = 'Not Voted';
+    message.innerHTML = 'Deadline has passed.';
+    disable(button);
+    disableAnswer(index, true);
+  } else if (document.querySelector('input[name="answer-' + index + '"]:checked')) {
+    button.innerHTML = 'Vote';
+    message.innerHTML = 'Think twice before you vote, there is no undo.';
+    enable(button);
+  } else {
+    message.innerHTML = 'Select an answer to vote.';
+    disable(button);
   }
+}
 };
