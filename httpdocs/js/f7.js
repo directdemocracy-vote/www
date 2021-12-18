@@ -1525,6 +1525,7 @@ window.onload = function() {
   }
 
   function updateVotings(type) {
+    console.log('updateVoting ' + type);
     const tab_name = (type === 'referendum') ? 'vote' : 'sign';
     let votings = (type === 'referendum') ? referendums : petitions;
     let fingerprints = '';
