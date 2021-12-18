@@ -92,7 +92,7 @@ window.onload = function() {
     updateStationKey();
   });
 
-  voting_types = ['referendum', 'petition'];
+  const voting_types = ['referendum', 'petition'];
   for (let i = 0, len = voting_types.length; i < len; i++) {
     const type = voting_types[i];
     console.log(type + '-paste');
