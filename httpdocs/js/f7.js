@@ -93,6 +93,7 @@ window.onload = function() {
   });
 
   for (let type in ['referendum', 'petition']) {
+    console.log(type + '-paste');
     document.getElementById(type + '-paste').addEventListener('click', function(event) {
       navigator.clipboard.readText().then(text => {
         let input = document.getElementById(type + '-reference');
