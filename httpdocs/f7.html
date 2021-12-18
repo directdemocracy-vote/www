@@ -313,7 +313,30 @@
                 </div>
               </div>
               <div class=" page-content tab" id="tab-sign">
-                <div class="block-title block-title-medium">Petitions</div>
+                <div class="list" style="margin:0">
+                  <ul>
+                    <li class="item-content item-input item-input-outline" style="padding-top:20px;padding-bottom:10px;">
+                      <div class="item-inner">
+                        <div class="item-title item-floating-label">Petition reference</div>
+                        <div class="item-input-wrap">
+                          <input id="petition-reference" class="disabled" type="text" placeholder="Petition reference" maxlength="40">
+                          <span class="input-clear-button"></span>
+                        </div>
+                      </div>
+                      <div>
+                        <button id="petition-paste" class="button color-blue disabled"><i class="icon f7-icons">doc_on_clipboard</i></button>
+                      </div>
+                      <div>
+                        <button id="petition-scan" class="button color-blue disabled"><i class="icon f7-icons">viewfinder</i></button>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div id="petition-qr-video-block" style="width:100%;text-align:center;overflow:hidden;background:white;display:none">
+                  <video muted playsinline id="petition-qr-video"></video>
+                </div>
+                <div id="scanned-petition">
+                </div>
               </div>
               <div class="page-content tab" id="tab-settings">
                 <div class="block-title block-title-medium">URLs</div>
