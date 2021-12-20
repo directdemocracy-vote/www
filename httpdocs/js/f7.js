@@ -586,8 +586,7 @@ window.onload = function() {
       if (p !== page)
         document.getElementById(p + '-page').style.display = 'none';
     });
-    const cardItems = ['tabbar-endorse', 'tab-endorse', 'endorse', 'tabbar-vote', 'tab-vote', 'tabbar-sign', 'tab-sign',
-      'edit', 'revoke-key'];
+    const cardItems = ['tabbar-endorse', 'tab-endorse', 'endorse', 'tabbar-vote', 'tab-vote', 'edit', 'revoke-key'];
     cardItems.forEach(function(i) {
       if (page === 'card')
         enable(i);
