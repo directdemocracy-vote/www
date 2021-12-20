@@ -179,12 +179,10 @@ window.onload = function() {
       return;
     if (document.getElementById('description').value == '')
       return;
-    if (publication_type == 'referendum') {
-      if (document.getElementById('question').value == '')
-        return;
-      if (document.getElementById('answers').value == '')
-        return;
-    }
+    if (document.getElementById('question').value == '')
+      return;
+    if (document.getElementById('answers').value == '')
+      return;
     if (document.getElementById('deadline-day').value == '')
       return;
     if (document.getElementById('deadline-hour').value == '')
@@ -211,17 +209,15 @@ window.onload = function() {
   }
   document.getElementById('title').addEventListener('input', validate);
   document.getElementById('description').addEventListener('input', validate);
-  if (publication_type == 'referendum') {
-    document.getElementById('question').addEventListener('input', validate);
-    document.getElementById('answers').addEventListener('input', validate);
-  }
+  document.getElementById('question').addEventListener('input', validate);
+  document.getElementById('answers').addEventListener('input', validate);
   document.getElementById('deadline-day').addEventListener('input', validate);
   document.getElementById('deadline-hour').addEventListener('input', validate);
   document.getElementById('deadline-time-zone').addEventListener('input', validate);
   document.getElementById('publish-button').addEventListener('click', function() {
     publication = {};
     publication.schema = 'https://directdemocracy.vote/json-schema/' + directdemocracy_version +
-      '/' + publication_type + '.schema.json';
+      '/referendum.schema.json';
     publication.key = stripped_key(publication_crypt.getPublicKey());
     publication.signature = '';
     publication.published = new Date().getTime();
@@ -230,10 +226,8 @@ window.onload = function() {
     publication.area = area;
     publication.title = document.getElementById('title').value.trim();
     publication.description = document.getElementById('description').value.trim();
-    if (publication_type == 'referendum') {
-      publication.question = document.getElementById('question').value.trim();
-      publication.answers = document.getElementById('answers').value.trim();
-    }
+    publication.question = document.getElementById('question').value.trim();
+    publication.answers = document.getElementById('answers').value.trim();
     publication.deadline = deadline;
     let website = document.getElementById('website').value.trim();
     if (website)
@@ -256,8 +250,8 @@ window.onload = function() {
                 showModal('Publication error', JSON.stringify(answer.error));
               else
                 showModal('Publication success',
-                  'Your ' + publication_type + ' was just published!<br>Check it <a target="_blank" href="' +
-                  publisher + '/' + publication_type + '.html?fingerprint=' + answer.fingerprint + '">here</a>.<br>');
+                  'Your referendum was just published!<br>Check it <a target="_blank" href="' +
+                  publisher + '/referendum.html?fingerprint=' + answer.fingerprint + '">here</a>.<br>');
             }
           };
           xhttp.open('POST', publisher + '/publish.php', true);
