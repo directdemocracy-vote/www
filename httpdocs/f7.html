@@ -42,11 +42,11 @@
             <div class="block-title block-title-medium">Features</div>
             <div class="block">The proposed system implements the following necessary features: <ul>
                 <li>available to anybody equipped with a smartphone.</li>
-                <li>anybody can propose referendums and petitions.</li>
+                <li>anybody can propose referendums.</li>
                 <li>fully decentralized: nobody can control it.</li>
                 <li>supported by a <a class="link external" href="https://en.wikipedia.org/wiki/Web_of_trust" target="_blank">web of trust</a>: distributed reputation system.</li>
-                <li>publicly verifiable referendums: check that my anonymous vote was taken into account, check that others didn't cheat.</li>
-                <li>publicly verifiable petitions: check that each signature corresponds to a real person, not just an e-mail address.</li>
+                <li>publicly verifiable anonymous referendums: check that my anonymous vote was taken into account, check that others didn't cheat.</li>
+                <li>publicly verifiable public referendums: check that each public vote corresponds to a real person, not just an e-mail address.</li>
                 <li>robust to attacks, resistant to censorship.</li>
                 <li>relying on state-of-the-art <a class="link external" href="https://en.wikipedia.org/wiki/Cryptography" target="_blank">cryptography</a>.</li>
                 <li><a class="link external" href="https://en.wikipedia.org/wiki/Free_and_open-source_software" target="_blank">free and open-source</a> specifications and implementations.</li>
@@ -106,10 +106,6 @@
               <a href="#" class="tab-link" data-tab="#tab-vote" id="tabbar-vote">
                 <i class="icon f7-icons">square_arrow_down<span id="vote-badge" class="badge color-green" style="display:none"></span></i>
                 <span class="tabbar-label">Vote</span>
-              </a>
-              <a href="#" class="tab-link" data-tab="#tab-sign" id="tabbar-sign">
-                <i class="icon f7-icons">signature<span id="sign-badge" class="badge color-green" style="display:none"></span></i>
-                <span class="tabbar-label">Sign</span>
               </a>
               <a href="#" class="tab-link" data-tab="#tab-settings" id="tabbar-settings">
                 <i class="icon f7-icons">gear_alt_fill</i>
@@ -310,32 +306,6 @@
                   <video muted playsinline id="referendum-qr-video"></video>
                 </div>
                 <div id="scanned-referendum">
-                </div>
-              </div>
-              <div class=" page-content tab" id="tab-sign">
-                <div class="list" style="margin:0">
-                  <ul>
-                    <li class="item-content item-input item-input-outline" style="padding-top:20px;padding-bottom:10px;">
-                      <div class="item-inner">
-                        <div class="item-title item-floating-label">Petition reference</div>
-                        <div class="item-input-wrap">
-                          <input id="petition-reference" class="disabled" type="text" placeholder="Petition reference" maxlength="40">
-                          <span class="input-clear-button"></span>
-                        </div>
-                      </div>
-                      <div>
-                        <button id="petition-paste" class="button color-blue disabled"><i class="icon f7-icons">doc_on_clipboard</i></button>
-                      </div>
-                      <div>
-                        <button id="petition-scan" class="button color-blue disabled"><i class="icon f7-icons">viewfinder</i></button>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-                <div id="petition-qr-video-block" style="width:100%;text-align:center;overflow:hidden;background:white;display:none">
-                  <video muted playsinline id="petition-qr-video"></video>
-                </div>
-                <div id="scanned-petition">
                 </div>
               </div>
               <div class="page-content tab" id="tab-settings">
