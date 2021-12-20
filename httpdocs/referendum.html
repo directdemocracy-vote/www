@@ -78,10 +78,17 @@ No" required></textarea>
           <small class="form-text text-muted">Please enter one possible answer per line. An abstention option will be added to this list.</small>
         </div>
         <div class="form-group">
-          <label for="anonymous">Anonymous vote</label>
-          <input type="radio" class="form-control" id="anonymous" checked>
-          <label for="public">Public vote</label>
-          <input type="radio" class="form-control" id="public">        
+          <label for="url">Type:</label>
+          <div class="form-check">
+            <label class="form-check-label">
+              <input class="form-check-input radio-inline" type="radio" name="secret" id="anonymous" value="anonymous" checked>
+              Anonymous
+            </label>
+            <label class="form-check-label">
+              <input class="form-check-input radio-inline" type="radio" name="secret" id="public" value="public">
+              Public
+            </label>
+          </div>
         </div>
         <div class="form-group">
           <label for="url">Web Site: (optional)</label>
