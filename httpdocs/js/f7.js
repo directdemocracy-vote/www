@@ -1169,13 +1169,6 @@ window.onload = function() {
         `<a class="link external" href="${referendum.website}" target="_blank">Official web site</a>.`
       );
     }
-    let row = newElement(block, 'div', 'row');
-    let col = newElement(row, 'div', 'col-80');
-    let button = newElement(col, 'div', 'button button-fill');
-    let message = newElement(col, 'div', 'item-label text-align-center');
-    button.id = 'vote-button-' + index;
-    let trash = newElement(row, 'div', 'col-20 button', '<i class="icon f7-icons">trash</i>');
-    message.id = 'vote-message-' + index;
     newElement(block, 'p', '', '<i>' + referendum.question + '</i>');
     let list = newElement(block, 'div', 'list');
     let ul = newElement(list, 'ul');
@@ -1197,9 +1190,16 @@ window.onload = function() {
         if (referendum.secret)
           updateVoteKey(index, vote);
         else
-          enable(button);
+          enable(document.getElementById('vote-button-' + index));
       });
     });
+    let row = newElement(block, 'div', 'row');
+    let col = newElement(row, 'div', 'col-80');
+    let button = newElement(col, 'div', 'button button-fill');
+    let message = newElement(col, 'div', 'item-label text-align-center');
+    button.id = 'vote-button-' + index;
+    let trash = newElement(row, 'div', 'col-20 button', '<i class="icon f7-icons">trash</i>');
+    message.id = 'vote-message-' + index;
     if (referendum.secret)
       updateVoteKey(index, vote);
     else
