@@ -1629,9 +1629,9 @@ window.onload = function() {
       disable(button);
       disableAnswer(index, true);
     } else if (document.querySelector('input[name="answer-' + index + '"]:checked')) {
-      // button.innerHTML = '<i class="icon f7-icons" style="margin-right:10px">envelope</i> Vote';
+      // button.innerHTML = '<i class="icon f7-icons" style="margin-right:10px">envelope</i> anonymous vote';
       button.innerHTML =
-        '<i class="icon f7-icons" style="margin-right:10px;transform:rotate(90deg)">hand_point_left</i> Vote';
+        '<i class="icon f7-icons" style="transform:rotate(90deg)">hand_point_left</i> public vote';
       message.innerHTML = 'Think twice before you vote, there is no undo.';
       enable(button);
     } else {
