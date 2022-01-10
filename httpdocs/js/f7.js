@@ -1169,6 +1169,13 @@ window.onload = function() {
         `<a class="link external" href="${referendum.website}" target="_blank">Official web site</a>.`
       );
     }
+    let row = newElement(block, 'div', 'row');
+    let col = newElement(row, 'div', 'col-80');
+    let button = newElement(col, 'div', 'button button-fill');
+    let message = newElement(col, 'div', 'item-label text-align-center');
+    button.id = 'vote-button-' + index;
+    let trash = newElement(row, 'div', 'col-20 button', '<i class="icon f7-icons">trash</i>');
+    message.id = 'vote-message-' + index;
     newElement(block, 'p', '', '<i>' + referendum.question + '</i>');
     let list = newElement(block, 'div', 'list');
     let ul = newElement(list, 'ul');
@@ -1187,16 +1194,12 @@ window.onload = function() {
       newElement(label, 'i', 'icon icon-radio');
       newElement(label, 'div', 'item-inner', answer);
       input.addEventListener('click', function() {
-        updateVoteKey(index, vote);
+        if (referendum.secret)
+          updateVoteKey(index, vote);
+        else
+          enable(button);
       });
     });
-    let row = newElement(block, 'div', 'row');
-    let col = newElement(row, 'div', 'col-80');
-    let button = newElement(col, 'div', 'button button-fill');
-    let message = newElement(col, 'div', 'item-label text-align-center');
-    button.id = 'vote-button-' + index;
-    let trash = newElement(row, 'div', 'col-20 button', '<i class="icon f7-icons">trash</i>');
-    message.id = 'vote-message-' + index;
     if (referendum.secret)
       updateVoteKey(index, vote);
     else
@@ -1210,6 +1213,13 @@ window.onload = function() {
       .toString();
     newElement(bottom, 'div', 'float-right padding-bottom', '<a class="link external" href="' +
       results_url + '" target="_blank">Results</a>');
+    if (!referendum.secret) { // public vote
+      button.addEventListener('click', function(event) {
+        console.log('Casting public vote...');
+      });
+      return;
+    }
+    // anonymous vote
     button.addEventListener('click', function(event) {
       app.preloader.show();
       let crypt = new JSEncrypt();
