@@ -1629,7 +1629,8 @@ window.onload = function() {
       disable(button);
       disableAnswer(index, true);
     } else if (document.querySelector('input[name="answer-' + index + '"]:checked')) {
-      button.innerHTML = 'Vote';
+      // button.innerHTML = '<i class="icon f7-icons">envelope</i> Vote';
+      button.innerHTML = '<i class="icon f7-icons" style="transform:rotate(90deg)">hand_point_right</i> Vote';
       message.innerHTML = 'Think twice before you vote, there is no undo.';
       enable(button);
     } else {
