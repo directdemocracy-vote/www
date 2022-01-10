@@ -1497,6 +1497,8 @@ window.onload = function() {
 
   function updateReferendums() {
     let tab = document.getElementById('tab-vote');
+    let propose = newElement(null, 'div', 'block-title',
+      'Propose a <a class="link external" href="referendum.html" target="_blank">new referendum</a>');
     let fingerprints = '';
     votes.forEach(function(vote) {
       if (vote.public)
@@ -1513,8 +1515,6 @@ window.onload = function() {
         referendums = JSON.parse(this.responseText);
         if (referendums.error)
           console.log(referendums.error);
-        let propose = newElement(null, 'div', 'block-title',
-          'Propose a <a class="link external" href="referendum.html" target="_blank">new referendum</a>');
         if (referendums.length == 0) {
           newElement(tab, 'div', 'block-title', 'No referendum available');
           tab.appendChild(propose);
