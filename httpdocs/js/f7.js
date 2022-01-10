@@ -1197,7 +1197,12 @@ window.onload = function() {
     button.id = 'vote-button-' + index;
     let trash = newElement(row, 'div', 'col-20 button', '<i class="icon f7-icons">trash</i>');
     message.id = 'vote-message-' + index;
-    updateVoteKey(index, vote);
+    if (referendum.secret)
+      updateVoteKey(index, vote);
+    else
+      button.innerHTML =
+      '<i class="icon f7-icons" style="margin-left:6px;transform:rotate(90deg)">hand_point_left</i> &nbsp; Public Vote';
+
     let bottom = newElement(block, 'div', 'padding-top');
     newElement(bottom, 'div', 'float-left', 'Deadline: <i>' + new Date(referendum.deadline).toLocaleString() +
       '</i>');
@@ -1631,7 +1636,6 @@ window.onload = function() {
       disableAnswer(index, true);
     } else if (document.querySelector('input[name="answer-' + index + '"]:checked')) {
       button.innerHTML = icon + 'Anonymous Vote';
-      //'<i class="icon f7-icons" style="margin-left:6px;transform:rotate(90deg)">hand_point_left</i> &nbsp; Public Vote';
       message.innerHTML = 'Think twice before you vote, there is no undo.';
       enable(button);
     } else {
