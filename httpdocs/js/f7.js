@@ -1602,6 +1602,7 @@ window.onload = function() {
     if (!button || index >= referendums.length)
       return;
     const expired = new Date().getTime() > referendums[index].deadline;
+    const icon = '<i class="icon f7-icons">envelope</i> &nbsp; ';
     if (stationKey === '') {
       message.innerHTML = 'Getting station key, please wait...';
       disable(button);
@@ -1612,26 +1613,25 @@ window.onload = function() {
       if (vote.hasOwnProperty('private')) {
         disable(button);
         disableAnswer(index, false);
-        button.innerHTML = 'Voting...';
+        button.innerHTML = icon + 'Voting...';
       } else {
-        message.innerHTML = 'Vote cast on ' + new Date(vote.date * 1000).toLocaleString().slice(0, -3);
+        message.innerHTML = icon + 'Vote cast on ' + new Date(vote.date * 1000).toLocaleString().slice(0, -3);
         if (expired)
           setCheckVoteButton(index, vote);
         else {
-          button.innerHTML = 'Vote cast!'; // French: "a voté !"
+          button.innerHTML = icon + 'Vote cast!'; // French: "a voté !"
           disable(button);
           disableAnswer(index, true);
         }
       }
     } else if (expired) {
-      button.innerHTML = 'Not Voted';
+      button.innerHTML = icon + 'Not Voted';
       message.innerHTML = 'Deadline has passed.';
       disable(button);
       disableAnswer(index, true);
     } else if (document.querySelector('input[name="answer-' + index + '"]:checked')) {
-      // button.innerHTML = '<i class="icon f7-icons" style="margin-right:10px">envelope</i> anonymous vote';
-      button.innerHTML =
-        '<i class="icon f7-icons" style="margin-left:6px;transform:rotate(90deg)">hand_point_left</i> public vote';
+      button.innerHTML = icon + 'Anonymous Vote';
+      //'<i class="icon f7-icons" style="margin-left:6px;transform:rotate(90deg)">hand_point_left</i> &nbsp; Public Vote';
       message.innerHTML = 'Think twice before you vote, there is no undo.';
       enable(button);
     } else {
