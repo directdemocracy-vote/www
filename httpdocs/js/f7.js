@@ -1091,7 +1091,6 @@ window.onload = function() {
   }
 
   function addReferendum(tab, referendum, index, state, top) {
-    console.log(referendum);
     const fingerprint = CryptoJS.SHA1(referendum.signature).toString();
     let vote = votes.find(vote => vote.referendum === fingerprint);
     if (vote === undefined) {
