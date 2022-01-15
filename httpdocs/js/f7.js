@@ -1213,9 +1213,66 @@ window.onload = function() {
       .toString();
     newElement(bottom, 'div', 'float-right padding-bottom', '<a class="link external" href="' +
       results_url + '" target="_blank">Results</a>');
+
+    function ballot_answer() {
+      let radios = document.getElementsByName('answer-' + index);
+      let answer = '';
+      for (let i = 0, length = radios.length; i < length; i++)
+        if (radios[i].checked) {
+          answer = radios[i].value;
+          break;
+        } else console.log("Not " + radios[i].checked + " - " + radios[i].value);
+      return answer;
+    }
+
+    function vote_callback(xhttp, crypt) {
+      if (xhttp.status == 200) {
+        let response = JSON.parse(xhttp.responseText);
+        if (response.error) {
+          app.dialog.alert(response.error, 'Vote error');
+          return;
+        }
+        console.log("Ballot fingerprint: " + response.fingerprint);
+        badge.classList.remove('color-red');
+        badge.classList.remove('color-orange');
+        badge.classList.remove('color-green');
+        badge.classList.add('color-blue');
+        badge.innerHTML = parseInt(badge.innerHTML) + 1;
+        let voteBadge = document.getElementById('vote-badge');
+        const n = parseInt(voteBadge.innerHTML);
+        if (n < 1)
+          console.log("ERROR: Vote badge is smaller than 1. This should not happen...");
+        if (n == 1)
+          voteBadge.style.display = 'none';
+        voteBadge.innerHTML = n - 1;
+        delete vote.private;
+        vote.public = strippedKey(crypt ? crypt.getPublicKey() : citizen.key);
+        vote.date = Math.round(new Date().getTime() / 1000);
+        localStorage.setItem('votes', JSON.stringify(votes));
+        updateVoteKey(index, vote);
+      }
+    }
+
     if (!referendum.secret) { // public vote
       button.addEventListener('click', function(event) {
-        console.log('Casting public vote...');
+        const answer = ballot_answer();
+        console.log('Casting public vote: ' + answer);
+        let ballot = {
+          schema: 'https://directdemocracy.vote/json-schema/' + DIRECTDEMOCRACY_VERSION + '/ballot.schema.json',
+          key: citizen.key,
+          signature: '',
+          published: referendum.deadline,
+          expires: referendum.deadline + 365.25 * 24 * 60 * 60 * 1000, // 1 year
+          referendum: referendum.key,
+          answer: answer
+        };
+        ballot.signature = citizenCrypt.sign(JSON.stringify(ballot), CryptoJS.SHA256, 'sha256');
+        xhttp.open('POST', publisher + '/publish.php', true);
+        xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhttp.onload = function() {
+          vote_callback(this, null);
+        };
+        xhttp.send(JSON.stringify(ballot));
       });
       return;
     }
@@ -1230,8 +1287,7 @@ window.onload = function() {
       updateVoteKey(index, vote);
       createNewVoteKey();
       let ballot = {
-        schema: 'https://directdemocracy.vote/json-schema/' + DIRECTDEMOCRACY_VERSION +
-          '/ballot.schema.json',
+        schema: 'https://directdemocracy.vote/json-schema/' + DIRECTDEMOCRACY_VERSION + '/ballot.schema.json',
         key: vote.public,
         signature: '',
         published: referendum.deadline,
@@ -1254,8 +1310,7 @@ window.onload = function() {
           key: stationKey
         }
       };
-      registration.signature = citizenCrypt.sign(JSON.stringify(registration), CryptoJS.SHA256,
-        'sha256');
+      registration.signature = citizenCrypt.sign(JSON.stringify(registration), CryptoJS.SHA256, 'sha256');
       let request = {
         ballot: ballot,
         registration: registration
@@ -1285,8 +1340,7 @@ window.onload = function() {
           // verify the fields of the ballot didn't change.
           let keys = Object.keys(ballot);
           if (!keys.includes('schema') || !keys.includes('key') || !keys.includes('signature') ||
-            !keys.includes('published') || !keys.includes('expires') || !keys.includes(
-              'referendum') ||
+            !keys.includes('published') || !keys.includes('expires') || !keys.includes('referendum') ||
             !keys.includes('station')) {
             app.dialog.alert('Missing field in ballot.', 'Register error');
             return false;
@@ -1296,8 +1350,7 @@ window.onload = function() {
             return false;
           }
           if (ballot.schema != 'https://directdemocracy.vote/json-schema/' +
-            DIRECTDEMOCRACY_VERSION +
-            '/ballot.schema.json') {
+            DIRECTDEMOCRACY_VERSION + '/ballot.schema.json') {
             app.dialog.alert('Wrong schema in ballot.', 'Register error');
             return;
           }
@@ -1371,9 +1424,7 @@ window.onload = function() {
           delete registration.station.signature;
           verify = new JSEncrypt();
           verify.setPublicKey(publicKey(registration.station.key));
-          if (!verify.verify(JSON.stringify(registration), registration_station_signature,
-              CryptoJS
-              .SHA256)) {
+          if (!verify.verify(JSON.stringify(registration), registration_station_signature, CryptoJS.SHA256)) {
             app.dialog.alert('Wrong station signature for registration.', 'Register error');
             return;
           }
@@ -1409,13 +1460,7 @@ window.onload = function() {
           localStorage.setItem('registrations', JSON.stringify(registrations));
           // proceed to vote
           document.getElementById('vote-message-' + index).innerHTML = "Registration success";
-          let radios = document.getElementsByName('answer-' + index);
-          let answer = '';
-          for (let i = 0, length = radios.length; i < length; i++)
-            if (radios[i].checked) {
-              answer = radios[i].value;
-              break;
-            } else console.log("Not " + radios[i].checked + " - " + radios[i].value);
+          const answer = ballot_answer();
           console.log("voting: " + answer);
           let crypt = new JSEncrypt();
           crypt.setPrivateKey(vote.private);
@@ -1423,31 +1468,7 @@ window.onload = function() {
           ballot.signature = crypt.sign(JSON.stringify(ballot), CryptoJS.SHA256, 'sha256');
           let xhttp = new XMLHttpRequest();
           xhttp.onload = function() {
-            if (this.status == 200) {
-              let response = JSON.parse(this.responseText);
-              if (response.error) {
-                app.dialog.alert(response.error, 'Vote error');
-                return;
-              }
-              console.log("Ballot fingerprint: " + response.fingerprint);
-              badge.classList.remove('color-red');
-              badge.classList.remove('color-orange');
-              badge.classList.remove('color-green');
-              badge.classList.add('color-blue');
-              badge.innerHTML = parseInt(badge.innerHTML) + 1;
-              let voteBadge = document.getElementById('vote-badge');
-              const n = parseInt(voteBadge.innerHTML);
-              if (n < 1)
-                console.log("ERROR: Vote badge is smaller than 1. This should not happen...");
-              if (n == 1)
-                voteBadge.style.display = 'none';
-              voteBadge.innerHTML = n - 1;
-              delete vote.private;
-              vote.public = strippedKey(crypt.getPublicKey());
-              vote.date = Math.round(new Date().getTime() / 1000);
-              localStorage.setItem('votes', JSON.stringify(votes));
-              updateVoteKey(index, vote);
-            }
+            vote_callback(this, crypt);
           };
           xhttp.open('POST', publisher + '/publish.php', true);
           xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
