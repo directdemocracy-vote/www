@@ -1169,7 +1169,7 @@ window.onload = function() {
         `<a class="link external" href="${referendum.website}" target="_blank">Official web site</a>.`
       );
     }
-    newElement(block, 'p', '', '<i>' + referendum.question + '</i>');
+    newElement(block, 'p', '', '<b>' + referendum.question + '</b>');
     let list = newElement(block, 'div', 'list');
     let ul = newElement(list, 'ul');
     const answers = referendum.answers.split('\n');
