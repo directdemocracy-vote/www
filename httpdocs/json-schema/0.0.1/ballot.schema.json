@@ -57,7 +57,7 @@
       }
     },
     "answer": {
-      "description": "answer if the citizen to the referendum question",
+      "description": "answer of the citizen to the referendum question",
       "type": "string"
     }
   },
