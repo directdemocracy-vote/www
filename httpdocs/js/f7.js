@@ -1261,7 +1261,7 @@ window.onload = function() {
           schema: 'https://directdemocracy.vote/json-schema/' + DIRECTDEMOCRACY_VERSION + '/ballot.schema.json',
           key: citizen.key,
           signature: '',
-          published: referendum.deadline,
+          published: Date.now(),
           expires: referendum.deadline + 365.25 * 24 * 60 * 60 * 1000, // 1 year
           referendum: referendum.key,
           answer: answer
