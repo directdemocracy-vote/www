@@ -1221,7 +1221,7 @@ window.onload = function() {
         if (radios[i].checked) {
           answer = radios[i].value;
           break;
-        } else console.log("Not " + radios[i].checked + " - " + radios[i].value);
+        }
       return answer;
     }
 
@@ -1267,6 +1267,7 @@ window.onload = function() {
           answer: answer
         };
         ballot.signature = citizenCrypt.sign(JSON.stringify(ballot), CryptoJS.SHA256, 'sha256');
+        let xhttp = new XMLHttpRequest();
         xhttp.open('POST', publisher + '/publish.php', true);
         xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhttp.onload = function() {
