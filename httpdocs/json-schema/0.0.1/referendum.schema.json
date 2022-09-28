@@ -82,7 +82,7 @@
       "minLength": 3
     },
     "secret": {
-      "description": "whether the votes to the rederendum should be anonymous or public",
+      "description": "whether the votes to the referendum should be anonymous or public",
       "type": "boolean"
     },
     "deadline": {
