@@ -14,8 +14,6 @@
     "area",
     "title",
     "description",
-    "question",
-    "answers",
     "secret",
     "deadline"
   ],
