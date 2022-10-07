@@ -236,7 +236,7 @@ window.onload = function() {
       publication.question = document.getElementById('question').value.trim();
       publication.answers = document.getElementById('answers').value.trim();
     }
-    publication.secret = document.getElementById('anonymous').checked;
+    publication.secret = (document.getElementById('ballots').value === 'anonymous');
     publication.deadline = deadline;
     let website = document.getElementById('website').value.trim();
     if (website)
