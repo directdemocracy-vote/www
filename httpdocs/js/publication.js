@@ -3,6 +3,8 @@ window.onload = function() {
   const publisher = localStorage.getItem('publisher');
   const trustee = localStorage.getItem('trustee');
   const citizen_private_key = localStorage.getItem('privateKey');
+  const publication_type = document.getElementById('publication_type').value;
+
   let publication_private_key = '';
   let latitude = 0;
   let longitude = 0;
@@ -179,10 +181,12 @@ window.onload = function() {
       return;
     if (document.getElementById('description').value == '')
       return;
-    if (document.getElementById('question').value == '')
-      return;
-    if (document.getElementById('answers').value == '')
-      return;
+    if (publication_type === 'referendum') {
+      if (document.getElementById('question').value == '')
+        return;
+      if (document.getElementById('answers').value == '')
+        return;
+    }
     if (document.getElementById('deadline-day').value == '')
       return;
     if (document.getElementById('deadline-hour').value == '')
@@ -209,8 +213,10 @@ window.onload = function() {
   }
   document.getElementById('title').addEventListener('input', validate);
   document.getElementById('description').addEventListener('input', validate);
-  document.getElementById('question').addEventListener('input', validate);
-  document.getElementById('answers').addEventListener('input', validate);
+  if (publication_type == 'referendum') {
+    document.getElementById('question').addEventListener('input', validate);
+    document.getElementById('answers').addEventListener('input', validate);
+  }
   document.getElementById('deadline-day').addEventListener('input', validate);
   document.getElementById('deadline-hour').addEventListener('input', validate);
   document.getElementById('deadline-time-zone').addEventListener('input', validate);
@@ -226,8 +232,10 @@ window.onload = function() {
     publication.area = area;
     publication.title = document.getElementById('title').value.trim();
     publication.description = document.getElementById('description').value.trim();
-    publication.question = document.getElementById('question').value.trim();
-    publication.answers = document.getElementById('answers').value.trim();
+    if (publication_type == 'referendum') {
+      publication.question = document.getElementById('question').value.trim();
+      publication.answers = document.getElementById('answers').value.trim();
+    }
     publication.secret = document.getElementById('anonymous').checked;
     publication.deadline = deadline;
     let website = document.getElementById('website').value.trim();
@@ -251,8 +259,8 @@ window.onload = function() {
                 showModal('Publication error', JSON.stringify(answer.error));
               else
                 showModal('Publication success',
-                  'Your referendum was just published!<br>Check it <a target="_blank" href="' +
-                  publisher + '/referendum.html?fingerprint=' + answer.fingerprint + '">here</a>.<br>');
+                  'Your ' + publication_type + ' was just published!<br>Check it <a target="_blank" href="' +
+                  publisher + '/' + publication_type + '.html?fingerprint=' + answer.fingerprint + '">here</a>.<br>');
             }
           };
           xhttp.open('POST', publisher + '/publish.php', true);
