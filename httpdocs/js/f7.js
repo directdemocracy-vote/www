@@ -1570,7 +1570,7 @@ window.onload = function() {
     if (fingerprints !== '')
       fingerprints = '&fingerprints=' + encodeURIComponent(fingerprints.slice(0, -1));
     let xhttp = new XMLHttpRequest();
-    xhttp.open('POST', publisher + '/' + type + '.php', true);
+    xhttp.open('POST', publisher + '/referendum.php', true);
     xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhttp.send('area=' + encodeURIComponent(area) + fingerprints);
     xhttp.onload = function() {
