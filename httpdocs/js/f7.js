@@ -41,8 +41,10 @@ window.onload = function() {
   let scanner = null;
   let endorsed = null;
   let referendums = [];
+  let petitions = [];
   let stationKey = '';
   let availableReferendum = 0;
+  let availablePetition = 0;
   const VOTE_KEY_POOL_SIZE = 10;
   let voteKeyPool = JSON.parse(localStorage.getItem('voteKeyPool'));
   if (voteKeyPool === null)
@@ -50,6 +52,9 @@ window.onload = function() {
   let votes = JSON.parse(localStorage.getItem('votes')); // for referendums
   if (votes === null)
     votes = [];
+  let signatures = JSON.parse(localStorage.getItem('signatures')); // for petitions
+  if (signatures === null)
+    signatures = [];
   let registrations = JSON.parse(localStorage.getItem('registrations'));
   if (registrations === null)
     registrations = [];
@@ -87,72 +92,73 @@ window.onload = function() {
     updateStationKey();
   });
 
-  document.getElementById('referendum-paste').addEventListener('click', function(event) {
-    navigator.clipboard.readText().then(text => {
-      let input = document.getElementById('referendum-reference');
-      input.value = text;
-      app.input.checkEmptyState(input);
-      showReferendum(text);
+  const voting_types = ['referendum', 'petition'];
+  for (let i = 0, len = voting_types.length; i < len; i++) {
+    const type = voting_types[i];
+    document.getElementById(type + '-paste').addEventListener('click', function(event) {
+      navigator.clipboard.readText().then(text => {
+        let input = document.getElementById(type + '-reference');
+        input.value = text;
+        app.input.checkEmptyState(input);
+        showVoting(text, type);
+      });
     });
-  });
+    document.getElementById(type + '-reference').addEventListener('input', function(event) {
+      showVoting(event.target.value, type);
+    });
+    document.getElementById(type + '-scan').addEventListener('click', function(event) {
+      const button = event.target;
+      const video = document.getElementById(type + '-qr-video');
+      const videoBlock = document.getElementById(type + '-qr-video-block');
+      const input = document.getElementById(type + '-reference');
+      if (scanner) { // Cancel pressed
+        button.classList.remove('color-red');
+        button.classList.add('color-blue');
+        videoBlock.style.display = 'none';
+        scanner.destroy();
+        scanner = null;
+        return;
+      }
+      videoBlock.style.display = '';
+      button.classList.remove('color-blue');
+      button.classList.add('color-red');
+      scanner = new QrScanner(video, fingerprint => setResult(fingerprint));
+      scanner.start();
+      function setResult(fingerprint) {
+        input.value = fingerprint;
+        app.input.checkEmptyState(input);
+        videoBlock.style.display = 'none';
+        button.classList.remove('color-red');
+        button.classList.add('color-blue');
+        scanner.destroy();
+        scanner = null;
+        showVoting(fingerprint, type);
+      }
+    });
+  }
 
-  document.getElementById('referendum-reference').addEventListener('input', function(event) {
-    showReferendum(event.target.value);
-  });
-
-  document.getElementById('referendum-scan').addEventListener('click', function(event) {
-    const button = event.target;
-    const video = document.getElementById('referendum-qr-video');
-    const videoBlock = document.getElementById('referendum-qr-video-block');
-    const input = document.getElementById('referendum-reference');
-
-    if (scanner) { // Cancel pressed
-      button.classList.remove('color-red');
-      button.classList.add('color-blue');
-      videoBlock.style.display = 'none';
-      scanner.destroy();
-      scanner = null;
-      return;
-    }
-    videoBlock.style.display = '';
-    button.classList.remove('color-blue');
-    button.classList.add('color-red');
-    scanner = new QrScanner(video, fingerprint => setResult(fingerprint));
-    scanner.start();
-
-    function setResult(fingerprint) {
-      input.value = fingerprint;
-      app.input.checkEmptyState(input);
-      videoBlock.style.display = 'none';
-      button.classList.remove('color-red');
-      button.classList.add('color-blue');
-      scanner.destroy();
-      scanner = null;
-      showReferendum(fingerprint);
-    }
-  });
-
-  function showReferendum(reference) {
+  function showVoting(reference, type) {
+    let type_upper = type.charAt(0).toUpperCase() + type.slice(1);
     let value = reference.toLowerCase();
     if (value.length !== 40)
       return;
     const regexp = /^[0-9a-f]+$/;
     if (!regexp.test(value)) {
-      app.dialog.alert('The reference format for a referendum is wrong, please double-check your input',
-        'Wrong Referendum Reference');
+      app.dialog.alert('The reference format for a ' + type + ' is wrong, please double-check your input',
+        'Wrong ' + type_upper + ' Reference');
       return;
     }
     let xhttp = new XMLHttpRequest();
-    xhttp.open('POST', publisher + '/referendum.php', true);
+    xhttp.open('POST', publisher + '/' + type + '.php', true);
     xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhttp.send('fingerprint=' + encodeURIComponent(value) + '&area=' + encodeURIComponent(area));
     xhttp.onload = function() {
       if (this.status == 200) {
         let answer = JSON.parse(this.responseText);
-        parent = document.getElementById('scanned-referendum');
+        parent = document.getElementById('scanned-' + type);
         parent.innerHTML = '';
         if (answer.error)
-          app.dialog.alert(answer.error, 'Referendum Not Found');
+          app.dialog.alert(answer.error, type_upper + ' Not Found');
         else {
           console.log(answer);
           let state = {
@@ -160,8 +166,13 @@ window.onload = function() {
             previousAreaType: '',
             topUp: null
           };
-          referendums.push(answer);
-          addReferendum(parent, answer, availableReferendum, state, true);
+          if (type === 'referendum') {
+            referendums.push(answer);
+            addReferendum(parent, answer, availableReferendum, state, true);
+          } else {
+            petitions.push(answer);
+            addPetition(parent, answer, availablePetition, state, true);
+          }
         }
       }
     };
@@ -768,8 +779,8 @@ window.onload = function() {
     'click', editOrRevokeKey);
 
   document.getElementById('endorse-qr-video').addEventListener('loadedmetadata', qrVideo);
-  document.getElementById(
-    'referendum-qr-video').addEventListener('loadedmetadata', qrVideo);
+  document.getElementById('referendum-qr-video').addEventListener('loadedmetadata', qrVideo);
+  document.getElementById('petition-qr-video').addEventListener('loadedmetadata', qrVideo);
 
   function qrVideo() {
     // display video as a square centered in the video rectangle
@@ -1088,6 +1099,18 @@ window.onload = function() {
     let badge = document.getElementById('endorse-badge');
     badge.innerHTML = count;
     badge.style.display = (count == 0) ? 'none' : '';
+  }
+
+  function addPetition(tab, petition, index, state, top) {
+    const fingerprint = CryptoJS.SHA1(petition.signature).toString();
+    let signature = signatures.find(signature => signature.petition === fingerprint);
+    if (signature === undefined) {
+      signature = {
+        petition: fingerprint
+      };
+      signatures.push(signature);
+    }
+    // FIXME: implement this
   }
 
   function addReferendum(tab, referendum, index, state, top) {
@@ -1527,15 +1550,18 @@ window.onload = function() {
             t = 'city';
           area += t + '=' + name[i] + '\n';
         });
-        updateReferendums();
+        updateVotings('referendum');
+        updateVotings('petition');
       }
     };
   }
 
-  function updateReferendums() {
-    let tab = document.getElementById('tab-vote');
+  function updateVotings(type) {
+    const tab_name = (type === 'referendum') ? 'vote' : 'sign';
+    let votings = (type === 'referendum') ? referendums : petitions;
+    let tab = document.getElementById('tab-' + tab_name);
     let propose = newElement(null, 'div', 'block-title',
-      'Propose a <a class="link external" href="referendum.html" target="_blank">new referendum</a>');
+      'Propose a <a class="link external" href="' + type + '.html" target="_blank">new ' + type + '</a>');
     let fingerprints = '';
     votes.forEach(function(vote) {
       if (vote.public)
@@ -1544,16 +1570,16 @@ window.onload = function() {
     if (fingerprints !== '')
       fingerprints = '&fingerprints=' + encodeURIComponent(fingerprints.slice(0, -1));
     let xhttp = new XMLHttpRequest();
-    xhttp.open('POST', publisher + '/referendum.php', true);
+    xhttp.open('POST', publisher + '/' + type + '.php', true);
     xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhttp.send('area=' + encodeURIComponent(area) + fingerprints);
     xhttp.onload = function() {
       if (this.status == 200) {
-        referendums = JSON.parse(this.responseText);
-        if (referendums.error)
+        votings = JSON.parse(this.responseText);
+        if (votings.error)
           console.log(referendums.error);
-        if (referendums.length == 0) {
-          newElement(tab, 'div', 'block-title', 'No referendum available');
+        if (votings.length == 0) {
+          newElement(tab, 'div', 'block-title', 'No ' + type + ' available');
           tab.appendChild(propose);
           return;
         }
@@ -1561,25 +1587,37 @@ window.onload = function() {
         let previousAreaType = '';
         let topUl = null;
         availableReferendum = 0;
+        availablePetition = 0;
         let state = {
           previousAreaName: '',
           previousAreaType: '',
           topUp: null
         };
-        referendums.forEach(function(referendum, index) {
-          addReferendum(tab, referendum, index, state, false);
+        votings.forEach(function(voting, index) {
+          if (type === 'referendum')
+            addReferendum(tab, voting, index, state, false);
+          else
+            addPetition(tab, voting, index, state, false);
         });
-        let badge = document.getElementById('vote-badge');
-        if (availableReferendum) {
-          badge.innerHTML = availableReferendum;
-          badge.style.display = '';
-        } else badge.style.display = 'none';
+
+        let badge = document.getElementById(tab_name + '-badge');
+        if (type === 'referendum')
+          if (availableReferendum) {
+            badge.innerHTML = availableReferendum;
+            badge.style.display = '';
+          } else badge.style.display = 'none';
+        else { // petition
+          if (availablePetition) {
+            badge.innerHTML = availablePetition;
+            badge.style.display = '';
+          } else badge.style.display = 'none';
+        }
+        tab.appendChild(propose);
       }
-      tab.appendChild(propose);
     };
-    document.getElementById('referendum-reference').classList.remove('disabled');
-    document.getElementById('referendum-scan').classList.remove('disabled');
-    document.getElementById('referendum-paste').classList.remove('disabled');
+    document.getElementById(type + '-reference').classList.remove('disabled');
+    document.getElementById(type + '-scan').classList.remove('disabled');
+    document.getElementById(type + '-paste').classList.remove('disabled');
   }
 
   function disableAnswer(index, erase) {
