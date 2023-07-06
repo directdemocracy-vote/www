@@ -1556,11 +1556,11 @@ window.onload = function() {
     };
   }
 
-  function updateVotings(type) {
+  function updateProposals(type) {
     const tab_name = (type === 'referendum') ? 'vote' : 'sign';
-    let votings = (type === 'referendum') ? referendums : petitions;
+    let proposals = (type === 'referendum') ? referendums : petitions;
     let tab = document.getElementById('tab-' + tab_name);
-    let propose = newElement(null, 'div', 'block-title',
+    const propose = newElement(null, 'div', 'block-title',
       'Propose a <a class="link external" href="' + type + '.html" target="_blank">new ' + type + '</a>');
     let fingerprints = '';
     votes.forEach(function(vote) {
@@ -1570,15 +1570,15 @@ window.onload = function() {
     if (fingerprints !== '')
       fingerprints = '&fingerprints=' + encodeURIComponent(fingerprints.slice(0, -1));
     let xhttp = new XMLHttpRequest();
-    xhttp.open('POST', publisher + '/referendum.php', true);
+    xhttp.open('POST', publisher + '/proposal.php', true);
     xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhttp.send('area=' + encodeURIComponent(area) + fingerprints);
     xhttp.onload = function() {
       if (this.status == 200) {
-        votings = JSON.parse(this.responseText);
-        if (votings.error)
-          console.log(referendums.error);
-        if (votings.length == 0) {
+        response = JSON.parse(this.responseText);
+        if (response.error)
+          console.log(response.error);
+        if (response.length == 0) {
           newElement(tab, 'div', 'block-title', 'No ' + type + ' available');
           tab.appendChild(propose);
           return;
@@ -1593,11 +1593,11 @@ window.onload = function() {
           previousAreaType: '',
           topUp: null
         };
-        votings.forEach(function(voting, index) {
+        response.forEach(function(proposal, index) {
           if (type === 'referendum')
-            addReferendum(tab, voting, index, state, false);
+            addReferendum(tab, proposal, index, state, false);
           else
-            addPetition(tab, voting, index, state, false);
+            addPetition(tab, proposal, index, state, false);
         });
 
         let badge = document.getElementById(tab_name + '-badge');
