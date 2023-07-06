@@ -223,7 +223,7 @@ window.onload = function() {
   document.getElementById('publish-button').addEventListener('click', function() {
     publication = {};
     publication.schema = 'https://directdemocracy.vote/json-schema/' + directdemocracy_version +
-      '/referendum.schema.json';
+      '/proposal.schema.json';
     publication.key = stripped_key(publication_crypt.getPublicKey());
     publication.signature = '';
     publication.published = new Date().getTime();
