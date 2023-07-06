@@ -1575,7 +1575,7 @@ window.onload = function() {
     xhttp.send('area=' + encodeURIComponent(area) + fingerprints);
     xhttp.onload = function() {
       if (this.status == 200) {
-        response = JSON.parse(this.responseText);
+        const response = JSON.parse(this.responseText);
         if (response.error)
           console.log(response.error);
         if (response.length == 0) {
