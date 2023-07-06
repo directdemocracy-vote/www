@@ -1550,8 +1550,8 @@ window.onload = function() {
             t = 'city';
           area += t + '=' + name[i] + '\n';
         });
-        updateVotings('referendum');
-        updateVotings('petition');
+        updateProposals('referendum');
+        updateProposals('petition');
       }
     };
   }
