@@ -6,7 +6,7 @@ It also hosts the reference specifications for the *directdemocracy.vote* public
 
 For more information about *directdemocracy.vote*, read our [white paper](https://github.com/directdemocracy-vote/www/wiki/White-Paper).
 
-This website is developed with bulma CSS and shares the style and Javascript libraries with the sample participant websites:
+This website is developed with [bulma](https://bulma.io) and shares the style and Javascript libraries with the sample participant websites:
 - https://app.directdemocracy.vote
 - https://publisher.directdemocracy.vote
 - https://trustee.directdemocracy.vote
