@@ -31,7 +31,7 @@
 			"maximum": 999999999999999
 		},
 		"referendum": {
-			"description": "signature of the referendum",
+			"description": "signature of the referendum proposal",
 			"type": "string"
 		},
 		"participation": {
