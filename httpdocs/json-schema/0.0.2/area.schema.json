@@ -1,63 +1,63 @@
 {
-	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "https://directdemocracy.vote/json-schema/0.0.2/area.schema.json",
-	"title": "area",
-	"description": "a named polygonal area signed by a participant",
-	"type": "object",
-	"required": [
-		"schema",
-		"key",
-		"signature",
-		"published",
-		"name",
-		"polygons"
-	],
-	"properties": {
-		"schema": {
-			"const": "https://directdemocracy.vote/json-schema/0.0.2/area.schema.json"
-		},
-		"key": {
-			"description": "public key of the author",
-			"type": "string",
-			"maxLength": 512
-		},
-		"signature": {
-			"description": "signature of the author",
-			"type": "string",
-			"maxLength": 512
-		},
-		"published": {
-			"description": "date of publication (milliseconds since 1970-01-01 00:00:00.000)",
-			"type": "integer",
-			"minimum": 0,
-			"maximum": 999999999999999
-		},
-		"name": {
-			"description": "name of the area",
-			"type": "array",
-			"items": {
-				"type": "string",
-				"minLength": 3
-			}
-		},
-		"polygons": {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://directdemocracy.vote/json-schema/0.0.2/area.schema.json",
+  "title": "area",
+  "description": "a named polygonal area signed by a participant",
+  "type": "object",
+  "required": [
+    "schema",
+    "key",
+    "signature",
+    "published",
+    "name",
+    "polygons"
+  ],
+  "properties": {
+    "schema": {
+      "const": "https://directdemocracy.vote/json-schema/0.0.2/area.schema.json"
+    },
+    "key": {
+      "description": "public key of the author",
+      "type": "string",
+      "maxLength": 512
+    },
+    "signature": {
+      "description": "signature of the author",
+      "type": "string",
+      "maxLength": 512
+    },
+    "published": {
+      "description": "date of publication (milliseconds since 1970-01-01 00:00:00.000)",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 999999999999999
+    },
+    "name": {
+      "description": "name of the area",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 3
+      }
+    },
+    "polygons": {
       "description": "polygons corresponding to the area in GeoJSON MultiPolygon format",
-			"type": "array",
-			"items": {
-				"type": "array",
-				"items": {
-					"type": "array",
-					"item": {
-						"type": "array",
-						"items": {
-							"type": "number",
-							"minItems": 2,
-							"maxItems": 2
-						}
-					}
-				}
-			}
-		}
-	},
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "item": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minItems": 2,
+              "maxItems": 2
+            }
+          }
+        }
+      }
+    }
+  },
   "additionalProperties": false
 }
