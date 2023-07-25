@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://directdemocracy.vote/json-schema/0.0.2/ballot.schema.json",
+  "title": "ballot",
+  "description": "ballot of a citizen who voted in a referendum, blindly signed by the station (participation)",
+  "type": "object",
+  "required": [
+    "schema",
+    "key",
+    "signature",
+    "published",
+    "encrypted_vote",
+  ],
+  "properties": {
+    "schema": {
+      "const": "https://directdemocracy.vote/json-schema/0.0.2/ballot.schema.json"
+    },
+    "key": {
+      "description": "public key of the station (participation)",
+      "type": "string"
+    },
+    "signature": {
+      "description": "blind signature of the station (participation)",
+      "type": "string"
+    },
+    "published": {
+      "description": "date of publication (milliseconds since 1970-01-01 00:00:00.000)",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 999999999999999
+    },
+    "encrypted_vote": {
+      "description": "encrypted vote of the citizen",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}
