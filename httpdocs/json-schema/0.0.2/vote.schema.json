@@ -1,38 +1,40 @@
 {
-	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "https://directdemocracy.vote/json-schema/0.0.2/vote.schema.json",
-	"title": "vote",
-	"description": "vote of a citizen to a referendum",
-	"type": "object",
-	"required": [
-		"schema",
-		"key",
-		"signature",
-		"published",
-		"vote"
-	],
-	"properties": {
-		"schema": {
-			"const": "https://directdemocracy.vote/json-schema/0.0.2/vote.schema.json"
-		},
-		"key": {
-			"description": "public key of the participation issued by the station",
-			"type": "string"
-		},
-		"signature": {
-			"description": "signature of the participation performed by the station",
-			"type": "string"
-		},
-		"published": {
-			"description": "current date (milliseconds since 1970-01-01 00:00:00.000)",
-			"type": "integer",
-			"minimum": 0,
-			"maximum": 999999999999999
-		},
-		"vote": {
-			"description": "vote of a citizen containing their answer accepted by the station",
-			"type": "string"
-		}
-	},
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://directdemocracy.vote/json-schema/0.0.2/vote.schema.json",
+  "title": "vote",
+  "description": "vote of a citizen to a referendum",
+  "type": "object",
+  "required": [
+    "schema",
+    "key",
+    "signature",
+    "published",
+    "vote"
+  ],
+  "properties": {
+    "schema": {
+      "const": "https://directdemocracy.vote/json-schema/0.0.2/vote.schema.json"
+    },
+    "key": {
+      "description": "public key of the participation issued by the station",
+      "type": "string",
+      "maxLength": 512
+    },
+    "signature": {
+      "description": "signature of the participation performed by the station",
+      "type": "string",
+      "maxLength": 512
+    },
+    "published": {
+      "description": "current date (milliseconds since 1970-01-01 00:00:00.000)",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 999999999999999
+    },
+    "vote": {
+      "description": "vote of a citizen containing their answer accepted by the station",
+      "type": "string"
+    }
+  },
   "additionalProperties": false
 }
