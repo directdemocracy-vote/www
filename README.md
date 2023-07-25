@@ -5,3 +5,9 @@ Its purpose is to inform about directdemocracy.vote and encourage people to part
 It also hosts the reference specifications for the *directdemocracy.vote* publications in the [json-schema](https://github.com/directdemocracy-vote/www/tree/master/httpdocs/json-schema) folder.
 
 For more information about *directdemocracy.vote*, read our [white paper](https://github.com/directdemocracy-vote/www/wiki/White-Paper).
+
+This website is developed with bulma CSS and shares the style and Javascript libraries with the sample participant websites:
+- https://app.directdemocracy.vote
+- https://publisher.directdemocracy.vote
+- https://trustee.directdemocracy.vote
+- https://station.directdemocracy.vote
