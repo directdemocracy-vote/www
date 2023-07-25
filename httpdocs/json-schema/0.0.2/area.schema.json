@@ -2,7 +2,7 @@
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://directdemocracy.vote/json-schema/0.0.2/area.schema.json",
 	"title": "area",
-	"description": "a named polygonal area signed by a trustee",
+	"description": "a named polygonal area signed by a participant",
 	"type": "object",
 	"required": [
 		"schema",
@@ -17,11 +17,11 @@
 			"const": "https://directdemocracy.vote/json-schema/0.0.2/area.schema.json"
 		},
 		"key": {
-			"description": "public key of the trustee",
+			"description": "public key of the author",
 			"type": "string"
 		},
 		"signature": {
-			"description": "signature of the trustee",
+			"description": "signature of the author",
 			"type": "string"
 		},
 		"published": {
