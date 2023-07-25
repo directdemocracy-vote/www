@@ -66,10 +66,13 @@
       "minLength": 1
     },
     "answers": {
-      "description": "possible answers to the above question separated by newlines, e.g., yes\nno\nabstain",
-      "type": "string",
-      "maxLength": 128,
-      "minLength": 3
+      "description": "possible answers to the above question",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 128,
+        "minLength": 1
+      }
     },
     "secret": {
       "description": "whether the votes to the proposal should be anonymous or public",
