@@ -36,18 +36,9 @@
 			"type": "boolean"
 		},
 		"publication": {
-			"description": "endorsed publication",
-			"type": "object",
-			"required": ["key", "signature"],
-			"properties": {
-				"key": {
-					"type": "string"
-				},
-				"signature": {
-					"type": "string"
-				}
-			},
-		  "additionalProperties": false
+			"description": "signature of the endorsed publication",
+			"type": "string",
+			"maxLength": 512
 		},
 		"message": {
 			"description": "message encrypted with the public key of the author of the endorsed publication",
