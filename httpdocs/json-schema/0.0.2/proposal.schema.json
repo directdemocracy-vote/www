@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://directdemocracy.vote/json-schema/0.0.2/proposal.schema.json",
+  "title": "proposal",
+  "description": "petition or referendum",
+  "type": "object",
+  "required": [
+    "schema",
+    "key",
+    "signature",
+    "published",
+    "trustee",
+    "area",
+    "title",
+    "description",
+    "secret",
+    "deadline"
+  ],
+  "properties": {
+    "schema": {
+      "const": "https://directdemocracy.vote/json-schema/0.0.2/proposal.schema.json"
+    },
+    "key": {
+      "description": "public key of the proposer",
+      "type": "string",
+      "maxLength": 512
+    },
+    "signature": {
+      "description": "proposer signature of the proposal",
+      "type": "string",
+      "maxLength": 512
+    },
+    "published": {
+      "description": "date of publication (milliseconds since 1970-01-01 00:00:00.000)",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 999999999999999
+    },
+    "trustee": {
+      "description": "public key of trustee that should be used to process this proposal",
+      "type": "string",
+      "maxLength": 512,
+      "minLength": 1
+    },
+    "area": {
+      "description": "signature of an area publication",
+      "type": "string",
+      "maxLength": 512
+    },
+    "title": {
+      "description": "title of the proposal",
+      "type": "string",
+      "maxLength": 128,
+      "minLength": 1
+    },
+    "description": {
+      "description": "detailed description of the proposal (markdown allowed)",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "question": {
+      "description": "question to which the citizen should answer",
+      "type": "string",
+      "maxLength": 128,
+      "minLength": 1
+    },
+    "answers": {
+      "description": "possible answers to the above question separated by newlines, e.g., yes\nno\nabstain",
+      "type": "string",
+      "maxLength": 128,
+      "minLength": 3
+    },
+    "secret": {
+      "description": "whether the votes to the proposal should be anonymous or public",
+      "type": "boolean"
+    },
+    "deadline": {
+      "description": "date of vote deadline (milliseconds since 1970-01-01 00:00:00.000)",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 999999999999999
+    },
+    "website": {
+      "description": "website providing more information about the proposal",
+      "type": "string",
+      "format": "uri",
+      "maxLength": 128
+    }
+  },
+  "additionalProperties": false
+}
