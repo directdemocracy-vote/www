@@ -34,7 +34,11 @@
 		},
 		"name": {
 			"description": "name of the area",
-			"type": "string"
+			"type": "array",
+			"items": {
+				"type": "string",
+				"minLength": 1
+			}
 		},
 		"polygons": {
       "description": "polygons corresponding to the area in GeoJSON MultiPolygon format",
