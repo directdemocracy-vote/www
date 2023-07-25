@@ -10,7 +10,7 @@
 		"signature",
 		"published",
 		"referendum",
-    "participation"
+		"participation"
 	],
 	"properties": {
 		"schema": {
