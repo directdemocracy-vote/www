@@ -18,11 +18,13 @@
 		},
 		"key": {
 			"description": "public key of the author",
-			"type": "string"
+			"type": "string",
+			"maxLength": 512
 		},
 		"signature": {
 			"description": "signature of the author",
-			"type": "string"
+			"type": "string",
+			"maxLength": 512
 		},
 		"published": {
 			"description": "date of publication (milliseconds since 1970-01-01 00:00:00.000)",
