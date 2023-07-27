@@ -14,9 +14,6 @@ class Translator {
       .catch(() => {
         console.error(`Could not load "${dictionary_url}languages.json".`);
       });
-
-    this._languages = ['en', 'fr'];
-    this.language = 'default';
   }
   set language(language) {
     if (language === undefined)
