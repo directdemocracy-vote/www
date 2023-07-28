@@ -18,10 +18,10 @@ class Translator {
   set language(language) {
     if (language === undefined)
       language = navigator.languages ? navigator.languages[0] : navigator.language;
-    if (!this._languages.includes(language))
+    if (!Object.keys(this._languages).includes(language))
       language = language.substr(0, 2);
-    if (!this._languages.includes(language))
-      language = this._languages[0];
+    if (!Object.keys(this._languages).includes(language)) {
+      language = 'en';
     if (document.documentElement.lang !== language)
       document.documentElement.lang = language;
     fetch(`${this._dictionary_url}${language}.json`)
@@ -51,6 +51,9 @@ class Translator {
   }
   translate(key) {
     return this._dictionary[key];
+  }
+  languageName() {
+    return this._dictionary[this.language];
   }
 }
 export default Translator;
