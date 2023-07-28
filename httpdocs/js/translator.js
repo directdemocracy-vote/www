@@ -37,6 +37,9 @@ class Translator {
   get language() {
     return document.documentElement.lang;
   }
+  get languages() {
+    return this._languages;
+  }
   translatePage() {
     this._elements = document.querySelectorAll("[data-i18n]");
     this._elements.forEach((element) => {
@@ -51,9 +54,6 @@ class Translator {
   }
   translate(key) {
     return this._dictionary[key];
-  }
-  languageName() {
-    return this._dictionary[this.language];
   }
 }
 export default Translator;
