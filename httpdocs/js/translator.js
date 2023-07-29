@@ -55,7 +55,7 @@ class Translator {
       if (key in this.#dictionary)
         element.innerHTML = this.translate(key);
       else {
-        console.error(`Missing translation for key "${key}" in language "${this.#language}".`);
+        console.error(`Missing translation for key "${key}" in language "${this.language}".`);
         element.innerHTML = this.translate('en');
       }
     });
