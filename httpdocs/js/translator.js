@@ -4,7 +4,6 @@ class Translator {
   #url;
   #dictionary;
   #languages;
-  #language;
   constructor(url, language) {
     if (!url.endsWith('/'))
       url += '/';
@@ -13,25 +12,24 @@ class Translator {
       .then((r) => r.json())
       .then((languages) => {
         this.#languages = languages;
-        this.language2 = language;
+        this.language = language;
       })
       .catch((error) => {
         console.error(`Could not load "${url}languages.json".`);
         console.error(error);
       });
   }
-  set language2(l) {
+  set language(l) {
     console.log('l='+l);
     console.log(this.#languages);
     console.log(Object.keys(this.#languages));
     if (l === undefined)
-      this.#language = navigator.languages ? navigator.languages[0] : navigator.language;
-    console.log(this.#language);
-    if (!Object.keys(this.#languages).includes(this.#language))
-      this.#language = this.#language.substr(0, 2);
-    console.log(this.#language);
-    if (!Object.keys(this.#languages).includes(this.#language))
-      this.#language = 'en';
+      l = navigator.languages ? navigator.languages[0] : navigator.language;
+    if (!Object.keys(this.#languages).includes(l))
+      l = l.substr(0, 2);
+    console.log(l);
+    if (!Object.keys(this.#languages).includes(l))
+      l = 'en';
     if (document.documentElement.lang !== l)
       document.documentElement.lang = l;
     fetch(`${this.#url}${l}.json`)
@@ -44,7 +42,7 @@ class Translator {
         console.error(`Could not load "${this.#url}${l}.json".`);
       });
   }
-  get language2() {
+  get language() {
     return document.documentElement.lang;
   }
   get languages() {
