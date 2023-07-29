@@ -13,14 +13,14 @@ class Translator {
       .then((r) => r.json())
       .then((languages) => {
         this.#languages = languages;
-        this.language = language;
+        this.language2 = language;
       })
       .catch((error) => {
         console.error(`Could not load "${url}languages.json".`);
         console.error(error);
       });
   }
-  set language(language) {
+  set language2(language) {
     if (language === undefined)
       this.#language = navigator.languages ? navigator.languages[0] : navigator.language;
     if (!Object.keys(this.#languages).includes(language))
@@ -39,7 +39,7 @@ class Translator {
         console.error(`Could not load "${this.#url}${language}.json".`);
       });
   }
-  get language() {
+  get language2() {
     return document.documentElement.lang;
   }
   get languages() {
