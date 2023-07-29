@@ -45,6 +45,7 @@ class Translator {
     return document.documentElement.lang;
   }
   get languages() {
+    console.log(this.#languages);
     return this.#languages;
   }
   translatePage() {
