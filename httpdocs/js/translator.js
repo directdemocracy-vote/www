@@ -26,8 +26,10 @@ class Translator {
     console.log(Object.keys(this.#languages));
     if (l === undefined)
       this.#language = navigator.languages ? navigator.languages[0] : navigator.language;
+    console.log(this.#languages);
     if (!Object.keys(this.#languages).includes(this.#language))
       this.#language = l.substr(0, 2);
+    console.log(this.#languages);
     if (!Object.keys(this.#languages).includes(this.#language))
       this.#language = 'en';
     if (document.documentElement.lang !== l)
