@@ -1,18 +1,22 @@
 "use strict"
 
 class Translator {
-  constructor(dictionary_url, language) {
-    if (!dictionary_url.endsWith('/'))
-      dictionary_url += '/';
-    #dictionary_url = dictionary_url;
-    fetch(`${dictionary_url}languages.json`)
+  #url;
+  #dictionary;
+  #languages;
+  #language;
+  constructor(url, language) {
+    if (!url.endsWith('/'))
+      url += '/';
+    #url = url;
+    fetch(`${url}languages.json`)
       .then((r) => r.json())
       .then((languages) => {
         #languages = languages;
         #language = language;
       })
       .catch(() => {
-        console.error(`Could not load "${dictionary_url}languages.json".`);
+        console.error(`Could not load "${url}languages.json".`);
       });
   }
   set language(language) {
@@ -24,14 +28,14 @@ class Translator {
       #language = 'en';
     if (document.documentElement.lang !== language)
       document.documentElement.lang = language;
-    fetch(`${#dictionary_url}${language}.json`)
+    fetch(`${#url}${language}.json`)
       .then((r) => r.json())
       .then((dictionary) => {
         #dictionary = dictionary;
         this.translatePage();
       })
       .catch(() => {
-        console.error(`Could not load "${#dictionary_url}${language}.json".`);
+        console.error(`Could not load "${#url}${language}.json".`);
       });
   }
   get language() {
