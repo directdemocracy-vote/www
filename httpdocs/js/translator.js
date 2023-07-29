@@ -15,31 +15,28 @@ class Translator {
         this.language = language;
       })
       .catch((error) => {
-        console.error(`Could not load "${url}languages.json".`);
+        console.error(`Could not load "${url}language.json".`);
         console.error(error);
       });
   }
-  set language(l) {
-    console.log('l='+l);
-    console.log(this.#languages);
-    console.log(Object.keys(this.#languages));
-    if (l === undefined)
-      l = navigator.languages ? navigator.languages[0] : navigator.language;
-    if (!Object.keys(this.#languages).includes(l))
-      l = l.substr(0, 2);
-    console.log(l);
-    if (!Object.keys(this.#languages).includes(l))
-      l = 'en';
-    if (document.documentElement.lang !== l)
-      document.documentElement.lang = l;
-    fetch(`${this.#url}${l}.json`)
+  set language(language) {
+    if (language === undefined)
+      language = navigator.languages ? navigator.languages[0] : navigator.language;
+    if (!Object.keys(this.#languages).includes(language))
+      language = language.substr(0, 2);
+    if (!Object.keys(this.#languages).includes(language))
+      language = 'en';
+    if (document.documentElement.lang !== language)
+      document.documentElement.lang = language;
+    fetch(`${this.#url}${language}.json`)
       .then((r) => r.json())
       .then((dictionary) => {
         this.#dictionary = dictionary;
         this.translatePage();
       })
-      .catch(() => {
-        console.error(`Could not load "${this.#url}${l}.json".`);
+      .catch((error) => {
+        console.error(`Could not load "${this.#url}${language}.json".`);
+        console.log(error);
       });
   }
   get language() {
