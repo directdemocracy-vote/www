@@ -20,23 +20,26 @@ class Translator {
         console.error(error);
       });
   }
-  set language2(language) {
-    if (language === undefined)
+  set language2(l) {
+    console.log('l='+l);
+    console.log(this.#languages);
+    console.log(Object.keys(this.#languages));
+    if (l === undefined)
       this.#language = navigator.languages ? navigator.languages[0] : navigator.language;
-    if (!Object.keys(this.#languages).includes(language))
-      this.#language = language.substr(0, 2);
-    if (!Object.keys(this.#languages).includes(language))
+    if (!Object.keys(this.#languages).includes(l))
+      this.#language = l.substr(0, 2);
+    if (!Object.keys(this.#languages).includes(l))
       this.#language = 'en';
-    if (document.documentElement.lang !== language)
-      document.documentElement.lang = language;
-    fetch(`${this.#url}${language}.json`)
+    if (document.documentElement.lang !== l)
+      document.documentElement.lang = l;
+    fetch(`${this.#url}${l}.json`)
       .then((r) => r.json())
       .then((dictionary) => {
         this.#dictionary = dictionary;
         this.translatePage();
       })
       .catch(() => {
-        console.error(`Could not load "${this.#url}${language}.json".`);
+        console.error(`Could not load "${this.#url}${l}.json".`);
       });
   }
   get language2() {
