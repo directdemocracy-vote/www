@@ -12,6 +12,8 @@ class Translator {
       .then((r) => r.json())
       .then((languages) => {
         this.#languages = languages;
+        console.log(this.#languages);
+        console.log(this.languages);
         this.language = language;
       })
       .catch((error) => {
