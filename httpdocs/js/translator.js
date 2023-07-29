@@ -13,7 +13,7 @@ class Translator {
       .then((r) => r.json())
       .then((languages) => {
         this.#languages = languages;
-        this.#language = language;
+        this.language = language;
       })
       .catch(() => {
         console.error(`Could not load "${url}languages.json".`);
