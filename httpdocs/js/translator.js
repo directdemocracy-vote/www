@@ -15,8 +15,9 @@ class Translator {
         this.#languages = languages;
         this.language = language;
       })
-      .catch(() => {
+      .catch((error) => {
         console.error(`Could not load "${url}languages.json".`);
+        console.error(error);
       });
   }
   set language(language) {
