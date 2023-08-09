@@ -53,7 +53,10 @@ class Translator {
     let elements = document.querySelectorAll("[data-i18n]");
     elements.forEach((element) => {
       const key = element.dataset.i18n;
-      element.innerHTML = this.translate(key);
+      if (element.nodeName === 'INPUT')
+        element.placeholder = this.translate(key);
+      else
+        element.innerHTML = this.translate(key);
     });
   }
   translate(key) {
