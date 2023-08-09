@@ -59,12 +59,14 @@ class Translator {
         element.innerHTML = this.translate(key);
     });
   }
-  translate(key) {
-    if (key in this.#dictionary)
-      return this.#dictionary[key];
-    else {
+  translate(key, parameter) {
+    if (key in this.#dictionary) {
+      if (parameter === undefined)
+        return this.#dictionary[key];
+      return this.#dictionary[key].replace('%1', parameter);
+    } else {
       console.error(`Missing translation for key "${key}" in language "${this.language}".`);
-      return this.#dictionary['en'];
+      return key;
     }
   }
 }
