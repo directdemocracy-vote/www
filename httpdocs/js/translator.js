@@ -58,10 +58,10 @@ class Translator {
   }
   translate(key) {
     if (key in this.#dictionary)
-      return this.translate(key);
+      return this.#dictionary[key];
     else {
       console.error(`Missing translation for key "${key}" in language "${this.language}".`);
-      return this.translate('en');
+      return this.#dictionary['en'];
     }
   }
 }
