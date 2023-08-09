@@ -53,16 +53,16 @@ class Translator {
     let elements = document.querySelectorAll("[data-i18n]");
     elements.forEach((element) => {
       const key = element.dataset.i18n;
-      if (key in this.#dictionary)
-        element.innerHTML = this.translate(key);
-      else {
-        console.error(`Missing translation for key "${key}" in language "${this.language}".`);
-        element.innerHTML = this.translate('en');
-      }
+      element.innerHTML = this.translate[key];
     });
   }
   translate(key) {
-    return this.#dictionary[key];
+    if (key in this.#dictionary)
+      return this.translate(key);
+    else {
+      console.error(`Missing translation for key "${key}" in language "${this.language}".`);
+      return this.translate('en');
+    }
   }
 }
 export default Translator;
