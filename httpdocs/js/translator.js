@@ -13,8 +13,6 @@ class Translator {
       .then((languages) => {
         this.#languages = languages;
         this.language = language;
-        if (typeof this.onready === "function")
-          this.onready();
       })
       .catch((error) => {
         console.error(`Could not load "${url}language.json".`);
@@ -37,6 +35,8 @@ class Translator {
       .then((dictionary) => {
         this.#dictionary = dictionary;
         this.translatePage();
+        if (typeof this.onready === "function")
+          this.onready();
       })
       .catch((error) => {
         console.error(`Could not load "${this.#url}${language}.json".`);
