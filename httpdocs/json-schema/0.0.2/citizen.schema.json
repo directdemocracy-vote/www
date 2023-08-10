@@ -35,14 +35,14 @@
       "minimum": 0,
       "maximum": 999999999999999
     },
-    "familyName": {
-      "description": "last name of the citizen",
+    "givenNames": {
+      "description": "first name and possibly middle name of the citizen",
       "type": "string",
       "maxLength": 256,
       "minLength": 1
     },
-    "givenNames": {
-      "description": "first name and possibly middle name of the citizen",
+    "familyName": {
+      "description": "last name of the citizen",
       "type": "string",
       "maxLength": 256,
       "minLength": 1
