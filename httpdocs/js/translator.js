@@ -60,6 +60,8 @@ class Translator {
     });
   }
   translate(key, parameter) {
+    if (this.#dictionary === undefined)
+      return '';
     if (key in this.#dictionary) {
       if (parameter === undefined)
         return this.#dictionary[key];
