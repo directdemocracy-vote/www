@@ -9,8 +9,8 @@
     "key",
     "signature",
     "published",
+    "givenNomes",
     "familyName",
-    "givenNames",
     "picture",
     "latitude",
     "longitude"
@@ -35,7 +35,7 @@
       "minimum": 0,
       "maximum": 999999999999999
     },
-    "givenNames": {
+    "givenNomes": {
       "description": "first name and possibly middle name of the citizen",
       "type": "string",
       "maxLength": 256,
