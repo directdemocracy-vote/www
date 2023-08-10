@@ -51,6 +51,7 @@
       "description": "portrait ID photo of the citizen with a resolution of 150x200 pixels",
       "type": "string",
       "contentMediaType": "image/jpeg",
+      "contentEncoding": "base64",
       "maxLength": 32768
     },
     "latitude": {
