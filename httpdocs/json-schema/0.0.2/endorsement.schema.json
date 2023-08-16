@@ -31,7 +31,7 @@
       "minimum": 0,
       "maximum": 999999999999999
     },
-    "publication": {
+    "endorsedSignature": {
       "description": "signature of the endorsed publication",
       "type": "string",
       "maxLength": 512
