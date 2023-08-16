@@ -31,14 +31,14 @@
       "minimum": 0,
       "maximum": 999999999999999
     },
-    "revoke": {
-      "description": "boolean set to true to disapprove a publication and false to approve (default to false)",
-      "type": "boolean"
-    },
     "publication": {
       "description": "signature of the endorsed publication",
       "type": "string",
       "maxLength": 512
+    },
+    "revoke": {
+      "description": "boolean set to true to disapprove a publication and false to approve (default to false)",
+      "type": "boolean"
     },
     "message": {
       "description": "message encrypted with the public key of the author of the endorsed publication",
