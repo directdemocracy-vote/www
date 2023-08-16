@@ -9,7 +9,7 @@
     "key",
     "signature",
     "published",
-    "publication"
+    "endorsedSignature"
   ],
   "properties": {
     "schema": {
