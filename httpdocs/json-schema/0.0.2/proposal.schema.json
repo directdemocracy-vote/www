@@ -9,7 +9,7 @@
     "key",
     "signature",
     "published",
-    "trustee",
+    "judge",
     "area",
     "title",
     "description",
@@ -36,8 +36,8 @@
       "minimum": 0,
       "maximum": 999999999999999
     },
-    "trustee": {
-      "description": "public key of trustee that should be used to process this proposal",
+    "judge": {
+      "description": "public key of judge for this proposal",
       "type": "string",
       "maxLength": 512,
       "minLength": 1
