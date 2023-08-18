@@ -53,50 +53,50 @@ Although companies and states are attempting to censor it, the freedom of speech
 *directdemocracy.vote* relies on [public-key cryptography](https://en.wikipedia.org/wiki/Public-key_cryptography).
 Each citizen owns a pair of cryptographic keys: a private key which is held secret and a public key which is published online.
 To implement an electronic voting system or a petition signing system, each citizen must have a unique key pair recognized by the system.
-To ensure this uniqueness, a [web of trust](https://en.wikipedia.org/wiki/Web_of_trust) is implemented by trustees with the help of citizens.
+To ensure this uniqueness, a [web of trust](https://en.wikipedia.org/wiki/Web_of_trust) is implemented by judges with the help of citizens.
 
-#### Trustees
+#### Judges
 
-A trustee is a [web service](https://en.wikipedia.org/wiki/Web_service) which attributes a reputation each public key supposed to represent uniquely a citizen or a web service.
-Anyone can run a trustee, regardless of any official acknowledgement. Trustees also have a reputation which is given by other trustees with the help of citizens.
-Hence, trustees forms a community of web services which permanently evaluate the reputation of public keys for citizens and other web services.
+A judge is a [web service](https://en.wikipedia.org/wiki/Web_service) which attributes a reputation each public key supposed to represent uniquely a citizen or a web service.
+Anyone can run a judge, regardless of any official acknowledgement. Judges also have a reputation which is given by other judges with the help of citizens.
+Hence, judges form a community of web services which permanently evaluate the reputation of public keys for citizens and other web services.
 
 #### Endorsements
 
-In order to help trustees in their duties, citizens are asked to endorse each other and to endorse web services.
+In order to help judges in their duties, citizens are asked to endorse each other and to endorse web services.
 Endorsing a citizen is the action of publishing a signed message saying "I certify this public key is unique for this citizen".
 Endorsing a web service is the action of publishing a signed message saying "I believe this web service is honest and doing a good job". 
-Trustees collect all the endorsements published by the citizens to construct their own web of trust.
+Judges collect all the endorsements published by the citizens to construct their own web of trust.
 
 #### Reputation
 
-Each trustee publishes its own web of trust, which is a list of containing public keys and their associated reputation.
+Each judge publishes its own web of trust, which is a list of containing public keys and their associated reputation.
 The reputation is a number.
 If this number is above a threshold, it means the public key can be trusted.
-Trustees rely on their own algorithms to compute the reputation of public keys.
+Judges rely on their own algorithms to compute the reputation of public keys.
 These algorithms use endorsements as input and may be inspired by the [page rank algorithm](https://en.wikipedia.org/wiki/PageRank).
-However, their implementation is totally left to the trustee.
+However, their implementation is totally left to the judge.
 
 #### Trusted Public Keys
 
-It is very likely that the webs of trust published by different trustees will be similar to each other, forming a consensual web of trust.
+It is very likely that the webs of trust published by different judges will be similar to each other, forming a consensual web of trust.
 This consensual web of trust can in turn be used to evaluate if a key can be trusted.
 
-#### Optional Trustee Information
+#### Optional Judge Information
 
-Some trustees may optionally ask citizens to provide then some private information, which they should keep private.
+Some judges may optionally ask citizens to provide then some private information, which they should keep private.
 This information is useful to assess the reputation of citizens, that is one citizen registration corresponds to a single real individual.
 It may include local voter registration number, phone number, credit card number, ID card number, passport number, social insurance number, etc.
 Such private information should never be made public.
 It is managed by trustess themselves and is out of the scope of the *directdemocracy.vote* system.
-Citizens are free to choose a trustee among several for which they feel confident about the management of their private information.
-Some trustees may not require to ask any private information to citizen.
+Citizens are free to choose a judge among several for which they feel confident about the management of their private information.
+Some judges may not require to ask any private information to citizen.
 
 ### Polling Stations
 
 In *directdemocracy.vote* voting is implemented with the help of polling stations.
 Polling stations are web services which are responsible for anonymizing the votes of citizens.
-Like trustees and citizens, polling stations have a reputation and citizens can choose freely which polling station they would like to use.
+Like judges and citizens, polling stations have a reputation and citizens can choose freely which polling station they would like to use.
 
 ### Referendums and Petitions
 
@@ -147,7 +147,7 @@ It is not possible to know what a citizen voted.
 ### Decentralized and Open
 
 Similarly to the [Bitcoin](https://en.wikipedia.org/wiki/Bitcoin) and other distributed systems, nobody controls *directdemocracy.vote*, it simply belongs to its users.
-Anyone can contribute to *directdemocracy.vote* by implementing their own web services, such as apps, trustees, polling stations or publishers, that will immediately take part in the network and try to gain a good reputation.
+Anyone can contribute to *directdemocracy.vote* by implementing their own web services, such as apps, judges, polling stations or notaries, that will immediately take part in the network and try to gain a good reputation.
 
 ### Simple and Secure
 
@@ -175,8 +175,8 @@ There are 6 different types of participants in *directdemocracy.vote*:
 - **citizens**: they issue their citizen card, endorse other participants, create petitions and referendums, sign and vote.
 - **smartphone providers**: they provide mobile phones used by the citizens (Android, iOS, etc.).
 - **app providers**: they provide mobile apps running on the smartphone of the citizen and allowing them to participate to *directdemocracy.vote*.
-- **publishers**: they receive publications from all the participants (including other publishers) and make them public on the web.
-- **trustees**: they compute and publish a reputation for each participant.
+- **notaries**: they receive publications from all the participants (including other notaries) and make them public on the web.
+- **judges**: they compute and publish a reputation for each participant.
 - **polling stations**: they provide anonymity of vote in referendums.
 
 ### Cryptography
@@ -248,16 +248,16 @@ There are mainly 8 types of publications in *directdemocracy.vote*:
 #### Citizen
 
 Becoming a citizen means publishing some information about oneself: name, picture and GPS home location.
-This information is immediately made public through the publisher services.
+This information is immediately made public through the notary services.
 No other information is asked to the user in the registration process.
 Anyone can register on *directdemocracy.vote* to publish their own citizen publication, e.g., citizen card.
 However, this is not sufficient to take part in a referendum, so that their vote is taken into account.
-Citizen publications must be endorsed by the trustee of the referendum so that the corresponding citizen can vote.
-To get endorsed by the trustee, a citizen should acquire a sufficiently high reputation from that trustee.
+Citizen publications must be endorsed by the judge of the referendum so that the corresponding citizen can vote.
+To get endorsed by the judge, a citizen should acquire a sufficiently high reputation from that judge.
 To increase their reputation, a citizen should ask other citizens to endorse them.
-Alternatively, they may also ask some trustees to endorse them.
-Trustees compute the reputation of a citizen based on endorsements by citizens and by other trustees.
-If a citizen has a large number of endorsements from citizens and/or trustees with a good reputation, their reputation will increase and they will get endorsed by more and more trustees.
+Alternatively, they may also ask some judges to endorse them.
+Judges compute the reputation of a citizen based on endorsements by citizens and by other judges.
+If a citizen has a large number of endorsements from citizens and/or judges with a good reputation, their reputation will increase and they will get endorsed by more and more judges.
 
 A [citizen](https://directdemocracy.vote/json-schema/0.0.2/citizen.schema.json) publication contains the name, picture and GPS home location of a citizen.
 It is signed by the citizen themself.
@@ -329,7 +329,7 @@ schema: https://directdemocracy.vote/json-schema/0.0.2/proposal.schema.json
 key: [public key of participant]
 signature: [signature of participant]
 published: 1574679658399
-trustee: [public key of trustee]
+judge: [public key of judge]
 area: |
   city=Mâcon
   county=Saône-et-Loire
@@ -404,11 +404,11 @@ published: 1590298858399
 vote: [vote]
 ```
 
-### Publishers
+### Notaries
 
-Publishers are web services receiving publications from participants, including other publishers, and making them public.
-Publishers should communicate with other publishers to gather more publications and possibly delete obsolete publications.
-A good publisher is a publisher which publishes almost all the available publications of *directdemocracy.vote*.
+Notaries are web services receiving publications from participants, including other notaries, and making them public.
+Notaries should communicate with other notaries to gather more publications and possibly delete obsolete publications.
+A good notary is a notary which publishes almost all the available publications of *directdemocracy.vote*.
 Publications can be searched by various criterions: type, key, area, name, date, etc.
 
 ## Petitioning
@@ -426,7 +426,7 @@ A petition is published as a proposal by a participant.
 Any citizen located in the area of the petition and approving it will publish an endorsement for it.
 
 ### Counting
-Publishers could display the result of a petition by counting and listing the citizens who signed it, excluding non-trusted citizens and citizens outside of the petition area.
+Notaries could display the result of a petition by counting and listing the citizens who signed it, excluding non-trusted citizens and citizens outside of the petition area.
 
 ## Voting
 This section describe the full voting process in details.
@@ -438,17 +438,17 @@ The voting process is summarized on the following figure:
 
 #### Referendum Publication
 
-A referendum *R* is published with a reference to trustee *T*.
+A referendum *R* is published with a reference to judge *J*.
 
 #### Polling Station Participation
 
-A polling station *S*, which is trusted by *T*, decide to participate to referendum *R* by generating a key pair *S<sub>R</sub>* and publishing a *participation* blob signed with its *S* public key and containing the public key of *S<sub>R</sub>* together with the public key of *R*.
+A polling station *S*, which is trusted by *J*, decide to participate to referendum *R* by generating a key pair *S<sub>R</sub>* and publishing a *participation* blob signed with its *S* public key and containing the public key of *S<sub>R</sub>* together with the public key of *R*.
 A polling station should publish only one *participation* per referendum, otherwise, it will be distrusted.
 
 #### Citizen Registration
 
 A citizen *A* announces their *registration* to referendum *R* at polling station *S*.
-The app used by *A* should ensure that *S* is trusted by *T*.
+The app used by *A* should ensure that *S* is trusted by *J*.
 The app generates a vote *V* which is actually a pseudo-random hash containing the answer of the citizen to the referendum question.
 For example if the possible answers are "yes", "no" and "abstain", it can be encoded on two bits.
 Thus, the app will generate random hashes until the first two bits of a hash match the answer of the citizen to the question.
@@ -461,7 +461,7 @@ The encryption algorithm used by the app to generate *V<sup>A</sup>* supports [b
 *S* determines if *A* is allowed to vote to *R*.
 If yes, it publishes a *ballot* message containing the encrypted vote *V<sup>A</sup>* blindly signed with *S<sub>R</sub>* and informs *A* about it.
 *A* is allowed to vote to *R* if they have a sufficiently high reputation and they have not already registered to vote at *R*.
-*A* has a sufficiently high reputation if they are trusted by the trustee of *R*.
+*A* has a sufficiently high reputation if they are trusted by the judge of *R*.
 *A* has not already registered to vote to *R* if they have not already published a signed registration to *R* at *S* or another station.
 
 #### Vote
@@ -546,7 +546,7 @@ However today [a large percentage of the adult population has a such a device](h
 A malicious polling station may misbehave, but this will be visible by all.
 If that happens, all the votes handled by this stations will be discarded.
 All the honest citizens who voted through this polling station will loose their vote.
-And the polling station will get a bad reputation from most of the trustees and won't be used any more.
+And the polling station will get a bad reputation from most of the judges and won't be used any more.
 A polling station handling a large number of votes is however unlikely to misbehave.
 This is because to have a large number of votes, a polling station should have a high reputation.
 And a high reputation is only possible if the station never misbehaved.
@@ -561,7 +561,7 @@ Any malicious participant could be spotted by other participants and its reputat
 It is not possible for a citizen to prove what they voted or sell their vote, unless the citizen sell their smartphone to some buyer after they acquired a high trust level.
 This is however unlikely to happen at large scale without being discovered.
 Also the sold citizen card could not get nor provide any further fair endorsement which will appear suspect after a while.
-That includes trustee endorsements which may happen on regular time intervals.
+That includes judge endorsements which may happen on regular time intervals.
 When discovered, a citizen who sold his smartphone with access to their *directdemocracy.vote* app, is unlikely to get trusted again in the future.
 
 ## Implementation
@@ -571,8 +571,8 @@ When discovered, a citizen who sold his smartphone with access to their *directd
 A fully working open-source implementation is provided on https://directdemocracy.vote
 It includes a minimal working system:
 - a [smartphone app](https://app.directdemocracy.vote) for both Android and iOS.
-- a [publisher](https://publisher.directdemocracy.vote).
-- a [trustee](https://trustee.directdemocracy.vote) implementing a simple [page rank algorithm](https://en.wikipedia.org/wiki/PageRank) among citizens to compute their reputation.
+- a [notary](https://notary.directdemocracy.vote).
+- a [judge](https://judge.directdemocracy.vote) implementing a simple [page rank algorithm](https://en.wikipedia.org/wiki/PageRank) among citizens to compute their reputation.
 - a [polling station](https://station.directdemocracy.vote).
 
 The source code is available at https://github.com/directdemocracy-vote/
@@ -581,7 +581,7 @@ But it is not yet ready to scale up at a larger levels, mainly due to the capaci
 
 ### Scaling-up
 
-It is easy for any individual computer scientist or organization to deploy their own servers (publishers, trustees and stations).
+It is easy for any individual computer scientist or organization to deploy their own servers (notaries, judges and stations).
 By increasing the number of servers, the system will be able to handle a larger number of citizens, and eventually the whole humanity.
 
 ### Improved Implementations
@@ -589,7 +589,7 @@ By increasing the number of servers, the system will be able to handle a larger 
 The open source software can be forked to create new versions of the app and web services.
 The resulting new software should respect the specifications to be inter-operable with other implementations.
 The current sample implementation the app and web services is minimal and could be greatly improved by developers.
-Improvements include a better user interface of the app, better trustees algorithms, better data exchange between publishers, etc.
+Improvements include a better user interface of the app, better judges algorithms, better data exchange between notaries, etc.
 
 ## Strategy
 
@@ -636,7 +636,7 @@ You certainly can help now to achieve such a bright future:
 - Participate to the democratic debates!
 - Endorse others!
 - Vote!
-- Develop and run a trustee, a polling station, a publisher or an app!
+- Develop and run a judge, a polling station, a notary or an app!
 - Force the rulers to respect the outcome of the referendums!
 
 Your grandchildren will thank you for this.
