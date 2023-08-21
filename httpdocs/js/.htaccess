@@ -1,4 +1,4 @@
-SetEnvIf Origin "^https:\/\/[^\/]*directdemocracy\.vote$" ORIGIN=$0
+SetEnvIf Origin "^https://[^/]*\.directdemocracy\.vote$" ORIGIN=$0
 Header set Access-Control-Allow-Origin %{ORIGIN}e env=ORIGIN
 Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
 Header set Access-Control-Allow-Headers "Content-Type"
