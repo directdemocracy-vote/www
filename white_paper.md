@@ -10,8 +10,8 @@ Version: 0.0.2 (draft)
 It relies on the Internet, decentralization and cryptography to guarantee a fair voting system.
 The principle is that people become citizens by getting trusted by others.
 Citizens can vote and propose referendums regardless of any official acknowledgement.
-Referendum results with a low participation could be ignored or considered as simple survey results.
 They could feed debates, influence political decisions and foster more people to become citizens.
+Referendum results with a low participation could be ignored or considered as simple survey results.
 Referendum results with a large participation will become significant from a democratic point of view.
 This will increase the pressure on governments to respect the democratic choices expressed by their people.
 Eventually, governments will officially recognize and contribute to *directdemocracy.vote*.
@@ -26,7 +26,7 @@ I will answer them: *[directdemocracy.vote](https://directdemocracy.vote)*.
 
 I believe that [direct democracy](https://en.wikipedia.org/wiki/Direct_democracy) is the best political system to address the challenges that the humanity is facing: global warming, biodiversity, overpopulation, human rights, peace and prosperity.
 In this political system, any citizen can propose a referendum for a law that will enter in force if a majority of citizens approves it.
-Direct democracy is implemented in a few countries, like Switzerland, where it has proved efficient to address local challenges. 
+Direct democracy is implemented in a few countries, like Switzerland, where it has proved efficient to address local challenges.
 However, many decisions, in particular with respect to ecology and peace, cannot simply be taken at the level of a single country.
 Instead they should be taken globally.
 
@@ -65,7 +65,7 @@ Hence, judges form a community of web services which permanently evaluate the re
 
 In order to help judges in their duties, citizens are asked to endorse each other and to endorse web services.
 Endorsing a citizen is the action of publishing a signed message saying "I certify this public key is unique for this citizen".
-Endorsing a web service is the action of publishing a signed message saying "I believe this web service is honest and doing a good job". 
+Endorsing a web service is the action of publishing a signed message saying "I believe this web service is honest and doing a good job".
 Judges collect all the endorsements published by the citizens to construct their own web of trust.
 
 #### Reputation
@@ -84,11 +84,11 @@ This consensual web of trust can in turn be used to evaluate if a key can be tru
 
 #### Optional Judge Information
 
-Some judges may optionally ask citizens to provide then some private information, which they should keep private.
+Some judges may optionally ask citizens to provide them some private information, which they should keep private.
 This information is useful to assess the reputation of citizens, that is one citizen registration corresponds to a single real individual.
 It may include local voter registration number, phone number, credit card number, ID card number, passport number, social insurance number, etc.
 Such private information should never be made public.
-It is managed by trustess themselves and is out of the scope of the *directdemocracy.vote* system.
+It is managed by judges themselves and is out of the scope of the *directdemocracy.vote* system.
 Citizens are free to choose a judge among several for which they feel confident about the management of their private information.
 Some judges may not require to ask any private information to citizen.
 
@@ -105,6 +105,13 @@ Once a referendum is published, the voting process takes place.
 Citizens use polling stations to cast their vote anonymously and the results are published online.
 Once a petition is published, the signature process takes place.
 Citizen can sign the petition and immediately publish online their signature for this petition.
+
+### Notaries
+
+Notaries are web services receiving publications from participants, including other notaries, and making them public.
+Notaries should communicate with other notaries to gather more publications and possibly delete obsolete publications.
+A good notary is a notary which publishes almost all the available publications of *directdemocracy.vote*.
+Publications can be searched by various criterions: type, key, area, name, date, etc.
 
 ## Properties
 
@@ -125,7 +132,7 @@ Citizens should publish a minimal amount of information about themselves: name, 
 This is necessary to declare to others their existence as a citizen.
 Also other publications are needed by the voting process, like the participation of a citizen to a referendum.
 Such publications are publicly available online and cannot be removed (although they can be revoked by their authors).
-It is a bit similar to what happens with crypto currencies where the transaction information is publicly stored in a block chain.
+It is a bit similar to what happens with crypto currencies where the transaction information is publicly stored in a blockchain.
 
 ### Free and Open Source
 
@@ -199,7 +206,7 @@ The app also generates a password protected revocation message that the particip
 
 The operating system of the smartphone also provides integrity checks on itself and on the app.
 The app integrity check prevents malicious users from using a modified app to cheat or to extract sensitive data.
-The operating system integrity check prevents malicious users from modifying the behavior of the app at run-time or extracting sensitive data. 
+The operating system integrity check prevents malicious users from modifying the behavior of the app at run-time or extracting sensitive data.
 These features are currently offered by the [Android Play Integrity](https://developer.android.com/google/play/integrity) and the [Apple iOS DeviceCheck](https://developer.apple.com/documentation/devicecheck).
 They require however that the app is provided through the official app store of the operating system.
 
@@ -378,9 +385,9 @@ participation: [public key of participation generated by station]
 ```
 
 #### Ballot
-A [ballot publication](https://directdemocracy.vote/json-schema/0.0.2/ballot.schema.json) contains the public key of a referendum, the answer to question of asked in the referendum.
+A [ballot publication](https://directdemocracy.vote/json-schema/0.0.2/ballot.schema.json) contains the public key of a referendum, the answer to the question asked in the referendum.
 Secret ballots are signed by a station.
-Public ballots are signed by citizens. 
+Public ballots are signed by citizens.
 
 Example:
 ```yaml
@@ -403,13 +410,6 @@ signature: [signature of participation]
 published: 1590298858399
 vote: [vote]
 ```
-
-### Notaries
-
-Notaries are web services receiving publications from participants, including other notaries, and making them public.
-Notaries should communicate with other notaries to gather more publications and possibly delete obsolete publications.
-A good notary is a notary which publishes almost all the available publications of *directdemocracy.vote*.
-Publications can be searched by various criterions: type, key, area, name, date, etc.
 
 ## Petitioning
 This section describe the full petitioning process in details.
@@ -490,7 +490,7 @@ If *S* doesn't answer quickly to the *registration* of *A* by publishing a corre
 #### Vote Ballot Mismatch
 
 If for a *S<sub>R</sub>* there is more *votes* than *ballots*, then the station is considered as cheating.
-It that happens, the reputation of the station is immediately distrusted and all its *votes* and *ballots* are ignored.
+If that happens, the reputation of the station is immediately distrusted and all its *votes* and *ballots* are ignored.
 This is unlikely to happen as the interest of stations is to maintain a high reputation on a large number of referendums.
 
 #### Citizen Voting Twice
@@ -597,7 +597,7 @@ We aim at getting *directdemocracy.vote* used by a large number of citizens to i
 In order to achieve this goal, we plan to start small with local petitions and/or referendum in small municipalities, like villages.
 It is likely that there exist many villages in the world where a majority of people disagrees with the local municipality on some topic.
 Thus a couple of citizens in one of these villages may decide to use *directdemocracy.vote* to organize a local referendum.
-The local municipality may decide ignore the outcome of the referendum.
+The local municipality may decide to ignore the outcome of the referendum.
 However, the local news may relay the fact that some citizens self-organized a referendum to increase the pressure on the municipality.
 This will have a side effect to spread the word about *directdemocracy.vote* and encourage other villages or cities to use it.
 At some point, citizens will launch a referendum for a whole region, then a whole country.
