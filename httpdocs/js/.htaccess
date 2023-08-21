@@ -1,3 +1,3 @@
-Header set Access-Control-Allow-Origin "https://app.directdemocracy.vote, https://app-1.directdemocracy.vote"
+Header set Access-Control-Allow-Origin "https://app.directdemocracy.vote"
 Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
 Header set Access-Control-Allow-Headers "Content-Type"
