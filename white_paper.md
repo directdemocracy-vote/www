@@ -83,7 +83,7 @@ This consensual web of trust can in turn be used to evaluate if a key can be tru
 
 #### Optional Judge Information
 
-Some judges may optionally ask citizens to provide them some private information, which they should keep private.
+Some judges may optionally ask citizens to provide them with some private information, which they should keep private.
 This information is useful to assess the reputation of citizens, that is one citizen registration corresponds to a single real individual.
 It may include local voter registration number, phone number, credit card number, ID card number, passport number, social insurance number, etc.
 Such private information should never be made public.
