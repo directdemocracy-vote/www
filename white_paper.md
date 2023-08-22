@@ -107,7 +107,7 @@ Citizen can sign the petition and immediately publish online their signature for
 
 ### Notaries
 
-Notaries are web services receiving publications from participants, including other notaries, and making them public.
+Notaries are web services receiving publications from participants, including other notaries, and making them public to anyone in the world.
 When a participant publishes something, it means that the participant sends a signed message to a notary and the notary makes it publicly available.
 Notaries should also communicate with other notaries to gather more publications.
 A good notary is a notary which publishes all the available publications of *directdemocracy.vote*.
