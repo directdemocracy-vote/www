@@ -294,7 +294,7 @@ Otherwise, in case of the endorsement of a web service or an app, it means that 
 An important endorsement is the integrity endorsement signed by the app provider which means that a citizen registered their citizen card using the genuine app running on a non-rooted unmodified smartphone.
 A citizen card failing to receive an integrity endorsement from a trusted app provider should not be trusted.
 
-A **revocation** is a special kind of endorsement meant to revoke a publication. It has its revocation field set to true. A revocation can be published by a citizen to revoke her own citizen card. Then, they may create a new card with the same public key or a new public key. Revocations are also published by participants to distrust other participants, or to cancel endorsements they previously published.
+A **revocation** is a special kind of endorsement meant to revoke a publication. It has its revocation field set to true. A revocation can be published by a citizen to revoke her own citizen card. Then, they may create a new card with the same public key or a new public key. Revocations are also published by participants to cancel endorsements they previously published.
 
 Example:
 ```yaml
