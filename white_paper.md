@@ -69,11 +69,15 @@ Judges collect all the endorsements published by the citizens to construct their
 
 #### Reputation
 
-Each judge publishes its own web of trust, which is a list of containing public keys and their associated reputation.
+Judges evaluate the reputation of all the participants: citizens, notaries, pooling stations and other judges.
 The reputation is a number.
-If this number is above a threshold, it means the public key can be trusted.
-Judges rely on their own algorithms to compute the reputation of public keys.
+When the reputation of a participant is above a threshold defined by the judge, the judge publishes an endorsement for this partipant.
+Polling stations query the notaries to check if a citizen was endorsed by the judge of a referendum.
+Anyone can query a judge to get the reputation of a participant.
+The judge shall also display publicly the threshold above which it considers that a participant can be trusted.
+Judges rely on their own algorithms to compute the reputation of participants.
 These algorithms use endorsements as input and may be inspired by the [page rank algorithm](https://en.wikipedia.org/wiki/PageRank).
+They may also take into account the date of the endorsements and the distance between the endorsing citizen and the endorsed citizen.
 However, their implementation is totally left to the judge.
 
 #### Trusted Public Keys
