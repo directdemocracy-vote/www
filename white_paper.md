@@ -79,11 +79,7 @@ Judges rely on their own algorithms to compute the reputation of participants.
 These algorithms use endorsements as input and may be inspired by the [page rank algorithm](https://en.wikipedia.org/wiki/PageRank).
 They may also take into account the date of the endorsements and the distance between the endorsing citizen and the endorsed citizen.
 However, their implementation is totally left to the judge.
-
-#### Trusted Public Keys
-
-It is very likely that the webs of trust published by different judges will be similar to each other, forming a consensual web of trust.
-This consensual web of trust can in turn be used to evaluate if a key can be trusted.
+It is very likely that the endorsements published by different judges will be similar to each other, thus converging towards a consensual web of trust.
 
 #### Optional Judge Information
 
