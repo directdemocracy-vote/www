@@ -10,9 +10,8 @@ Version: 0.0.2 (draft)
 It relies on the Internet, decentralization and cryptography to guarantee a fair voting system.
 The principle is that people become citizens by getting trusted by others.
 Citizens can vote and propose referendums regardless of any official acknowledgement.
-They could feed debates, influence political decisions and foster more people to become citizens.
-Referendum results with a low participation could be ignored or considered as simple survey results.
-Referendum results with a large participation will become significant from a democratic point of view.
+Referendum with a low participation could be ignored or considered as simple survey results.
+Referendum with a large participation will become significant from a democratic point of view.
 This will increase the pressure on governments to respect the democratic choices expressed by their people.
 Eventually, governments will officially recognize and contribute to *directdemocracy.vote*.
 The system can be applied locally at the municipal level, or more globally at regional, national or international levels.
