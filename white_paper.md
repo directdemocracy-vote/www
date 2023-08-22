@@ -108,9 +108,9 @@ Citizen can sign the petition and immediately publish online their signature for
 ### Notaries
 
 Notaries are web services receiving publications from participants, including other notaries, and making them public.
-Notaries should communicate with other notaries to gather more publications and possibly delete obsolete publications.
-A good notary is a notary which publishes almost all the available publications of *directdemocracy.vote*.
-Publications can be searched by various criterions: type, key, area, name, date, etc.
+Notaries should communicate with other notaries to gather more publications.
+A good notary is a notary which publishes all the available publications of *directdemocracy.vote*.
+Notaries also provide a web user interface to allow anyone to search and browse the various publications.
 
 ## Properties
 
