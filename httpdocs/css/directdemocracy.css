@@ -1,4 +1,4 @@
-@media(max-width: 200px) {
+@media (max-width: 200px) {
   .hero .f7-icons {
     font-size:24px;
   }
@@ -9,7 +9,7 @@
     font-size: 6px;
   }
 }
-@media(max-width: 1000px) {
+@media (min-width: 201px) and (max-width: 1000px) {
   .hero .f7-icons {
     font-size:12vw;
   }
@@ -20,7 +20,7 @@
     font-size: 3vw;
   }
 }
-@media(min-width: 1000px) {
+@media (min-width: 1001px) {
   .hero .f7-icons {
     font-size:120px;
   }
