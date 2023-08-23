@@ -1,87 +1,10 @@
-.jumbotron {
-  background: url("../images/handsup.jpg") no-repeat center center;
-}
-.nav-link {
-  outline: 0
-}
-.directdemocracy-title {
-  padding: 10px 0 0 0;
-  color: black;
-}
-.directdemocracy-subtitle {
-  color:black;
-  background: rgba(255,255,255,0.7);
-  border-radius: 6px;
-  width: 430px;
-  padding: 15px 20px 15px 20px;
-  box-shadow: rgba(0,0,0,0.2) 0px 2px 3px, inset rgba(0,0,0,0.2) 0px -1px 2px;
-}
-.directdemocracy-subtitle h3 {
-  font-family: sans-serif;
-  font-weight: normal;
-  font-size:120%;
-}
-.directdemocracy-title h1 {
-  font-size:280%;
-}
+/*
 @media(max-width: 500px) {
-  .directdemocracy-title {
-    font-size:3.2vw;
-  }
-  .directdemocracy-title-logo {
-    width: 17vw;
-  }
-  .directdemocracy-subtitle {
-    width: 100%;
+  .hero-body.i {
+    font-size:50px;
   }
 }
-.corner-ribbon {
-  z-index:500;
-  position: fixed;
-  top: 25px;
-  right: -50px;
-  width: 200px;
-  text-align: center;
-  font-size: 18px;
-  line-height: 40px;
-  letter-spacing: 1px;
-  color: #f0f0f0;
-  transform: rotate(45deg);
-  background: #e43;
-  box-shadow: 1px 2px 3px rgba(0,0,0,.3);
-  opacity: 0.85;
-  text-transform: uppercase;
-  font-family: Verdana, Geneva, sans-serif;
-}
-
-.citizen-label {
-  white-space: nowrap;
-  padding-top: 1px;
-  font-size: 80%;
-  color: grey;
-}
-
-.citizen-entry {
-  white-space: nowrap;
-  font-weight: bold;
-  font-size: 120%;
-  padding-bottom: 3px;
-}
-
-.citizen-date {
-  color:black;
-  font-weight:bold;
-}
-
-.revoked {
-  filter: grayscale(100%);
-  background-color: #ddd;
-}
-
-.revoked .citizen-date {
-  color:grey;
-}
-
-.revoked img {
-  filter: blur(2px);
+*/
+.hero-body.i {
+  font-size:50px;
 }
