@@ -37,10 +37,11 @@
       "maximum": 999999999999999
     },
     "judge": {
-      "description": "public key of judge for this proposal",
+      "description": "URL of the judge for this proposal",
       "type": "string",
-      "maxLength": 512,
-      "minLength": 1
+      "format": "uri",
+      "maxLength": 128,
+      "minLength": 11
     },
     "area": {
       "description": "signature of an area publication",
