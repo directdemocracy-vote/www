@@ -79,7 +79,7 @@ window.onload = function() {
         }
       }
     };
-    xhttp.open('POST', publisher + '/coordinates.php', true);
+    xhttp.open('POST', publisher + '/api/coordinates.php', true);
     xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhttp.send('key=' + encodeURIComponent(stripped_key(citizen_crypt.getPublicKey())));
   }
@@ -96,7 +96,7 @@ window.onload = function() {
         }
       }
     };
-    xhttp.open('POST', trustee + '/key.php', true);
+    xhttp.open('POST', trustee + '/api/key.php', true);
     xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhttp.send();
   }
@@ -263,13 +263,13 @@ window.onload = function() {
                   publisher + '/' + publication_type + '.html?fingerprint=' + answer.fingerprint + '">here</a>.<br>');
             }
           };
-          xhttp.open('POST', publisher + '/publish.php', true);
+          xhttp.open('POST', publisher + '/api/publish.php', true);
           xhttp.send(JSON.stringify(publication));
         }
       }
     };
     let query = publication.area.trim().replace(/(\r\n|\n|\r)/g, "&");
-    xhttp.open('GET', trustee + '/publish_area.php?' + query, true);
+    xhttp.open('GET', trustee + '/api/publish_area.php?' + query, true);
     xhttp.send();
   });
   generateNewKeyPair();
