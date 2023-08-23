@@ -336,7 +336,7 @@ schema: https://directdemocracy.vote/json-schema/0.0.2/proposal.schema.json
 key: [public key of participant]
 signature: [signature of participant]
 published: 1574679658399
-judge: [public key of judge]
+judge: https://judge.directdemocracy.vote
 area: |
   city=Mâcon
   county=Saône-et-Loire
