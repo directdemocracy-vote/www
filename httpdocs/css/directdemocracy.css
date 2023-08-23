@@ -1,10 +1,33 @@
+@media(max-width: 200px) {
+  .hero .f7-icons {
+    font-size:24px;
+  }
+  .hero .title {
+    font-size: 12px;
+  }
+  .hero .subtitle {
+    font-size: 6px;
+  }
+}
 @media(max-width: 1000px) {
   .hero .f7-icons {
     font-size:12vw;
+  }
+  .hero .title {
+    font-size: 6vw;
+  }
+  .hero .subtitle {
+    font-size: 3vw;
   }
 }
 @media(min-width: 1000px) {
   .hero .f7-icons {
     font-size:120px;
+  }
+  .hero .title {
+    font-size:60px;
+  }
+  .hero .subtitle {
+    font-size:30px;
   }
 }
