@@ -1,15 +1,15 @@
-@media (max-width: 200px) {
+@media (max-width: 400px) {
   .hero .f7-icons {
-    font-size:24px;
+    font-size:48px;
   }
   .hero .title {
-    font-size: 12px;
+    font-size: 24px;
   }
   .hero .subtitle {
-    font-size: 6px;
+    font-size: 12px;
   }
 }
-@media (min-width: 201px) and (max-width: 1000px) {
+@media (min-width: 401px) and (max-width: 1000px) {
   .hero .f7-icons {
     font-size:12vw;
   }
