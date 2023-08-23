@@ -1,7 +1,7 @@
 window.onload = function() {
   const directdemocracy_version = '0.0.1';
   const publisher = localStorage.getItem('publisher');
-  const trustee = localStorage.getItem('trustee');
+  const judge = localStorage.getItem('judge');
   const citizen_private_key = localStorage.getItem('privateKey');
   const publication_type = document.getElementById('publication_type').value;
 
@@ -11,7 +11,7 @@ window.onload = function() {
   let area = '';
   let citizen_crypt = null;
   let publication_crypt = null;
-  let trustee_key = '';
+  let judge_key = '';
   let offset = new Date().getTimezoneOffset();
   let hour = -offset / 60;
   let v = '';
@@ -83,20 +83,20 @@ window.onload = function() {
     xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhttp.send('key=' + encodeURIComponent(stripped_key(citizen_crypt.getPublicKey())));
   }
-  if (trustee) {
+  if (judge) {
     let xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
       if (this.status == 200) {
         let answer = JSON.parse(this.responseText);
         if (answer.error)
-          showModal('Trustee key', JSON.stringify(answer.error));
+          showModal('judge key', JSON.stringify(answer.error));
         else {
-          trustee_key = answer.key;
+          judge_key = answer.key;
           validate();
         }
       }
     };
-    xhttp.open('POST', trustee + '/api/key.php', true);
+    xhttp.open('POST', judge + '/api/key.php', true);
     xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhttp.send();
   }
@@ -175,7 +175,7 @@ window.onload = function() {
       return;
     if (publication_private_key === '')
       return;
-    if (trustee_key == '')
+    if (judge_key == '')
       return;
     if (document.getElementById('title').value == '')
       return;
@@ -228,7 +228,7 @@ window.onload = function() {
     publication.signature = '';
     publication.published = new Date().getTime();
     publication.expires = new Date(new Date().setFullYear(new Date().getFullYear() + 10)).getTime(); // 10 years
-    publication.trustee = trustee_key;
+    publication.judge = judge_key;
     publication.area = area;
     publication.title = document.getElementById('title').value.trim();
     publication.description = document.getElementById('description').value.trim();
@@ -269,7 +269,7 @@ window.onload = function() {
       }
     };
     let query = publication.area.trim().replace(/(\r\n|\n|\r)/g, "&");
-    xhttp.open('GET', trustee + '/api/publish_area.php?' + query, true);
+    xhttp.open('GET', judge + '/api/publish_area.php?' + query, true);
     xhttp.send();
   });
   generateNewKeyPair();
