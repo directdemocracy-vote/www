@@ -1,11 +1,10 @@
-/*
-@media(max-width: 500px) {
-  .hero-body.i {
-    font-size:50px;
+@media(max-width: 1000px) {
+  .hero .f7-icons {
+    font-size:12vw;
   }
 }
-*/
-@media(max-width: 800px) {
-.hero .f7-icons {
-  font-size:12vw;
+@media(min-width: 1000px) {
+  .hero .f7-icons {
+    font-size:500px;
+  }
 }
