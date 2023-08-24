@@ -130,6 +130,8 @@ It is not stored on a private server.
 This guarantees that this information cannot be retained or sold.
 Citizens should publish a minimal amount of information about themselves: name, picture and GPS home location.
 This is necessary to declare to others their existence as a citizen.
+However, if publishing the picture is a problem for a citizen, it may be possible to publish a blank picture.
+Similarly, if publishing the GPS home location is a problem, it may be possible to publish the GPS location of the town hall of the city where the citizen lives.
 Also other publications are needed by the voting process, like the participation of a citizen to a referendum.
 Such publications are publicly available online and cannot be removed (although they can be revoked by their authors).
 It is a bit similar to what happens with crypto currencies where the transaction information is publicly stored in a blockchain.
