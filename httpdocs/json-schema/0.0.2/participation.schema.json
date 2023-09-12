@@ -17,12 +17,12 @@
       "const": "https://directdemocracy.vote/json-schema/0.0.2/participation.schema.json"
     },
     "key": {
-      "description": "public key of the citizen",
+      "description": "public key of the polling station",
       "type": "string",
       "maxLength": 512
     },
     "signature": {
-      "description": "signature of the citizen",
+      "description": "signature of the polling station",
       "type": "string",
       "maxLength": 512
     },
