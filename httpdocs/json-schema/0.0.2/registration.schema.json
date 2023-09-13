@@ -10,7 +10,7 @@
     "signature",
     "published",
     "participation",
-    "encrypted_vote"
+    "encryptedVote"
   ],
   "properties": {
     "schema": {
@@ -37,7 +37,7 @@
       "type": "string",
       "maxLength": 512
     },
-    "encrypted_vote": {
+    "encryptedVote": {
       "description": "vote encrypted by the citizen for blind signature by the station",
       "type": "string"
     }
