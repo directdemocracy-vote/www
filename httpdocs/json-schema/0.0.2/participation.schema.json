@@ -10,7 +10,7 @@
     "signature",
     "published",
     "referendum",
-    "participation"
+    "blindKey"
   ],
   "properties": {
     "schema": {
@@ -37,8 +37,8 @@
       "type": "string",
       "maxLength": 512
     },
-    "participation": {
-      "description": "public key of the participation issued by the station",
+    "blindKey": {
+      "description": "public key of used by the station for blind signature",
       "type": "string",
       "maxLength": 512
     }
