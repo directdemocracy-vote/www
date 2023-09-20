@@ -9,7 +9,8 @@
     "key",
     "signature",
     "published",
-    "vote"
+    "vote",
+    "blindSignature"
   ],
   "properties": {
     "schema": {
@@ -32,7 +33,11 @@
       "maximum": 999999999999999
     },
     "vote": {
-      "description": "vote of a citizen containing their answer accepted by the station",
+      "description": "vote of a citizen containing a unique number and their answer",
+      "type": "string"
+    }
+    "blindSignature": {
+      "description": "signature of the vote",
       "type": "string"
     }
   },
