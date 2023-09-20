@@ -440,34 +440,35 @@ The voting process is summarized on the following figure:
 
 #### Referendum Publication
 
-A referendum *R* is published with a reference to judge *J*.
+A referendum with public a key *R* is published with a reference to the public key *J* of a judge.
 
 #### Polling Station Participation
 
-A polling station *S*, which is trusted by *J*, decide to participate to referendum *R* by generating a key pair *B* and publishing a *participation* blob signed with its *S* public key and containing the public key of *B* together with the public key of *R*.
+A polling station with a public key *S*, which is trusted by the *J*, decide to participate to referendum *R* by generating a public key *B* and it corresponding private key and publishing a *participation* blob signed with its *S* key and containing *B* together with *R*.
 A polling station should publish only one *participation* per referendum, otherwise, it will be distrusted.
 
 #### Citizen Registration
 
-A citizen *A* announces their *registration* to referendum *R* at polling station *S*.
+A citizen with public key *A* announces their *registration* to referendum *R* at polling station *S*.
 The app used by *A* should ensure that *S* is endorsed by *J*.
-The app generates a vote message *V* which contains a publication date in the future, a random ballot number and the answer of the citizen to the referendum question.
+The app generates a vote blob *V* which contains a publication date in the future, a unique random ballot number and the answer of the citizen to the referendum question.
 The answer could be "yes", "no", "abstain" or something else.
-The app encrypts *V* with the private key of *A* to generate *V<sup>A</sup>*, adds *B*, publish this signed blob and informs *S* about it.
+The app encrypts *V* with the private key of *A* to generate *V<sup>a</sup>*, adds *B*, publish this signed blob and informs *S* about it.
 The encryption algorithm used by the app to generate *V<sup>A</sup>* supports [blind signature](https://en.wikipedia.org/wiki/Blind_signature).
 
 #### Polling Station Check
 
 *S* determines if *A* is allowed to vote to *R*.
 *A* is allowed to vote to *R* if they are endorsed by *J* and are located in the area of *R*.
-*A* should not be in the process of voting in another station, e.g., there should not be any *ballot* message for *A* and *R* published by another station.
+Also, *A* should not be in the process of voting in another station, e.g., there should not be any *ballot* message for *A* and *R* published by another station.
 Moreover, *A* should be endorsed by the app (integrity check) and the app should be endorsed by *J*.
-If *A* is allowed to vote, the station publishes a *ballot* message containing the encrypted vote *V<sup>A</sup>* blindly signed with *B* and informs *A* about it.
+If *A* is allowed to vote, the station publishes a *ballot* message containing the encrypted vote *V<sup>A</sup>* blindly signed by *B* and informs *A* about it.
 
 #### Vote
 
-*A* gets the *V<sup>A</sup>* blob signed by *B*, decrypts it and publishes the result which holds the unblinded signature *B'*.
-This vote is perfectly anonymous and verifiable by the app used by *A* since the app knows the ballot number included in *V*.
+*A* gets the *V<sup>A</sup>* blob signed by *B*, decrypts it and publishes the result which holds the unblinded signature *b'*.
+This vote is perfectly anonymous because the polling station cannot link the unblinded signature of *B* (noted *b'*) with the original blind signature (noted *b*).
+It is also verifiable by the app since the app knows the unique ballot number included in *V*.
 
 ### Special Cases
 
