@@ -34,7 +34,7 @@
       "maximum": 999999999999999
     },
     "encryptedVote": {
-      "description": "encrypted vote of the citizen (includes ballot number, date and vote)",
+      "description": "encrypted vote of the citizen (includes all the fields of a vote message, except the signature which is left empty)",
       "type": "string"
     },
     "blindKey": {

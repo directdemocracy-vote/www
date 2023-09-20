@@ -9,7 +9,7 @@
     "key",
     "signature",
     "published",
-    "participation",
+    "blindKey",
     "encryptedVote"
   ],
   "properties": {
@@ -32,8 +32,8 @@
       "minimum": 0,
       "maximum": 999999999999999
     },
-    "participation": {
-      "description": "public key of the participation issued by the station",
+    "blindKey": {
+      "description": "public blind key of the station",
       "type": "string",
       "maxLength": 512
     },
