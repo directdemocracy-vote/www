@@ -10,6 +10,7 @@
     "signature",
     "published",
     "encryptedVote",
+    "blindKey",
     "blindSignature"
   ],
   "properties": {
@@ -17,12 +18,12 @@
       "const": "https://directdemocracy.vote/json-schema/0.0.2/ballot.schema.json"
     },
     "key": {
-      "description": "public key of the station (participation)",
+      "description": "public key of the station",
       "type": "string",
       "maxLength": 512
     },
     "signature": {
-      "description": "blind signature of the station (participation)",
+      "description": "signature of the station",
       "type": "string",
       "maxLength": 512
     },
@@ -33,7 +34,11 @@
       "maximum": 999999999999999
     },
     "encryptedVote": {
-      "description": "encrypted vote of the citizen",
+      "description": "encrypted vote of the citizen (includes ballot number, date and vote)",
+      "type": "string"
+    },
+    "blindKey": {
+      "description": "blind signature of the station for the encrypted vote",
       "type": "string"
     },
     "blindSignature": {
