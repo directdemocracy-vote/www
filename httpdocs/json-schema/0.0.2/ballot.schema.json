@@ -9,7 +9,8 @@
     "key",
     "signature",
     "published",
-    "encrypted_vote",
+    "encryptedVote",
+    "blindSignature"
   ],
   "properties": {
     "schema": {
@@ -31,8 +32,12 @@
       "minimum": 0,
       "maximum": 999999999999999
     },
-    "encrypted_vote": {
+    "encryptedVote": {
       "description": "encrypted vote of the citizen",
+      "type": "string"
+    },
+    "blindSignature": {
+      "description": "blind signature of the station for the encrypted vote",
       "type": "string"
     }
   },
