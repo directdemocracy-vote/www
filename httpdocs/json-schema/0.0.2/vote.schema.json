@@ -10,7 +10,7 @@
     "signature",
     "published",
     "vote",
-    "blindSignature"
+    "unblindedSignature"
   ],
   "properties": {
     "schema": {
@@ -36,8 +36,8 @@
       "description": "vote of a citizen containing a unique number and their answer",
       "type": "string"
     }
-    "blindSignature": {
-      "description": "signature of the vote",
+    "unblindedSignature": {
+      "description": "unblinded signature of station for the vote",
       "type": "string"
     }
   },
