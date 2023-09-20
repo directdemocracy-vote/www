@@ -397,8 +397,8 @@ schema: https://directdemocracy.vote/json-schema/0.0.2/ballot.schema.json
 key: [public key of citizen]
 signature: [signature of citizen]
 published: 1590298858399
-participation: [public key of participation]
-vote: [encrypted vote]
+blindKey: [public key of participation]
+encryptedVote: [encrypted vote]
 ```
 
 #### Vote
@@ -410,6 +410,7 @@ schema: https://directdemocracy.vote/json-schema/0.0.2/vote.schema.json
 key: [public key of participation]
 signature: [signature of participation]
 published: 1590298858399
+number: [unique ballot number]
 vote: [vote]
 ```
 
@@ -451,7 +452,7 @@ A polling station should publish only one *participation* per referendum, otherw
 
 A citizen with public key *A* announces their *registration* to referendum *R* at polling station *S*.
 The app used by *A* should ensure that *S* is endorsed by *J*.
-The app generates a vote blob *V* which contains a publication date set at the deadline of *R*, a unique random ballot number and the answer of the citizen to the referendum question.
+The app generates a vote blob *V* which contains a unique random ballot number and the answer of the citizen to the referendum question.
 The answer could be "yes", "no", "abstain" or something else.
 The app encrypts *V* with the private key of *A* to generate *V<sup>a</sup>*, adds *B*, publish this signed blob and informs *S* about it.
 The encryption algorithm used by the app to generate *V<sup>A</sup>* supports [blind signature](https://en.wikipedia.org/wiki/Blind_signature).
