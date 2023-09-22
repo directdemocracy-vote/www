@@ -2,7 +2,7 @@
 
 Date: July 25th, 2023
 
-Version: 0.2.0 (draft)
+Version: 2.0 (draft)
 
 ## Abstract
 
