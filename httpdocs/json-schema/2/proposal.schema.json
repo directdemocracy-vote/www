@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://directdemocracy.vote/json-schema/0.0.2/proposal.schema.json",
+  "$id": "https://directdemocracy.vote/json-schema/2/proposal.schema.json",
   "title": "proposal",
   "description": "petition or referendum",
   "type": "object",
@@ -18,7 +18,7 @@
   ],
   "properties": {
     "schema": {
-      "const": "https://directdemocracy.vote/json-schema/0.0.2/proposal.schema.json"
+      "const": "https://directdemocracy.vote/json-schema/2/proposal.schema.json"
     },
     "key": {
       "description": "public key of the proposer",

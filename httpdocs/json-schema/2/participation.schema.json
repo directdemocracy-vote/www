@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://directdemocracy.vote/json-schema/0.0.2/participation.schema.json",
+  "$id": "https://directdemocracy.vote/json-schema/2/participation.schema.json",
   "title": "registration",
   "description": "participation of a polling station in a referendum",
   "type": "object",
@@ -14,7 +14,7 @@
   ],
   "properties": {
     "schema": {
-      "const": "https://directdemocracy.vote/json-schema/0.0.2/participation.schema.json"
+      "const": "https://directdemocracy.vote/json-schema/2/participation.schema.json"
     },
     "key": {
       "description": "public key of the polling station",

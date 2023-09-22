@@ -268,12 +268,12 @@ Alternatively, they may also ask some judges to endorse them.
 Judges compute the reputation of a citizen based on endorsements by citizens and by other judges.
 If a citizen has a large number of endorsements from citizens and/or judges with a good reputation, their reputation will increase and they will get endorsed by more and more judges.
 
-A [citizen](https://directdemocracy.vote/json-schema/0.0.2/citizen.schema.json) publication contains the name, picture and GPS home location of a citizen.
+A [citizen](https://directdemocracy.vote/json-schema/2/citizen.schema.json) publication contains the name, picture and GPS home location of a citizen.
 It is signed by the citizen themself.
 
 Example:
 ```yaml
-schema: https://directdemocracy.vote/json-schema/0.0.2/citizen.schema.json
+schema: https://directdemocracy.vote/json-schema/2/citizen.schema.json
 key: [citizen public key]
 signature: [citizen signature]
 published: 1590298858399
@@ -286,7 +286,7 @@ longitude: -73.993403
 
 #### Endorsement
 
-The [endorsement](https://directdemocracy.vote/json-schema/0.0.2/endorsement.schema.json) of a participant includes the public key of the participant signed by another participant.
+The [endorsement](https://directdemocracy.vote/json-schema/2/endorsement.schema.json) of a participant includes the public key of the participant signed by another participant.
 In case of the endorsement of a citizen, it claims that the owner of this citizen card is eligible to vote, e.g., the citizen card is owned by an adult person who own a single citizen card.
 Otherwise, in case of the endorsement of a web service or an app, it means that the web service or app is honest and provides a good quality of service.
 
@@ -297,7 +297,7 @@ A **revocation** is a special kind of endorsement meant to revoke a publication.
 
 Example:
 ```yaml
-schema: https://directdemocracy.vote/json-schema/0.0.2/endorsement.schema.json
+schema: https://directdemocracy.vote/json-schema/2/endorsement.schema.json
 key: [citizen1 public key]
 signature: [citizen1 signature]
 published: 1590298858399
@@ -308,14 +308,14 @@ endorsed:
 ```
 
 #### Area
-An [area](https://directdemocracy.vote/json-schema/0.0.2/area.schema.json) represents geographic zones defined by a set of polygons and used to delimit the boundaries of a referendum. Polygons are expressed as coordinates in the GeoJSON MultiPolygon format.
+An [area](https://directdemocracy.vote/json-schema/2/area.schema.json) represents geographic zones defined by a set of polygons and used to delimit the boundaries of a referendum. Polygons are expressed as coordinates in the GeoJSON MultiPolygon format.
 The name field is used for user information purposes only.
 It should match the area field of the referendum.
 It is self-signed.
 
 Example:
 ```yaml
-schema: https://directdemocracy.vote/json-schema/0.0.2/area.schema.json
+schema: https://directdemocracy.vote/json-schema/2/area.schema.json
 key: [public key of participant]
 signature: [signature of participant]
 published: 1574679658399
@@ -329,12 +329,12 @@ polygons: [[[[ 12.123, 123.121 ], [12.112, 134.113], [12.321. 107.122]]]]
 ```
 
 #### Proposal: Referendum or Petition
-A referendum [proposal](https://directdemocracy.vote/json-schema/0.0.2/proposal.schema.json) contains a description of the referendum and the question asked to the citizen.
+A referendum [proposal](https://directdemocracy.vote/json-schema/2/proposal.schema.json) contains a description of the referendum and the question asked to the citizen.
 It is self-signed.
 
 Example:
 ```yaml
-schema: https://directdemocracy.vote/json-schema/0.0.2/proposal.schema.json
+schema: https://directdemocracy.vote/json-schema/2/proposal.schema.json
 key: [public key of participant]
 signature: [signature of participant]
 published: 1574679658399
@@ -357,16 +357,16 @@ deadline: 1590298858399
 website: https://www.myreferendum.net
 ```
 
-A petition [proposal](https://directdemocracy.vote/json-schema/0.0.2/proposal.schema.json) is similar to a referendum proposal, except that it has its `secret` field set to `false` and has no `question` nor `answers` fields.
+A petition [proposal](https://directdemocracy.vote/json-schema/2/proposal.schema.json) is similar to a referendum proposal, except that it has its `secret` field set to `false` and has no `question` nor `answers` fields.
 
 #### Participation
 
-A [participation](https://directdemocracy.vote/json-schema/0.0.2/participation.schema.json) is a declaration by a polling station that it is participating to a referendum and can handle the votes of the citizens on it.
+A [participation](https://directdemocracy.vote/json-schema/2/participation.schema.json) is a declaration by a polling station that it is participating to a referendum and can handle the votes of the citizens on it.
 It also includes the public key of the *participation* key pair which was forged by the station specifically for this referendum.
 
 Example:
 ```yaml
-schema: https://directdemocracy.vote/json-schema/0.0.2/participation.schema.json
+schema: https://directdemocracy.vote/json-schema/2/participation.schema.json
 key: [public key of station]
 signature: [signature of station]
 published: 1590298858399
@@ -374,12 +374,12 @@ participation: [public key of participation generated by station]
 ```
 
 #### Registration
-A [registration](https://directdemocracy.vote/json-schema/0.0.2/registration.schema.json) contains a the public key of a referendum and is signed by both a citizen and a station.
+A [registration](https://directdemocracy.vote/json-schema/2/registration.schema.json) contains a the public key of a referendum and is signed by both a citizen and a station.
 It means the citizen has secretly voted to the specified referendum in the specified station.
 
 Example:
 ```yaml
-schema: https://directdemocracy.vote/json-schema/0.0.2/registration.schema.json
+schema: https://directdemocracy.vote/json-schema/2/registration.schema.json
 key: [public key of citizen]
 signature: [signature of citizen]
 published: 1590298858399
@@ -387,13 +387,13 @@ participation: [public key of participation generated by station]
 ```
 
 #### Ballot
-A [ballot publication](https://directdemocracy.vote/json-schema/0.0.2/ballot.schema.json) contains the public key of a referendum, the answer to the question asked in the referendum.
+A [ballot publication](https://directdemocracy.vote/json-schema/2/ballot.schema.json) contains the public key of a referendum, the answer to the question asked in the referendum.
 Secret ballots are signed by a station.
 Public ballots are signed by citizens.
 
 Example:
 ```yaml
-schema: https://directdemocracy.vote/json-schema/0.0.2/ballot.schema.json
+schema: https://directdemocracy.vote/json-schema/2/ballot.schema.json
 key: [public key of citizen]
 signature: [signature of citizen]
 published: 1590298858399
@@ -402,11 +402,11 @@ encryptedVote: [encrypted vote]
 ```
 
 #### Vote
-A [vote](https://directdemocracy.vote/json-schema/0.0.2/vote.schema.json) publication contains the actual vote of a citizen, signed by the participation key of the polling station. The information in the vote field include both the answer and random bits guarantying the uniqueness of the vote.
+A [vote](https://directdemocracy.vote/json-schema/2/vote.schema.json) publication contains the actual vote of a citizen, signed by the participation key of the polling station. The information in the vote field include both the answer and random bits guarantying the uniqueness of the vote.
 
 Example:
 ```yaml
-schema: https://directdemocracy.vote/json-schema/0.0.2/vote.schema.json
+schema: https://directdemocracy.vote/json-schema/2/vote.schema.json
 key: [public key of participation]
 signature: [signature of participation]
 published: 1590298858399
