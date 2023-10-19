@@ -1,6 +1,6 @@
 # directdemocracy.vote: Let's Make a Better World!
 
-Date: July 25th, 2023
+Date: October 19th, 2023
 
 Version: 2.0 (draft)
 
@@ -20,7 +20,7 @@ This paper describes *directdemocracy.vote* from a conceptual, strategical and t
 
 ## Introduction
 
-When I will be a grand-father, my grandchildren will ask me: "What did you do grandpa to save the world?".
+As a grand-father, one day my grandchildren will ask me: "What did you do grandpa to save the world?".
 I will answer them: *[directdemocracy.vote](https://directdemocracy.vote)*.
 
 I believe that [direct democracy](https://en.wikipedia.org/wiki/Direct_democracy) is the best political system to address the challenges that the humanity is facing: global warming, biodiversity, overpopulation, human rights, peace and prosperity.
@@ -65,7 +65,8 @@ Hence, judges form a community of web services which permanently evaluate the re
 In order to help judges in their duties, citizens are asked to endorse each other and to endorse web services.
 Endorsing a citizen is the action of publishing a signed message saying "I certify this public key is unique for this citizen".
 Endorsing a web service is the action of publishing a signed message saying "I believe this web service is honest and doing a good job".
-Judges collect all the endorsements published by the citizens to construct their own web of trust.
+Judges collect all the endorsements published by the citizens and by the app providers to construct their own web of trust.
+A citizen not endorsed by an app provider should not be trusted.
 
 #### Reputation
 
@@ -190,6 +191,8 @@ There are 6 different types of participants in *directdemocracy.vote*:
 
 ### Cryptography
 
+#### Assymetric Key Pairs
+
 Each participant has its own cryptographic key pair to allow it to sign its publications.
 It is a 2048-bit key pairs using the RSA algorithm.
 The hash algorithm used for signatures is SHA-256.
@@ -201,16 +204,25 @@ openssl rsa -pubout -in id_rsa -out id_rsa.pub
 Where `id_rsa` is the private key and `id_rsa.pub` is the public key.
 These commands can be used for any participant except citizens.
 
+#### Hardware Keystore
+
 The private key of a citizen is generated, stored and operated by some special hardware of the smartphone, so that it cannot be read by anyone.
 Smartphone operating systems actually provide a hardware-based API allowing to generate a key pair, sign, encrypt and perform other operations without disclosing the private key.
 This is implemented in the [Android Keystore](https://source.android.com/docs/security/features/keystore) and [Apple iOS Secure Enclave](https://developer.apple.com/documentation/security/certificate_key_and_trust_services/keys/protecting_keys_with_the_secure_enclave).
 The app also generates a password protected revocation message that the participant should save and use if they loose access to their smartphone.
 
+#### Integrity Check
+
 The operating system of the smartphone also provides integrity checks on itself and on the app.
+These integrity checks guarantee that the genuine app is used on a non-rooted unmodified smartphone.
 The app integrity check prevents malicious users from using a modified app to cheat or to extract sensitive data.
 The operating system integrity check prevents malicious users from modifying the behavior of the app at run-time or extracting sensitive data.
 These features are currently offered by the [Android Play Integrity](https://developer.android.com/google/play/integrity) and the [Apple iOS DeviceCheck](https://developer.apple.com/documentation/devicecheck).
-They require however that the app is provided through the official app store of the operating system.
+
+#### App Transparency
+
+The app being open-source, it can be rebuild from the source and compared against the signed binary app to ensure that the signed binary app was built from the same unmodified source.
+This guarantees to the users that the app is not doing anything malicious.
 
 ### Publications
 
@@ -245,12 +257,12 @@ MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkoSFvGywo4sb0crZlmDJR7iOSSioDS/ujo4d
 
 There are mainly 8 types of publications in *directdemocracy.vote*:
 
-- citizen
+- citizen (endorsed by app after integrity check to garantee the private key is inside in the phone keystore by the app)
 - endorsement
 - area
 - proposal (referendum or petition)
 - participation
-- registration
+- registration (endorsed by app after integrity check to guarantee the ballot encryption key is only known to the app)
 - ballot
 - vote
 
@@ -290,8 +302,8 @@ The [endorsement](https://directdemocracy.vote/json-schema/2/endorsement.schema.
 In case of the endorsement of a citizen, it claims that the owner of this citizen card is eligible to vote, e.g., the citizen card is owned by an adult person who own a single citizen card.
 Otherwise, in case of the endorsement of a web service or an app, it means that the web service or app is honest and provides a good quality of service.
 
-An important endorsement is the integrity endorsement signed by the app provider which means that a citizen registered their citizen card using the genuine app running on a non-rooted unmodified smartphone.
-A citizen card failing to receive an integrity endorsement from a trusted app provider should not be trusted.
+An important type of endorsement is the integrity endorsement signed by the app provider which means that the publication was performed from the genuine app running on a non-rooted unmodified smartphone.
+A citizen or a registration publication failing to receive an integrity endorsement from a trusted app provider should not be trusted.
 
 A **revocation** is a special kind of endorsement meant to revoke a publication. It has its revocation field set to true. A revocation can be published by a citizen to revoke her own citizen card. Then, they may create a new card with the same public key or a new public key. Revocations are also published by participants to cancel endorsements they previously published.
 
@@ -442,6 +454,7 @@ The voting process is summarized on the following figure:
 #### Referendum Publication
 
 A referendum with public a key *R* is published with a reference to the public key *J* of a judge.
+The judge should endorse a number of apps which are considered as valid for *directdemocracy.vote*.
 
 #### Polling Station Participation
 
@@ -462,7 +475,6 @@ The encryption algorithm used by the app to generate *V<sup>A</sup>* supports [b
 *S* determines if *A* is allowed to vote to *R*.
 *A* is allowed to vote to *R* if they are endorsed by *J* and are located in the area of *R*.
 Also, *A* should not be in the process of voting in another station, e.g., there should not be any *ballot* message for *A* and *R* published by another station.
-Moreover, *A* should be endorsed by the app (integrity check) and the app should be endorsed by *J*.
 If *A* is allowed to vote, the station publishes a *ballot* message containing the encrypted vote *V<sup>A</sup>* blindly signed by *B* and informs *A* about it.
 
 #### Vote
