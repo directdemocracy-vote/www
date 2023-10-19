@@ -513,7 +513,7 @@ It is safe to publish the vote if for the same station, the difference between t
 
 While waiting, the app should keep its encryption key in RAM and not on a permanent storage (e.g., in a file).
 If it does, the user may root the phone and get the encryption key to prove what they voted and sell their vote.
-Thus, this key should be either stored in the keystore (not sure if this is possible because the data encrypted with the key should support blind signatures, thus the key may not be a standard key) or encrypted with the citizen key and sent to the app server that will perform an integrity check, store the key in its database and restore to the client app upon request after performing another integrity check.
+Thus, this key should be encrypted with the citizen key and sent to the app server that will perform an integrity check, store the key in its database and restore to the client app upon request after performing another integrity check.
 
 ### Special Cases
 
