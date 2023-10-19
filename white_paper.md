@@ -258,7 +258,7 @@ MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkoSFvGywo4sb0crZlmDJR7iOSSioDS/ujo4d
 There are mainly 8 types of publications in *directdemocracy.vote*:
 
 - citizen (endorsed by app after integrity check to garantee the private key is inside in the phone keystore by the app)
-- endorsement
+- endorsement (citizen endorsements should be endorsed by app after integrity check to prevent fake endorsements)
 - area
 - proposal (referendum or petition)
 - participation
@@ -279,6 +279,10 @@ To increase their reputation, a citizen should ask other citizens to endorse the
 Alternatively, they may also ask some judges to endorse them.
 Judges compute the reputation of a citizen based on endorsements by citizens and by other judges.
 If a citizen has a large number of endorsements from citizens and/or judges with a good reputation, their reputation will increase and they will get endorsed by more and more judges.
+
+When a citizen card is published, the app performs an integrity check and if successful, it endorses the citizen card publication.
+This guarantees that the private key used to create the citizen card originates from the geniune app and is stored in the system keystore.
+Thus, the private key cannot be read by anyone and the identity of the citizen cannot be usurpated, unless some malicious people physically access their phone and app.
 
 A [citizen](https://directdemocracy.vote/json-schema/2/citizen.schema.json) publication contains the name, picture and GPS home location of a citizen.
 It is signed by the citizen themself.
@@ -306,6 +310,8 @@ An important type of endorsement is the integrity endorsement signed by the app 
 A citizen or a registration publication failing to receive an integrity endorsement from a trusted app provider should not be trusted.
 
 A **revocation** is a special kind of endorsement meant to revoke a publication. It has its revocation field set to true. A revocation can be published by a citizen to revoke her own citizen card. Then, they may create a new card with the same public key or a new public key. Revocations are also published by participants to cancel endorsements they previously published.
+
+All endorsements published by citizens should be endorsed by the app after integrity check to prevent a citizen to sell their signature for signing petitions or endorsing others.
 
 Example:
 ```yaml
@@ -442,7 +448,7 @@ Petitioning is way simpler to handle than voting because it doesn't involves ano
 The petition system of *directdemocracy.vote* is superior to most Internet-based petitions systems.
 Such systems rely on e-mail addresses for signature and cannot prevent people from signing several times if they have several e-mail addresses.
 Moreover, in case of a local petition, such systems cannot prevent people from outside of the geographical area to sign.
-The petition system of *directdemocracy.vote* fixes these two shortcomings by relying on the citizen reputation coming from the web of trust.
+The petition system of *directdemocracy.vote* fixes these two shortcomings by relying on the citizen reputation coming from the web of trust and the confirmed citizen location.
 
 ### Petition Publication
 A petition is published as a proposal by a participant.
@@ -480,6 +486,10 @@ The answer could be "yes", "no", "abstain" or something else.
 The app encrypts *V* with the private key of *A* to generate *V<sup>a</sup>*, adds *B*, publish this signed blob and informs *S* about it.
 The encryption algorithm used by the app to generate *V<sup>A</sup>* supports [blind signature](https://en.wikipedia.org/wiki/Blind_signature).
 
+When the citizen publishes their registration, the app performs an integrity check and endorses this registation publication.
+This guarantees that the citizen registration was performed by a trusted app and the private encryption key originates from the app and didn't leak.
+Leaking the encryption private key or using a foreign encryption key would allow a citizen to sell their vote, as it would prove that the citizen voted according to the demand of the vote buyer.
+
 #### Polling Station Check
 
 *S* determines if *A* is allowed to vote to *R*.
@@ -492,6 +502,18 @@ If *A* is allowed to vote, the station publishes a *ballot* message containing t
 *A* gets the *V<sup>A</sup>* blob signed by *B*, decrypts it and publishes the result which holds the unblinded signature *b'*.
 This vote is perfectly anonymous because the polling station cannot link the unblinded signature of *B* (noted *b'*) with the original blind signature (noted *b*).
 It is also verifiable by the app since the app knows the unique ballot number included in *V*.
+
+#### Delay before Voting
+
+In order to prevent any time correlation between the publication of the citizen registration and the vote, the publication of the vote should not happen immediately.
+Instead, the voter should wait until several (a not-too-small random number of) citizen registations from the same polling station are published, so that nobody can deduce their vote.
+
+However, this wait may be long, e.g., a few hours or maybe days. So, the app should check on a regular basis if it is safe to publish the vote.
+It is safe to publish the vote if for the same station, the difference between the number of registrations and the number of votes is fairly high (let's say 10 or so)
+
+While waiting, the app should keep its encryption key in RAM and not on a permanent storage (e.g., in a file).
+If it does, the user may root the phone and get the encryption key to prove what they voted and sell their vote.
+Thus, this key should be either stored in the keystore (not sure if this is possible because the data encrypted with the key should support blind signatures, thus the key may not be a standard key) or encrypted with the citizen key and sent to the app server that will perform an integrity check, store the key in its database and restore to the client app upon request after performing another integrity check.
 
 ### Special Cases
 
