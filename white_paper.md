@@ -295,7 +295,7 @@ signature: [citizen signature]
 published: 1590298858
 familyName: Smith
 givenNames: John
-picture: [base64 encoded jpeg picture]
+picture: [base64 encoded jpeg picture of 150x200 pixels]
 latitude: 40.724723
 longitude: -73.993403
 ```
