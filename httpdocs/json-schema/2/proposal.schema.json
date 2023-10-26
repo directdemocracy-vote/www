@@ -9,7 +9,6 @@
     "key",
     "signature",
     "published",
-    "judge",
     "area",
     "title",
     "description",
@@ -35,13 +34,6 @@
       "type": "integer",
       "minimum": 0,
       "maximum": 999999999999999
-    },
-    "judge": {
-      "description": "URL of the judge for this proposal",
-      "type": "string",
-      "format": "uri",
-      "maxLength": 128,
-      "minLength": 11
     },
     "area": {
       "description": "signature of an area publication",
