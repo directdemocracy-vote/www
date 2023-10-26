@@ -9,6 +9,8 @@
     "key",
     "signature",
     "published",
+    "appKey",
+    "appSignature",
     "givenNames",
     "familyName",
     "picture",
@@ -34,6 +36,16 @@
       "type": "integer",
       "minimum": 0,
       "maximum": 999999999999999
+    },
+    "appKey": {
+      "description": "public key of the app used by the citizen",
+      "type": "string",
+      "maxLength": 512
+    },
+    "appSignature": {
+      "description": "signature of the app",
+      "type": "string",
+      "maxLength": 512
     },
     "givenNames": {
       "description": "first name and possibly middle name of the citizen",
