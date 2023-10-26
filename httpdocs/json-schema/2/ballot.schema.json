@@ -28,10 +28,10 @@
       "maxLength": 512
     },
     "published": {
-      "description": "date of publication (milliseconds since 1970-01-01 00:00:00.000)",
+      "description": "date of publication (seconds since 1970-01-01 00:00:00)",
       "type": "integer",
       "minimum": 0,
-      "maximum": 999999999999999
+      "maximum": 999999999999
     },
     "encryptedVote": {
       "description": "encrypted vote of the citizen (includes all the fields of a vote message, except the signature which is left empty)",
