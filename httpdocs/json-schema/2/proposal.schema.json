@@ -20,20 +20,20 @@
       "const": "https://directdemocracy.vote/json-schema/2/proposal.schema.json"
     },
     "key": {
-      "description": "public key of the proposer",
+      "description": "public key of the judge",
       "type": "string",
       "maxLength": 512
     },
     "signature": {
-      "description": "proposer signature of the proposal",
+      "description": "signature of the judge",
       "type": "string",
       "maxLength": 512
     },
     "published": {
-      "description": "date of publication (milliseconds since 1970-01-01 00:00:00.000)",
+      "description": "date of publication (seconds since 1970-01-01 00:00:00)",
       "type": "integer",
       "minimum": 0,
-      "maximum": 999999999999999
+      "maximum": 999999999999
     },
     "area": {
       "description": "signature of an area publication",
@@ -72,10 +72,10 @@
       "type": "boolean"
     },
     "deadline": {
-      "description": "date of vote deadline (milliseconds since 1970-01-01 00:00:00.000)",
+      "description": "date of vote deadline (seconds since 1970-01-01 00:00:00)",
       "type": "integer",
       "minimum": 0,
-      "maximum": 999999999999999
+      "maximum": 999999999999
     },
     "website": {
       "description": "website providing more information about the proposal",
