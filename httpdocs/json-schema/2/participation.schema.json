@@ -27,10 +27,10 @@
       "maxLength": 512
     },
     "published": {
-      "description": "current date (milliseconds since 1970-01-01 00:00:00.000)",
+      "description": "current date (seconds since 1970-01-01 00:00:00)",
       "type": "integer",
       "minimum": 0,
-      "maximum": 999999999999999
+      "maximum": 999999999999
     },
     "referendum": {
       "description": "signature of the referendum proposal",
