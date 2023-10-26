@@ -65,7 +65,7 @@ Hence, judges form a community of web services which permanently evaluate the re
 In order to help judges in their duties, citizens are asked to endorse each other and to endorse web services.
 Endorsing a citizen is the action of publishing a signed message saying "I certify this public key is unique for this citizen".
 Endorsing a web service is the action of publishing a signed message saying "I believe this web service is honest and doing a good job".
-Judges collect all the endorsements published by the citizens and by the app providers to construct their own web of trust.
+Judges collect all the endorsements published by the citizens to construct their own web of trust.
 
 #### Reputation
 
@@ -208,7 +208,7 @@ These commands can be used for any participant except citizens.
 The private key of a citizen is generated, stored and operated by some special hardware of the smartphone, so that it cannot be read by anyone.
 Smartphone operating systems actually provide a hardware-based API allowing to generate a key pair, sign, encrypt and perform other operations without disclosing the private key.
 This is implemented in the [Android Keystore](https://source.android.com/docs/security/features/keystore) and [Apple iOS Secure Enclave](https://developer.apple.com/documentation/security/certificate_key_and_trust_services/keys/protecting_keys_with_the_secure_enclave).
-The app also generates a password protected revocation message that the participant should save and use if they loose access to their smartphone.
+The app may also generate a password protected revocation message that the participant should save and use if they loose access to their smartphone.
 
 #### Integrity Check
 
@@ -217,6 +217,8 @@ These integrity checks guarantee that the genuine app is used on a non-rooted un
 The app integrity check prevents malicious users from using a modified app to cheat or to extract sensitive data.
 The operating system integrity check prevents malicious users from modifying the behavior of the app at run-time or extracting sensitive data.
 These features are currently offered by the [Android Play Integrity](https://developer.android.com/google/play/integrity) and the [Apple iOS DeviceCheck](https://developer.apple.com/documentation/devicecheck).
+An integrity check is performed each time a citizen wants to publish a citizen, endorsement or registration publication.
+If the check is successful, the app will also sign the publication on server side of the app, so that it can be published by the citizen from the client side of the app.
 
 #### App Transparency
 
@@ -261,7 +263,7 @@ There are mainly 8 types of publications in *directdemocracy.vote*:
 - area
 - proposal (referendum or petition)
 - participation
-- registration (signed by app after integrity check to guarantee the ballot encryption key is only known to the app)
+- registration (signed by app after integrity check to guarantee the ballot encryption key is only known by the app)
 - ballot
 - vote
 
@@ -279,7 +281,7 @@ Alternatively, they may also ask some judges to endorse them.
 Judges compute the reputation of a citizen based on endorsements by citizens and by other judges.
 If a citizen has a large number of endorsements from citizens and/or judges with a good reputation, their reputation will increase and they will get endorsed by more and more judges.
 
-When a citizen card is published, the app performs an integrity check and if successful, it signs the citizen card publication.
+When a citizen card is published, the app performs an integrity check and if successful, it signs the citizen card.
 This guarantees that the private key used to create the citizen card originates from the geniune app and is stored in the system keystore.
 Thus, the private key cannot be read by anyone and the identity of the citizen cannot be usurpated, unless some malicious people physically access their phone and app.
 
@@ -308,11 +310,10 @@ In case of the endorsement of a citizen, it claims that the owner of this citize
 Otherwise, in case of the endorsement of a web service or an app, it means that the web service or app is honest and provides a good quality of service.
 
 An important type of endorsement is the integrity endorsement signed by the app provider which means that the publication was performed from the genuine app running on a non-rooted unmodified smartphone.
-A citizen or a registration publication failing to receive an integrity endorsement from a trusted app provider should not be trusted.
 
 A **revocation** is a special kind of endorsement meant to revoke a publication. It has its revocation field set to true. A revocation can be published by a citizen to revoke her own citizen card. Then, they may create a new card with the same public key or a new public key. Revocations are also published by participants to cancel endorsements they previously published.
 
-All endorsements published by citizens should be endorsed by the app after integrity check to prevent a citizen to sell their signature for signing petitions or endorsing others.
+All endorsements published by citizens should be signed by the app after integrity check to prevent a citizen to sell their signature for signing petitions or endorsing others.
 
 Example:
 ```yaml
@@ -491,7 +492,7 @@ The answer could be "yes", "no", "abstain" or something else.
 The app encrypts *V* with the private key of *A* to generate *V<sup>a</sup>*, adds *B*, publish this signed blob and informs *S* about it.
 The encryption algorithm used by the app to generate *V<sup>A</sup>* supports [blind signature](https://en.wikipedia.org/wiki/Blind_signature).
 
-When the citizen publishes their registration, the app performs an integrity check and endorses this registation publication.
+When the citizen publishes their registration, the app performs an integrity check and signs this registation publication.
 This guarantees that the citizen registration was performed by a trusted app and the private encryption key originates from the app and didn't leak.
 Leaking the encryption private key or using a foreign encryption key would allow a citizen to sell their vote, as it would prove that the citizen voted according to the demand of the vote buyer.
 
