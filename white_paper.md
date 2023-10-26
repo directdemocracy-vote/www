@@ -352,15 +352,15 @@ polygons: [[[[ 12.123, 123.121 ], [12.112, 134.113], [12.321. 107.122]]]]
 
 #### Proposal: Referendum or Petition
 A referendum [proposal](https://directdemocracy.vote/json-schema/2/proposal.schema.json) contains a description of the referendum and the question asked to the citizen.
-It is self-signed.
+It is signed by a judge.
+Judges should offer the possibility to anyone to submit their own proposal.
 
 Example:
 ```yaml
 schema: https://directdemocracy.vote/json-schema/2/proposal.schema.json
-key: [public key of participant]
-signature: [signature of participant]
+key: [public key of judge]
+signature: [signature of judge]
 published: 1574679658
-judge: https://judge.directdemocracy.vote
 area: |
   city=Mâcon
   county=Saône-et-Loire
