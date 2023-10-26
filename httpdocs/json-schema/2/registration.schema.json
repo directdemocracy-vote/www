@@ -9,6 +9,8 @@
     "key",
     "signature",
     "published",
+    "appKey",
+    "appSignature",
     "blindKey",
     "encryptedVote"
   ],
@@ -31,6 +33,16 @@
       "type": "integer",
       "minimum": 0,
       "maximum": 999999999999999
+    },
+    "appKey": {
+      "description": "public key of the app used by the citizen",
+      "type": "string",
+      "maxLength": 512
+    },
+    "appSignature": {
+      "description": "signature of the app",
+      "type": "string",
+      "maxLength": 512
     },
     "blindKey": {
       "description": "public blind key of the station",
