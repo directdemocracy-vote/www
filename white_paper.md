@@ -29,7 +29,7 @@ Forget this.
 *directdemocracy.vote* is the biggest revolution in the history of humanity.
 And we need it urgently.
 
-Here is my personal feeling about the governance models in the world and what *directdemocracy.vote* will bring:
+Here is my personal view about the governance models in the world and what *directdemocracy.vote* will bring:
 
 | Governance             | democratic | not corrupted | fast | planet impact |
 |------------------------|:----------:|:-------------:|:----:|:-------------:|
