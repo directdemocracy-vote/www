@@ -23,6 +23,26 @@ This paper describes *directdemocracy.vote* from a conceptual, strategical and t
 As a grand-father, one day my grandchildren will ask me: "What did you do grandpa to save the world?".
 I will answer them: *[directdemocracy.vote](https://directdemocracy.vote)*.
 
+*directdemocracy.vote* is a decentralized e-voting app...
+Wait.
+Forget this.
+*directdemocracy.vote* is the biggest revolution in the history of humanity.
+And we need it urgently.
+
+Here is my personal feeling about the governance models in the world and what *directdemocracy.vote* will bring:
+
+| Governance             | democratic | not corrupted | fast | planet impact |
+|------------------------|:----------:|:-------------:|:----:|:-------------:|
+| USA                    |          🟡|            🟡|    🟡|             🟡|
+| China                  |          🔴|            🔴|    🟢|             🟡|
+| India                  |          🟡|            🟠|    🟠|             🟡|
+| European Union         |          🟡|            🟠|    🟠|             🟡|
+| Russia                 |          🔴|            🔴|    🟢|             🟠|
+| Germany                |          🟡|            🟡|    🟡|             🟠|
+| Switzerland            |          🟢|            🟡|    🟠|             🔴|
+| United Nations         |          🟠|            🟠|    🔴|             🟢|
+| *directdemocracy.vote* |          🟢|            🟢|    🟢|             🟢|
+
 I believe that [direct democracy](https://en.wikipedia.org/wiki/Direct_democracy) is the best political system to address the challenges that the humanity is facing: global warming, biodiversity, overpopulation, human rights, peace and prosperity.
 In this political system, any citizen can propose a referendum for a law that will enter in force if a majority of citizens approves it.
 Direct democracy is implemented in a few countries, like Switzerland, where it has proved efficient to address local challenges.
