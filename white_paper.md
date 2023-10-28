@@ -1,6 +1,6 @@
 # directdemocracy.vote: Let's Make a Better World!
 
-Date: October 19th, 2023
+Date: October 28th, 2023
 
 Version: 2.0 (draft)
 
