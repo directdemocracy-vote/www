@@ -675,6 +675,21 @@ This will have a side effect to spread the word about *directdemocracy.vote* and
 At some point, citizens will launch a referendum for a whole region, then a whole country.
 This self-feeding marketing will eventually outreach the whole planet.
 
+## The 1% Rule
+
+In Switzerland, a citizen initiave (e.g., referendum) needs to collect 100'000 signatures from swiss citizens to trigger a nationwide referendum. This number should be compared to the swiss population which is currently nearing 9 million people. In other words, a referendum needs to be approved by roughly 1.1% of the population before a vote is officially organised.
+
+We could consider something similar in *directdemocracy.vote*.
+A referendum receiving votes from at least 1% of a local population could be considered as significant.
+However, this 1% threshold should be reached sufficiently ahead of the deadline so that other people could vote.
+There should be one month or so, between the time the 1% is reached and the referendum deadline is over.
+
+For example, let's consider a village of 1020 inhabitants.
+A referendum concerning this village is published on June 30, 2024 with a deadline set to September 30, 2024.
+On July 15th, 2024, 11 people already voted to this referendum, which is more than 1% of the village population.
+This happens more than one month ahead of the deadline.
+Therefore the referendum should be considered as valid and the rest of the population should vote on it.
+
 ## Roadmap
 
 1. First Municipal Referendum
