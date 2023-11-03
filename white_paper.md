@@ -238,7 +238,8 @@ The app integrity check prevents malicious users from using a modified app to ch
 The operating system integrity check prevents malicious users from modifying the behavior of the app at run-time or extracting sensitive data.
 These features are currently offered by the [Android Play Integrity](https://developer.android.com/google/play/integrity) and the [Apple iOS DeviceCheck](https://developer.apple.com/documentation/devicecheck).
 An integrity check is performed each time a citizen wants to publish a citizen, endorsement or registration publication.
-If the check is successful, the app will also sign the publication on server side of the app, so that it can be published by the citizen from the client side of the app.
+If the check is successful, the app will also sign the publication on server-side of the app and publish it at the notary indicated by the client-side of the app.
+This way, the notary has no clue on the IP address of the client and won't be able to correlate it with an anonymous ballots coming from the client-side of the app.
 
 #### App Transparency
 
