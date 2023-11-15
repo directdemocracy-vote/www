@@ -223,6 +223,11 @@ openssl rsa -pubout -in id_rsa -out id_rsa.pub
 Where `id_rsa` is the private key and `id_rsa.pub` is the public key.
 These commands can be used for any participant except citizens.
 
+#### Blind signatures
+
+The blind signatures used during the voting process are based on 2048-bit RSA keys.
+They implement the [IETF RFC 9474](https://datatracker.ietf.org/doc/html/rfc9474) norm.
+
 #### Hardware Keystore
 
 The private key of a citizen is generated, stored and operated by some special hardware of the smartphone, so that it cannot be read by anyone.
