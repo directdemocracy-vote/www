@@ -1,76 +1,286 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>directdemocracy.vote</title>
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any">
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-    <link rel="stylesheet" href="//app.directdemocracy.vote/app/css/framework7-icons.css">
-    <link rel="stylesheet" href="/css/corner-ribbon.css">
-    <link rel="stylesheet" href="/css/directdemocracy.css">
-  </head>
-  <body>
-    <div class="corner-ribbon" title="This web site is in beta quality: it may have bugs and change without notice. Please, report any problem to info@directdemocracy.vote.">Beta</div>
-    <section class="hero">
-      <div class="hero-body">
-        <div class="columns is-mobile">
-          <div class="column is-narrow"><i class="f7-icons" style="rotate:-90deg">hand_point_right</i></div>
-          <div class="column">
-            <p class="title">direct<b>democracy</b></p>
-            <p class="subtitle">worldwide democratic uprising</p>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>directdemocracy.vote</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="//app.directdemocracy.vote/app/css/framework7-icons.css">
+  <link rel="stylesheet" href="/css/corner-ribbon.css">
+  <link rel="stylesheet" href="/css/directdemocracy.css">
+</head>
+
+<body class="has-navbar-fixed-top">
+  <div class="corner-ribbon"
+    title="This web site is in beta quality: it may have bugs and change without notice. Please, report any problem to info@directdemocracy.vote.">
+    Beta</div>
+  <nav class="navbar is-fixed-top is-light" role="navigation" aria-label="main navigation">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="https://directdemocracy.vote">
+          <i class="f7-icons" style="rotate:-90deg;margin-right:4px">hand_point_right</i>
+          direct<b>democracy</b>
+        </a>
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start">
+          <div class="navbar-item has-dropdown is-hoverable">
+            <div class="navbar-link">Propose</div>
+            <div class="navbar-dropdown">
+              <a class="navbar-item"><i class="f7-icons mr-3">square_arrow_down</i>A Referendum</a>
+              <a class="navbar-item"><i class="f7-icons mr-3">signature</i>A Petition</a>
+            </div>
+          </div>
+          <div class="navbar-item has-dropdown is-hoverable">
+            <div class="navbar-link">Vote</div>
+            <div class="navbar-dropdown">
+              <a class="navbar-item"><i class="f7-icons mr-3">device_phone_portrait</i>Download App</a>
+              <a class="navbar-item"><i class="f7-icons mr-3">book</i>Referendums & Petitions</a>
+            </div>
+          </div>
+          <div class="navbar-item has-dropdown is-hoverable">
+            <div class="navbar-link">Docs & Code</div>
+            <div class="navbar-dropdown">
+              <a class="navbar-item"><i class="f7-icons mr-3">device_phone_portrait</i>App</a>
+              <a class="navbar-item"><i class="f7-icons mr-3">book</i>Notary</a>
+              <a class="navbar-item"><i class="f7-icons mr-3">building_columns</i>Judge</a>
+              <a class="navbar-item"><i class="f7-icons mr-3">square_arrow_down</i>Polling Station</a>
+            </div>
+          </div>
+          <a class="navbar-item">About Us</a>
+          <a class="navbar-item">Contact</a>
+          <a class="navbar-item">Donate</a>
+        </div>
+        <div class="navbar-end">
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link"><span class="is-size-4">🇺🇸</span></a>
+            <div class="navbar-dropdown">
+              <a class="navbar-item"><span class="is-size-4 pr-2">🇫🇷</span>Français</a>
+            </div>
           </div>
         </div>
       </div>
-    </section>
-    <section class="section">
-      <div>
+    </div>
+  </nav>
+  <section class="hero">
+    <div class="container">
+      <div class="hero-body">
+        <div class="columns is-centered is-mobile">
+          <div class="column is-narrow">
+            <i class="f7-icons " style="rotate:-90deg;font-size:16rem">hand_point_right</i>
+          </div>
+          <div class="column">
+            <p class="title">direct<b>democracy</b></p>
+            <p class="subtitle pl-1">a worldwide democratic uprising</p>
+            <p>
+              direct<b>democracy</b> is a mobile phone app allowing anyone, anywhere to propose referendums and vote.
+              It features all the guarantees of modern electronic voting software.
+              Citizens are endorsed by each other in a web of trust.
+              Governments won't be able to silence or ignore the voice of their people.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section pt-0 pb-0">
+    <div class="container">
+      <div class="is-size-2 is-uppercase has-text-weight-bold has-text-centered">
+        “This is a revolution„
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <div class="columns">
+        <div class="column">
+          <div class="card">
+            <header class="card-header has-background-danger-dark">
+              <p class="card-header-title has-text-white">Emergent</p>
+            </header>
+            <div class="card-content has-background-danger-light">
+              Anyone proposes, everyone votes.
+            </div>
+          </div>
+        </div>
+        <div class="column">
+          <div class="card">
+            <header class="card-header has-background-link-dark">
+              <p class="card-header-title has-text-white">Decentralized</p>
+            </header>
+            <div class="card-content has-background-link-light">
+              Nobody controls it, can stop it.
+            </div>
+          </div>
+        </div>
+        <div class="column">
+          <div class="card">
+            <header class="card-header has-background-primary-dark">
+              <p class="card-header-title has-text-white">Open-Source</p>
+            </header>
+            <div class="card-content has-background-primary-light">
+              Free, open and belonging to all.
+            </div>
+          </div>
+        </div>
+        <div class="column">
+          <div class="card">
+            <header class="card-header has-background-warning-dark">
+              <p class="card-header-title has-text-white">E-Voting</p>
+            </header>
+            <div class="card-content has-background-warning-light">
+              Verifiable and anonymous.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section>
+    <div class="container">
+      <div class="columns">
+        <div class="column">
+          <div class="card">
+            <header class="card-header has-background-success-dark">
+              <p class="card-header-title has-text-white">Need to change something?</p>
+            </header>
+            <div class="card-content has-background-success-light">
+              <ol>
+                <li>Write a referendum text <i class="f7-icons is-size-6">info_circle</i></li>
+                <li>Register as a citizen <i class="f7-icons is-size-6">info_circle</i></li>
+                <li>Get endorsed by others <i class="f7-icons is-size-6">info_circle</i></li>
+                <li>Vote at your own referendum</li>
+                <li>Ask others to register and vote</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+        <div class="column">
+          <div class="card">
+            <header class="card-header has-background-success-dark">
+              <p class="card-header-title has-text-white">And the results are...</p>
+            </header>
+            <div class="card-content has-background-success-light">
+              <ul>
+                <li>A verifiable and indisputable process</li>
+                <li>A participation level</li>
+                <li>The choice of the voting citizens</li>
+                <li>The democratic solution to a problem</li>
+                <li>A pressure on governments</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section>
+    <div class="container">
+      <div class="columns">
+        <div class="column has-text-centered">
+          <em>Governments will have to decide if they respect democracy or not.</em>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section>
+    <div class="container">
+      <div class="columns">
+        <div class="column">
+          <div class="content">
+            direct<b>democracy</b> is made to:
+            <ul>
+              <li>Fix the broken world governance</li>
+              <li>Take fast democratic decisions</li>
+              <li>Allow humanity to save the planet</li>
+              <li>Bring peace, prosperity and freedom</li>
+              <li>Enforce true democracy everywhere</li>
+            </ul>
+          </div>
+        </div>
+        <div class="column">
+          <div class="content">
+            <!-- <div class="is-uppercase has-text-weight-bold">Join the revolution now</div> -->
+            <div class="is-uppercase has-text-weight-bold">To be available soon on:</div>
+            <figure class="image is-4by1 mb-0 pb-0">
+              <img src="images/google_play.png" style="width:192px;height:57px">
+            </figure>
+            <figure class="image is-4by1 mt-0 pt-0">
+              <img src="images/app_store.png" style="width:192px;height:57px">
+            </figure>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="panel is-info container mt-6">
+    <p class="panel-heading has-background-grey">
+      About Us
+    </p>
+    <div class="panel-block">
+      <p>
+        The <em>DirectDemocracy Association</em> is a non-profit association based in Switzerland which promotes the
+        <em>DirectDemocracy</em> electronic voting system to impose direct democracy everywhere in the world.
+      </p>
+    </div>
+    <div class="panel-block">
+      <p>
+        <b>Our Motivation:</b>
+        Humanity is facing increasingly challenging threats : global warming, mass extinction, wars, nuclear threat,
+        poverty, famines, etc. Unfortunately, the current governance systems are unable to address these problems. They
+        are corrupted by economical interests and too slow. We strongly believe that only democracy can help humanity to
+        avoid, as much as possible, these disasters. However, democracy is currently regressing in the world. But we
+        have developed a unique technology that can impose a worldwide governance system based on direct democracy.
+        Designed around an open- source decentralized electronic voting mobile phone app, it allows anyone to propose
+        referendums at municipal, regional, national or international levels for which everyone can vote anonymously, in
+        a verifiable and non-censurable way. With this tool, humanity can decide freely, quickly and indisputably on the
+        matters that concern it. The governments will have to choose their camp : either they apply the democratic
+        decisions or they expose themselves to a popular uprising. The goal of our association is to promote this
+        democratic tool which aims at reversing the current trend of democratic decline and impose direct democracy
+        everywhere in the world for the greater good of humanity.
+      </p>
+    </div>
+  </section>
+  <section class="panel is-info container mt-6">
+    <p class="panel-heading has-background-grey">
+      Contact
+    </p>
+    <div class="panel-block">
+      Reach us by e-mail at <a class="ml-1" href="mailto:info@directdemocracy.vote">info@directdemocracy.vote</a>.
+    </div>
+  </section>
+  <section class="panel is-info container mt-6">
+    <p class="panel-heading has-background-grey">
+      Donate
+    </p>
+    <div class="panel-block">
+      <div class="content">
         <p>
-          This web site is the home of <i>directdemocracy</i>.
-          Currently, this project is under development.
+          We are seeking financial support from foundations and individuals to help us:
         </p>
+        <ul>
+          <li>deploy the necessary computing resources</li>
+          <li>refine the technology</li>
+          <li>help citizens to organize referendums</li>
+          <li>reach out the world with direct<b>democracy</b></li>
+        </ul>
+        <p>Please contact us if you would like to support to this project.</p>
       </div>
-    </section>
-    <section class="section">
-      <div class="columns is-mobile">
-        <div class="column is-narrow"><i class="f7-icons" style="font-size:400%">device_phone_portrait</i></div>
-        <div class="column">
-          <p class="title is-3"><a href="//app.directdemocracy.vote" target="_blank">app</a></p>
-          <p class="subtitle is-5">smartphone app allowing citizens to sign petitions and vote on referendums.</p>
-        </div>
-      </div>
-    </section>
-    <section class="section">
-      <div class="columns is-mobile">
-        <div class="column is-narrow"><i class="f7-icons" style="font-size:400%">book</i></div>
-        <div class="column">
-          <p class="title is-3"><a href="//notary.directdemocracy.vote" target="_blank">notary</a></p>
-          <p class="subtitle is-5">web service publishing messages signed by citizens and other web services.</p>
-        </div>
-      </div>
-    </section>
-    <section class="section">
-      <div class="columns is-mobile">
-        <div class="column is-narrow"><i class="f7-icons" style="font-size:400%">building_columns</i></div>
-        <div class="column">
-          <p class="title is-3"><a href="//judge.directdemocracy.vote" target="_blank">judge</a></p>
-          <p class="subtitle is-5">web service evaluating whether citizens can vote based on a web of trust.</p>
-        </div>
-      </div>
-    </section>
-    <section class="section">
-      <div class="columns is-mobile">
-        <div class="column is-narrow"><i class="f7-icons" style="font-size:400%">square_arrow_down</i></div>
-        <div class="column">
-          <p class="title is-3"><a href="//station.directdemocracy.vote" target="_blank">polling station</a></p>
-          <p class="subtitle is-5">web service guaranteeing the anonymity of votes.</p>
-        </div>
-      </div>
-    </section>
-    <footer class="footer">
-      <div class="content has-text-centered">
-        More information is available from our <a href="https://github.com/directdemocracy-vote/www" target="_blank">GitHub repository</a>.
-      </div>
-    </footer>
-  </body>
+    </div>
+  </section>
+  <footer class="footer">
+    <div class="content has-text-centered">
+      More information is available from our <a href="https://github.com/directdemocracy-vote/www"
+        target="_blank">GitHub repository</a>.
+    </div>
+  </footer>
+</body>
+
 </html>
