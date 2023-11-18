@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="//app.directdemocracy.vote/app/css/framework7-icons.css">
   <link rel="stylesheet" href="/css/corner-ribbon.css">
   <link rel="stylesheet" href="/css/directdemocracy.css">
-  <script src="/js/index.js"></script>
+  <script type="module" src="/js/index.js"></script>
 </head>
 
 <body class="has-navbar-fixed-top">
@@ -80,9 +80,10 @@
         </div>
         <div class="navbar-end">
           <div class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-link"><span class="is-size-4">🇺🇸</span></a>
+            <a class="navbar-link"><span class="is-size-4" id="language">🇺🇸</span></a>
             <div class="navbar-dropdown">
-              <a class="navbar-item"><span class="is-size-4 pr-2">🇫🇷</span>Français</a>
+              <a class="navbar-item is-hidden" id="language-en"><span class="is-size-4 pr-2">🇺🇸</span>English</a>
+              <a class="navbar-item" id="language-fr"><span class="is-size-4 pr-2">🇫🇷</span>Français</a>
             </div>
           </div>
         </div>
@@ -98,7 +99,7 @@
           </div>
           <div class="column has-text-centered">
             <p class="title">direct<b>democracy</b></p>
-            <p class="subtitle pl-1">a worldwide democratic uprising</p>
+            <p class="subtitle pl-1" data-i18n="a-worldwide-democratic-uprising"></p>
             <p class="has-text-justified">
               direct<b>democracy</b> is a mobile phone app allowing anyone, anywhere to propose referendums and vote.
               It features all the guarantees of modern electronic voting software.
