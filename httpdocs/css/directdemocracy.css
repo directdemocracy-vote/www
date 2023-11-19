@@ -60,3 +60,8 @@ a.anchor {
   top: -90px;
   visibility: hidden;
 }
+
+.is-disabled {
+  pointer-events: none;
+  opacity: .65;
+}
