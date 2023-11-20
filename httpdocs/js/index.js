@@ -31,13 +31,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (translator.language !== 'en') // default one
       setLanguage(translator.language, 'en');
   };
-  const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-  $navbarBurgers.forEach(el => {
+  const navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+  navbarBurgers.forEach(el => {
     el.addEventListener('click', () => {
-      const target = el.dataset.target;
-      const $target = document.getElementById(target);
+      const target = document.getElementById(el.dataset.target);
       el.classList.toggle('is-active');
-      $target.classList.toggle('is-active');
+      target.classList.toggle('is-active');
+    });
+  });
+  const navbarItems = document.querySelectorAll('.navbar-item');
+  navbarItems.forEach(navbarItem => {
+    navbarItem.addEventListener('click', function() {
+      document.getElementById('navbar-burger').classList.remove('is-active');
+      document.getElementById('navbar-menu').classList.remove('is-active');
     });
   });
 });
