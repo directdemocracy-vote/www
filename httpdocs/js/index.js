@@ -41,9 +41,21 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   const navbarItems = document.querySelectorAll('.navbar-item');
   navbarItems.forEach(navbarItem => {
-    navbarItem.addEventListener('click', function() {
+    navbarItem.addEventListener('click', function(event) {
+      const t = event.currentTarget;
       document.getElementById('navbar-burger').classList.remove('is-active');
       document.getElementById('navbar-menu').classList.remove('is-active');
+      if (t === document.getElementById('faq')) {
+        document.getElementById('main-page').classList.add('is-hidden');
+        document.getElementById('faq-page').classList.remove('is-hidden');
+      } else if (
+        t === document.getElementById('main') ||
+        t === document.getElementById('about-menu') ||
+        t === document.getElementById('contact-menu') ||
+        t === document.getElementById('donate-menu')) {
+        document.getElementById('main-page').classList.remove('is-hidden');
+        document.getElementById('faq-page').classList.add('is-hidden');
+      }
     });
   });
 });
