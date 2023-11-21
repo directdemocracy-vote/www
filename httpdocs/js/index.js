@@ -1,7 +1,6 @@
 import Translator from 'https://app.directdemocracy.vote/app/js/translator.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-  console.log(window.location.hash);
   if (window.location.hash === '#faq' || window.location.hash.startsWith('#q')) {
     document.getElementById('main-page').classList.add('is-hidden');
     document.getElementById('faq-page').classList.remove('is-hidden');
@@ -9,8 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
   let flags = null;
   let translator = new Translator('i18n');
   translator.onready = function() {
-    console.log('loading...');
-
     const language = document.getElementById('language');
     const dropdown = document.getElementById('language-dropdown');
     fetch('../i18n/flags.json')
@@ -25,7 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
               dd.classList.remove('is-hidden');
             }, 100);
           }
-          console.log('set language: ' + language);
           translator.language = language;
           document.getElementById(`language-${previous}`).classList.remove('is-disabled');
           document.getElementById(`language-${language}`).classList.add('is-disabled');
@@ -51,22 +47,13 @@ document.addEventListener('DOMContentLoaded', () => {
           a.appendChild(span);
           a.appendChild(document.createTextNode(translator.languages[country]));
           dropdown.appendChild(a);
-          console.log(`${country}: ${flag}`);
         }
-        if (translator.language !== 'en') // default one
-          setLanguage(translator.language, 'en');
+        setLanguage(translator.language);
       })
       .catch((error) => {
         console.error('Could not load "i18n/flags.json".');
-        console.log(error);
+        console.error(error);
       });
-    /*
-    for (const [key] of Object.entries(translator.languages)) {
-      document.getElementById(`language-${key}`).addEventListener('click', function(event) {
-        setLanguage(key);
-      });
-    }
-    */
   };
   const navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
   navbarBurgers.forEach(el => {
