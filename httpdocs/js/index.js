@@ -1,6 +1,11 @@
 import Translator from 'https://app.directdemocracy.vote/app/js/translator.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+  console.log(window.location.hash);
+  if (window.location.hash === '#faq' || window.location.hash.startsWith('#q')) {
+    document.getElementById('main-page').classList.add('is-hidden');
+    document.getElementById('faq-page').classList.remove('is-hidden');
+  }
   let translator = new Translator('i18n');
   function setLanguage(language, previous) {
     if (previous === undefined) {
@@ -45,11 +50,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const t = event.currentTarget;
       document.getElementById('navbar-burger').classList.remove('is-active');
       document.getElementById('navbar-menu').classList.remove('is-active');
-      if (t === document.getElementById('faq')) {
+      if (t === document.getElementById('faq-menu')) {
         document.getElementById('main-page').classList.add('is-hidden');
         document.getElementById('faq-page').classList.remove('is-hidden');
       } else if (
-        t === document.getElementById('main') ||
+        t === document.getElementById('main-menu') ||
         t === document.getElementById('about-menu') ||
         t === document.getElementById('contact-menu') ||
         t === document.getElementById('donate-menu')) {
