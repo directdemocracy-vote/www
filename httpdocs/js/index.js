@@ -79,6 +79,10 @@ document.addEventListener('DOMContentLoaded', () => {
         t === document.getElementById('donate-menu')) {
         document.getElementById('main-page').classList.remove('is-hidden');
         document.getElementById('faq-page').classList.add('is-hidden');
+        if (t === document.getElementById('main-menu')) {
+          history.pushState('', document.title, window.location.pathname + window.location.search);
+          window.scrollTo(0, 0);
+        }
       }
     });
   });
