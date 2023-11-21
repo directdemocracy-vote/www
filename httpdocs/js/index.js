@@ -72,6 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (t === document.getElementById('faq-menu')) {
         document.getElementById('main-page').classList.add('is-hidden');
         document.getElementById('faq-page').classList.remove('is-hidden');
+        window.scrollTo(0, 0);
       } else if (
         t === document.getElementById('main-menu') ||
         t === document.getElementById('about-menu') ||
@@ -84,6 +85,24 @@ document.addEventListener('DOMContentLoaded', () => {
           window.scrollTo(0, 0);
         }
       }
+    });
+  });
+  function showPrivacy() {
+    document.getElementById('privacy').classList.add('is-active');
+  }
+  function hidePrivacy() {
+    document.getElementById('privacy').classList.remove('is-active');
+  }
+  document.getElementById('privacy-link').addEventListener('click', showPrivacy);
+  document.addEventListener('keydown', (event) => {
+    if (event.code === 'Escape')
+      hidePrivacy();
+  });
+  let closeOptions = document.querySelectorAll(
+    '.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button');
+  closeOptions.forEach((close) => {
+    close.addEventListener('click', () => {
+      hidePrivacy();
     });
   });
 });
