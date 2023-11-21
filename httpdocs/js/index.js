@@ -6,35 +6,67 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('main-page').classList.add('is-hidden');
     document.getElementById('faq-page').classList.remove('is-hidden');
   }
+  let flags = null;
   let translator = new Translator('i18n');
-  function setLanguage(language, previous) {
-    if (previous === undefined) {
-      previous = translator.language;
-      const dd = document.getElementById('language-dropdown');
-      dd.classList.add('is-hidden');
-      setTimeout(() => {
-        dd.classList.remove('is-hidden');
-      }, 100);
-    }
-    translator.language = language;
-    let flag;
-    switch (language) {
-      case 'en': flag = '🇺🇸'; break;
-      case 'fr': flag = '🇫🇷'; break;
-      default: flag = '?';
-    }
-    document.getElementById(`language-${previous}`).classList.remove('is-disabled');
-    document.getElementById(`language-${language}`).classList.add('is-disabled');
-    document.getElementById('language').innerHTML = flag;
-  }
   translator.onready = function() {
+    console.log('loading...');
+
+    const language = document.getElementById('language');
+    const dropdown = document.getElementById('language-dropdown');
+    fetch('../i18n/flags.json')
+      .then((r) => r.json())
+      .then((content) => {
+        function setLanguage(language, previous) {
+          if (previous === undefined) {
+            previous = translator.language;
+            const dd = document.getElementById('language-dropdown');
+            dd.classList.add('is-hidden');
+            setTimeout(() => {
+              dd.classList.remove('is-hidden');
+            }, 100);
+          }
+          console.log('set language: ' + language);
+          translator.language = language;
+          document.getElementById(`language-${previous}`).classList.remove('is-disabled');
+          document.getElementById(`language-${language}`).classList.add('is-disabled');
+          document.getElementById('language').innerHTML = flags[language];
+        }
+        flags = content;
+        let first = true;
+        for (const [country, flag] of Object.entries(flags)) {
+          let a = document.createElement('a');
+          a.classList.add('navbar-item');
+          if (first) {
+            a.classList.add('is-disabled');
+            language.textContent = flag;
+            first = false;
+          }
+          a.setAttribute('id', `language-${country}`);
+          a.addEventListener('click', function(event) {
+            setLanguage(country);
+          });
+          let span = document.createElement('span');
+          span.classList.add('is-size-4', 'pr-2');
+          span.textContent = flag;
+          a.appendChild(span);
+          a.appendChild(document.createTextNode(translator.languages[country]));
+          dropdown.appendChild(a);
+          console.log(`${country}: ${flag}`);
+        }
+        if (translator.language !== 'en') // default one
+          setLanguage(translator.language, 'en');
+      })
+      .catch((error) => {
+        console.error('Could not load "i18n/flags.json".');
+        console.log(error);
+      });
+    /*
     for (const [key] of Object.entries(translator.languages)) {
       document.getElementById(`language-${key}`).addEventListener('click', function(event) {
         setLanguage(key);
       });
     }
-    if (translator.language !== 'en') // default one
-      setLanguage(translator.language, 'en');
+    */
   };
   const navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
   navbarBurgers.forEach(el => {
