@@ -9,8 +9,11 @@
     "key",
     "signature",
     "published",
+    "citizen",
     "referendum",
-    "blindKey"
+    "encryptedVote",
+    "appKey",
+    "appSignature"
   ],
   "properties": {
     "schema": {
@@ -32,13 +35,28 @@
       "minimum": 0,
       "maximum": 999999999999
     },
+    "citizen": {
+      "description": "public key of the citizen",
+      "type": "string",
+      "maxLength": 512
+    },
     "referendum": {
       "description": "signature of the referendum proposal",
       "type": "string",
       "maxLength": 512
     },
-    "blindKey": {
-      "description": "public key of used by the station for blind signature",
+    "encryptedVote": {
+      "description": "vote encrypted for blind signature",
+      "type": "string",
+      "maxLength": 512
+    },
+    "appKey": {
+      "description": "public key of the app",
+      "type": "string",
+      "maxLength": 512
+    },
+    "appSignature": {
+      "description": "signature of the signature by the app",
       "type": "string",
       "maxLength": 512
     }
