@@ -61,7 +61,7 @@
       "maxLength": 512
     },
     "appSignature": {
-      "description": "signature of the app server for the referendum, number and answer"
+      "description": "signature of the app server for the referendum, ballot, number and answer"
       "type": "string"
       "maxLength": 512
     }
