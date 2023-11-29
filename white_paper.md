@@ -266,6 +266,7 @@ published: [date of publication expressed in seconds since 1970-01-01 00:00:00]
 
 The public keys stored in JSON structures are stripped down version of the standard public key.
 The header and footer line are suppressed as well as the new lines.
+Moreover the common heading and trailing characters of the RSA-2048 are removed.
 Considering the following public key:
 ```
 -----BEGIN PUBLIC KEY-----
@@ -280,8 +281,9 @@ ixjan50H4C04HkvvLILFXsNylxOz7vZNYauO6Oh2Jn8IkKzTtXuxaLmh7KuzrLSk
 ```
 The value stored as a string in the JSON structure is:
 ```
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkoSFvGywo4sb0crZlmDJR7iOSSioDS/ujo4dI0ISYezTVSBnuMvdEtCNfjIXUXy5fMbemrCB8GaragdJQf3w5xCKYjVSHlU2CEglTz0tgKTfm00/eoBPoW0oEaHRovVkwtaMDECvN8DyWBsA0XqVGXQsSYa3WA9s0CaaWv9+za1N1Lfv6gKxXMItWcMBcBnPqj2mcl3qgbp635maIkSMk9/ybH80kv8lxkc/VFsAWsLykcMSZdgNWaxWvNXl6zES8ZkNfOnXHYztbIm25Hjrixjan50H4C04HkvvLILFXsNylxOz7vZNYauO6Oh2Jn8IkKzTtXuxaLmh7KuzrLSk1QIDAQAB
+koSFvGywo4sb0crZlmDJR7iOSSioDS/ujo4dI0ISYezTVSBnuMvdEtCNfjIXUXy5fMbemrCB8GaragdJQf3w5xCKYjVSHlU2CEglTz0tgKTfm00/eoBPoW0oEaHRovVkwtaMDECvN8DyWBsA0XqVGXQsSYa3WA9s0CaaWv9+za1N1Lfv6gKxXMItWcMBcBnPqj2mcl3qgbp635maIkSMk9/ybH80kv8lxkc/VFsAWsLykcMSZdgNWaxWvNXl6zES8ZkNfOnXHYztbIm25Hjrixjan50H4C04HkvvLILFXsNylxOz7vZNYauO6Oh2Jn8IkKzTtXuxaLmh7KuzrLSk1Q
 ```
+This base64 string translates into a 256-byte binary data chunk.
 
 There are mainly 8 types of publications in *directdemocracy.vote*:
 
