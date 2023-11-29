@@ -194,7 +194,8 @@ Hackers cannot change the results of a vote and cannot sabotage a referendum.
 ### Preventing Vote Buying
 
 It is very difficult for a voter to prove to someone else what they voted.
-Hence, selling ones vote is almost impossible, especially at large scale.
+This is made particularly difficult as voters can change their mind anytime before the referendum deadline and re-vote differently.
+Only their last vote is taken into account.
 
 ## Principles
 
@@ -265,6 +266,7 @@ published: [date of publication expressed in seconds since 1970-01-01 00:00:00]
 
 The public keys stored in JSON structures are stripped down version of the standard public key.
 The header and footer line are suppressed as well as the new lines.
+Moreover the common heading and trailing characters of the 2048-bit RSA public keys are removed.
 Considering the following public key:
 ```
 -----BEGIN PUBLIC KEY-----
@@ -279,8 +281,9 @@ ixjan50H4C04HkvvLILFXsNylxOz7vZNYauO6Oh2Jn8IkKzTtXuxaLmh7KuzrLSk
 ```
 The value stored as a string in the JSON structure is:
 ```
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkoSFvGywo4sb0crZlmDJR7iOSSioDS/ujo4dI0ISYezTVSBnuMvdEtCNfjIXUXy5fMbemrCB8GaragdJQf3w5xCKYjVSHlU2CEglTz0tgKTfm00/eoBPoW0oEaHRovVkwtaMDECvN8DyWBsA0XqVGXQsSYa3WA9s0CaaWv9+za1N1Lfv6gKxXMItWcMBcBnPqj2mcl3qgbp635maIkSMk9/ybH80kv8lxkc/VFsAWsLykcMSZdgNWaxWvNXl6zES8ZkNfOnXHYztbIm25Hjrixjan50H4C04HkvvLILFXsNylxOz7vZNYauO6Oh2Jn8IkKzTtXuxaLmh7KuzrLSk1QIDAQAB
+koSFvGywo4sb0crZlmDJR7iOSSioDS/ujo4dI0ISYezTVSBnuMvdEtCNfjIXUXy5fMbemrCB8GaragdJQf3w5xCKYjVSHlU2CEglTz0tgKTfm00/eoBPoW0oEaHRovVkwtaMDECvN8DyWBsA0XqVGXQsSYa3WA9s0CaaWv9+za1N1Lfv6gKxXMItWcMBcBnPqj2mcl3qgbp635maIkSMk9/ybH80kv8lxkc/VFsAWsLykcMSZdgNWaxWvNXl6zES8ZkNfOnXHYztbIm25Hjrixjan50H4C04HkvvLILFXsNylxOz7vZNYauO6Oh2Jn8IkKzTtXuxaLmh7KuzrLSk1Q
 ```
+This base64 string translates into a 256-byte binary data chunk.
 
 There are mainly 8 types of publications in *directdemocracy.vote*:
 
@@ -549,18 +552,6 @@ Thus, this key should be encrypted with the citizen key and sent to the app serv
 
 ### Special Cases
 
-#### Vote Buying Prevention
-
-The app should include an optional "hide-vote" feature to discourage vote buying attempts.
-When voting, the citizen has the option to click the "hide-vote" checkbox.
-If they do it, their vote won't take place immediately and the app will look like they never voted to this referendum.
-However, their original answer to the vote will be remembered by the app and used whenever they vote again to the same referendum without the "hide-vote" option checked.
-Imagine that a citizen votes "yes" with the "hide-vote" option checked.
-Then, a vote buyer ask them to show their phone, they will see that the citizen didn't vote yet.
-If they force the citizen to vote "no", the citizen will do so in front of the vote buyer and a "yes" will be casted.
-Hence the vote buyer cannot be sure that the citizen actually voted as they told them to do.
-Note however, that in case the citizen first check the "hide-vote" option, they won't be able to verify their vote afterwards: the verification will always display a vote corresponding to the answer of the second vote to fool the possible buyer.
-
 #### Station not Responding
 
 If *S* doesn't answer quickly to the *registration* of *A* by publishing a corresponding *ballot* publication, then the original *registration* of *A* can be considered as obsolete by other stations, which can accept a new registration for *A*. As a consequence, *S* will get bad reputation.
@@ -636,7 +627,7 @@ Any malicious participant could be spotted by other participants and its reputat
 
 ### Vote Buying
 
-It is not possible for a citizen to prove what they voted or sell their vote, unless the citizen sell their smartphone to some buyer after they acquired a high trust level.
+It is not possible for a citizen to prove what they voted or sell their vote, unless the citizen sell their smartphone to some buyer after they acquired a high reputation.
 This is however unlikely to happen at large scale without being discovered.
 Also the sold citizen card could not get nor provide any further fair endorsement which will appear suspect after a while.
 That includes judge endorsements which may happen on regular time intervals.
