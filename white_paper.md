@@ -266,7 +266,7 @@ published: [date of publication expressed in seconds since 1970-01-01 00:00:00]
 
 The public keys stored in JSON structures are stripped down version of the standard public key.
 The header and footer line are suppressed as well as the new lines.
-Moreover the common heading and trailing characters of the RSA-2048 are removed.
+Moreover the common heading and trailing characters of the 2048-bit RSA public keys are removed.
 Considering the following public key:
 ```
 -----BEGIN PUBLIC KEY-----
