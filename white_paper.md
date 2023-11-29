@@ -484,41 +484,20 @@ I signs and publishes vote contents after sufficiently votes are casted to preve
 
 #### Citizen Registration
 
-A citizen with public key *A* announces their *registration* to referendum *R* at polling station *S*.
-The app used by *A* should ensure that *S* is endorsed by *J*.
-The app generates a vote blob *V* which contains a unique random ballot number and the answer of the citizen to the referendum question.
+A citizen with public key *C* announces their *registration* to referendum *R* using server app *A* and encrypted vote *~V~*
+The app server ensure the app client is unmodifed thanks to the integrity check.
+The app client ensure that *C* is endorsed by *J* and is located inside the area of the referendum.
+The app generates a vote blob *V* which contains the signature of the referendum, a unique random ballot number, a vote number and the answer of the citizen to the referendum question.
 The answer could be "yes", "no", "abstain" or something else.
-The app encrypts *V* with the private key of *A* to generate *V<sup>a</sup>*, adds *B*, publish this signed blob and informs *S* about it.
-The encryption algorithm used by the app to generate *V<sup>A</sup>* supports [blind signature](https://en.wikipedia.org/wiki/Blind_signature).
-
-When the citizen publishes their registration, the app performs an integrity check and signs this registation publication.
-This guarantees that the citizen registration was performed by a trusted app and the private encryption key originates from the app and didn't leak.
-Leaking the encryption private key or using a foreign encryption key would allow a citizen to sell their vote, as it would prove that the citizen voted according to the demand of the vote buyer.
-
-#### Polling Station Check
-
-*S* determines if *A* is allowed to vote to *R*.
-*A* is allowed to vote to *R* if they are endorsed by *J* and are located in the area of *R*.
-Also, *A* should not be in the process of voting in another station, e.g., there should not be any *ballot* message for *A* and *R* published by another station.
-If *A* is allowed to vote, the station publishes a *ballot* message containing the encrypted vote *V<sup>A</sup>* blindly signed by *B* and informs *A* about it.
+The client app encrypts *V* for RSA [blind signature](https://en.wikipedia.org/wiki/Blind_signature) as *~V~* by the server app *A*.
+The server app *A* blind signs *~V~* and sign the *CRA~V~* message and this back to the client app.
+When the deadline of the referendum is reached, the server app signs and publishes the *CRA~V~* message to announce that it handled the participation of *C* to *R*.
 
 #### Vote
 
-*A* gets the *V<sup>A</sup>* blob signed by *B*, decrypts it and publishes the result which holds the unblinded signature *b'*.
-This vote is perfectly anonymous because the polling station cannot link the unblinded signature of *B* (noted *b'*) with the original blind signature (noted *b*).
-It is also verifiable by the app since the app knows the unique ballot number included in *V*.
-
-#### Delay before Voting
-
-In order to prevent any time correlation between the publication of the citizen registration and the vote, the publication of the vote should not happen immediately.
-Instead, the voter should wait until several (a not-too-small random number of) citizen registations from the same polling station are published, so that nobody can deduce their vote.
-
-However, this wait may be long, e.g., a few hours or maybe days. So, the app should check on a regular basis if it is safe to publish the vote.
-It is safe to publish the vote if for the same station, the difference between the number of registrations and the number of votes is fairly high (let's say 10 or so)
-
-While waiting, the app should keep its encryption key in RAM and not on a permanent storage (e.g., in a file).
-If it does, the user may root the phone and get the encryption key to prove what they voted and sell their vote.
-Thus, this key should be encrypted with the citizen key and sent to the app server that will perform an integrity check, store the key in its database and restore to the client app upon request after performing another integrity check.
+The citizen app *C* sends the clear vote *V* that includes the unblinded signature of *A* to the polling station *S*.
+*S* wait until a large number of votes for *R* from *A* are published (about 100 or so) to publish *V*.
+This guarantees that the app server *A* cannot deduce the vote of *C* by time correlation.
 
 ### Special Cases
 
