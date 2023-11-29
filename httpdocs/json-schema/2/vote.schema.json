@@ -13,6 +13,7 @@
     "ballot",
     "number",
     "answer",
+    "appKey",
     "appSignature"
   ],
   "properties": {
@@ -54,6 +55,11 @@
       "description": "answer of the citizen to the referendum question",
       "type": "string"
     },
+    "appKey": {
+      "description": "public key of the app server"
+      "type": "string"
+      "maxLength": 512
+    }
     "appSignature": {
       "description": "signature of the app server for the referendum, number and answer"
       "type": "string"
