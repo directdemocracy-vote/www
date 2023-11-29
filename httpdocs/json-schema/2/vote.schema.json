@@ -57,12 +57,12 @@
     },
     "appKey": {
       "description": "public key of the app server"
-      "type": "string"
+      "type": "string",
       "maxLength": 512
     },
     "appSignature": {
       "description": "signature of the app server for the referendum, ballot, number and answer"
-      "type": "string"
+      "type": "string",
       "maxLength": 512
     }
   },
