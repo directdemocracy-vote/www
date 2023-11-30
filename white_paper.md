@@ -414,10 +414,10 @@ schema: https://directdemocracy.vote/json-schema/2/participation.schema.json
 key: [public key of the citizen]
 signature: [signature of the citizen]
 published: 1590298858
-referendum: [signature of the referendum proposal]
-encryptedVote: [encrypted vote of the citizen]
 appKey: [public key of the app]
 appSignature: [signature of the signature by the app]
+referendum: [signature of the referendum proposal]
+encryptedVote: [encrypted vote of the citizen]
 ```
 
 #### Vote
@@ -435,6 +435,8 @@ schema: https://directdemocracy.vote/json-schema/2/vote.schema.json
 key: [public key of participation]
 signature: [blind signature of the station]
 published: 1590298858
+appKey: [public key of the app]
+appSignature: [blind signature of vote: referendum, ballot, number and answer by the app]
 referendum: [signature of the referendum]
 ballot: [unique random ballot number]
 number: [vote counter]
@@ -468,55 +470,43 @@ The voting process is summarized on the following figure:
 
 #### Referendum Publication
 
-A referendum with public a key *R* is published with a reference to the public key *J* of a judge.
-The judge should endorse a number of apps which are considered as valid for *directdemocracy.vote*.
+A referendum with signature *R* is published by a judge with a public key *J*.
 
 #### Polling Station
 
 A polling station with a public key *S* is trusted by the citizen and used as a proxy to anonymize the vote of the citizen.
-It doesn't know anything of the citizen, except its IP address and vote content.
-I signs and publishes vote contents after sufficiently votes are casted to prevent the app server from deducing the vote of the citizen using time correlation.
+It doesn't know anything about the citizen, except its IP address and vote content.
+It signs and publishes vote contents after sufficiently votes are casted to prevent the app server from deducing the vote of the citizen using time correlation.
+The voting station manage a vote buffer with a fixed size (e.g., 100).
+Each new vote coming from client apps is stored in the buffer.
+When the vote buffer is full, the station chooses randomly one vote in its buffer, published it and remove it from its buffer, so that it can accept new votes.
+This guarantees that the app server cannot make any time correlation to deduce the vote of a citizen.
 
 #### Citizen Registration
 
-A citizen with public key *C* announces their *registration* to referendum *R* using server app *A* and encrypted vote *~V~*
-The app server ensure the app client is unmodifed thanks to the integrity check.
-The app client ensure that *C* is endorsed by *J* and is located inside the area of the referendum.
-The app generates a vote blob *V* which contains the signature of the referendum, a unique random ballot number, a vote number and the answer of the citizen to the referendum question.
+A citizen with public key *C* sends to the app server their signed *registration* to referendum *R* using app server public key *A* and encrypted vote *~V~*
+The app server ensures the client app is unmodifed thanks to the integrity check.
+The client app ensures that *C* is endorsed by *J* and is located inside the area of the referendum *R*.
+The client app generates a vote blob *V* which contains the deadline of the referendum as a publication date, the signature of the referendum *R*, a unique random ballot number, a vote number and the answer of the citizen to the referendum question.
 The answer could be "yes", "no", "abstain" or something else.
-The client app encrypts *V* for RSA [blind signature](https://en.wikipedia.org/wiki/Blind_signature) as *~V~* by the server app *A*.
-The server app *A* blind signs *~V~* and sign the *CRA~V~* message and this back to the client app.
-When the deadline of the referendum is reached, the server app signs and publishes the *CRA~V~* message to announce that it handled the participation of *C* to *R*.
+The client app encrypts *V* for RSA [blind signature](https://en.wikipedia.org/wiki/Blind_signature) by the app server *A* as *~V~* and send it to the app server in a signed message together with the *C* key, *R* signature and *A* key.
+The app server *A* blind signs *~V~*, sign the *CRA~V~* message and send this back to the client app.
+When the deadline of the referendum is reached, the server app publishes the *CRA~V~* signed message to announce that it handled the participation of *C* to *R*.
+This information will be use to show publicly that *C* participated to *R* with app *A*.
 
 #### Vote
 
-The citizen app *C* sends the clear vote *V* that includes the unblinded signature of *A* to the polling station *S*.
-*S* wait until a large number of votes for *R* from *A* are published (about 100 or so) to publish *V*.
+The citizen app sends the clear vote *V* that includes the unblinded signature of *A* to the polling station *S*.
+It signs the vote and send it back immediately to the client app as a proof of receipt.
+*S* wait until a large number of votes for *R* from *A* are published (about 100 or so) before publishing *V*.
 This guarantees that the app server *A* cannot deduce the vote of *C* by time correlation.
-
-### Special Cases
-
-#### Station not Responding
-
-If *S* doesn't answer quickly to the *registration* of *A* by publishing a corresponding *ballot* publication, then the original *registration* of *A* can be considered as obsolete by other stations, which can accept a new registration for *A*. As a consequence, *S* will get bad reputation.
-
-#### Vote Ballot Mismatch
-
-If for a *S<sub>R</sub>* there is more *votes* than *ballots*, then the station is considered as cheating.
-If that happens, the reputation of the station is immediately distrusted and all its *votes* and *ballots* are ignored.
-This is unlikely to happen as the interest of stations is to maintain a high reputation on a large number of referendums.
-
-#### Citizen Voting Twice
-
-A trusted app cannot let *A* vote twice to *R*.
-Even if that would happen, *S* would detect it and refuse to publish the requested *ballot*.
 
 ### Display of the Results
 
 #### Start of the Display of the Results
 
 The display of the results of *R* starts as soon as a first vote is published.
-The first vote of a station is published only after several *ballots* are published for the same station.
+
 Otherwise, observers would know what the first registered citizen has voted.
 The results are pretty simple to compute: we should list all the *votes* for all the stations taking part in the referendum.
 For each possible answer, all the *votes* corresponding to this answer are summed up and the final sum is displayed.
