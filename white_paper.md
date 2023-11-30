@@ -481,6 +481,7 @@ The voting station manage a vote buffer with a fixed size (e.g., 100).
 Each new vote coming from client apps is stored in the buffer.
 When the vote buffer is full, the station chooses randomly one vote in its buffer, published it and remove it from its buffer, so that it can accept new votes.
 This guarantees that the app server cannot make any time correlation to deduce the vote of a citizen.
+When the deadline of the referendum is reached, the stations should not accept new votes from client apps and should publish all the vote contained in their buffer.
 
 #### Citizen Registration
 
@@ -503,21 +504,14 @@ This guarantees that the app server *A* cannot deduce the vote of *C* by time co
 
 ### Display of the Results
 
-#### Start of the Display of the Results
+#### Display of the Results
 
 The display of the results of *R* starts as soon as a first vote is published.
-
-Otherwise, observers would know what the first registered citizen has voted.
-The results are pretty simple to compute: we should list all the *votes* for all the stations taking part in the referendum.
 For each possible answer, all the *votes* corresponding to this answer are summed up and the final sum is displayed.
-The answer is computed from the first bits of the hash contained in the *vote*.
-
-#### Final Results
-
-The results are displayed continuously until the deadline of the referendum is reached.
-At this point the results are final and any vote published after the deadline should be ignored.
-This allows observers to follow the participation and outcome of the referendum.
-This may also encourage more citizens to vote especially if the results appears to be tied.
+When the deadline is reached, the app servers publish the list of participants and the result should be considered as final.
+The number of participants should match the number of votes.
+Displaying the results in real time during the voting process is uncommon in classical voting processes.
+It has however the nice property of motivating more citizens to participate, especially if they are not happy with the current preliminary results.
 
 #### Participation
 
@@ -544,28 +538,24 @@ Unlike Google and Apple, such new systems could be publicly audited from both a 
 People without a smartphone are unfortunately unable to vote.
 However today [a large percentage of the adult population has a such a device](https://en.wikipedia.org/wiki/List_of_countries_by_smartphone_penetration) and it is increasing every day.
 
-### Malicious Polling stations
+### Malicious Participants
 
-A malicious polling station may misbehave, but this will be visible by all.
-If that happens, all the votes handled by this stations will be discarded.
-All the honest citizens who voted through this polling station will loose their vote.
-And the polling station will get a bad reputation from most of the judges and won't be used any more.
-A polling station handling a large number of votes is however unlikely to misbehave.
-This is because to have a large number of votes, a polling station should have a high reputation.
-And a high reputation is only possible if the station never misbehaved.
-If it misbehaves once, it will immediately loose its reputation and be excluded for the next referendums.
-
-### Other Malicious Participants
-
-Any malicious participant could be spotted by other participants and its reputation will immediately drop, excluding the malicious participant from further participation in *directdemocracy.vote*.
+Any malicious participant, e.g., citizens, apps, polling stations, notaries or judges, could be spotted by other participants and their reputation will immediately drop, excluding the malicious participant from further participation in *directdemocracy.vote*.
 
 ### Vote Buying
 
-It is not possible for a citizen to prove what they voted or sell their vote, unless the citizen sell their smartphone to some buyer after they acquired a high reputation.
+Citizen can vote as many times as they want until the deadline of a referendum.
+Only their last vote is taken into account.
+This allows a citizen to show someone else that they voted one specific answer and some time afterwards they could vote again, but with a different answer.
+Optionally, apps could include a "final" tickbox when voting that would make that any further voting to the same referendum will be silently ignored.
+This way, a citizen could vote "yes" and then meet a person close to the deadline of the referendum and show them that they vote "no" and wait that the deadline passes.
+This "no" will simply be ignored if you ticked the "final" tickbox when you voted "yes".
+The vote buyer has no way to be aware of this unless they have been controlling your phone from the beginning to the deadline of the referendum, which means several weeks or months.
+The only way for a citizen to sell their vote is indeed to sell their smartphone to some buyer after they acquired a high reputation.
 This is however unlikely to happen at large scale without being discovered.
 Also the sold citizen card could not get nor provide any further fair endorsement which will appear suspect after a while.
 That includes judge endorsements which may happen on regular time intervals.
-When discovered, a citizen who sold his smartphone with access to their *directdemocracy.vote* app, is unlikely to get trusted again in the future.
+When discovered, a citizen who sold their smartphone with access to their *directdemocracy.vote* app, is unlikely to get trusted again in the future.
 
 ## Implementation
 
