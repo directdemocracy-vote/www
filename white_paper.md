@@ -388,12 +388,7 @@ schema: https://directdemocracy.vote/json-schema/2/proposal.schema.json
 key: [public key of judge]
 signature: [signature of judge]
 published: 1574679658
-area: |
-  city=Mâcon
-  county=Saône-et-Loire
-  state=Bourgogne-Franche-Comté
-  country=France
-  union=European Union
+area: [signature of area]
 title: my referendum
 description: my description
 question: do you agree?
