@@ -245,7 +245,7 @@ The operating system integrity check prevents malicious users from modifying the
 These features are currently offered by the [Android Play Integrity](https://developer.android.com/google/play/integrity) and the [Apple iOS DeviceCheck](https://developer.apple.com/documentation/devicecheck).
 An integrity check is performed each time a citizen wants to publish a citizen, endorsement or registration publication.
 If the check is successful, the app will also sign the publication on server-side of the app and publish it at the notary indicated by the client-side of the app.
-This way, the notary has no clue on the IP address of the client and won't be able to correlate it with an anonymous ballots coming from the client-side of the app.
+This way, the notary has no clue on the IP address of the client.
 
 #### App Transparency
 
@@ -488,7 +488,7 @@ When the deadline of the referendum is reached, the stations should not accept n
 A citizen with public key *C* sends to the app server their signed *registration* to referendum *R* using app server public key *A* and encrypted vote *~V~*
 The app server ensures the client app is unmodifed thanks to the integrity check.
 The client app ensures that *C* is endorsed by *J* and is located inside the area of the referendum *R*.
-The client app generates a vote blob *V* which contains the deadline of the referendum as a publication date, the signature of the referendum *R*, a unique random ballot number, a vote number and the answer of the citizen to the referendum question.
+The client app generates a vote blob *V* which contains the signature of the referendum *R*, a unique random ballot number, a vote number and the answer of the citizen to the referendum question.
 The answer could be "yes", "no", "abstain" or something else.
 The client app encrypts *V* for RSA [blind signature](https://en.wikipedia.org/wiki/Blind_signature) by the app server *A* as *~V~* and send it to the app server in a signed message together with the *C* key, *R* signature and *A* key.
 The app server *A* blind signs *~V~*, sign the *CRA~V~* message and send this back to the client app.
