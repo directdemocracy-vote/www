@@ -51,7 +51,7 @@
     },
     "encryptedVote": {
       "description": "vote encrypted for blind signature",
-      "type": "string",
+      "type": "string"
     }
   },
   "additionalProperties": false
