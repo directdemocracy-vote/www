@@ -47,11 +47,6 @@
       "type": "string",
       "maxLength": 512
     },
-    "previous": {
-      "description": "signature of the previous citizen publication",
-      "type": "string",
-      "maxLength": 512
-    },
     "givenNames": {
       "description": "first name and possibly middle name of the citizen",
       "type": "string",
