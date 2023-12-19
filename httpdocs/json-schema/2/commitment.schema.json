@@ -42,6 +42,9 @@
       "type": "string",
       "maxLength": 512
     },
+    "type": {
+      "enum": ["endorse", "petition", "report", "revoke"]
+    },
     "publication": {
       "description": "signature of the publication for which the participant commit",
       "type": "string",
