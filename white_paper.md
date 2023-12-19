@@ -336,13 +336,13 @@ The [commitment](https://directdemocracy.vote/json-schema/2/commitment.schema.js
 There are four types of commitments:
 - endorse: to provide an endorsement for a participant
 - petition: to sign a petition
-- report: to report a participant
+- report: to report a participant (possibly myself)
 - revoke: to revoke an endorsement
 
 In case of the endorsement of a citizen, it claims that the owner of this citizen card is eligible to vote, e.g., the citizen card is owned by an adult person who own a single citizen card.
 Otherwise, in case of the endorsement of a web service or an app, it means that the web service or app is honest and provides a good quality of service.
 
-A **revoke** commitment is a special kind of commitment which cancels a previous endorsement. A revoke commitment can also be published by a citizen to revoke their own citizen card.
+A **revoke** commitment is a special kind of commitment which cancels a previous endorsement.
 
 All commitments published by citizens should be signed by the app after integrity check to prevent a citizen to sell their signature for signing petitions or endorsing others.
 
