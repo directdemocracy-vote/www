@@ -335,9 +335,9 @@ longitude: -73.993403
 The [commitment](https://directdemocracy.vote/json-schema/2/commitment.schema.json) of a participant includes the public key and the signature of the participant, a publication signature to which the participant provides commitment.
 There are four types of commitments:
 - endorse: to provide an endorsement for a participant
-- revoke: to revoke an endorsement
-- sign: to sign a petition
+- petition: to sign a petition
 - report: to report a participant
+- revoke: to revoke an endorsement
 
 In case of the endorsement of a citizen, it claims that the owner of this citizen card is eligible to vote, e.g., the citizen card is owned by an adult person who own a single citizen card.
 Otherwise, in case of the endorsement of a web service or an app, it means that the web service or app is honest and provides a good quality of service.
