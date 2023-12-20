@@ -43,7 +43,7 @@
       "maxLength": 512
     },
     "type": {
-      "enum": ["endorse", "petition", "report", "revoke"]
+      "enum": ["endorse", "report", "update", "transfer", "lost", "sign"]
     },
     "publication": {
       "description": "signature of the publication for which the participant commit",
