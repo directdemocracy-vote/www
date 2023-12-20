@@ -50,12 +50,12 @@
       "type": "string",
       "maxLength": 512
     },
-    "message": {
-      "description": "message encrypted with the public key of the author of the publication",
-      "type": "string"
-    },
     "comment": {
       "description": "public comment",
+      "type": "string"
+    },
+    "message": {
+      "description": "message encrypted with the public key of the author of the publication",
       "type": "string"
     }
   },
