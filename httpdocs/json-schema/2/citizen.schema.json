@@ -77,6 +77,11 @@
       "type": "number",
       "minimum": -180,
       "maximum": 180
+    },
+    "previous": {
+      "description": "signature of the previous citizen card",
+      "type": "string",
+      "maxLength": 512
     }
   },
   "additionalProperties": false
