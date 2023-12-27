@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://directdemocracy.vote/json-schema/2/commitment.schema.json",
-  "title": "commitment",
-  "description": "commitment of a participant with respect to a publication",
+  "$id": "https://directdemocracy.vote/json-schema/2/certificate.schema.json",
+  "title": "certificate",
+  "description": "certificate of a participant with respect to a publication",
   "type": "object",
   "required": [
     "schema",
@@ -14,7 +14,7 @@
   ],
   "properties": {
     "schema": {
-      "const": "https://directdemocracy.vote/json-schema/2/commitment.schema.json"
+      "const": "https://directdemocracy.vote/json-schema/2/certificate.schema.json"
     },
     "key": {
       "description": "public key of the participant",
@@ -46,7 +46,7 @@
       "enum": ["endorse", "report", "update", "transfer", "lost", "sign"]
     },
     "publication": {
-      "description": "signature of the publication for which the participant commit",
+      "description": "signature of the publication which the participant certifies",
       "type": "string",
       "maxLength": 512
     },
