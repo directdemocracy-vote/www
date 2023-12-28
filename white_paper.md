@@ -83,8 +83,8 @@ Hence, judges form a community of web services which permanently evaluate the re
 #### Endorsements
 
 In order to help judges in their duties, citizens are asked to endorse each other and to endorse web services.
-Endorsing a citizen is the action of publishing a commitment message saying "I certify this public key is unique for this citizen".
-Endorsing a web service is the action of publishing a commitment message saying "I believe this web service is honest and doing a good job".
+Endorsing a citizen is the action of publishing a certificate message saying "I certify this public key is unique for this citizen".
+Endorsing a web service is the action of publishing a certificate message saying "I believe this web service is honest and doing a good job".
 Judges collect all the endorsements published by the citizens to construct their own web of trust.
 
 #### Reputation
@@ -243,7 +243,7 @@ These integrity checks guarantee that the genuine app is used on a non-rooted un
 The app integrity check prevents malicious users from using a modified app to cheat or to extract sensitive data.
 The operating system integrity check prevents malicious users from modifying the behavior of the app at run-time or extracting sensitive data.
 These features are currently offered by the [Android Play Integrity](https://developer.android.com/google/play/integrity) and the [Apple iOS DeviceCheck](https://developer.apple.com/documentation/devicecheck).
-An integrity check is performed each time a citizen wants to publish a citizen, commitment or registration publication.
+An integrity check is performed each time a citizen wants to publish a citizen, certificate or registration publication.
 If the check is successful, the app will also sign the publication on server-side of the app and publish it at the notary indicated by the client-side of the app.
 This way, the notary has no clue on the IP address of the client.
 
@@ -288,7 +288,7 @@ This base64 string translates into a 256-byte binary data chunk.
 There are mainly 6 types of publications in *directdemocracy.vote*:
 
 - citizen (signed by app after integrity check to garantee the private key is inside in the phone keystore by the app)
-- commitment (citizen commitments should be signed by app after integrity check to prevent fake commitments)
+- certificate (citizen certificates should be signed by app after integrity check to prevent fake certificates)
 - area
 - proposal (referendum or petition)
 - participation (signed by app after integrity check to guarantee the vote encryption key is only known by the client app)
@@ -330,10 +330,10 @@ latitude: 40.724723
 longitude: -73.993403
 ```
 
-#### Commitment
+#### Certificates
 
-The [commitment](https://directdemocracy.vote/json-schema/2/commitment.schema.json) of a participant includes the public key and the signature of the participant, a publication signature to which the participant provides commitment.
-There are four types of commitments:
+The [certificate](https://directdemocracy.vote/json-schema/2/certificate.schema.json) of a participant includes the public key and the signature of the participant, a publication signature for which the participant provides the certificate.
+There are four types of certificates:
 - endorse: to provide an endorsement for a participant
 - petition: to sign a petition
 - report: to report a participant (possibly myself)
@@ -342,9 +342,9 @@ There are four types of commitments:
 In case of the endorsement of a citizen, it claims that the owner of this citizen card is eligible to vote, e.g., the citizen card is owned by an adult person who own a single citizen card.
 Otherwise, in case of the endorsement of a web service or an app, it means that the web service or app is honest and provides a good quality of service.
 
-A **revoke** commitment is a special kind of commitment which cancels a previous endorsement.
+A **revoke** certificate is a special kind of certificate which cancels a previous endorsement.
 
-All commitments published by citizens should be signed by the app after integrity check to prevent a citizen to sell their signature for signing petitions or endorsing others.
+All certificates published by citizens should be signed by the app after integrity check to prevent a citizen to sell their signature for signing petitions or endorsing others.
 
 Example:
 ```yaml
@@ -456,7 +456,7 @@ The petition system of *directdemocracy.vote* fixes these two shortcomings by re
 A petition is published as a proposal by a participant.
 
 ### Signatures
-Any citizen located in the area of the petition and approving it can sign it, that is they will publish a commitment for it.
+Any citizen located in the area of the petition and approving it can sign it, that is they will publish a certificate for it.
 
 ### Counting
 Notaries could display the result of a petition by counting and listing the citizens who signed it, excluding non-trusted citizens and citizens outside of the petition area.
