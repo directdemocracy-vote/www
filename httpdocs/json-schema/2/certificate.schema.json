@@ -43,7 +43,7 @@
       "maxLength": 512
     },
     "type": {
-      "enum": ["endorse", "report", "update", "transfer", "lost", "sign"]
+      "enum": ["endorse", "report", "sign", "trust", "distrust"]
     },
     "publication": {
       "description": "signature of the publication which the participant certifies",
