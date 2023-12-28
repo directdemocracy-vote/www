@@ -13,7 +13,8 @@
     "title",
     "description",
     "secret",
-    "deadline"
+    "deadline",
+    "trust"
   ],
   "properties": {
     "schema": {
@@ -73,6 +74,13 @@
     },
     "deadline": {
       "description": "date of vote deadline (seconds since 1970-01-01 00:00:00), minutes and seconds should be 0",
+      "type": "integer",
+      "multipleOf": 3600,
+      "minimum": 0,
+      "maximum": 999999999999
+    },
+    "trust": {
+      "description": "date or delay for trusted citizens, minutes and seconds should be 0",
       "type": "integer",
       "multipleOf": 3600,
       "minimum": 0,
