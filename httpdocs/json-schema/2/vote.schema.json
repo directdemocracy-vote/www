@@ -14,7 +14,8 @@
     "referendum",
     "number",
     "ballot",
-    "answer"
+    "answer",
+    "tag"
   ],
   "properties": {
     "schema": {
@@ -52,7 +53,7 @@
       "maxLength": 512
     },
     "number": {
-      "description": "vote number, increased each time the citizen re-vote to the same referendum",
+      "description": "vote number, increased by a random amount each time the citizen re-vote to the same referendum",
       "type": "integer",
       "minimum": 1
     },
@@ -63,6 +64,11 @@
     "answer": {
       "description": "answer of the citizen to the referendum question",
       "type": "string"
+    },
+    "tag": {
+      "description": "unique number for a vote cast by a station for a referendum",
+      "type": "integer",
+      "minimum": 1
     }
   },
   "additionalProperties": false
