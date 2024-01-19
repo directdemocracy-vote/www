@@ -18,7 +18,7 @@ $checkout_session = $stripe->checkout->sessions->create([
   ],
   'line_items' => [[
     # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
-    'price' => 'price_1OaKcUJ8bitZPVQT1bLmXANn',
+    'price' => 'price_1OaKs1J8bitZPVQTlDszgDpK',
     'quantity' => 1
   ]],
   'mode' => 'subscription',
