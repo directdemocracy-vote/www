@@ -1,12 +1,12 @@
 <?php
 
-require_once '../vendor/autoload.php';
-require_once '../secrets.php';
+require_once '../../vendor/autoload.php';
+require_once '../../secrets.php';
 
 $stripe = new \Stripe\StripeClient($stripeSecretKey);
 header('Content-Type: application/json');
 
-$YOUR_DOMAIN = 'http://localhost:4242';
+$YOUR_DOMAIN = 'https://directdemocracy.vote';
 
 $checkout_session = $stripe->checkout->sessions->create([
   'ui_mode' => 'embedded',
@@ -14,7 +14,7 @@ $checkout_session = $stripe->checkout->sessions->create([
   'submit_type' => 'donate',
   'billing_address_collection' => 'required',
   'shipping_address_collection' => [
-    'allowed_countries' => ['US', 'CA'],
+    'allowed_countries' => ['US', 'CA', 'CH'],
   ],
   'line_items' => [[
     # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
@@ -28,4 +28,4 @@ $checkout_session = $stripe->checkout->sessions->create([
   ],
 ]);
 
-  echo json_encode(array('clientSecret' => $checkout_session->client_secret));
+echo json_encode(array('clientSecret' => $checkout_session->client_secret));
