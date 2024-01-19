@@ -21,7 +21,7 @@ $checkout_session = $stripe->checkout->sessions->create([
     'price' => 'price_1OaKcUJ8bitZPVQT1bLmXANn',
     'quantity' => 1
   ]],
-  'mode' => 'payment',
+  'mode' => 'subscription',
   'return_url' => $YOUR_DOMAIN . '/stripe/return.html?session_id={CHECKOUT_SESSION_ID}',
   'automatic_tax' => [
     'enabled' => true,
