@@ -14,7 +14,7 @@ $checkout_session = $stripe->checkout->sessions->create([
   'submit_type' => 'donate',
   'billing_address_collection' => 'required',
   'shipping_address_collection' => [
-    'allowed_countries' => ['US', 'CA', 'CH'],
+    'allowed_countries' => ['US', 'CH'],
   ],
   'line_items' => [[
     # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
