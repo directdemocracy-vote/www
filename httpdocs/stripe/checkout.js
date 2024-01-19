@@ -5,7 +5,7 @@ initialize();
 
 // Create a Checkout Session as soon as the page loads
 async function initialize() {
-  const response = await fetch("/checkout.php", {
+  const response = await fetch("/stripe/checkout.php", {
     method: "POST",
   });
 
