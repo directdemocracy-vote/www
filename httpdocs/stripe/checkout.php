@@ -19,9 +19,6 @@ $checkout_session = $stripe->checkout->sessions->create([
   'line_items' => [[
     'price' => 'price_1OaKGZJ8bitZPVQTQt085HCk',
     'quantity' => 1,
-  ], [
-    'price' => 'price_1OaKHoJ8bitZPVQT7aScN1wg',
-    'quantity' => 1,
   ]],
   'mode' => 'payment',
   'return_url' => $YOUR_DOMAIN . '/return.html?session_id={CHECKOUT_SESSION_ID}',
