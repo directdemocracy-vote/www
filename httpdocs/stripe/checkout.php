@@ -22,7 +22,7 @@ $checkout_session = $stripe->checkout->sessions->create([
     'quantity' => 1
   ]],
   'mode' => 'payment',
-  'return_url' => $YOUR_DOMAIN . '/return.html?session_id={CHECKOUT_SESSION_ID}',
+  'return_url' => $YOUR_DOMAIN . '/stripe/return.html?session_id={CHECKOUT_SESSION_ID}',
   'automatic_tax' => [
     'enabled' => true,
   ],
