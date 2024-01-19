@@ -20,9 +20,6 @@ $checkout_session = $stripe->checkout->sessions->create([
     # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
     'price' => 'price_1OaHpgJ8bitZPVQT4PKOhLIr',
     'quantity' => 1
-  ], [
-    'price' => 'price_1OaKUiJ8bitZPVQT4FgBTHAB',
-    'quantity' => 1                                     
   ]],
   'mode' => 'payment',
   'return_url' => $YOUR_DOMAIN . '/return.html?session_id={CHECKOUT_SESSION_ID}',
