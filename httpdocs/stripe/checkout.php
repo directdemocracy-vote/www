@@ -17,10 +17,10 @@ $checkout_session = $stripe->checkout->sessions->create([
     'allowed_countries' => ['US', 'CH'],
   ],
   'line_items' => [[
-    'price' => 'price_1OaKcUJ8bitZPVQT1bLmXANn',
+    'price' => 'price_1OaKzgJ8bitZPVQTvUtbfTZn',
     'quantity' => 1
   ]],
-  'mode' => 'payment',
+  'mode' => 'subscription',
   'return_url' => $YOUR_DOMAIN . '/stripe/return.html?session_id={CHECKOUT_SESSION_ID}',
   'automatic_tax' => [
     'enabled' => true,
