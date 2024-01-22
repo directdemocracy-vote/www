@@ -1,4 +1,4 @@
-document.getElementById('donate').addEventListener('click', function(event) {
+document.getElementById('donate').addEventListener('click', async function(event) {
   event.currentTarget.classList.add('is-loading');
   const stripe = Stripe("pk_test_51ONAiHJ8bitZPVQT83mvU9hsFgAcXYctJa6wFynuQ7ZieWQHLeFmmdNlJMpECaIkVz87vBHnbBgW9q48qc9fdvcr00oudVLpYM");
   const response = await fetch("/stripe/checkout.php", {method: "POST"});
