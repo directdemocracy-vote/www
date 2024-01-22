@@ -9,5 +9,12 @@ window.addEventListener("load", function() {
     document.getElementById('donate-explanation').classList.add('is-hidden');
     document.getElementById('donate-form').classList.add('is-hidden');
     document.getElementById('donate-checkout').classList.remove('is-hidden');
+    document.getElementById('donate-back').classList.remove('is-hidden');
+  });
+  document.getElementById('donate-back').addEventListener('click', async function(event) {
+    document.getElementById('donate-explanation').classList.remove('is-hidden');
+    document.getElementById('donate-form').classList.remove('is-hidden');
+    document.getElementById('donate-checkout').classList.add('is-hidden');
+    document.getElementById('donate-back').classList.add('is-hidden');    
   });
 });
