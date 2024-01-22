@@ -15,9 +15,6 @@ $checkout_session = $stripe->checkout->sessions->create([
     'quantity' => 1
   ]],
   'mode' => 'subscription',
-  # 'submit_type' => 'donate',
-  # 'success_url' => 'https://directdemocracy.vote/success',
-  # 'cancel_url' => 'https://directdemocracy.vote'
   'return_url' => $YOUR_DOMAIN . '/stripe/return.html?session_id={CHECKOUT_SESSION_ID}'
 ]);
 
