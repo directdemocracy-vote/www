@@ -6,12 +6,12 @@ window.addEventListener("load", function() {
     const response = await fetch('/stripe/checkout.php', {method: 'POST'});
     const {clientSecret} = await response.json();
     const checkout = await stripe.initEmbeddedCheckout({clientSecret});
-    checkout.mount('#donate-checkout');
     document.getElementById('donate-explanation').classList.add('is-hidden');
     document.getElementById('donate-form').classList.add('is-hidden');
     document.getElementById('donate-checkout').classList.remove('is-hidden');
     document.getElementById('donate-back').classList.remove('is-hidden');
     button.classList.remove('is-loading');
+    checkout.mount('#donate-checkout');
   });
   document.getElementById('donate-back').addEventListener('click', async function(event) {
     document.getElementById('donate-explanation').classList.remove('is-hidden');
