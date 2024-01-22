@@ -306,14 +306,9 @@
                 <p class="card-header-title has-text-white">Donate</p>
               </header>
               <div class="card-content has-background-white-ter content">
-
               <div class="columns">
-
-
-                <div class="column">
-                  <p>
-                    We are seeking financial support from foundations and individuals to help us:
-                  </p>
+                <div id="donate-explanation" class="column">
+                  <p>We are seeking financial support from foundations and individuals to help us:</p>
                   <ul>
                     <li>deploy the necessary computing resources</li>
                     <li>improve the technology</li>
@@ -323,84 +318,82 @@
                   <p>Use the online form to pay with credit card or wire your donation at our IBAN: <em>CH50 8080 8002 8372 8994 4</em>.</p>
                   <p>Contact us for any question regarding donations.</p>
                 </div>
-
-                
-                <div class="column">
-<div class="buttons has-addons is-centered">
-  <button id="one-time" class="button is-info">One-time</button>
-  <button id="monthly" class="button">Monthly</button>
-  <button id="annually" class="button">Annually</button>
-</div>
-<div class="buttons is-centered">
-  <label class="radio mr-2 ml-2"><input type="radio" class="mr-1" name="currency" value="EUR" checked>EUR</label>
-  <label class="radio m2-2 ml-2"><input type="radio" class="mr-1" name="currency" value="CHF">CHF</label>
-  <label class="radio mr-2 ml-2"><input type="radio" class="mr-1" name="currency" value="USD">USD</label>
-</div>
-<div class="buttons is-centered">
-  <button id="5-buck" class="button is-info">5</button>
-  <button id="10-buck" class="button">10</button>
-  <button id="20-buck" class="button">20</button>
-  <button id="50-buck" class="button">50</button>
-</div>
-<div class="buttons is-centered">
-  <button id="100-buck" class="button">100</button>
-  <button id="200-buck" class="button">200</button>
-  <button id="500-buck" class="button">500</button>
-  <button id="1000-buck" class="button">1000</button>
-</div>
-<div class="field is-horizontal">
-  <div class="field mr-1">
-    <label class="label">First Name(s)</label>
-    <div class="control">
-      <input id="firstName" class="input" type="text" placeholder="First Name(s)">
-    </div>
-  </div>
-  <div class="field ml-1">
-    <label class="label">Last Name</label>
-    <div class="control">
-      <input id="lastName" class="input" type="text" placeholder="Last Name">
-    </div>
-  </div>
-</div>
-<div class="field">
-  <label class="label">E-Mail</label>
-  <p class="control has-icons-left">
-    <input id="email" class="input" type="email" placeholder="E-mail">
-    <span class="icon is-small is-left">
-      <i class="f7-icons">envelope</i>
-    </span>
-  </p>
-</div>
-<div class="field">
-  <label class="checkbox"><input id="comment" type="checkbox" class="mr-1">Write us a comment</label>
-</div>
-<div class="field is-hidden">
-  <p class="control">
-    <input id="comment-text" class="input" type="text" placeholder="Comment">
-  </p>
-</div>
-<div class="field">
-  <label class="checkbox mr-1"><input id="display" type="checkbox" class="mr-1">Display donation and comment</label>
-</div>
-<div class="field is-hidden">
-  <label class="checkbox mr-1"><input id="first-name-only" type="checkbox" class="mr-1">Display first name(s) instead of full name</label>
-</div>
-<div class="field is-hidden">
-  <label class="checkbox mr-1"><input id="hide-donation" type="checkbox" class="mr-1">Hide donation amount</label>
-</div>
-<div class="field">
-  <label class="checkbox mr-1"><input id="organization" type="checkbox" class="mr-1">This donation is on behalf of an organization</label>
-</div>
-<div class="field is-hidden">
-  <p class="control">
-    <input id="organization-name" class="input" type="text" placeholder="Organization name">
-  </p>
-</div>
-<div class="field buttons is-centered">
-  <button id="donate" class="button is-success">Donate</button>
-</div>
-<div id="checkout" class="column">
-</div>
+                <div id="donate-form" class="column">
+                  <div class="buttons has-addons is-centered">
+                    <button id="one-time" class="button is-info">One-time</button>
+                    <button id="monthly" class="button">Monthly</button>
+                    <button id="annually" class="button">Annually</button>
+                  </div>
+                  <div class="buttons is-centered">
+                    <label class="radio mr-2 ml-2"><input type="radio" class="mr-1" name="currency" value="EUR" checked>EUR</label>
+                    <label class="radio m2-2 ml-2"><input type="radio" class="mr-1" name="currency" value="CHF">CHF</label>
+                    <label class="radio mr-2 ml-2"><input type="radio" class="mr-1" name="currency" value="USD">USD</label>
+                  </div>
+                  <div class="buttons is-centered">
+                    <button id="5-buck" class="button is-info">5</button>
+                    <button id="10-buck" class="button">10</button>
+                    <button id="20-buck" class="button">20</button>
+                    <button id="50-buck" class="button">50</button>
+                  </div>
+                  <div class="buttons is-centered">
+                    <button id="100-buck" class="button">100</button>
+                    <button id="200-buck" class="button">200</button>
+                    <button id="500-buck" class="button">500</button>
+                    <button id="1000-buck" class="button">1000</button>
+                  </div>
+                  <div class="field is-horizontal">
+                    <div class="field mr-1">
+                      <label class="label">First Name(s)</label>
+                      <div class="control">
+                        <input id="firstName" class="input" type="text" placeholder="First Name(s)">
+                      </div>
+                    </div>
+                    <div class="field ml-1">
+                      <label class="label">Last Name</label>
+                      <div class="control">
+                        <input id="lastName" class="input" type="text" placeholder="Last Name">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label class="label">E-Mail</label>
+                    <p class="control has-icons-left">
+                      <input id="email" class="input" type="email" placeholder="E-mail">
+                      <span class="icon is-small is-left">
+                        <i class="f7-icons">envelope</i>
+                      </span>
+                    </p>
+                  </div>
+                  <div class="field">
+                    <label class="checkbox"><input id="comment" type="checkbox" class="mr-1">Write us a comment</label>
+                  </div>
+                  <div class="field is-hidden">
+                    <p class="control">
+                      <input id="comment-text" class="input" type="text" placeholder="Comment">
+                    </p>
+                  </div>
+                  <div class="field">
+                    <label class="checkbox mr-1"><input id="display" type="checkbox" class="mr-1">Display donation and comment</label>
+                  </div>
+                  <div class="field is-hidden">
+                    <label class="checkbox mr-1"><input id="first-name-only" type="checkbox" class="mr-1">Display first name(s) instead of full name</label>
+                  </div>
+                  <div class="field is-hidden">
+                    <label class="checkbox mr-1"><input id="hide-donation" type="checkbox" class="mr-1">Hide donation amount</label>
+                  </div>
+                  <div class="field">
+                    <label class="checkbox mr-1"><input id="organization" type="checkbox" class="mr-1">This donation is on behalf of an organization</label>
+                  </div>
+                  <div class="field is-hidden">
+                    <p class="control">
+                      <input id="organization-name" class="input" type="text" placeholder="Organization name">
+                    </p>
+                  </div>
+                  <div class="field buttons is-centered">
+                    <button id="donate" class="button is-success">Donate</button>
+                  </div>
+                  <div id="donate-checkout" class="column">
+                  </div>
                 </div>
               </div>
             </div>
