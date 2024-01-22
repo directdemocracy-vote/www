@@ -15,7 +15,7 @@ $checkout_session = $stripe->checkout->sessions->create([
     'quantity' => 1
   ]],
   'mode' => 'subscription',
-  'customer_email' => 'Olivier.Michel@cyberbotics.com',
+  'submit_type' => 'donate',
   'return_url' => $YOUR_DOMAIN . '/stripe/return.html?session_id={CHECKOUT_SESSION_ID}'
 ]);
 
