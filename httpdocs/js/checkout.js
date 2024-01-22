@@ -10,6 +10,7 @@ window.addEventListener("load", function() {
     document.getElementById('donate-form').classList.add('is-hidden');
     document.getElementById('donate-checkout').classList.remove('is-hidden');
     document.getElementById('donate-back').classList.remove('is-hidden');
+    event.currentTarget.classList.remove('is-loading');
   });
   document.getElementById('donate-back').addEventListener('click', async function(event) {
     document.getElementById('donate-explanation').classList.remove('is-hidden');
