@@ -17,6 +17,8 @@ window.addEventListener("load", function() {
       checkout.unmount();
       checkout.destroy();
       console.log('Handled complete');
+      document.getElementById('donate-checkout').classList.add('is-hidden');
+      document.getElementById('donate-complete').classList.remove('is-hidden');
       // const details = await retrievePurchaseDetails();
       // showPurchaseSummary(details);
     }
