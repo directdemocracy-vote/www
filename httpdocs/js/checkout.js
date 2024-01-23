@@ -96,7 +96,7 @@ window.addEventListener("load", function() {
       if (display)
         displayFirstName.add('is-hidden');
     } else {
-      ifOrganization = false;
+      isOrganization = false;
       classList.add('is-hidden');
       name.remove('is-hidden');
       if (display)
