@@ -12,9 +12,20 @@ window.addEventListener("load", function() {
     const button = event.currentTarget;
     button.classList.add('is-loading');
     const stripe = Stripe('pk_test_51ONAiHJ8bitZPVQT83mvU9hsFgAcXYctJa6wFynuQ7ZieWQHLeFmmdNlJMpECaIkVz87vBHnbBgW9q48qc9fdvcr00oudVLpYM');
-    const currency = document.querySelectorAll('input[name="donation-currency"]:checked')[0].value;
+    const currency = document.querySelectorAll('input[name="donate-currency"]:checked')[0].value;
     const email = document.getElementById('donate-email').value;
-    const response = await fetch(`/stripe/checkout.php?amount=${amount}&frequency=${frequency}&currency=${currency}&email=${email}`, {method: 'POST'});
+    const isOrganization = document.getElementById('donate-organization-checkbox').checked;
+    const givenNames = isOrganization ? '' : document.getElementById('donate-given-names').value;
+    const familyName = isOrganization ? '' : document.getElementById('donate-family-name').value;
+    const organization = isOrganization ? document.getElementById('donate-organization').value : '';
+    const comment = document.getElementById('donate-comment-checkbox').checked ? document.getElementById('donate-comment').value : '';
+    const displayGivenNames = document.getElementById('donate-display-given-names-checkbox').checked ? 1 : 0;
+    const hideAmount = document.getElementById('donate-hide-amount-checkbox').checked ? 1 : 0;
+    const parameters = `amount=${amount}&frequency=${frequency}&currency=${currency}&email=${encodeURIComponent(email)}&` +
+                       `givenNames=${encodeURIComponent(givenNames)}&familyName=${encodeURIComponent(familyName)}&` +
+                       `organization=${encodeURIComponent(organization)}&comment=${encodeURIComponent(comment)}&` +
+                       `displayGivenNames=${displayGivenNames}&hideAmount=${hideAmount}`;
+    const response = await fetch(`/stripe/checkout.php?${parameters}, {method: 'POST'});
     const {clientSecret, paymentId} = await response.json();
     const handleComplete = async function() {
       checkout.unmount();
