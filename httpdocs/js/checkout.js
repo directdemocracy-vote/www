@@ -84,11 +84,14 @@ window.addEventListener("load", function() {
   document.getElementById('donate-organization-checkbox').addEventListener('click', function(event) {
     const classList = document.getElementById('donate-organization-field').classList;
     const displayFirstName = document.getElementById('donate-display-first-name-field').classList;
+    const name = document.getElementById('donate-name-field').classList;
     if (event.currentTarget.checked) {
       classList.remove('is-hidden');
+      name.add('is-hidden');
       displayFirstName.add('is-hidden');
     } else {
       classList.add('is-hidden');
+      name.add('is-hidden');
       displayFirstName.remove('is-hidden');
     }
   });
