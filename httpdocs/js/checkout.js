@@ -85,14 +85,17 @@ window.addEventListener("load", function() {
     const classList = document.getElementById('donate-organization-field').classList;
     const displayFirstName = document.getElementById('donate-display-first-name-field').classList;
     const name = document.getElementById('donate-name-field').classList;
+    const display = document.getElementById('donate-display-checkbox').checked;
     if (event.currentTarget.checked) {
       classList.remove('is-hidden');
       name.add('is-hidden');
-      displayFirstName.add('is-hidden');
+      if (display)
+        displayFirstName.add('is-hidden');
     } else {
       classList.add('is-hidden');
-      name.add('is-hidden');
-      displayFirstName.remove('is-hidden');
+      name.remove('is-hidden');
+      if (display)
+        displayFirstName.remove('is-hidden');
     }
   });
 });
