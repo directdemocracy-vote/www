@@ -6,8 +6,8 @@ window.addEventListener("load", function() {
   const amounts = [5, 10, 20, 50, 100, 200, 500, 1000];
   let isOrganization = false;
   let display = false;
-  document.getElementById('donate-button').addEventListener('click', async function(event) {
-    const button = event.currentTarget;
+  document.getElementById('donate-form').addEventListener('submit', async function(event) {
+    const button = document.getElementById('donate-button');
     button.classList.add('is-loading');
     const stripe = Stripe('pk_test_51ONAiHJ8bitZPVQT83mvU9hsFgAcXYctJa6wFynuQ7ZieWQHLeFmmdNlJMpECaIkVz87vBHnbBgW9q48qc9fdvcr00oudVLpYM');
     const currency = document.querySelectorAll('input[name="donation-currency"]:checked')[0].value;
