@@ -1,5 +1,5 @@
 window.addEventListener("load", function() {
-  let checkout;
+  let checkout = null;
   let step = 1;
   let frequency = 'one-time';
   let amount = 5;
