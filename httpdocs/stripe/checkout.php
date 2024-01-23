@@ -177,7 +177,7 @@ if ($frequency === 'one-time') {
     die("Unsupported currency: $currency");
 } else
   die("unknown frequency: $frequency");
-$checkout_session = $stripe->checkout->sessions->create([
+$parameters = [
   'ui_mode' => 'embedded',
   'line_items' => [[
     'price' => $price,
@@ -186,7 +186,10 @@ $checkout_session = $stripe->checkout->sessions->create([
   'mode' => $mode,
   'customer_email' => $email,
   'client_reference_id' => '0',
-  'redirect_on_completion' => 'never'
-]);
+  'redirect_on_completion' => 'never'  
+];
+if ($mode === 'payment')
+  $parameters['submit_type'] = 'donate';
+$checkout_session = $stripe->checkout->sessions->create($parameters);
 
 echo json_encode(array('clientSecret' => $checkout_session->client_secret, 'paymentId' => 0));
