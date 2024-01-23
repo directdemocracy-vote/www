@@ -7,6 +7,8 @@ window.addEventListener("load", function() {
   let isOrganization = false;
   let display = false;
   document.getElementById('donate-button').addEventListener('click', async function(event) {
+    if (!document.getElementById('donate-email').reportValidity())
+      return;
     const button = event.currentTarget;
     button.classList.add('is-loading');
     const stripe = Stripe('pk_test_51ONAiHJ8bitZPVQT83mvU9hsFgAcXYctJa6wFynuQ7ZieWQHLeFmmdNlJMpECaIkVz87vBHnbBgW9q48qc9fdvcr00oudVLpYM');
