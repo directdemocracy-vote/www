@@ -72,21 +72,55 @@ if ($frequency === 'one-time') {
   $mode = 'subscription';
   if ($currency === 'CHF') {
     if ($amount === 5)
-      $price = '';
+      $price = 'price_1Obh1yJ8bitZPVQTLoC7NtcK';
     elseif ($amount === 10)
-      $price = '';
+      $price = 'price_1Obh4bJ8bitZPVQTVCCDuo8y';
     elseif ($amount === 20)
-      $price = '';
+      $price = 'price_1Obh4vJ8bitZPVQTp5DnuKDV';
     elseif ($amount === 50)
-      $price = '';
+      $price = 'price_1Obh5CJ8bitZPVQTclMcdYov';
     elseif ($amount === 100)
-      $price = '';
+      $price = 'price_1Obh5eJ8bitZPVQTFKUVX6ti';
     elseif ($amount === 200)
-      $price = '';
+      $price = 'price_1Obh5rJ8bitZPVQTiROWGSic';
     elseif ($amount === 500)
-      $price = '';
+      $price = 'price_1Obh62J8bitZPVQTL4rBpI29';
     elseif ($amount === 1000)
-      $price = '';
+      $price = 'price_1Obh6FJ8bitZPVQTx69TmkQA';
+  } elseif ($currency === 'USD') {
+    if ($amount === 5)
+      $price = 'price_1Obh6VJ8bitZPVQTZCOAFrfQ';
+    elseif ($amount === 10)
+      $price = 'price_1Obh6dJ8bitZPVQThOdjqT0w';
+    elseif ($amount === 20)
+      $price = 'price_1Obh6nJ8bitZPVQTtcDpEHua';
+    elseif ($amount === 50)
+      $price = 'price_1Obh6wJ8bitZPVQTtmZzyIfW';
+    elseif ($amount === 100)
+      $price = 'price_1Obh76J8bitZPVQTQnGwkFG3';
+    elseif ($amount === 200)
+      $price = 'price_1Obh7EJ8bitZPVQTLaU9HppQ';
+    elseif ($amount === 500)
+      $price = 'price_1Obh7NJ8bitZPVQTgIU5IJe5';
+    elseif ($amount === 1000)
+      $price = 'price_1Obh7WJ8bitZPVQTmmy2aSmv';    
+  } elseif ($currency === 'EUR') {
+    if ($amount === 5)
+      $price = 'price_1Obh7nJ8bitZPVQTEG5Gi2v4';
+    elseif ($amount === 10)
+      $price = 'price_1Obh80J8bitZPVQTL2thTq5J';
+    elseif ($amount === 20)
+      $price = 'price_1Obh8DJ8bitZPVQTjCWEatyz';
+    elseif ($amount === 50)
+      $price = 'price_1Obh8SJ8bitZPVQTlJx8hhCA';
+    elseif ($amount === 100)
+      $price = 'price_1Obh8hJ8bitZPVQTXyMelHRD';
+    elseif ($amount === 200)
+      $price = 'price_1Obh8tJ8bitZPVQTGqXx1BnY';
+    elseif ($amount === 500)
+      $price = 'price_1Obh95J8bitZPVQTJGllpVMT';
+    elseif ($amount === 1000)
+      $price = 'price_1Obh9MJ8bitZPVQT2u7ajJoM';
   } else
     die("Unsupported currency: $currency");
 } else
