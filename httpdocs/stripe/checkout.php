@@ -15,6 +15,7 @@ $givenNames = $mysqli->escape_string($_GET['givenNames']);
 $familyName = $mysqli->escape_string($_GET['familyName']);
 $organization = $mysqli->escape_string($_GET['organization']);
 $comment = $mysqli->escape_string($_GET['comment']);
+$display = intval($_GET['display']);
 $displayGivenNames = intval($_GET['displayGivenNames']);
 $hideAmount = intval($_GET['hideAmount']);
 if ($frequency === 'one-time') {
@@ -184,8 +185,8 @@ if ($frequency === 'one-time') {
     die("Unsupported currency: $currency");
 } else
   die("unknown frequency: $frequency");
-$query = "INSERT INTO payment(frequency, currency, amount, email, givenNames, familyName, organization, comment, displayGivenNames, hideAmount) "
-        ."VALUES('$frequency', '$currency', $amount, '$email', \"$givenNames\", \"$familyName\", \"$organization\", \"$comment\", $displayGivenNames, $hideAmount)";
+$query = "INSERT INTO payment(frequency, currency, amount, email, givenNames, familyName, organization, comment, display, displayGivenNames, hideAmount) "
+        ."VALUES('$frequency', '$currency', $amount, '$email', \"$givenNames\", \"$familyName\", \"$organization\", \"$comment\", $display, $displayGivenNames, $hideAmount)";
 $mysqli->query($query) or die($mysqli->error);
 $id = $mysqli->insert_id;
 $mysqli->close();
