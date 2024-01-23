@@ -12,6 +12,59 @@ $currency = $_GET['currency'];
 $email = $_GET['email'];
 if ($frequency === 'one-time') {
   $mode = 'payment';
+  if ($currency === 'CHF') {
+    if ($amount === 5)
+      $price = 'price_1OblLsJ8bitZPVQTSa9zT0ev';
+    elseif ($amount === 10)
+      $price = 'price_1OblMSJ8bitZPVQTug8UBRXE';
+    elseif ($amount === 20)
+      $price = 'price_1OblN9J8bitZPVQTZctP0VHg';
+    elseif ($amount === 50)
+      $price = 'price_1OblNbJ8bitZPVQT46vMWilQ';
+    elseif ($amount === 100)
+      $price = 'price_1OblO0J8bitZPVQTf3brslO7';
+    elseif ($amount === 200)
+      $price = 'price_1OblOEJ8bitZPVQTz2eigJsw';
+    elseif ($amount === 500)
+      $price = 'price_1OblOQJ8bitZPVQT47OKuSf3';
+    elseif ($amount === 1000)
+      $price = 'price_1OblP2J8bitZPVQTTdXT8uLI';
+  } elseif ($currency === 'USD') {
+    if ($amount === 5)
+      $price = 'price_1OblPIJ8bitZPVQTeZp7D0ro';
+    elseif ($amount === 10)
+      $price = 'price_1OblPUJ8bitZPVQTu1KVhWZB';
+    elseif ($amount === 20)
+      $price = 'price_1OblPbJ8bitZPVQTfciyO0DV';
+    elseif ($amount === 50)
+      $price = 'price_1OblPhJ8bitZPVQTLe7pyLqJ';
+    elseif ($amount === 100)
+      $price = 'price_1OblPoJ8bitZPVQTnUEWLOKF';
+    elseif ($amount === 200)
+      $price = 'price_1OblPvJ8bitZPVQTbvvjoJQi';
+    elseif ($amount === 500)
+      $price = 'price_1OblQ4J8bitZPVQTITYvuwop';
+    elseif ($amount === 1000)
+      $price = 'price_1OblQBJ8bitZPVQTyjQFKQwH';
+  } elseif ($currency === 'EUR') {
+    if ($amount === 5)
+      $price = 'price_1OblQQJ8bitZPVQT3HShagD7';
+    elseif ($amount === 10)
+      $price = 'price_1OblQfJ8bitZPVQTNc6X69N5';
+    elseif ($amount === 20)
+      $price = 'price_1OblQrJ8bitZPVQTSzUy56St';
+    elseif ($amount === 50)
+      $price = 'price_1OblR4J8bitZPVQTCDF6PnFN';
+    elseif ($amount === 100)
+      $price = 'price_1OblRMJ8bitZPVQTEaJz1SfY';
+    elseif ($amount === 200)
+      $price = 'price_1OblRYJ8bitZPVQT0WcSWCGW';
+    elseif ($amount === 500)
+      $price = 'price_1OblRjJ8bitZPVQTboGHMtZ7';
+    elseif ($amount === 1000)
+      $price = 'price_1OblRuJ8bitZPVQTB6zmCbUo';
+  } else
+    die("Unsupported currency: $currency");
 } elseif ($frequency === 'monthly') {
   $mode = 'subscription';
   if ($currency === 'CHF') {
