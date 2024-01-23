@@ -16,6 +16,7 @@ window.addEventListener("load", function() {
     const handleComplete = async function() {
       checkout.unmount();
       checkout.destroy();
+      checkout = null;
       console.log('Handled complete');
       document.getElementById('donate-checkout').classList.add('is-hidden');
       document.getElementById('donate-complete').classList.remove('is-hidden');
@@ -36,8 +37,11 @@ window.addEventListener("load", function() {
     step = 2;
   });
   document.getElementById('donate-back').addEventListener('click', async function(event) {
-    checkout.unmount();
-    checkout.destroy();
+    if (checkout) {
+      checkout.unmount();
+      checkout.destroy();
+      checkout = null;
+    }
     document.getElementById('donate-explanation').classList.remove('is-hidden');
     document.getElementById('donate-form').classList.remove('is-hidden');
     document.getElementById('donate-checkout').classList.add('is-hidden');
