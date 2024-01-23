@@ -80,8 +80,7 @@ window.addEventListener("load", function() {
       hideAmount.remove('is-hidden');
       display = true;
     } else {
-      if (!isOrganization)
-        firstName.add('is-hidden');
+      firstName.add('is-hidden');
       hideAmount.add('is-hidden');
       display = false;
     }
