@@ -9,6 +9,7 @@ header('Content-Type: application/json');
 $amount = intval($_GET['amount']);
 $frequency = $_GET['frequency'];
 $currency = $_GET['currency'];
+$email = $_GET['email'];
 if ($frequency === 'one-time') {
   $mode = 'payment';
 } elseif ($frequency === 'monthly') {
@@ -130,6 +131,7 @@ $checkout_session = $stripe->checkout->sessions->create([
     'quantity' => 1
   ]],
   'mode' => $mode,
+  'customer_email' => $email,
   'client_reference_id' => '0',
   'redirect_on_completion' => 'never'
 ]);
