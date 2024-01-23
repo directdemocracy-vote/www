@@ -6,8 +6,6 @@ require_once '../../secrets.php';
 $stripe = new \Stripe\StripeClient($stripeSecretKey);
 header('Content-Type: application/json');
 
-$YOUR_DOMAIN = 'https://directdemocracy.vote';
-
 $amount = intval($_GET['amount']);
 $frequency = $_GET['frequency'];
 $currency = $_GET['currency'];
@@ -133,8 +131,7 @@ $checkout_session = $stripe->checkout->sessions->create([
   ]],
   'mode' => $mode,
   'client_reference_id' => '0',
-  'redirect_on_completion' => 'if_required',
-  'return_url' => $YOUR_DOMAIN . '/thank_you.php?session_id={CHECKOUT_SESSION_ID}'
+  'redirect_on_completion' => 'never'
 ]);
 
 echo json_encode(array('clientSecret' => $checkout_session->client_secret));
