@@ -13,11 +13,12 @@ window.addEventListener("load", function() {
     const currency = document.querySelectorAll('input[name="donation-currency"]:checked')[0].value;
     const response = await fetch(`/stripe/checkout.php?amount=${amount}&frequency=${frequency}&currency=${currency}`, {method: 'POST'});
     const {clientSecret} = await response.json();
-    const handleComplete = async function() {
+    const handleComplete = async function(data) {
       checkout.unmount();
       checkout.destroy();
       checkout = null;
-      console.log('Handled complete');
+      console.log('onComplete data = ');
+      console.log(data);
       document.getElementById('donate-checkout').classList.add('is-hidden');
       document.getElementById('donate-complete').classList.remove('is-hidden');
       document.getElementById('donate-2').textContent = 'circle';
