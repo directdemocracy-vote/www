@@ -66,12 +66,12 @@ window.addEventListener("load", function() {
   }
   document.getElementById('donate-comment-checkbox').addEventListener('click', function(event) {
     const classList = document.getElementById('donate-comment-field').classList;
-    const donateDisplayCheckbox = document.getElementById('donate-display-checkbox');
+    const donateDisplayText = document.getElementById('donate-display-text');
     if (event.currentTarget.checked) {
-      donateDisplayCheckbox.textContent = 'Display donation and comment';
+      donateDisplayText.textContent = 'Display donation and comment';
       classList.remove('is-hidden');
     } else {
-      donateDisplayCheckbox.textContent = 'Display donation';
+      donateDisplayText.textContent = 'Display donation';
       classList.add('is-hidden');
     }
   });
