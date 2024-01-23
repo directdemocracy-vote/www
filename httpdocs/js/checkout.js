@@ -13,15 +13,13 @@ window.addEventListener("load", function() {
     const currency = document.querySelectorAll('input[name="donation-currency"]:checked')[0].value;
     const response = await fetch(`/stripe/checkout.php?amount=${amount}&frequency=${frequency}&currency=${currency}`, {method: 'POST'});
     const {clientSecret} = await response.json();
-    console.log('client secret 0 = ' + clientSecret);
     const handleComplete = async function(data) {
       checkout.unmount();
       checkout.destroy();
       checkout = null;
       console.log('onComplete data = ');
       console.log(data);
-      console.log('client secret 1 = ' + clientSecret);
-      const paymentIntent = await stripe.retrievePaymentIntent(clientSecret);
+      const paymentIntent = await stripe.retrievePaymentIntent();
       console.log(paymentIntent.currency + ' ' + paymentIntent.amount);
       document.getElementById('donate-checkout').classList.add('is-hidden');
       document.getElementById('donate-complete').classList.remove('is-hidden');
