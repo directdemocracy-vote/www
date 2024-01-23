@@ -13,7 +13,14 @@ window.addEventListener("load", function() {
     const currency = document.querySelectorAll('input[name="donation-currency"]:checked')[0].value;
     const response = await fetch(`/stripe/checkout.php?amount=${amount}&frequency=${frequency}&currency=${currency}`, {method: 'POST'});
     const {clientSecret} = await response.json();
-    checkout = await stripe.initEmbeddedCheckout({clientSecret});
+    const handleComplete = async function() {
+      checkout.unmount();
+      checkout.destroy();
+      console.log('Handled complete');
+      // const details = await retrievePurchaseDetails();
+      // showPurchaseSummary(details);
+    }
+    checkout = await stripe.initEmbeddedCheckout({clientSecret, onComplete: handleComplete});
     document.getElementById('donate-explanation').classList.add('is-hidden');
     document.getElementById('donate-form').classList.add('is-hidden');
     document.getElementById('donate-checkout').classList.remove('is-hidden');
