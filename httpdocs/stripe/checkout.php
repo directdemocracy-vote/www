@@ -1,7 +1,8 @@
 <?php
 
 require_once '../../vendor/autoload.php';
-require_once '../../secrets.php';
+require_once '../../php/stripe.php';
+require_once '../../php/database.php';
 
 $stripe = new \Stripe\StripeClient($stripeSecretKey);
 header('Content-Type: application/json');
