@@ -96,35 +96,35 @@ window.addEventListener("load", function() {
     }
   });
   document.getElementById('donate-display-checkbox').addEventListener('click', function(event) {
-    const firstName = document.getElementById('donate-display-first-name-field').classList;
+    const displayGivenNames = document.getElementById('donate-display-given-names-field').classList;
     const hideAmount = document.getElementById('donate-hide-amount-field').classList;
     if (event.currentTarget.checked) {
       if (!isOrganization)
-        firstName.remove('is-hidden');
+        displayGivenNames.remove('is-hidden');
       hideAmount.remove('is-hidden');
       display = true;
     } else {
-      firstName.add('is-hidden');
+      displayGivenNames.add('is-hidden');
       hideAmount.add('is-hidden');
       display = false;
     }
   });
   document.getElementById('donate-organization-checkbox').addEventListener('click', function(event) {
     const classList = document.getElementById('donate-organization-field').classList;
-    const displayFirstName = document.getElementById('donate-display-first-name-field').classList;
+    const displayGivenNames = document.getElementById('donate-display-given-names-field').classList;
     const name = document.getElementById('donate-name-field').classList;
     if (event.currentTarget.checked) {
       isOrganization = true;
       classList.remove('is-hidden');
       name.add('is-hidden');
       if (display)
-        displayFirstName.add('is-hidden');
+        displayGivenNames.add('is-hidden');
     } else {
       isOrganization = false;
       classList.add('is-hidden');
       name.remove('is-hidden');
       if (display)
-        displayFirstName.remove('is-hidden');
+        displayFivenNames.remove('is-hidden');
     }
   });
 });
