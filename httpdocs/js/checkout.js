@@ -63,10 +63,10 @@ window.addEventListener("load", function() {
     });
   }
   document.getElementById('donate-comment-checkbox').addEventListener('click', function(event) {
-    const classList = document.getElementById('donate-comment').classList;
+    const classList = document.getElementById('donate-comment-field').classList;
     if (event.currentTarget.checked)
       classList.remove('is-hidden');
     else
-      classList.add('id-hidden');
+      classList.add('is-hidden');
   });
 });
