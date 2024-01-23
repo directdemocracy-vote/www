@@ -1,6 +1,7 @@
 window.addEventListener("load", function() {
   let checkout;
   let step = 1;
+  let frequency = 1; // 1: one-time, 2: monthly, 3: annually
   document.getElementById('donate-button').addEventListener('click', async function(event) {
     const button = event.currentTarget;
     button.classList.add('is-loading');
@@ -29,5 +30,25 @@ window.addEventListener("load", function() {
     document.getElementById('donate-2').textContent = 'circle';
     step = 1;
   });
-  
+  document.getElementById('donate-one-time').addEventListener('click', function(event) {
+    if (frequency === 1)
+      return;
+    event.currentTarget.classList.add('is-info');
+    document.getElementById(frequency === 2 ? 'donate-monthly' : 'donate-annually')).classList.remove('is-info');
+    frequency = 2;
+  });
+  document.getElementById('donate-monthly').addEventListener('click', function(event) {
+    if (frequency === 2)
+      return;
+    event.currentTarget.classList.add('is-info');
+    document.getElementById(frequency === 1 ? 'donate-one-time' : 'donate-annually')).classList.remove('is-info');
+    frequency = 2;
+  });
+  document.getElementById('donate-annually').addEventListener('click', function(event) {
+    if (frequency === 3)
+      return;
+    event.currentTarget.classList.add('is-info');
+    document.getElementById(frequency === 1 ? 'donate-one-time' : 'donate-monthly')).classList.remove('is-info');
+    frequency = 2;
+  });
 });
