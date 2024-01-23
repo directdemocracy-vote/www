@@ -329,7 +329,7 @@
                   <p>Use the online form to pay with credit card or wire your donation at our IBAN: <em>CH50 8080 8002 8372 8994 4</em>.</p>
                   <p>Contact us for any question regarding donations.</p>
                 </div>
-                <div id="donate-form" class="column">
+                <form id="donate-form" class="column">
                   <div class="buttons has-addons is-centered">
                     <button id="donate-one-time" class="button is-info">One-time</button>
                     <button id="donate-monthly" class="button">Monthly</button>
@@ -354,12 +354,12 @@
                   </div>
                   <div class="field">
                     <label class="label">E-mail</label>
-                    <div class="control has-icons-left has-icons-right">
-                      <input id="donation-email" class="input is-danger" type="email" placeholder="E-mail">
+                    <div class="control has-icons-left">
+                      <input id="donation-email" class="input" type="email" placeholder="E-mail"> <!-- is-danger -->
                       <span class="icon is-small is-left"><i class="f7-icons">envelope</i></span>
-                      <span id="donation-email-warning" class="icon is-small is-right"><i class="f7-icons">exclamationmark_triangle</i></span>
+                      <!--  <span id="donation-email-warning" class="icon is-small is-right"><i class="f7-icons">exclamationmark_triangle</i></span> -->
                     </div>
-                    <p id="donation-email-error" class="help is-danger">This E-mail is invalid</p>
+                    <!-- <p id="donation-email-error" class="help is-danger">This E-mail is invalid</p> -->
                   </div>
                   <div id="donate-name-field" class="field is-horizontal">
                     <div class="field mr-1">
@@ -404,7 +404,7 @@
                     <label class="checkbox mr-1"><input id="donate-hide-amount-checkbox" type="checkbox" class="mr-1">Hide donation amount</label>
                   </div>
                 <div class="field buttons is-centered">
-                  <button id="donate-button" class="button is-success">Donate <i class="f7-icons ml-2" style="font-size:100%">arrow_right</i></button>
+                  <input type="submit" id="donate-button" class="button is-success">Donate <i class="f7-icons ml-2" style="font-size:100%">arrow_right</i></button>
                 </div>
               </div>
               <div id="donate-checkout" class="column is-hidden">
