@@ -83,14 +83,13 @@ window.addEventListener("load", function() {
   });
   document.getElementById('donate-organization-checkbox').addEventListener('click', function(event) {
     const classList = document.getElementById('donate-organization-field').classList;
-    const displayFirstName = document.getElementById('donate-display-first-name-field');
+    const displayFirstName = document.getElementById('donate-display-first-name-field').classList;
     if (event.currentTarget.checked) {
       classList.remove('is-hidden');
-      displayFirstName.checked = false;
-      displayFirstName.disabled = true;
+      displayFirstName.add('is-hidden');
     } else {
       classList.add('is-hidden');
-      displayFirstName.disabled = false;
+      displayFirstName.remove('is-hidden');
     }
   });
 });
