@@ -1,5 +1,6 @@
 window.addEventListener("load", function() {
   let checkout;
+  let step = 1;
   document.getElementById('donate-button').addEventListener('click', async function(event) {
     const button = event.currentTarget;
     button.classList.add('is-loading');
@@ -13,6 +14,7 @@ window.addEventListener("load", function() {
     document.getElementById('donate-back').classList.remove('is-hidden');
     button.classList.remove('is-loading');
     checkout.mount('#donate-checkout');
+    step = 2;
   });
   document.getElementById('donate-back').addEventListener('click', async function(event) {
     checkout.unmount();
@@ -21,5 +23,7 @@ window.addEventListener("load", function() {
     document.getElementById('donate-form').classList.remove('is-hidden');
     document.getElementById('donate-checkout').classList.add('is-hidden');
     document.getElementById('donate-back').classList.add('is-hidden');    
+    step = 1;
   });
+  
 });
