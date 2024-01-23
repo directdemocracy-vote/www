@@ -20,7 +20,6 @@ window.addEventListener("load", function() {
       checkout.unmount();
       checkout.destroy();
       checkout = null;
-      console.log('onComplete data for client ' + paymentId);
       // fetch client data from database
       document.getElementById('donate-checkout').classList.add('is-hidden');
       document.getElementById('donate-complete').classList.remove('is-hidden');
