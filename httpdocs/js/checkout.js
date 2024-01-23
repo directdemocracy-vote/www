@@ -19,12 +19,13 @@ window.addEventListener("load", function() {
     const familyName = isOrganization ? '' : document.getElementById('donate-family-name').value;
     const organization = isOrganization ? document.getElementById('donate-organization').value : '';
     const comment = document.getElementById('donate-comment-checkbox').checked ? document.getElementById('donate-comment').value : '';
+    const display = document.getElementById('donate-display-checkbox') ? 1 : 0;
     const displayGivenNames = document.getElementById('donate-display-given-names-checkbox').checked ? 1 : 0;
     const hideAmount = document.getElementById('donate-hide-amount-checkbox').checked ? 1 : 0;
     const parameters = `amount=${amount}&frequency=${frequency}&currency=${currency}&email=${encodeURIComponent(email)}&` +
                        `givenNames=${encodeURIComponent(givenNames)}&familyName=${encodeURIComponent(familyName)}&` +
                        `organization=${encodeURIComponent(organization)}&comment=${encodeURIComponent(comment)}&` +
-                       `displayGivenNames=${displayGivenNames}&hideAmount=${hideAmount}`;
+                       `display=${display}&displayGivenNames=${displayGivenNames}&hideAmount=${hideAmount}`;
     const response = await fetch(`/stripe/checkout.php?${parameters}, {method: 'POST'});
     const {clientSecret, paymentId} = await response.json();
     const handleComplete = async function() {
