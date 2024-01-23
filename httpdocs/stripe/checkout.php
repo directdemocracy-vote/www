@@ -132,8 +132,8 @@ $checkout_session = $stripe->checkout->sessions->create([
     'quantity' => 1
   ]],
   'mode' => $mode,
-  'client_reference_id': '0',
-  'redirect_on_completion': 'if_required',
+  'client_reference_id' => '0',
+  'redirect_on_completion' => 'if_required',
   'return_url' => $YOUR_DOMAIN . '/thank_you.php?session_id={CHECKOUT_SESSION_ID}'
 ]);
 
