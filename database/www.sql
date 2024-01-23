@@ -12,6 +12,7 @@ CREATE TABLE `payment` (
   `familyName` text NOT NULL,
   `organization` text NOT NULL,
   `comment` text NOT NULL,
+  `display` tinyint(1) NOT NULL,
   `displayGivenNames` tinyint(1) NOT NULL,
   `hideAmount` tinyint(1) NOT NULL,
   `date` datetime NOT NULL DEFAULT current_timestamp()
