@@ -1,2 +1,4 @@
 /secrets.php
 /httpdocs/.well-known/
+/composer.lock
+/vendor/
