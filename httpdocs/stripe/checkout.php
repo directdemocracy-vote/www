@@ -15,7 +15,7 @@ if ($frequency === 'one-time') {
   $mode = 'purchase';  // FIXME
 } elseif ($frequency === 'monthly') {
   $mode = 'subscription';
-  if (currency === 'CHF') {
+  if ($currency === 'CHF') {
     if ($amount === 5)
       $price = 'price_1OaKzgJ8bitZPVQTvUtbfTZn';
     elseif ($amount === 10)
