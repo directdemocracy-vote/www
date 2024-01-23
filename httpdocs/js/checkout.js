@@ -66,10 +66,14 @@ window.addEventListener("load", function() {
   }
   document.getElementById('donate-comment-checkbox').addEventListener('click', function(event) {
     const classList = document.getElementById('donate-comment-field').classList;
-    if (event.currentTarget.checked)
+    const donateDisplayCheckbox = document.getElementById('donate-display-checkbox');
+    if (event.currentTarget.checked) {
+      donateDisplayCheckbox.textContent = 'Display donation and comment';
       classList.remove('is-hidden');
-    else
+    } else {
+      donateDisplayCheckbox.textContent = 'Display donation';
       classList.add('is-hidden');
+    }
   });
   document.getElementById('donate-display-checkbox').addEventListener('click', function(event) {
     const firstName = document.getElementById('donate-display-first-name-field').classList;
