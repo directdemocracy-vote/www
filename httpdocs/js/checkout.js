@@ -13,7 +13,8 @@ window.addEventListener("load", function() {
     button.classList.add('is-loading');
     const stripe = Stripe('pk_test_51ONAiHJ8bitZPVQT83mvU9hsFgAcXYctJa6wFynuQ7ZieWQHLeFmmdNlJMpECaIkVz87vBHnbBgW9q48qc9fdvcr00oudVLpYM');
     const currency = document.querySelectorAll('input[name="donation-currency"]:checked')[0].value;
-    const response = await fetch(`/stripe/checkout.php?amount=${amount}&frequency=${frequency}&currency=${currency}`, {method: 'POST'});
+    const email = document.getElementById('donate-email').value;
+    const response = await fetch(`/stripe/checkout.php?amount=${amount}&frequency=${frequency}&currency=${currency}&email=${email}`, {method: 'POST'});
     const {clientSecret, paymentId} = await response.json();
     const handleComplete = async function() {
       checkout.unmount();
