@@ -19,7 +19,7 @@ window.addEventListener("load", function() {
       checkout = null;
       console.log('onComplete data = ');
       console.log(data);
-      const paymentIntent = await stripe.paymentIntents.retrieve(clientSecret);
+      const paymentIntent = await stripe.retrievePaymentIntent(clientSecret);
       console.log(paymentIntent.currency + ' ' + paymentIntent.amount);
       document.getElementById('donate-checkout').classList.add('is-hidden');
       document.getElementById('donate-complete').classList.remove('is-hidden');
