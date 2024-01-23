@@ -132,7 +132,9 @@ $checkout_session = $stripe->checkout->sessions->create([
     'quantity' => 1
   ]],
   'mode' => $mode,
-  'return_url' => $YOUR_DOMAIN . '/stripe/return.html?session_id={CHECKOUT_SESSION_ID}'
+  'client_reference_id': '0',
+  'redirect_on_completion': 'if_required',
+  'return_url' => $YOUR_DOMAIN . '/thank_you.php?session_id={CHECKOUT_SESSION_ID}'
 ]);
 
 echo json_encode(array('clientSecret' => $checkout_session->client_secret));
