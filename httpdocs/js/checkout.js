@@ -2,6 +2,8 @@ window.addEventListener("load", function() {
   let checkout;
   let step = 1;
   let frequency = 1; // 1: one-time, 2: monthly, 3: annually
+  let amount = 5;
+  const amounts = [5, 10, 20, 50, 100, 200, 500, 1000];
   document.getElementById('donate-button').addEventListener('click', async function(event) {
     const button = event.currentTarget;
     button.classList.add('is-loading');
@@ -51,4 +53,13 @@ window.addEventListener("load", function() {
     document.getElementById(frequency === 1 ? 'donate-one-time' : 'donate-monthly').classList.remove('is-info');
     frequency = 3;
   });
+  for(const a of amounts) {
+    document.getElementById(`donate-${a}`).addEventListener('click', function(event) {
+      if (amount === a)
+        return;
+      event.currentTarget.classList.add('is-info');
+      document.getElementById(`donate-${amount}`).classList.remove('is-info');
+      amount = a;
+    });
+  }
 });
