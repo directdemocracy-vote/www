@@ -72,6 +72,7 @@ window.addEventListener("load", function() {
   document.getElementById('donate-display-checkbox').addEventListener('click', function(event) {
     const firstName = document.getElementById('donate-display-first-name-field').classList;
     const hideAmount = document.getElementById('donate-hide-amount-field').classList;
+    console.log(hideAmount);
     if (event.currentTarget.checked) {
       firstName.remove('is-hidden');
       hideAmount.remove('is-hidden');
