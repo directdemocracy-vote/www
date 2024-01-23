@@ -1,7 +1,7 @@
 window.addEventListener("load", function() {
   let checkout;
   let step = 1;
-  let frequency = 1; // 1: one-time, 2: monthly, 3: annually
+  let frequency = 'one-time';
   let amount = 5;
   const amounts = [5, 10, 20, 50, 100, 200, 500, 1000];
   let isOrganization = false;
@@ -10,7 +10,7 @@ window.addEventListener("load", function() {
     const button = event.currentTarget;
     button.classList.add('is-loading');
     const stripe = Stripe('pk_test_51ONAiHJ8bitZPVQT83mvU9hsFgAcXYctJa6wFynuQ7ZieWQHLeFmmdNlJMpECaIkVz87vBHnbBgW9q48qc9fdvcr00oudVLpYM');
-    const response = await fetch('/stripe/checkout.php', {method: 'POST'});
+    const response = await fetch(`/stripe/checkout.php?amount=${amount}&frequency=${frequency}`, {method: 'POST'});
     const {clientSecret} = await response.json();
     checkout = await stripe.initEmbeddedCheckout({clientSecret});
     document.getElementById('donate-explanation').classList.add('is-hidden');
@@ -35,25 +35,25 @@ window.addEventListener("load", function() {
     step = 1;
   });
   document.getElementById('donate-one-time').addEventListener('click', function(event) {
-    if (frequency === 1)
+    if (frequency === 'one-time')
       return;
     event.currentTarget.classList.add('is-info');
-    document.getElementById(frequency === 2 ? 'donate-monthly' : 'donate-annually').classList.remove('is-info');
-    frequency = 1;
+    document.getElementById(frequency === 'monthly' ? 'donate-monthly' : 'donate-annually').classList.remove('is-info');
+    frequency = 'one-time';
   });
   document.getElementById('donate-monthly').addEventListener('click', function(event) {
-    if (frequency === 2)
+    if (frequency === 'monthly')
       return;
     event.currentTarget.classList.add('is-info');
-    document.getElementById(frequency === 1 ? 'donate-one-time' : 'donate-annually').classList.remove('is-info');
-    frequency = 2;
+    document.getElementById(frequency === 'one-time' ? 'donate-one-time' : 'donate-annually').classList.remove('is-info');
+    frequency = 'monthly';
   });
   document.getElementById('donate-annually').addEventListener('click', function(event) {
-    if (frequency === 3)
+    if (frequency === 'annually')
       return;
     event.currentTarget.classList.add('is-info');
-    document.getElementById(frequency === 1 ? 'donate-one-time' : 'donate-monthly').classList.remove('is-info');
-    frequency = 3;
+    document.getElementById(frequency === 'one-time' ? 'donate-one-time' : 'donate-monthly').classList.remove('is-info');
+    frequency = 'annually';
   });
   for(const a of amounts) {
     document.getElementById(`donate-${a}`).addEventListener('click', function(event) {
