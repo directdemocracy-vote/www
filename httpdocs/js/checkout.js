@@ -35,7 +35,7 @@ window.addEventListener("load", function() {
       return;
     event.currentTarget.classList.add('is-info');
     document.getElementById(frequency === 2 ? 'donate-monthly' : 'donate-annually').classList.remove('is-info');
-    frequency = 2;
+    frequency = 1;
   });
   document.getElementById('donate-monthly').addEventListener('click', function(event) {
     if (frequency === 2)
@@ -49,6 +49,6 @@ window.addEventListener("load", function() {
       return;
     event.currentTarget.classList.add('is-info');
     document.getElementById(frequency === 1 ? 'donate-one-time' : 'donate-monthly').classList.remove('is-info');
-    frequency = 2;
+    frequency = 3;
   });
 });
