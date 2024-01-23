@@ -69,4 +69,15 @@ window.addEventListener("load", function() {
     else
       classList.add('is-hidden');
   });
+  document.getElementById('donate-display-checkbox').addEventListener('click', function(event) {
+    const firstName = document.getElementById('donate-display-first-name-field').classList;
+    const hideAmount = document.getElementById('donate-hide-amount-field').classList;
+    if (event.currentTarget.checked) {
+      firstName.remove('is-hidden');
+      hideAmount.remove('is-hidden');
+    } else {
+      firstName.add('is-hidden');
+      hideAmount.add('is-hidden');
+    }
+  });
 });
