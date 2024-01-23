@@ -134,4 +134,4 @@ $checkout_session = $stripe->checkout->sessions->create([
   'redirect_on_completion' => 'never'
 ]);
 
-echo json_encode(array('clientSecret' => $checkout_session->client_secret));
+echo json_encode(array('clientSecret' => $checkout_session->client_secret, 'clientId' => 0));
