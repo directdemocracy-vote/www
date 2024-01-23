@@ -12,7 +12,7 @@ $amount = intval($_GET['amount']);
 $frequency = $_GET['frequency'];
 $currency = $_GET['currency'];
 if ($frequency === 'one-time') {
-  $mode = 'purchase';  // FIXME
+  $mode = 'payment';
 } elseif ($frequency === 'monthly') {
   $mode = 'subscription';
   if ($currency === 'CHF') {
