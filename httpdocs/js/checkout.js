@@ -62,4 +62,11 @@ window.addEventListener("load", function() {
       amount = a;
     });
   }
+  document.getElementById('donate-comment-checkbox').addEventListener('click', function(event) {
+    const classList = document.getElementById('donate-comment').classList;
+    if (event.currentTarget.checked)
+      classList.remove('is-hidden');
+    else
+      classList.add('id-hidden');
+  });
 });
