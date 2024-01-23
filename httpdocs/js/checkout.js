@@ -81,4 +81,11 @@ window.addEventListener("load", function() {
       hideAmount.add('is-hidden');
     }
   });
+  document.getElementById('donate-organization-checkbox').addEventListener('click', function(event) {
+    const classList = document.getElementById('donate-organization-field').classList;
+    if (event.currentTarget.checked)
+      classList.remove('is-hidden');
+    else
+      classList.add('is-hidden');
+  });
 });
