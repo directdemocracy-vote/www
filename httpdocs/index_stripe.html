@@ -376,20 +376,20 @@
                     </p>
                   </div>
                   <div class="field">
-                    <label class="checkbox mr-1"><input id="display" type="checkbox" class="mr-1">Display donation and comment</label>
+                    <label class="checkbox mr-1"><input id="donate-display-checkbox" type="checkbox" class="mr-1">Display donation and comment</label>
                   </div>
-                  <div class="field is-hidden">
-                    <label class="checkbox mr-1"><input id="first-name-only" type="checkbox" class="mr-1">Display first name(s) instead of full name</label>
+                  <div id="donate-display-first-name-field" class="field is-hidden">
+                    <label class="checkbox mr-1"><input id="donate-display-first-name-checkbox" type="checkbox" class="mr-1">Display first name(s) instead of full name</label>
                   </div>
-                  <div class="field is-hidden">
-                    <label class="checkbox mr-1"><input id="hide-donation" type="checkbox" class="mr-1">Hide donation amount</label>
+                  <div is="donate-hide-donation-field" class="field is-hidden">
+                    <label class="checkbox mr-1"><input id="donate-hide-donation-checkbox" type="checkbox" class="mr-1">Hide donation amount</label>
                   </div>
                   <div class="field">
-                    <label class="checkbox mr-1"><input id="organization" type="checkbox" class="mr-1">This donation is on behalf of an organization</label>
+                    <label class="checkbox mr-1"><input id="donate-organization-checkbox" type="checkbox" class="mr-1">This donation is on behalf of an organization</label>
                   </div>
-                  <div class="field is-hidden">
+                  <div id="donate-organization-field" class="field is-hidden">
                     <p class="control">
-                      <input id="organization-name" class="input" type="text" placeholder="Organization name">
+                      <input id="donate-organization" class="input" type="text" placeholder="Organization name">
                     </p>
                   </div>
                 <div class="field buttons is-centered">
