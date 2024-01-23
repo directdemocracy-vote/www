@@ -10,7 +10,13 @@ header('Content-Type: application/json');
 $amount = intval($_GET['amount']);
 $frequency = $_GET['frequency'];
 $currency = $_GET['currency'];
-$email = $_GET['email'];
+$email = $mysqli->escape_string($_GET['email']);
+$givenNames = $mysqli->escape_string($_GET['givenNames']);
+$familyName = $mysqli->escape_string($_GET['familyName']);
+$organization = $mysqli->escape_string($_GET['organization']);
+$comment = $mysqli->escape_string($_GET['comment']);
+$displayGivenNames = intval($_GET['displayGivenNames']);
+$hideAmount = intval($_GET['hideAmount']);
 if ($frequency === 'one-time') {
   $mode = 'payment';
   if ($currency === 'CHF') {
@@ -178,6 +184,11 @@ if ($frequency === 'one-time') {
     die("Unsupported currency: $currency");
 } else
   die("unknown frequency: $frequency");
+$query = "INSERT INTO payment(frequency, currency, amount, email, givenNames, familyName, organization, comment, displayGivenNames, hideAmount) "
+        ."VALUES('$frequency', '$currency', $amount, '$email', \"$givenNames\", \"$familyName\", \"$organization\", \"$comment\", $displayGivenNames, $hideAmount)";
+$mysqli->query($query) or die($mysqli->error);
+$id = $mysqli->insert_id;
+$mysqli->close();
 $parameters = [
   'ui_mode' => 'embedded',
   'line_items' => [[
@@ -193,4 +204,4 @@ if ($mode === 'payment')
   $parameters['submit_type'] = 'donate';
 $checkout_session = $stripe->checkout->sessions->create($parameters);
 
-echo json_encode(array('clientSecret' => $checkout_session->client_secret, 'paymentId' => 0));
+echo json_encode(array('clientSecret' => $checkout_session->client_secret, 'paymentId' => $id));
