@@ -12,7 +12,7 @@ function checkoutSessionCompleted($object) {
   $mode = $object->mode; # payment or subscription
   $status = $object->payment_status; # should be "paid"
   $message = "Dear $name,<br><br>"
-            ."Thank you for donating $amount to support <a href=\"https://directdemocracy.vote\" target="_blank">directdemocracy.vote</a>!<br><br>"
+            ."Thank you for donating $amount to support <a href=\"https://directdemocracy.vote\" target=\"_blank\">directdemocracy.vote</a>!<br><br>"
             ."Best regards,<br><br>"
             ."directdemocracy.vote";
   $headers = "From: info@directdemocracy.vote\r\n"
