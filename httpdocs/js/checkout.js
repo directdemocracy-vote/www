@@ -1,6 +1,7 @@
-window.addEventListener("load", function() {
+/* global Stripe */
+
+window.addEventListener('load', function() {
   let checkout = null;
-  let step = 1;
   let frequency = 'one-time';
   let amount = 5;
   const amounts = [5, 10, 20, 50, 100, 200, 500, 1000];
@@ -18,14 +19,16 @@ window.addEventListener("load", function() {
 
     const button = event.currentTarget;
     button.classList.add('is-loading');
-    const stripe = Stripe('pk_test_51ONAiHJ8bitZPVQT83mvU9hsFgAcXYctJa6wFynuQ7ZieWQHLeFmmdNlJMpECaIkVz87vBHnbBgW9q48qc9fdvcr00oudVLpYM');
+    const stripe = Stripe(
+      'pk_test_51ONAiHJ8bitZPVQT83mvU9hsFgAcXYctJa6wFynuQ7ZieWQHLeFmmdNlJMpECaIkVz87vBHnbBgW9q48qc9fdvcr00oudVLpYM');
     const currency = document.querySelectorAll('input[name="donate-currency"]:checked')[0].value;
     const email = document.getElementById('donate-email').value;
     const isOrganization = document.getElementById('donate-organization-checkbox').checked;
     const givenNames = isOrganization ? '' : document.getElementById('donate-given-names').value;
     const familyName = isOrganization ? '' : document.getElementById('donate-family-name').value;
     const organization = isOrganization ? document.getElementById('donate-organization').value : '';
-    const comment = document.getElementById('donate-comment-checkbox').checked ? document.getElementById('donate-comment').value : '';
+    const comment = document.getElementById('donate-comment-checkbox').checked
+      ? document.getElementById('donate-comment').value : '';
     const display = document.getElementById('donate-display-checkbox') ? 1 : 0;
     const displayGivenNames = document.getElementById('donate-display-given-names-checkbox').checked ? 1 : 0;
     const hideAmount = document.getElementById('donate-hide-amount-checkbox').checked ? 1 : 0;
@@ -46,7 +49,7 @@ window.addEventListener("load", function() {
       document.getElementById('donate-3').textContent = 'circle_fill';
       // const details = await retrievePurchaseDetails();
       // showPurchaseSummary(details);
-    }
+    };
     checkout = await stripe.initEmbeddedCheckout({clientSecret, onComplete: handleComplete});
     document.getElementById('donate-explanation').classList.add('is-hidden');
     document.getElementById('donate-form').classList.add('is-hidden');
@@ -56,7 +59,6 @@ window.addEventListener("load", function() {
     document.getElementById('donate-2').textContent = 'circle_fill';
     button.classList.remove('is-loading');
     checkout.mount('#donate-checkout');
-    step = 2;
   });
   document.getElementById('donate-back').addEventListener('click', async function(event) {
     if (checkout) {
@@ -71,7 +73,6 @@ window.addEventListener("load", function() {
     document.getElementById('donate-1').textContent = 'circle_fill';
     document.getElementById('donate-2').textContent = 'circle';
     document.getElementById('donate-3').textContent = 'circle';
-    step = 1;
   });
   document.getElementById('donate-one-time').addEventListener('click', function(event) {
     if (frequency === 'one-time')
@@ -94,7 +95,7 @@ window.addEventListener("load", function() {
     document.getElementById(frequency === 'one-time' ? 'donate-one-time' : 'donate-monthly').classList.remove('is-info');
     frequency = 'annually';
   });
-  for(const a of amounts) {
+  for (const a of amounts) {
     document.getElementById(`donate-${a}`).addEventListener('click', function(event) {
       if (amount === a)
         return;
@@ -152,7 +153,7 @@ window.addEventListener("load", function() {
       classList.add('is-hidden');
       name.remove('is-hidden');
       if (display)
-        displayFivenNames.remove('is-hidden');
+        displayGivenNames.remove('is-hidden');
     }
   });
 });
