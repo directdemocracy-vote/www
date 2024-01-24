@@ -19,7 +19,7 @@ function checkoutSessionCompleted($object) {
   $country = $object->customer_details->address->country;
   $mode = $object->mode;
   $date = intval($object->created);
-  $query = "SELECT frequency, currency, amount, email, givenNames, familyName, organization, comment, display, displayGivenNames, hideAmount, date FROM payment WHERE id=$id";
+  $query = "SELECT frequency, currency, amount, email, givenNames, familyName, organization, comment, display, displayGivenNames, hideAmount, paid FROM payment WHERE id=$id";
   $result = $mysqli->query($query) or error($mysqli->error);
   $payment = $result->fetch_object();
   if (!$payment)
@@ -38,15 +38,15 @@ function checkoutSessionCompleted($object) {
   $name = ($payment->organization === '') ? $payment->givenNames.' '.$payment->familyName : $payment->organization;
   $summary = "<table>";
   if ($payment->organization === '')
-    $summary.= "<tr><td>Given Name(s)</td><td>$payment->givenNames</td></tr><tr><td>Family Name</td><td>$payment->familyName</td></tr>";
+    $summary.= "<tr><td>Given Name(s): </td><td>$payment->givenNames</td></tr><tr><td>Family Name: </td><td>$payment->familyName</td></tr>";
   else
-    $summary.= "<tr><td>Organization</td><td>$payment->organization</td></tr>";
-  $summary.= "<tr><td>Amount Paid</td><td>$amount</td></tr>"
-           ."<tr><td>Frequency</td><td>$payment->frequency</td></tr>";
+    $summary.= "<tr><td>Organization: </td><td>$payment->organization</td></tr>";
+  $summary.= "<tr><td>Paid Amount: </td><td>$amount</td></tr>"
+           ."<tr><td>Frequency: </td><td>$payment->frequency</td></tr>";
   if ($payment->comment !== '')
-    $summary.= "<tr><td>Comment</td><td>$payment->comment</td></tr>";
+    $summary.= "<tr><td>Comment: </td><td>$payment->comment</td></tr>";
   $options = '';
-  if ($payment->display) {
+  if ($payment->display === 1) {
     $options.= ($payment->comment !== '') ? "display donation and comment, " : "display donation, ";
     if ($payment->displayGivenNames)
       $options.= "display given names instead of full name, ";
@@ -54,15 +54,15 @@ function checkoutSessionCompleted($object) {
       $options.= "hide donation amount, ";
   }
   if ($options !== '')
-    $summary.= "<tr><td>Options</td><td>".substr($options, 0, -2)."</td></tr>";
-  $summary.="<tr><td>Date</td><td></td></tr>";
+    $summary.= "<tr><td>Options: </td><td>".substr($options, 0, -2)."</td></tr>";
+  $summary.="<tr><td>Date: </td><td>".date(DATE_RFC2822, $payment->paid)."</td></tr>";
   $summary.="</table>";
   $message = "Dear $name,<br><br>"
             ."Thank you for donating $amount to support <a href=\"https://directdemocracy.vote\" target=\"_blank\">directdemocracy.vote</a>!<br>"
-            ."Your contriution will help us to advance direct democracy everywhere in the world.<br>"
+            ."Your contribution will help us to advance direct democracy everywhere in the world.<br>"
             ."If you have any question regarding your donation, please contact us by replying to this e-mail.<br><br>"
             ."Best regards,<br><br>"
-            ."directdemocracy.vote<br><br>Summary of your donation:<br>$summary";
+            ."directdemocracy.vote<br><br><i>Summary of your donation:</i><br><br>$summary";
   $headers = "From: info@directdemocracy.vote\r\n"
             ."X-Mailer: php\r\n"
             ."MIME-Version: 1.0\r\n"
