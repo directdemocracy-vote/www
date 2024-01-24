@@ -21,7 +21,7 @@ function checkoutSessionCompleted($object) {
   $date = intval($object->created);
   $query = "SELECT frequency, currency, amount, email, givenNames, familyName, organization, comment, display, displayGivenNames, hideAmount, date FROM payment WHERE id=$id";
   $result = $mysqli->query($query) or error($mysqli->error);
-  $payment = $result->fetch_assoc();
+  $payment = $result->fetch_object();
   if (!$payment)
     error("Payment $id not found");
   if ($payment->email != $object->customer_email)
