@@ -3,7 +3,11 @@ require_once '../../vendor/autoload.php';
 require_once '../../php/stripe.php';
 
 function paymentIntentSucceeded($paymentIntent) {
-  mail('Olivier.Michel@cyberbotics.com', 'DirectDemocracy Donation', 'Yes', 'From: info@cyberbotics.com');
+  mail('Olivier.Michel@cyberbotics.com', 'DirectDemocracy Donation Intent', 'Yes', 'From: info@cyberbotics.com');
+}
+
+function paymentMethodAttached($paymentMethod) {
+  mail('Olivier.Michel@cyberbotics.com', 'DirectDemocracy Donation Method', 'Yes', 'From: info@cyberbotics.com');
 }
 
 \Stripe\Stripe::setApiKey($stripe_secret_key);
@@ -23,11 +27,11 @@ try {
 switch ($event->type) {
   case 'payment_intent.succeeded':
     $paymentIntent = $event->data->object; // contains a \Stripe\PaymentIntent
-    handlePaymentIntentSucceeded($paymentIntent);
+    paymentIntentSucceeded($paymentIntent);
     break;
   case 'payment_method.attached':
     $paymentMethod = $event->data->object; // contains a \Stripe\PaymentMethod
-    # handlePaymentMethodAttached($paymentMethod);
+    paymentMethodAttached($paymentMethod);
     break;
   default:
     echo 'Received unknown event type ' . $event->type;
