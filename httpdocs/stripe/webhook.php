@@ -7,10 +7,6 @@ function paymentIntentSucceeded($paymentIntent) {
   mail('Olivier.Michel@cyberbotics.com', 'DirectDemocracy Donation Intent', 'Yes', 'From: info@directdemocracy.vote');
 }
 
-function paymentMethodAttached($paymentMethod) {
-  mail('Olivier.Michel@cyberbotics.com', 'DirectDemocracy Donation Method', 'Yes', 'From: info@directdemocracy.vote');
-}
-
 function chargeSucceeded($charge) {
   mail('Olivier.Michel@cyberbotics.com', 'DirectDemocracy Donation Charged', 'Yes', 'From: info@directdemocracy.vote');
 }
@@ -31,9 +27,6 @@ try {
 switch ($event->type) {
   case 'payment_intent.succeeded':
     paymentIntentSucceeded($event->data->object);
-    break;
-  case 'payment_method.attached':
-    paymentMethodAttached($event->data->object);
     break;
   case 'charge.succeeded':
     chargeSucceeded($event->data->object);
