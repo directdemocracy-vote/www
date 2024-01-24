@@ -3,4 +3,5 @@
 // or in a private script that does not publicly expose the source code.
 
 // This is your test secret API key.
-$stripeSecretKey = 'sk_test_51ONAiHJ8bitZPVQT9i7SskwP1TQ9Vd2oTuyBZmBhwDdxZ7EaY5r4u9HPvB1Fadrsajm58GQThE8em54MBGw3QGZJ00LbM6DJqV';
+$stripe_secret_key = 'sk_...';
+$stripe_end_point_secret = 'whsec_...';
