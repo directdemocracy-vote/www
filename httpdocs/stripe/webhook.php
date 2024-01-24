@@ -12,7 +12,7 @@ function paymentMethodAttached($paymentMethod) {
 }
 
 function chargeSucceeded($charge) {
-  mail('Olivier.Michel@cyberbotics.com', 'DirectDemocracy Donation Method', 'Yes', 'From: info@directdemocracy.vote');
+  mail('Olivier.Michel@cyberbotics.com', 'DirectDemocracy Donation Charged', 'Yes', 'From: info@directdemocracy.vote');
 }
 
 \Stripe\Stripe::setApiKey($stripe_secret_key);
@@ -36,7 +36,8 @@ switch ($event->type) {
     paymentMethodAttached($event->data->object);
     break;
   case 'charge.succeeded':
-    chargeSucceeded($event->data->object);  
+    chargeSucceeded($event->data->object);
+    break;
   default:
     mail('Olivier.Michel@cyberbotics.com', 'Unknown event received', $event->type, 'From: info@directdemocracy.vote');
     echo 'Received unknown event type ' . $event->type;
