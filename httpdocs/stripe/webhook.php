@@ -10,8 +10,11 @@ function paymentIntentSucceeded($paymentIntent) {
 
 function chargeSucceeded($charge) {
   $amount = strtoupper($charge->currency).' '.($charge->amount / 100);
-  $message = "Donor: $charge->billing_details->name <$charge->billing_details->email> ($charge->billing_details->address->country)";
-  mail('Olivier.Michel@cyberbotics.com', 'DirectDemocracy Donation: $amount', $message, 'From: info@directdemocracy.vote');
+  $name = $charge->billing_details->name;
+  $email = $charge->billing_details->email;
+  $country = $charge->billing_details->address->country;
+  $message = "Donor: $name <$email> ($country)";
+  mail('Olivier.Michel@cyberbotics.com', "DirectDemocracy Donation: $amount", $message, 'From: info@directdemocracy.vote');
 }
 
 \Stripe\Stripe::setApiKey($stripe_secret_key);
