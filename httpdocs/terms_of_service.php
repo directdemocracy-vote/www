@@ -22,9 +22,7 @@ These Terms of Service describes Our policies and procedures on the collection, 
 We use Your Personal data to provide the Service. By using the Service, You agree to the collection and use of information in accordance with these Terms of Service.
 </p>
 
-<h2 class="title is-2">Interpretation and Definitions</h2>
-
-<h3 class="title is-3">Interpretation</h3>
+<h2 class="title is-2">Interpretation</h2>
 <p>
 The words of which the initial letter is capitalized have meanings defined under the following conditions.
 The following definitions shall have the same meaning regardless of whether they appear in singular or in plural.
@@ -40,12 +38,13 @@ For the purposes of these Terms of Service:
 <li><b>Personal Data</b> is any information that relates to an identified or identifiable individual.</li>
 </ul>
 </p>
+
 <h2 class="title is-2">Collecting and Using Your Personal Data</h2>
 
 <h3 class="title is-3">Types of Personal Data Collected</h3>
 
 <p>While donating to the Us, We may ask You to provide Us with certain personally identifiable information that can be used to identify You.
-Personally identifiable information may include, but is not limited to:</p>
+Personally identifiable information may include, but is not limited to:
 <ul>
 <li>Family name</li>
 <li>Given names</li>
@@ -56,11 +55,12 @@ Personally identifiable information may include, but is not limited to:</p>
 <li>Comments</li>
 <li>Payment dates</li>
 </ul>
-<p>You may also provide Our Third Party Payment Services with additional information, such as:</p>
+You may also provide Our Third Party Payment Services with additional information, such as:
 <ul>
 <li>Credit card information</li>
 <li>Other payment information</li>
 </ul>
+</p>
 <h3 class="title is-3">Retention, Use, Transfer, Disclosure and Security of Your Personal Data</h3>
 <p>Your Personal Data is stored securely in our databases and won't be transferred or disclosed to any third party without your explicit consent.</p>
 <p>You may request Us anytime to delete your Personal Data from our databases.</p>
