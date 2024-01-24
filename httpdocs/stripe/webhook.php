@@ -3,18 +3,24 @@
 require_once '../../vendor/autoload.php';
 require_once '../../php/stripe.php';
 
-function paymentIntentSucceeded($paymentIntent) {
-  $amount = strtoupper($paymentIntent->currency).' '.($paymentIntent->amount / 100);
-  mail('Olivier.Michel@cyberbotics.com', "DirectDemocracy Donation Intent: $amount", 'Charge should follow...', 'From: info@directdemocracy.vote');
-}
-
-function chargeSucceeded($charge) {
-  $amount = strtoupper($charge->currency).' '.($charge->amount / 100);
-  $name = $charge->billing_details->name;
-  $email = $charge->billing_details->email;
-  $country = $charge->billing_details->address->country;
-  $message = "Donor: $name <$email> ($country)";
-  mail('Olivier.Michel@cyberbotics.com', "DirectDemocracy Donation: $amount", $message, 'From: info@directdemocracy.vote');
+function checkoutSessionCompleted($object) {
+  $amount = strtoupper($object->currency).' '.($object->amount_total / 100);
+  $id = $object->client_reference_id;
+  $email = $object->customer_email;
+  $name = $object->customer_details->name;
+  $country = $object->customer_details->address->country;
+  $mode = $object->mode; # payment or subscription
+  $status = $object->payment_status; # should be "paid"
+  $message = "Dear $name,<br><br>"
+            ."Thank you for donating $amount to support <a href=\"https://directdemocracy.vote\" target="_blank">directdemocracy.vote</a>!<br><br>"
+            ."Best regards,<br><br>"
+            ."directdemocracy.vote";
+  $headers = "From: info@directdemocracy.vote\r\n"
+            ."X-Mailer: php\r\n"
+            ."MIME-Version: 1.0\r\n"
+            ."Content-Type: text/html; charset=UTF-8\r\n";
+            ."Bcc: Olivier.Michel@cyberbotics.com\r\n";
+  mail($email, "Thank you for your donation!", $message, $headers);
 }
 
 \Stripe\Stripe::setApiKey($stripe_secret_key);
@@ -31,14 +37,11 @@ try {
   die(json_encode(['Error verifying webhook signature: ' => $e->getMessage()]));
 }
 switch ($event->type) {
-  case 'payment_intent.succeeded':
-    paymentIntentSucceeded($event->data->object);
-    break;
-  case 'charge.succeeded':
-    chargeSucceeded($event->data->object);
+  case 'checkout.session.completed':
+    checkoutSessionCompleted($event->data->object);
     break;
   default:
-    mail('Olivier.Michel@cyberbotics.com', "Unknown event received", $payload, 'From: info@directdemocracy.vote');
+    mail('Olivier.Michel@cyberbotics.com', "Unknown Stripe event received: $event->type", $payload, 'From: info@directdemocracy.vote');
     echo 'Received unknown event type ' . $event->type;
 }
 http_response_code(200);
