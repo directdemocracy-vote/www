@@ -28,8 +28,8 @@ function checkoutSessionCompleted($object) {
     error("E-mail mismatch for client $1: $payment->email != $object->customer_email");
   if (($mode === 'payment' && $payment->frequency !== 'one-time') || ($mode === 'subscription' && $payment->frequency === 'one-time'))
     error("Frequency mismatch for client $1: $object->mode for $payment->frequency");
-  if ($payment->amount !== $amount_raw)
-    error("Payment amount mismatch for client $1: $amount_raw !== $payment->amount");
+  if ($payment->amount != $amount_raw)
+    error("Payment amount mismatch for client $1: $amount_raw != $payment->amount");
   if ($object->payment_status !== 'paid')
     error("Expecting payment status to be 'paid', but got '$object->payment_status'");
   if ($object->status !== 'complete')
