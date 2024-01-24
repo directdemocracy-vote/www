@@ -53,7 +53,7 @@ function checkoutSessionCompleted($object) {
       $options.= "hide donation amount, ";
   }
   if ($options !== '')
-    $summary.= "<tr><td>Options</td><td>".substr($options, 0, -2).">/td></tr>";
+    $summary.= "<tr><td>Options</td><td>".substr($options, 0, -2)."</td></tr>";
   $summary.="<tr><td>Date</td><td></td></tr>";
   $summary.="</table>";
   $message = "Dear $name,<br><br>"
