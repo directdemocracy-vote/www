@@ -40,7 +40,7 @@ function checkoutSessionCompleted($object) {
     $summary.= "<tr><td>Given Name(s)</td><td>$payment->givenNames</td></tr><tr><td>Family Name</td><td>$payment->familyName</td></tr>";
   else
     $summary.= "<tr><td>Organization</td><td>$payment->organization</td></tr>";
-  summary.= "<tr><td>Amount Paid</td><td>$amount</td></tr>"
+  $summary.= "<tr><td>Amount Paid</td><td>$amount</td></tr>"
            ."<tr><td>Frequency</td><td>$payment->frequency</td></tr>";
   if ($payment->comment !== '')
     $summary.= "<tr><td>Comment</td><td>$payment->comment</td></tr>";
@@ -52,9 +52,8 @@ function checkoutSessionCompleted($object) {
     if ($payment->hideAmount)
       $options.= "hide donation amount, ";
   }
-  if ($options !== '') {
-    $summary.= "<tr><td>Options</td><td>$options</td></tr>";
-  } 
+  if ($options !== '')
+    $summary.= "<tr><td>Options</td><td>".substr($options, 0, -2)">/td></tr>";
   $summary.="<tr><td>Date</td><td></td></tr>";
   $summary.="</table>";
   $message = "Dear $name,<br><br>"
