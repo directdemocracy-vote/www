@@ -3,7 +3,7 @@ require_once '../../vendor/autoload.php';
 require_once '../../php/stripe.php';
 
 function paymentIntentSucceeded($paymentIntent) {
-  mail('Olivier.Michel@cyberbotics.com', 'DirectDemocracy Donation', 'Yes');
+  mail('Olivier.Michel@cyberbotics.com', 'DirectDemocracy Donation', 'Yes', 'From: info@cyberbotics.com');
 }
 
 \Stripe\Stripe::setApiKey($stripe_secret_key);
