@@ -198,7 +198,7 @@ $parameters = [
   ]],
   'mode' => $mode,
   'customer_email' => $email,
-  'client_reference_id' => '0',
+  'client_reference_id' => "$id",
   'redirect_on_completion' => 'never'  
 ];
 if ($mode === 'payment')
