@@ -8,7 +8,7 @@ window.addEventListener('load', function() {
   let amount = 5;
   const amounts = [5, 10, 20, 50, 100, 200, 500, 1000];
   let isOrganization = false;
-  let display = false;
+  let display = 0;
   document.getElementById('donate-button').addEventListener('click', async function(event) {
     if (!document.getElementById('donate-email').reportValidity())
       return;
@@ -32,7 +32,6 @@ window.addEventListener('load', function() {
     const organization = isOrganization ? document.getElementById('donate-organization').value : '';
     const comment = document.getElementById('donate-comment-checkbox').checked
       ? document.getElementById('donate-comment').value : '';
-    const display = document.getElementById('donate-display-checkbox') ? 1 : 0;
     const displayGivenNames = document.getElementById('donate-display-given-names-checkbox').checked ? 1 : 0;
     const hideAmount = document.getElementById('donate-hide-amount-checkbox').checked ? 1 : 0;
     const parameters = `amount=${amount}&frequency=${frequency}&currency=${currency}&email=${encodeURIComponent(email)}&` +
@@ -125,11 +124,11 @@ window.addEventListener('load', function() {
       if (!isOrganization)
         displayGivenNames.remove('is-hidden');
       hideAmount.remove('is-hidden');
-      display = true;
+      display = 1;
     } else {
       displayGivenNames.add('is-hidden');
       hideAmount.add('is-hidden');
-      display = false;
+      display = 0;
     }
   });
   document.getElementById('donate-organization-checkbox').addEventListener('click', function(event) {
