@@ -71,7 +71,7 @@ window.addEventListener('load', function() {
     document.getElementById('donate-explanation').classList.remove('is-hidden');
     document.getElementById('donate-form').classList.remove('is-hidden');
     document.getElementById('donate-checkout').classList.add('is-hidden');
-    document.getElementById('donate-complete').classList.remove('is-hidden');
+    document.getElementById('donate-complete').classList.add('is-hidden');
     document.getElementById('donate-back').classList.add('is-hidden');
     document.getElementById('donate-1').textContent = 'circle_fill';
     document.getElementById('donate-2').textContent = 'circle';
