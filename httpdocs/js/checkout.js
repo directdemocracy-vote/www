@@ -16,7 +16,8 @@ window.addEventListener('load', function() {
       return;
     if (!document.getElementById('donate-organization').reportValidity())
       return;
-
+    if (!document.getElementById('donate-terms-of-service').reportValidity())
+      return;
     const button = event.currentTarget;
     button.classList.add('is-loading');
     const stripe = Stripe(
