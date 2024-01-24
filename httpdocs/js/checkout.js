@@ -9,6 +9,13 @@ window.addEventListener("load", function() {
   document.getElementById('donate-button').addEventListener('click', async function(event) {
     if (!document.getElementById('donate-email').reportValidity())
       return;
+    if (!document.getElementById('donate-given-names').reportValidity())
+      return;
+    if (!document.getElementById('donate-family-name').reportValidity())
+      return;
+    if (!document.getElementById('donate-organization').reportValidity())
+      return;
+
     const button = event.currentTarget;
     button.classList.add('is-loading');
     const stripe = Stripe('pk_test_51ONAiHJ8bitZPVQT83mvU9hsFgAcXYctJa6wFynuQ7ZieWQHLeFmmdNlJMpECaIkVz87vBHnbBgW9q48qc9fdvcr00oudVLpYM');
@@ -124,14 +131,23 @@ window.addEventListener("load", function() {
   document.getElementById('donate-organization-checkbox').addEventListener('click', function(event) {
     const classList = document.getElementById('donate-organization-field').classList;
     const displayGivenNames = document.getElementById('donate-display-given-names-field').classList;
+    const givenNames = document.getElementById('donate-given-names');
+    const familyName = document.getElementById('donate-family-name');
+    const organization = document.getElementById('donate-organization');
     const name = document.getElementById('donate-name-field').classList;
     if (event.currentTarget.checked) {
+      givenNames.removeAttribute('required');
+      familyName.removeAttribute('required');
+      organization.addAttribute('required', '');
       isOrganization = true;
       classList.remove('is-hidden');
       name.add('is-hidden');
       if (display)
         displayGivenNames.add('is-hidden');
     } else {
+      givenNames.setAttribute('required', '');
+      familyName.setAttribute('required', '');
+      organization.removeAttribute('required');
       isOrganization = false;
       classList.add('is-hidden');
       name.remove('is-hidden');
