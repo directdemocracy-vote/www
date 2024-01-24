@@ -18,6 +18,8 @@ window.addEventListener('load', function() {
       return;
     if (!document.getElementById('donate-organization').reportValidity())
       return;
+    if (!document.getElementById('donate-comment').reportValidity())
+      return;
     if (!document.getElementById('donate-terms-of-service').reportValidity())
       return;
     const button = event.currentTarget;
@@ -109,12 +111,15 @@ window.addEventListener('load', function() {
   document.getElementById('donate-comment-checkbox').addEventListener('click', function(event) {
     const classList = document.getElementById('donate-comment-field').classList;
     const donateDisplayText = document.getElementById('donate-display-text');
+    const comment = document.getElementById('donate-comment').classList;
     if (event.currentTarget.checked) {
       donateDisplayText.textContent = 'Display donation and comment';
       classList.remove('is-hidden');
+      comment.setAttribute('required', '');
     } else {
       donateDisplayText.textContent = 'Display donation';
       classList.add('is-hidden');
+      comment.removeAttribute('required');
     }
   });
   document.getElementById('donate-display-checkbox').addEventListener('click', function(event) {
