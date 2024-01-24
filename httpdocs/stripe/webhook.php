@@ -10,6 +10,7 @@ function error($message) {
 }
 
 function checkoutSessionCompleted($object) {
+  global $mysqli;
   $amount_raw = $object->amount_total / 100;
   $amount = strtoupper($object->currency).' '.$amount_raw;
   $id = intval($object->client_reference_id);
