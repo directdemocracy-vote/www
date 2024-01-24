@@ -55,7 +55,7 @@ function checkoutSessionCompleted($object) {
   }
   if ($options !== '')
     $summary.= "<tr><td>Options: </td><td>".substr($options, 0, -2)."</td></tr>";
-  $summary.="<tr><td>Date: </td><td>".date(DATE_RFC2822, $date)."</td></tr>";
+  $summary.="<tr><td>Date: </td><td>".date('r', $date)."</td></tr>";
   $summary.="</table>";
   $message = "Dear $name,<br><br>"
             ."Thank you for donating $amount to support <a href=\"https://directdemocracy.vote\" target=\"_blank\">directdemocracy.vote</a>!<br>"
