@@ -139,7 +139,7 @@ window.addEventListener('load', function() {
     if (event.currentTarget.checked) {
       givenNames.removeAttribute('required');
       familyName.removeAttribute('required');
-      organization.addAttribute('required', '');
+      organization.setAttribute('required', '');
       isOrganization = true;
       classList.remove('is-hidden');
       name.add('is-hidden');
