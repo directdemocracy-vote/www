@@ -64,7 +64,7 @@ function checkoutSessionCompleted($object) {
             ."Your contribution will help us to advance direct democracy everywhere in the world.<br>"
             ."If you have any question regarding your donation, please contact us by replying to this e-mail.<br><br>"
             ."Best regards,<br><br>"
-            ."directdemocracy.vote<br><br><i>Summary of your donation:</i><br><br>$summary";
+            ."directdemocracy.vote<br><br><i>Summary of your donation to directdemocracy.vote:</i><br><br>$summary";
   $headers = "From: info@directdemocracy.vote\r\n"
             ."X-Mailer: php\r\n"
             ."MIME-Version: 1.0\r\n"
