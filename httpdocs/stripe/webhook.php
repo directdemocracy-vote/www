@@ -38,7 +38,7 @@ switch ($event->type) {
     chargeSucceeded($event->data->object);
     break;
   default:
-    mail('Olivier.Michel@cyberbotics.com', 'Unknown event received', $event->type, 'From: info@directdemocracy.vote');
+    mail('Olivier.Michel@cyberbotics.com', "Unknown event received", $payload, 'From: info@directdemocracy.vote');
     echo 'Received unknown event type ' . $event->type;
 }
 http_response_code(200);
