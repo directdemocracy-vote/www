@@ -48,8 +48,7 @@ window.addEventListener('load', function() {
       document.getElementById('donate-complete').classList.remove('is-hidden');
       document.getElementById('donate-2').textContent = 'circle';
       document.getElementById('donate-3').textContent = 'circle_fill';
-      // const details = await retrievePurchaseDetails();
-      // showPurchaseSummary(details);
+      document.getElementById('donate-thank-you').textContent = `Thank you ${isOrganization ? organization : givenNames} for supporting directdemocracy!`;
     };
     checkout = await stripe.initEmbeddedCheckout({clientSecret, onComplete: handleComplete});
     document.getElementById('donate-explanation').classList.add('is-hidden');
