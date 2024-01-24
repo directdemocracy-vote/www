@@ -2,6 +2,10 @@
 require_once '../../vendor/autoload.php';
 require_once '../../php/stripe.php';
 
+function paymentIntentSucceeded($paymentIntent) {
+  mail('Olivier.Michel@cyberbotics.com', 'DirectDemocracy Donation', 'Yes');
+}
+
 \Stripe\Stripe::setApiKey($stripe_secret_key);
 $payload = @file_get_contents('php://input');
 $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
@@ -23,9 +27,8 @@ switch ($event->type) {
     break;
   case 'payment_method.attached':
     $paymentMethod = $event->data->object; // contains a \Stripe\PaymentMethod
-    handlePaymentMethodAttached($paymentMethod);
+    # handlePaymentMethodAttached($paymentMethod);
     break;
-  // ... handle other event types
   default:
     echo 'Received unknown event type ' . $event->type;
 }
