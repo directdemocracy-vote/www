@@ -1,6 +1,8 @@
 /* global Stripe */
 
 window.addEventListener('load', function() {
+  for (const checkbox of document.querySelectorAll('input[type="checkbox"]:checked'))
+    checkbox.checked = false;
   let checkout = null;
   let frequency = 'one-time';
   let amount = 5;
