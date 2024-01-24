@@ -32,7 +32,7 @@ window.addEventListener('load', function() {
     const organization = isOrganization ? document.getElementById('donate-organization').value : '';
     const comment = document.getElementById('donate-comment-checkbox').checked
       ? document.getElementById('donate-comment').value : '';
-    const displayGivenNames = document.getElementById('donate-display-given-names-checkbox').checked ? 1 : 0;
+    const displayGivenNames = isOrganization ? 0 : (document.getElementById('donate-display-given-names-checkbox').checked ? 1 : 0);
     const hideAmount = document.getElementById('donate-hide-amount-checkbox').checked ? 1 : 0;
     const parameters = `amount=${amount}&frequency=${frequency}&currency=${currency}&email=${encodeURIComponent(email)}&` +
                        `givenNames=${encodeURIComponent(givenNames)}&familyName=${encodeURIComponent(familyName)}&` +
