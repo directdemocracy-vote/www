@@ -46,11 +46,11 @@ function checkoutSessionCompleted($object) {
   if ($payment->comment !== '')
     $summary.= "<tr><td>Comment: </td><td>$payment->comment</td></tr>";
   $options = '';
-  if ($payment->display === 1) {
-    $options.= ($payment->comment !== '') ? "display donation and comment, " : "display donation, ";
-    if ($payment->displayGivenNames)
+  if ($payment->display == 1) {
+    $options.= ($payment->comment != '') ? "display donation and comment, " : "display donation, ";
+    if ($payment->displayGivenNames == 1)
       $options.= "display given names instead of full name, ";
-    if ($payment->hideAmount)
+    if ($payment->hideAmount == 1)
       $options.= "hide donation amount, ";
   }
   if ($options !== '')
