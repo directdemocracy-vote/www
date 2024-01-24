@@ -4,11 +4,14 @@ require_once '../../vendor/autoload.php';
 require_once '../../php/stripe.php';
 
 function paymentIntentSucceeded($paymentIntent) {
-  mail('Olivier.Michel@cyberbotics.com', 'DirectDemocracy Donation Intent', 'Yes', 'From: info@directdemocracy.vote');
+  $amount = strtoupper($paymentIntent->currency).' '.($paymentIntent->amount / 100);
+  mail('Olivier.Michel@cyberbotics.com', "DirectDemocracy Donation Intent: $amount", 'Charge should follow...', 'From: info@directdemocracy.vote');
 }
 
 function chargeSucceeded($charge) {
-  mail('Olivier.Michel@cyberbotics.com', 'DirectDemocracy Donation Charged', 'Yes', 'From: info@directdemocracy.vote');
+  $amount = strtoupper($charge->currency).' '.($charge->amount / 100);
+  $message = "Donor: $charge->billing_details->name <$charge->billing_details->email> ($charge->billing_details->address->country)";
+  mail('Olivier.Michel@cyberbotics.com', 'DirectDemocracy Donation: $amount', $message, 'From: info@directdemocracy.vote');
 }
 
 \Stripe\Stripe::setApiKey($stripe_secret_key);
