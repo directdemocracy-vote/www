@@ -1,4 +1,9 @@
 <?php
+
+mail('Olivier.Michel@cyberbotics.com', 'This is a test', 'Yes', 'From: info@directdemocracy.vote');
+
+die("OK");
+
 require_once '../../vendor/autoload.php';
 require_once '../../php/stripe.php';
 
