@@ -18,7 +18,7 @@ function checkoutSessionCompleted($object) {
   $headers = "From: info@directdemocracy.vote\r\n"
             ."X-Mailer: php\r\n"
             ."MIME-Version: 1.0\r\n"
-            ."Content-Type: text/html; charset=UTF-8\r\n";
+            ."Content-Type: text/html; charset=UTF-8\r\n"
             ."Bcc: Olivier.Michel@cyberbotics.com\r\n";
   mail($email, "Thank you for your donation!", $message, $headers);
 }
