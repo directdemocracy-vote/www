@@ -4,7 +4,7 @@ require_once '../../vendor/autoload.php';
 require_once '../../php/stripe.php';
 require_once '../../php/database.php';
 
-$stripe = new \Stripe\StripeClient($stripeSecretKey);
+$stripe = new \Stripe\StripeClient($stripe_secret_key);
 header('Content-Type: application/json');
 
 $amount = intval($_GET['amount']);
