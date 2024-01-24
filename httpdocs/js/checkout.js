@@ -33,7 +33,7 @@ window.addEventListener("load", function() {
                        `givenNames=${encodeURIComponent(givenNames)}&familyName=${encodeURIComponent(familyName)}&` +
                        `organization=${encodeURIComponent(organization)}&comment=${encodeURIComponent(comment)}&` +
                        `display=${display}&displayGivenNames=${displayGivenNames}&hideAmount=${hideAmount}`;
-    const response = await fetch(`/stripe/checkout.php?${parameters}, {method: 'POST'});
+    const response = await fetch(`/stripe/checkout.php?${parameters}`, {method: 'POST'});
     const {clientSecret, paymentId} = await response.json();
     const handleComplete = async function() {
       checkout.unmount();
