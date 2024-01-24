@@ -41,8 +41,9 @@ function checkoutSessionCompleted($object) {
     $summary.= "<tr><td>Given Name(s): </td><td>$payment->givenNames</td></tr><tr><td>Family Name: </td><td>$payment->familyName</td></tr>";
   else
     $summary.= "<tr><td>Organization: </td><td>$payment->organization</td></tr>";
-  $summary.= "<tr><td>Paid Amount: </td><td>$amount</td></tr>"
-           ."<tr><td>Frequency: </td><td>$payment->frequency</td></tr>";
+  $summary.= "<tr><td>Country: </td><td>$country</td></tr>"
+            ."<tr><td>Paid Amount: </td><td>$amount</td></tr>"
+            ."<tr><td>Frequency: </td><td>$payment->frequency</td></tr>";
   if ($payment->comment !== '')
     $summary.= "<tr><td>Comment: </td><td>$payment->comment</td></tr>";
   $options = '';
@@ -55,6 +56,7 @@ function checkoutSessionCompleted($object) {
   }
   if ($options !== '')
     $summary.= "<tr><td>Options: </td><td>".substr($options, 0, -2)."</td></tr>";
+  date_default_timezone_set('Europe/Zurich');
   $summary.="<tr><td>Date: </td><td>".date('r', $date)."</td></tr>";
   $summary.="</table>";
   $message = "Dear $name,<br><br>"
