@@ -124,7 +124,25 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch(`/donors.php?page=${page}`)
       .then(response => response.json())
       .then(answer => {
-        console.log(answer);  
+        console.log(answer);
+        const body = document.getElementById('donors-table-body');
+        const tr = document.createElement('tr');
+        body.appendChild(tr);
+        let td = document.createElement('td');
+        tr.appendChild(td);
+        let name = answer.organization !== '' ? answer.organization : (answer.familyName === '' ? answer.givenNames : answer.givenNames + ' ' + answer.familyName);
+        td.textContent = name;
+        if (answer.organization !== '')
+          td.style.fontStyle = 'italic';
+        td = document.createElement('td');
+        tr.appendChild(td);
+        td.textContent = answer.amount == 0 ? 'N/A' : answer.currency + ' ' + answer.amount;
+        td = document.createElement('td');
+        tr.appendChild(td);
+        td.textContent = answer.comment;
+        td = document.createElement('td');
+        tr.appendChild(td);
+        td.textContent = answer.paid;        
       });
   }
 });
