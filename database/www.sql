@@ -18,6 +18,7 @@ CREATE TABLE `payment` (
   `date` datetime NOT NULL DEFAULT current_timestamp(),
   `country` varchar(3) NOT NULL,
   `paid` datetime NOT NULL,
+  `key` char(40) NOT NULL,
   `test` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
