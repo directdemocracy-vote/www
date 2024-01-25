@@ -1,5 +1,3 @@
-import { Stripe } from 'https://js.stripe.com/v3/';
-
 window.addEventListener('load', function() {
   for (const checkbox of document.querySelectorAll('input[type="checkbox"]:checked'))
     checkbox.checked = false;
