@@ -1,15 +1,16 @@
 window.addEventListener('load', function() {
   function findGetParameter(parameterName) {
+    let result = null;
     location.search.substr(1).split("&").forEach(function (item) {
       console.log('item = ' + item);
       let tmp = item.split("=");
       console.log(parameterName + " === " + tmp[0]);
       if (tmp[0] === parameterName) {
         console.log("found");
-        return decodeURIComponent(tmp[1]);
+        result = decodeURIComponent(tmp[1]);
       }
     });
-    return null;
+    return result;
   }
   const reference = findGetParameter('reference');
   console.log('reference = ' + reference);
