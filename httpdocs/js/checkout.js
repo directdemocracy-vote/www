@@ -13,13 +13,16 @@ window.addEventListener('load', function() {
     fetch(`/stripe/payment.php?key=${key}`)
       .then(response => response.json())
       .then(answer => {
+        const thanks = document.getElementById('donate-thank-you');
+        const info = document.getElementById('donate-information');
         document.getElementById('donate-3').scrollIntoView(true);
-        if (answer.error)
-          document.getElementById('donate-thank-you').textContent = answer.error;
-        else {
+        if (answer.error) {
+          thanks.textContent = 'There was an error processing your payment.';
+          info.textContent = answer.error;
+        } else {
           const name = answer.organization === '' ? answer.givenNames : answer.organization;
-          document.getElementById('donate-thank-you').textContent = `Thank you ${name} for supporting directdemocracy!`;
-          document.getElementById('donate-information').textContent = (answer.paid === '0000-00-00 00:00:00')
+          thanks.textContent = `Thank you ${name} for supporting directdemocracy!`;
+          info.textContent = (answer.paid === '0000-00-00 00:00:00')
             ? 'We didn't yet received your payment, but we will send you an e-mail as soon as we get it.'
             : 'You will soon receive an e-mail with a confirmation of your donation.';
         }
