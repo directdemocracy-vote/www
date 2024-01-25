@@ -152,7 +152,7 @@ window.addEventListener('load', function() {
   document.getElementById('donate-comment-checkbox').addEventListener('click', function(event) {
     const classList = document.getElementById('donate-comment-field').classList;
     const donateDisplayText = document.getElementById('donate-display-text');
-    const comment = document.getElementById('donate-comment').classList;
+    const comment = document.getElementById('donate-comment');
     if (event.currentTarget.checked) {
       donateDisplayText.textContent = 'Display donation and comment';
       classList.remove('is-hidden');
