@@ -192,8 +192,9 @@ if ($frequency === 'one-time') {
     die("Unsupported currency: $currency");
 } else
   die("unknown frequency: $frequency");
-$query = "INSERT INTO payment(frequency, currency, amount, email, givenNames, familyName, organization, comment, display, displayGivenNames, hideAmount, test) "
-        ."VALUES('$frequency', '$currency', $amount, '$email', \"$givenNames\", \"$familyName\", \"$organization\", \"$comment\", $display, $displayGivenNames, $hideAmount, $test)";
+$key = bin2hex(random_bytes(20));
+$query = "INSERT INTO payment(frequency, currency, amount, email, givenNames, familyName, organization, comment, display, displayGivenNames, hideAmount, `key`, test) "
+        ."VALUES('$frequency', '$currency', $amount, '$email', \"$givenNames\", \"$familyName\", \"$organization\", \"$comment\", $display, $displayGivenNames, $hideAmount, '$key', $test)";
 $mysqli->query($query) or die($mysqli->error);
 $id = $mysqli->insert_id;
 $mysqli->close();
@@ -206,7 +207,8 @@ $parameters = [
   'mode' => $mode,
   'customer_email' => $email,
   'client_reference_id' => "$id",
-  'redirect_on_completion' => 'never'  
+  'redirect_on_completion' => 'if_required',
+  'return_url' => "https://directdemocracy.vote?key=$key"
 ];
 if ($mode === 'payment')
   $parameters['submit_type'] = 'donate';
