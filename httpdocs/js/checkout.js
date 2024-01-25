@@ -23,7 +23,7 @@ window.addEventListener('load', function() {
           const name = answer.organization === '' ? answer.givenNames : answer.organization;
           thanks.textContent = `Thank you ${name} for supporting directdemocracy!`;
           info.textContent = answer.paid === '0000-00-00 00:00:00'
-            ? 'We didn't yet received your payment, but we will send you an e-mail as soon as we get it.'
+            ? "We didn't yet received your payment, but we will send you an e-mail as soon as we get it."
             : 'You will soon receive an e-mail with a confirmation of your donation.';
         }
         document.getElementById('donate-explanation').classList.add('is-hidden');
