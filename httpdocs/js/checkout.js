@@ -26,7 +26,7 @@ window.addEventListener('load', function() {
             ? `Thank you ${name} for supporting directdemocracy!`
             : `${name}, we didn't received your payment because it was either cancelled or delayed.`;
           info.textContent = received
-            ? 'You will soon receive an e-mail with a confirmation of your donation.'
+            ? 'You should have received an e-mail with a confirmation of your donation.'
             : "In the latter case, we will send you an e-mail as soon as we receive it. Otherwise, please consider using a different payment method.";
         }
         document.getElementById('donate-explanation').classList.add('is-hidden');
@@ -92,7 +92,7 @@ window.addEventListener('load', function() {
       document.getElementById('donate-3').textContent = 'circle_fill';
       document.getElementById('donate-thank-you').textContent =
         `Thank you ${isOrganization ? organization : givenNames} for supporting directdemocracy!`
-      document.getElementById('donate-information').textContent = 'You will soon receive an e-mail with a confirmation of your donation.';
+      document.getElementById('donate-information').textContent = 'You should have received an e-mail with a confirmation of your donation.';
     };
     checkout = await stripe.initEmbeddedCheckout({clientSecret, onComplete: handleComplete});
     document.getElementById('donate-explanation').classList.add('is-hidden');
