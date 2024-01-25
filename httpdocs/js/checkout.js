@@ -21,7 +21,8 @@ window.addEventListener('load', function() {
           const name = answer.organization === '' ? answer.givenNames : answer.organization;
           document.getElementById('donate-thank-you').textContent = `Thank you ${name} for supporting directdemocracy!`;
         }
-        document.getElementById('donate-checkout').classList.add('is-hidden');
+        document.getElementById('donate-explanation').classList.add('is-hidden');
+        document.getElementById('donate-form').classList.add('is-hidden');
         document.getElementById('donate-complete').classList.remove('is-hidden');
         document.getElementById('donate-2').textContent = 'circle';
         document.getElementById('donate-3').textContent = 'circle_fill';
