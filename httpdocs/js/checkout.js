@@ -1,4 +1,14 @@
 window.addEventListener('load', function() {
+  function findGetParameter(parameterName) {
+    location.search.substr(1).split("&").forEach(function (item) {
+      let tmp = item.split("=");
+      if (tmp[0] === parameterName)
+        return decodeURIComponent(tmp[1]);
+    });
+    return null;
+  }
+  const reference = findGetParameter('checkout');
+  console.log('reference = ' + reference);
   for (const checkbox of document.querySelectorAll('input[type="checkbox"]:checked'))
     checkbox.checked = false;
   let checkout = null;
