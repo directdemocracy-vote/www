@@ -9,7 +9,7 @@ window.addEventListener('load', function() {
     return result;
   }
   const reference = findGetParameter('reference');
-  const test = location.pathname === '/test_stripe.html';
+  const test = location.pathname === '/stripe_test.html';
   for (const checkbox of document.querySelectorAll('input[type="checkbox"]:checked'))
     checkbox.checked = false;
   let checkout = null;
