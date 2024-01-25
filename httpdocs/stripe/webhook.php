@@ -1,8 +1,11 @@
 <?php
 
 require_once '../../vendor/autoload.php';
-require_once '../../php/stripe.php';
 require_once '../../php/database.php';
+if (isset($_GET['test']))
+  require_once '../../php/stripe_test.php';
+else
+  require_once '../../php/stripe.php';
 
 function error($message) {
   http_response_code(400);
