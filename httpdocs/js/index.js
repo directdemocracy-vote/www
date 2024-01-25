@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   document.getElementById('donors-wall-link').addEventListener('click', function() {
     console.log('donors');
-    document.getElementById('main-page').classList.remove('is-hidden');
-    document.getElementById('donors-wall-page').classList.add('is-hidden');
+    document.getElementById('main-page').classList.add('is-hidden');
+    document.getElementById('donors-wall-page').classList.remove('is-hidden');
   });
 });
