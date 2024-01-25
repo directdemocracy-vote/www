@@ -36,6 +36,7 @@ window.addEventListener('load', function() {
     const publishableKey = test ?
       'pk_test_51ONAiHJ8bitZPVQT83mvU9hsFgAcXYctJa6wFynuQ7ZieWQHLeFmmdNlJMpECaIkVz87vBHnbBgW9q48qc9fdvcr00oudVLpYM' :
       'pk_live_51ONAiHJ8bitZPVQTzSVJATuEtVz6UV6BroUIKV8U3uj4XwWTKmcDFGgQf2t26ZMhobcYr8FdacGYiyNOTyVLMZKa00pyPJ7JEI';
+    console.log('key = ' + publishableKey);
     const stripe = Stripe(publishableKey);
     const currency = document.querySelectorAll('input[name="donate-currency"]:checked')[0].value;
     const email = document.getElementById('donate-email').value;
