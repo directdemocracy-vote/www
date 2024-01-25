@@ -7,7 +7,7 @@ window.addEventListener('load', function() {
     });
     return null;
   }
-  const reference = findGetParameter('checkout');
+  const reference = findGetParameter('reference');
   console.log('reference = ' + reference);
   for (const checkbox of document.querySelectorAll('input[type="checkbox"]:checked'))
     checkbox.checked = false;
