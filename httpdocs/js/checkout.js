@@ -9,7 +9,7 @@ window.addEventListener('load', function() {
     return result;
   }
   const reference = findGetParameter('reference');
-  console.log('reference = ' + reference);
+  const test = location.pathname === '/test_stripe.html';
   for (const checkbox of document.querySelectorAll('input[type="checkbox"]:checked'))
     checkbox.checked = false;
   let checkout = null;
@@ -33,8 +33,10 @@ window.addEventListener('load', function() {
       return;
     const button = event.currentTarget;
     button.classList.add('is-loading');
-    const stripe = Stripe(
-      'pk_test_51ONAiHJ8bitZPVQT83mvU9hsFgAcXYctJa6wFynuQ7ZieWQHLeFmmdNlJMpECaIkVz87vBHnbBgW9q48qc9fdvcr00oudVLpYM');
+    const publishableKey = test ?
+      'pk_test_51ONAiHJ8bitZPVQT83mvU9hsFgAcXYctJa6wFynuQ7ZieWQHLeFmmdNlJMpECaIkVz87vBHnbBgW9q48qc9fdvcr00oudVLpYM' :
+      'pk_live_51ONAiHJ8bitZPVQTzSVJATuEtVz6UV6BroUIKV8U3uj4XwWTKmcDFGgQf2t26ZMhobcYr8FdacGYiyNOTyVLMZKa00pyPJ7JEI';
+    const stripe = Stripe(publishableKey);
     const currency = document.querySelectorAll('input[name="donate-currency"]:checked')[0].value;
     const email = document.getElementById('donate-email').value;
     const isOrganization = document.getElementById('donate-organization-checkbox').checked;
