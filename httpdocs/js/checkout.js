@@ -1,6 +1,7 @@
 window.addEventListener('load', function() {
   function findGetParameter(parameterName) {
     location.search.substr(1).split("&").forEach(function (item) {
+      console.log('item = ' + item);
       let tmp = item.split("=");
       if (tmp[0] === parameterName)
         return decodeURIComponent(tmp[1]);
