@@ -117,4 +117,11 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('main-page').classList.add('is-hidden');
     document.getElementById('donors-wall-page').classList.remove('is-hidden');
   });
+  function loadDonorsPage(page) {
+    fetch(`/donors.php?page=${page}`)
+      .then(response => response.json())
+      .then(answer => {
+        console.log(answer);  
+      });
+  }
 });
