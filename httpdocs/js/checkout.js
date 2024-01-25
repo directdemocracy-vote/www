@@ -13,7 +13,6 @@ window.addEventListener('load', function() {
     fetch(`/stripe/payment.php?key=${key}`)
       .then(response => response.json())
       .then(answer => {
-        console.log(answer);
         document.getElementById('donate-3').scrollIntoView(true);
         if (answer.error)
           document.getElementById('donate-thank-you').textContent = answer.error;
@@ -56,7 +55,6 @@ window.addEventListener('load', function() {
     const publishableKey = test ?
       'pk_test_51ONAiHJ8bitZPVQT83mvU9hsFgAcXYctJa6wFynuQ7ZieWQHLeFmmdNlJMpECaIkVz87vBHnbBgW9q48qc9fdvcr00oudVLpYM' :
       'pk_live_51ONAiHJ8bitZPVQTzSVJATuEtVz6UV6BroUIKV8U3uj4XwWTKmcDFGgQf2t26ZMhobcYr8FdacGYiyNOTyVLMZKa00pyPJ7JEI';
-    console.log('key = ' + publishableKey);
     const stripe = Stripe(publishableKey);
     const currency = document.querySelectorAll('input[name="donate-currency"]:checked')[0].value;
     const email = document.getElementById('donate-email').value;
