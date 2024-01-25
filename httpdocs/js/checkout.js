@@ -21,10 +21,13 @@ window.addEventListener('load', function() {
           info.textContent = answer.error;
         } else {
           const name = answer.organization === '' ? answer.givenNames : answer.organization;
-          thanks.textContent = `Thank you ${name} for supporting directdemocracy!`;
-          info.textContent = answer.paid === '0000-00-00 00:00:00'
-            ? "We didn't yet received your payment, but we will send you an e-mail as soon as we get it."
-            : 'You will soon receive an e-mail with a confirmation of your donation.';
+          const received = answer.paid !== '0000-00-00 00:00:00';
+          thanks.textContent = received
+            ? `Thank you ${name} for supporting directdemocracy!`
+            : `${name}, we didn't received your payment because it was either cancelled or delayed.`;
+          info.textContent = received
+            ? 'You will soon receive an e-mail with a confirmation of your donation.'
+            : "In the latter case, we will send you an e-mail as soon as we receive it. Otherwise, please consider using a different payment method.";
         }
         document.getElementById('donate-explanation').classList.add('is-hidden');
         document.getElementById('donate-form').classList.add('is-hidden');
