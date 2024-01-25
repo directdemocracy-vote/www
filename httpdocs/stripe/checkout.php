@@ -18,6 +18,7 @@ $comment = $mysqli->escape_string($_GET['comment']);
 $display = intval($_GET['display']);
 $displayGivenNames = intval($_GET['displayGivenNames']);
 $hideAmount = intval($_GET['hideAmount']);
+$test = isset($_GET['test']) ? 1 : 0;
 if ($frequency === 'one-time') {
   $mode = 'payment';
   if ($currency === 'CHF') {
@@ -185,8 +186,8 @@ if ($frequency === 'one-time') {
     die("Unsupported currency: $currency");
 } else
   die("unknown frequency: $frequency");
-$query = "INSERT INTO payment(frequency, currency, amount, email, givenNames, familyName, organization, comment, display, displayGivenNames, hideAmount) "
-        ."VALUES('$frequency', '$currency', $amount, '$email', \"$givenNames\", \"$familyName\", \"$organization\", \"$comment\", $display, $displayGivenNames, $hideAmount)";
+$query = "INSERT INTO payment(frequency, currency, amount, email, givenNames, familyName, organization, comment, display, displayGivenNames, hideAmount, test) "
+        ."VALUES('$frequency', '$currency', $amount, '$email', \"$givenNames\", \"$familyName\", \"$organization\", \"$comment\", $display, $displayGivenNames, $hideAmount, $test)";
 $mysqli->query($query) or die($mysqli->error);
 $id = $mysqli->insert_id;
 $mysqli->close();
