@@ -3,6 +3,7 @@ window.addEventListener('load', function() {
     location.search.substr(1).split("&").forEach(function (item) {
       console.log('item = ' + item);
       let tmp = item.split("=");
+      console.log(parameterName + " === " + tmp[0]);
       if (tmp[0] === parameterName)
         return decodeURIComponent(tmp[1]);
     });
