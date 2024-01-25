@@ -14,6 +14,17 @@ window.addEventListener('load', function() {
       .then(response => response.json())
       .then(answer => {
         console.log(answer);
+        document.getElementById('donate-3').scrollIntoView(true);
+        if (answer.error)
+          document.getElementById('donate-thank-you').textContent = answer.error;
+        else {
+          const name = answer.organization === '' ? answer.givenNames : answer.organization;
+          document.getElementById('donate-thank-you').textContent = `Thank you ${name} for supporting directdemocracy!`;
+        }
+        document.getElementById('donate-checkout').classList.add('is-hidden');
+        document.getElementById('donate-complete').classList.remove('is-hidden');
+        document.getElementById('donate-2').textContent = 'circle';
+        document.getElementById('donate-3').textContent = 'circle_fill';
       });
   }
   const test = location.pathname === '/stripe_test.html';
@@ -66,7 +77,6 @@ window.addEventListener('load', function() {
       checkout.unmount();
       checkout.destroy();
       checkout = null;
-      // fetch client data from database
       document.getElementById('donate-checkout').classList.add('is-hidden');
       document.getElementById('donate-complete').classList.remove('is-hidden');
       document.getElementById('donate-2').textContent = 'circle';
