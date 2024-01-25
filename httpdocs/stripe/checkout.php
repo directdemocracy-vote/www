@@ -1,10 +1,8 @@
 <?php
 
 require_once '../../vendor/autoload.php';
-require_once '../../php/stripe.php';
 require_once '../../php/database.php';
 
-$stripe = new \Stripe\StripeClient($stripe_secret_key);
 header('Content-Type: application/json');
 
 $amount = intval($_GET['amount']);
@@ -19,6 +17,14 @@ $display = intval($_GET['display']);
 $displayGivenNames = intval($_GET['displayGivenNames']);
 $hideAmount = intval($_GET['hideAmount']);
 $test = isset($_GET['test']) ? 1 : 0;
+
+if ($test === 1)
+  require_once '../../php/stripe_test.php';
+else
+  require_once '../../php/stripe.php';
+
+$stripe = new \Stripe\StripeClient($stripe_secret_key);
+
 if ($frequency === 'one-time') {
   $mode = 'payment';
   if ($currency === 'CHF') {
