@@ -8,7 +8,14 @@ window.addEventListener('load', function() {
     });
     return result;
   }
-  const reference = findGetParameter('reference');
+  const key = findGetParameter('key');
+  if (key !== null) {
+    fetch(`/stripe/payment.php?key=${key}`)
+      .then(response => response.json())
+      .then(answer => {
+        console.log(answer);
+      });
+  }
   const test = location.pathname === '/stripe_test.html';
   for (const checkbox of document.querySelectorAll('input[type="checkbox"]:checked'))
     checkbox.checked = false;
