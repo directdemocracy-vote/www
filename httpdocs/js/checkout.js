@@ -4,8 +4,10 @@ window.addEventListener('load', function() {
       console.log('item = ' + item);
       let tmp = item.split("=");
       console.log(parameterName + " === " + tmp[0]);
-      if (tmp[0] === parameterName)
+      if (tmp[0] === parameterName) {
+        console.log("found");
         return decodeURIComponent(tmp[1]);
+      }
     });
     return null;
   }
