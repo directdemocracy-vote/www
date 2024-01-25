@@ -1,12 +1,15 @@
 import Translator from 'https://app.directdemocracy.vote/app/js/translator.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+  let donor_page = 1;
   if (window.location.hash === '#faq' || window.location.hash.startsWith('#q')) {
     document.getElementById('main-page').classList.add('is-hidden');
     document.getElementById('faq-page').classList.remove('is-hidden');
-  } else if (window.location.hash === '#donors') {
+  } else if (window.location.hash.startsWith('#donors')) {
     document.getElementById('main-page').classList.add('is-hidden');
     document.getElementById('donors-wall-page').classList.remove('is-hidden');
+    const page = (window.location.hash === '#donors') ? 1 : parseInt(window.location.hash.split('-')[1]);
+    loadDonors(page);
   }
   let flags = null;
   let translator = new Translator('i18n');
@@ -113,11 +116,11 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('faq-page').classList.add('is-hidden');
   });
   document.getElementById('donors-wall-link').addEventListener('click', function() {
-    console.log('donors');
     document.getElementById('main-page').classList.add('is-hidden');
     document.getElementById('donors-wall-page').classList.remove('is-hidden');
+    loadDonors(1);
   });
-  function loadDonorsPage(page) {
+  function loadDonors(page) {
     fetch(`/donors.php?page=${page}`)
       .then(response => response.json())
       .then(answer => {
