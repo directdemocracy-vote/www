@@ -44,8 +44,9 @@ function checkoutSessionCompleted($object) {
     $summary.= "<tr><td>Given Name(s): </td><td>$payment->givenNames</td></tr><tr><td>Family Name: </td><td>$payment->familyName</td></tr>";
   else
     $summary.= "<tr><td>Organization: </td><td>$payment->organization</td></tr>";
-  $summary.= "<tr><td>Country: </td><td>$country</td></tr>"
-            ."<tr><td>Paid Amount: </td><td>$amount</td></tr>"
+  if ($country !== '')
+    $summary.= "<tr><td>Country: </td><td>$country</td></tr>";
+  $summary.= "<tr><td>Paid Amount: </td><td>$amount</td></tr>"
             ."<tr><td>Frequency: </td><td>$payment->frequency</td></tr>";
   if ($payment->comment !== '')
     $summary.= "<tr><td>Comment: </td><td>$payment->comment</td></tr>";
