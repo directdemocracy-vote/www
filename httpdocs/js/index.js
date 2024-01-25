@@ -4,6 +4,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (window.location.hash === '#faq' || window.location.hash.startsWith('#q')) {
     document.getElementById('main-page').classList.add('is-hidden');
     document.getElementById('faq-page').classList.remove('is-hidden');
+  } else if (window.location.hash === '#donors') {
+    document.getElementById('main-page').classList.add('is-hidden');
+    document.getElementById('donors-wall-page').classList.remove('is-hidden');
   }
   let flags = null;
   let translator = new Translator('i18n');
@@ -108,5 +111,9 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('donate-link').addEventListener('click', function() {
     document.getElementById('main-page').classList.remove('is-hidden');
     document.getElementById('faq-page').classList.add('is-hidden');
+  });
+  document.getElementById('donors-wall-link').addEventListener('click', function() {
+    document.getElementById('main-page').classList.remove('is-hidden');
+    document.getElementById('donors-wall-page').classList.add('is-hidden');
   });
 });
