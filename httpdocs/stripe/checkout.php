@@ -21,7 +21,7 @@ $test = isset($_GET['test']) ? 1 : 0;
 if ($test === 1)
   require_once '../../php/stripe_test.php';
 else
-  require_once '../../php/stripe.php';
+  require_once '../../php/stripe_test.php';
 
 $stripe = new \Stripe\StripeClient($stripe_secret_key);
 
