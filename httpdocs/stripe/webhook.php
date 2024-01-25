@@ -73,7 +73,7 @@ function checkoutSessionCompleted($object) {
             ."X-Mailer: php\r\n"
             ."MIME-Version: 1.0\r\n"
             ."Content-Type: text/html; charset=UTF-8\r\n"
-            ."Bcc: Olivier.Michel@cyberbotics.com\r\n";
+            ."Bcc: donate@directdemocracy.vote\r\n";
   mail($email, "Thank you for your donation!", $message, $headers);
 }
 
@@ -93,7 +93,7 @@ switch ($event->type) {
     checkoutSessionCompleted($event->data->object);
     break;
   default:
-    mail('Olivier.Michel@cyberbotics.com', "Unknown Stripe event received: $event->type", $payload, 'From: info@directdemocracy.vote');
+    mail('donate@directdemocracy.vote', "Unknown Stripe event received: $event->type", $payload, 'From: info@directdemocracy.vote');
     echo 'Received unknown event type ' . $event->type;
 }
 http_response_code(200);
