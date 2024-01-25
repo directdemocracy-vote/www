@@ -3,10 +3,8 @@ window.addEventListener('load', function() {
     let result = null;
     location.search.substr(1).split("&").forEach(function (item) {
       let tmp = item.split("=");
-      if (tmp[0] === parameterName) {
+      if (tmp[0] === parameterName)
         result = decodeURIComponent(tmp[1]);
-        break;
-      }
     });
     return result;
   }
