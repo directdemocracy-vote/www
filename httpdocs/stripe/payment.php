@@ -9,5 +9,5 @@ $payment = $result->fetch_assoc();
 if ($payment)
   die(json_encode($payment, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
 else
-  die('{"error":"Payment not found"}');
+  die('{"error":"Your payment not found in our database."}');
 ?>
