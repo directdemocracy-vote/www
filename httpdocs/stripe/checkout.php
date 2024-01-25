@@ -198,6 +198,7 @@ $query = "INSERT INTO payment(frequency, currency, amount, email, givenNames, fa
 $mysqli->query($query) or die($mysqli->error);
 $id = $mysqli->insert_id;
 $mysqli->close();
+$return_url = 'https://directdemocracy.vote'.($test ? '/stripe_test.html' : '').'?key='.$key;
 $parameters = [
   'ui_mode' => 'embedded',
   'line_items' => [[
@@ -208,7 +209,7 @@ $parameters = [
   'customer_email' => $email,
   'client_reference_id' => "$id",
   'redirect_on_completion' => 'if_required',
-  'return_url' => "https://directdemocracy.vote?key=$key"
+  'return_url' => $return_url
 ];
 if ($mode === 'payment')
   $parameters['submit_type'] = 'donate';
