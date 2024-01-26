@@ -126,23 +126,25 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(answer => {
         console.log(answer);
         const body = document.getElementById('donors-table-body');
-        const tr = document.createElement('tr');
-        body.appendChild(tr);
-        let td = document.createElement('td');
-        tr.appendChild(td);
-        let name = answer.organization !== '' ? answer.organization : (answer.familyName === '' ? answer.givenNames : answer.givenNames + ' ' + answer.familyName);
-        td.textContent = name;
-        if (answer.organization !== '')
-          td.style.fontStyle = 'italic';
-        td = document.createElement('td');
-        tr.appendChild(td);
-        td.textContent = answer.amount == 0 ? 'N/A' : answer.currency + ' ' + answer.amount;
-        td = document.createElement('td');
-        tr.appendChild(td);
-        td.textContent = answer.comment;
-        td = document.createElement('td');
-        tr.appendChild(td);
-        td.textContent = answer.paid;        
+        for(payment of answer) {
+          const tr = document.createElement('tr');
+          body.appendChild(tr);
+          let td = document.createElement('td');
+          tr.appendChild(td);
+          let name = payment.organization !== '' ? payment.organization : (payment.familyName === '' ? payment.givenNames : payment.givenNames + ' ' + payment.familyName);
+          td.textContent = name;
+          if (payment.organization !== '')
+            td.style.fontStyle = 'italic';
+          td = document.createElement('td');
+          tr.appendChild(td);
+          td.textContent = payment.amount == 0 ? 'N/A' : payment.currency + ' ' + payment.amount;
+          td = document.createElement('td');
+          tr.appendChild(td);
+          td.textContent = payment.comment;
+          td = document.createElement('td');
+          tr.appendChild(td);
+          td.textContent = payment.paid;        
+        }
       });
   }
 });
