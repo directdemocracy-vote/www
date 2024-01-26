@@ -38,7 +38,7 @@ function checkoutSessionCompleted($object) {
   if ($object->status !== 'complete')
     error("Expecting status to be 'complete', but got '$object->status'");
   if ($country == '') {
-    $timeZone = new DateTimeZone($object->timeZone);
+    $timeZone = new DateTimeZone($payment->timeZone);
     $country = $timeZone['country_code'];
   }
   $mysqli->query("UPDATE payment SET country=\"$country\", paid=FROM_UNIXTIME($date) WHERE id=$id") or error($mysqli->error);
