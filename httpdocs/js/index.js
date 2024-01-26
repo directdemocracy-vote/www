@@ -2,8 +2,7 @@ import Translator from 'https://app.directdemocracy.vote/app/js/translator.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   let donor_page = 1;
-  window.addEventListener('popstate', function(event) { // browser back or forward button pressed
-    console.log('back button pressed');
+  window.addEventListener('popstate', function(event) {
     loadPage();
   });
   function loadPage() {
@@ -84,32 +83,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const target = document.getElementById(el.dataset.target);
       el.classList.toggle('is-active');
       target.classList.toggle('is-active');
-    });
-  });
-  const navbarItems = document.querySelectorAll('.navbar-item');
-  navbarItems.forEach(navbarItem => {
-    navbarItem.addEventListener('click', function(event) {
-      /*
-      const t = event.currentTarget;
-      document.getElementById('navbar-burger').classList.remove('is-active');
-      document.getElementById('navbar-menu').classList.remove('is-active');
-      if (t === document.getElementById('faq-menu')) {
-        document.getElementById('main-page').classList.add('is-hidden');
-        document.getElementById('faq-page').classList.remove('is-hidden');
-        window.scrollTo(0, 0);
-      } else if (
-        t === document.getElementById('main-menu') ||
-        t === document.getElementById('about-menu') ||
-        t === document.getElementById('contact-menu') ||
-        t === document.getElementById('donate-menu')) {
-        document.getElementById('main-page').classList.remove('is-hidden');
-        document.getElementById('faq-page').classList.add('is-hidden');
-        if (t === document.getElementById('main-menu')) {
-          history.pushState('', document.title, window.location.pathname + window.location.search);
-          window.scrollTo(0, 0);
-        }
-      }
-      */
     });
   });
   function showPrivacy() {
