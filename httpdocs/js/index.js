@@ -1,7 +1,7 @@
 import Translator from 'https://app.directdemocracy.vote/app/js/translator.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-  let donor_page = 1;
+  let donor_page = 0;  // not loaded
   window.addEventListener('popstate', function(event) {
     loadPage();
   });
@@ -116,7 +116,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('main-page').classList.remove('is-hidden');
     document.getElementById('faq-page').classList.add('is-hidden');
   });
-  function loadDonors(page) {
+  function rs(page) {
+    if (donor_page === page)
+      return;
+    donor_page = page;
     fetch(`/donors.php?page=${page}`)
       .then(response => response.json())
       .then(answer => {
