@@ -12,6 +12,7 @@
     "area",
     "title",
     "description",
+    "type",
     "secret",
     "deadline",
     "trust"
@@ -67,6 +68,9 @@
         "maxLength": 128,
         "minLength": 1
       }
+    },
+    "type": {
+      "enum": ["petition", "referendum", "election"]
     },
     "secret": {
       "description": "whether the votes to the proposal should be anonymous or public",
