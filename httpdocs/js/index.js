@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
             td.style.fontStyle = 'italic';
           td = document.createElement('td');
           tr.appendChild(td);
-          td.textContent = payment.amount == 0 ? 'N/A' : payment.currency + ' ' + payment.amount;
+          td.innerHTML = payment.amount == 0 ? '&mdash;' : payment.currency + ' ' + payment.amount;
           td = document.createElement('td');
           tr.appendChild(td);
           td.textContent = payment.comment;
