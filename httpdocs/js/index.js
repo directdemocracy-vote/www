@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('popstate', function(event) {
     loadPage();
   });
-  document.getElementById('faq-menu').eddEventListener('click', function(event) {
+  document.getElementById('faq-menu').addEventListener('click', function(event) {
     event.currentTarget.blur();
   });
   function loadPage() {
