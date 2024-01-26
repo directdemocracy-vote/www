@@ -5,10 +5,13 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('popstate', function(event) {
     loadPage();
   });
+  document.getElementById('faq-menu').eddEventListener('click', function(event) {
+    event.currentTarget.blur();
+  });
   function loadPage() {
     console.log('load page');
     if (window.location.hash === '#faq' || window.location.hash.startsWith('#q')) {
-      document.getElementById('faq-menu').focus();
+      // document.getElementById('faq-menu').blur();
       document.getElementById('main-page').classList.add('is-hidden');
       document.getElementById('faq-page').classList.remove('is-hidden');
       document.getElementById('donors-wall-page').classList.add('is-hidden');
