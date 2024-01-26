@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   function loadPage() {
     if (window.location.hash === '#faq' || window.location.hash.startsWith('#q')) {
+      document.getElementById('faq-menu').classList.remove('is-active')
       document.getElementById('main-page').classList.add('is-hidden');
       document.getElementById('faq-page').classList.remove('is-hidden');
       document.getElementById('donors-wall-page').classList.add('is-hidden');
