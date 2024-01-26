@@ -12,6 +12,10 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('main-page').classList.add('is-hidden');
       document.getElementById('faq-page').classList.remove('is-hidden');
       document.getElementById('donors-wall-page').classList.add('is-hidden');
+      if (window.location.hash === '#faq')
+        window.scrollTo(0, 0);
+      else
+        document.getElementById(window.location.hash.substring(1)).scrollIntoView();
     } else if (window.location.hash.startsWith('#donors')) {
       document.getElementById('main-page').classList.add('is-hidden');
       document.getElementById('faq-page').classList.add('is-hidden');
