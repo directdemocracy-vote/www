@@ -87,6 +87,10 @@ document.addEventListener('DOMContentLoaded', () => {
       target.classList.toggle('is-active');
     });
   });
+  document.getElementById('main-menu').addEventListener('click', function() {
+    window.location.hash = '';
+    loadPage();
+  });
   function showPrivacy() {
     document.getElementById('privacy').classList.add('is-active');
   }
@@ -108,13 +112,6 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('donate-link').addEventListener('click', function() {
     document.getElementById('main-page').classList.remove('is-hidden');
     document.getElementById('faq-page').classList.add('is-hidden');
-  });
-  document.getElementById('donors-wall-link').addEventListener('click', function() {
-    /*
-    document.getElementById('main-page').classList.add('is-hidden');
-    document.getElementById('donors-wall-page').classList.remove('is-hidden');
-    loadDonors(1);
-    */
   });
   function loadDonors(page) {
     fetch(`/donors.php?page=${page}`)
