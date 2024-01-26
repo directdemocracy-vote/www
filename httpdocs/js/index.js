@@ -92,6 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('main-menu').addEventListener('click', function() {
     history.replaceState({}, document.title, window.location.href.split('#')[0]);
     loadPage();
+    window.scrollTo(0, 0);
   });
   function showPrivacy() {
     document.getElementById('privacy').classList.add('is-active');
