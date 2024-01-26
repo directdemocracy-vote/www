@@ -89,6 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const navbarItems = document.querySelectorAll('.navbar-item');
   navbarItems.forEach(navbarItem => {
     navbarItem.addEventListener('click', function(event) {
+      /*
       const t = event.currentTarget;
       document.getElementById('navbar-burger').classList.remove('is-active');
       document.getElementById('navbar-menu').classList.remove('is-active');
@@ -108,6 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
           window.scrollTo(0, 0);
         }
       }
+      */
     });
   });
   function showPrivacy() {
