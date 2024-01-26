@@ -135,7 +135,6 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('donors-wall-link').addEventListener('click', function() {
     document.getElementById('main-page').classList.add('is-hidden');
     document.getElementById('donors-wall-page').classList.remove('is-hidden');
-    history.pushState({urlPath:'/page2.php'},"",'/page2.php')
     loadDonors(1);
   });
   function loadDonors(page) {
