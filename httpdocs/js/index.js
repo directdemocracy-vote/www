@@ -161,6 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
           tr.appendChild(td);
           td.textContent = getFlagEmoji(payment.country);
           td.title = payment.country;
+          td.style.fontStyle = 'normal';
         }
       });
   }
