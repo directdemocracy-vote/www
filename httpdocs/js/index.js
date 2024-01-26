@@ -13,6 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   let flags = null;
   let translator = new Translator('i18n');
+  function getFlagEmoji(countryCode) {
+    const codePoints = countryCode.toUpperCase().split('').map(char =>  127397 + char.charCodeAt());
+    return String.fromCodePoint(...codePoints);
+  }
   translator.onready = function() {
     const language = document.getElementById('language');
     const dropdown = document.getElementById('language-dropdown');
@@ -137,13 +141,26 @@ document.addEventListener('DOMContentLoaded', () => {
             td.style.fontStyle = 'italic';
           td = document.createElement('td');
           tr.appendChild(td);
-          td.innerHTML = payment.amount == 0 ? '&mdash;' : payment.currency + ' ' + payment.amount;
+          if (payment.amount == 0)
+            td.innerHTML = '&mdash;';
+          else {
+            let amount = payment.currency + ' ' + payment.amount;
+            if (frequency === 'monthly')
+              amount += ' / month';
+            else if (frequency === 'annually')
+              amount += ' / year';
+            td.textContent = amount;
+          }
           td = document.createElement('td');
           tr.appendChild(td);
           td.textContent = payment.comment;
           td = document.createElement('td');
           tr.appendChild(td);
-          td.textContent = payment.paid;        
+          td.textContent = payment.paid;    
+          td = document.createElement('td');
+          tr.appendChild(td);
+          td.textContent = getFlagEmoji(payment.country);
+          td.title = payment.country;
         }
       });
   }
