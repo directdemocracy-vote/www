@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(answer => {
         console.log(answer);
         const body = document.getElementById('donors-table-body');
-        for(payment of answer) {
+        for(const payment of answer) {
           const tr = document.createElement('tr');
           body.appendChild(tr);
           let td = document.createElement('td');
