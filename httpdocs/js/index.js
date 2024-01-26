@@ -2,18 +2,28 @@ import Translator from 'https://app.directdemocracy.vote/app/js/translator.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   let donor_page = 1;
-  window.addEventListener('popstate', function(event) { // browser back button pressed
+  window.addEventListener('popstate', function(event) { // browser back or forward button pressed
     console.log('back button pressed');
+    loadPage();
   });
-  if (window.location.hash === '#faq' || window.location.hash.startsWith('#q')) {
-    document.getElementById('main-page').classList.add('is-hidden');
-    document.getElementById('faq-page').classList.remove('is-hidden');
-  } else if (window.location.hash.startsWith('#donors')) {
-    document.getElementById('main-page').classList.add('is-hidden');
-    document.getElementById('donors-wall-page').classList.remove('is-hidden');
-    const page = (window.location.hash === '#donors') ? 1 : parseInt(window.location.hash.split('-')[1]);
-    loadDonors(page);
+  function loadPage() {
+    if (window.location.hash === '#faq' || window.location.hash.startsWith('#q')) {
+      document.getElementById('main-page').classList.add('is-hidden');
+      document.getElementById('faq-page').classList.remove('is-hidden');
+      document.getElementById('donors-wall-page').classList.add('is-hidden');
+    } else if (window.location.hash.startsWith('#donors')) {
+      document.getElementById('main-page').classList.add('is-hidden');
+      document.getElementById('faq-page').classList.add('is-hidden');
+      document.getElementById('donors-wall-page').classList.remove('is-hidden');
+      const page = (window.location.hash === '#donors') ? 1 : parseInt(window.location.hash.split('-')[1]);
+      loadDonors(page);
+    } else {
+      document.getElementById('main-page').classList.remove('is-hidden');
+      document.getElementById('donors-wall-page').classList.add('is-hidden');
+      document.getElementById('faq-page').classList.add('is-hidden');
+    }
   }
+  loadPage();
   let flags = null;
   let translator = new Translator('i18n');
   function getFlagEmoji(countryCode) {
