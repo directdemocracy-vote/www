@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
   document.getElementById('main-menu').addEventListener('click', function() {
-    window.location.href = window.location.href.split('#')[0];
+    history.replaceState({}, document.title, window.location.href.split('#')[0]);
     loadPage();
   });
   function showPrivacy() {
