@@ -16,6 +16,7 @@ $comment = $mysqli->escape_string($_GET['comment']);
 $display = intval($_GET['display']);
 $displayGivenNames = intval($_GET['displayGivenNames']);
 $hideAmount = intval($_GET['hideAmount']);
+$timeZone = $mysqli->escape_string($_GET['timeZone']);
 $test = isset($_GET['test']) ? 1 : 0;
 
 if ($test === 1)
@@ -193,8 +194,8 @@ if ($frequency === 'one-time') {
 } else
   die("unknown frequency: $frequency");
 $key = bin2hex(random_bytes(20));
-$query = "INSERT INTO payment(frequency, currency, amount, email, givenNames, familyName, organization, comment, display, displayGivenNames, hideAmount, `key`, test) "
-        ."VALUES('$frequency', '$currency', $amount, '$email', \"$givenNames\", \"$familyName\", \"$organization\", \"$comment\", $display, $displayGivenNames, $hideAmount, '$key', $test)";
+$query = "INSERT INTO payment(frequency, currency, amount, email, givenNames, familyName, organization, comment, display, displayGivenNames, hideAmount, timeZone, `key`, test) "
+        ."VALUES('$frequency', '$currency', $amount, '$email', \"$givenNames\", \"$familyName\", \"$organization\", \"$comment\", $display, $displayGivenNames, $hideAmount, \"$timeZone\", '$key', $test)";
 $mysqli->query($query) or die($mysqli->error);
 $id = $mysqli->insert_id;
 $mysqli->close();
