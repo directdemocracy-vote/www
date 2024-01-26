@@ -141,9 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
             td.style.fontStyle = 'italic';
           td = document.createElement('td');
           tr.appendChild(td);
-          if (payment.amount == 0)
-            td.innerHTML = '&mdash;';
-          else {
+          if (payment.amount != 0) {
             let amount = payment.currency + ' ' + payment.amount;
             if (payment.frequency === 'monthly')
               amount += ' / month';
