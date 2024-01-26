@@ -76,10 +76,12 @@ window.addEventListener('load', function() {
     const displayGivenNames = isOrganization ? 0 : (document.getElementById('donate-display-given-names-checkbox').checked ? 1 : 0);
     const hideAmount = document.getElementById('donate-hide-amount-checkbox').checked ? 1 : 0;
     const testParameter = test ? '&test=1' : '';
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const parameters = `amount=${amount}&frequency=${frequency}&currency=${currency}&email=${encodeURIComponent(email)}&` +
                        `givenNames=${encodeURIComponent(givenNames)}&familyName=${encodeURIComponent(familyName)}&` +
                        `organization=${encodeURIComponent(organization)}&comment=${encodeURIComponent(comment)}&` +
-                       `display=${display}&displayGivenNames=${displayGivenNames}&hideAmount=${hideAmount}${testParameter}`;
+                       `display=${display}&displayGivenNames=${displayGivenNames}&hideAmount=${hideAmount}&` +
+                       `timeZone=${timeZone}${testParameter}`;
     const response = await fetch(`/stripe/checkout.php?${parameters}`, {method: 'POST'});
     const {clientSecret, paymentId} = await response.json();
     const handleComplete = async function() {
