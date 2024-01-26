@@ -162,6 +162,9 @@ document.addEventListener('DOMContentLoaded', () => {
           td.textContent = getFlagEmoji(payment.country);
           td.title = payment.country;
           td.style.fontStyle = 'normal';
+          td.style.textAlign = 'center';
+          td.style.padding = '0';
+          td.style.fontSize = '160%';
         }
       });
   }
