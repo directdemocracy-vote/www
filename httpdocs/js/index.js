@@ -145,9 +145,9 @@ document.addEventListener('DOMContentLoaded', () => {
             td.innerHTML = '&mdash;';
           else {
             let amount = payment.currency + ' ' + payment.amount;
-            if (frequency === 'monthly')
+            if (payment.frequency === 'monthly')
               amount += ' / month';
-            else if (frequency === 'annually')
+            else if (payment.frequency === 'annually')
               amount += ' / year';
             td.textContent = amount;
           }
