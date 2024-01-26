@@ -22,7 +22,7 @@ function checkoutSessionCompleted($object) {
   $country = $object->customer_details->address->country;
   $mode = $object->mode;
   $date = intval($object->created);
-  $query = "SELECT frequency, currency, amount, email, givenNames, familyName, organization, comment, display, displayGivenNames, hideAmount, paid FROM payment WHERE id=$id";
+  $query = "SELECT frequency, currency, amount, email, givenNames, familyName, organization, comment, display, displayGivenNames, hideAmount, timeZone, paid FROM payment WHERE id=$id";
   $result = $mysqli->query($query) or error($mysqli->error);
   $payment = $result->fetch_object();
   if (!$payment)
@@ -59,10 +59,10 @@ function checkoutSessionCompleted($object) {
       $options.= "hide donation amount, ";
   }
   if ($options !== '')
-    $summary.= "<tr><td>Options: </td><td>".substr($options, 0, -2)."</td></tr>";
-  date_default_timezone_set('Europe/Zurich');
-  $summary.="<tr><td>Date: </td><td>".date('r', $date)."</td></tr>";
-  $summary.="</table>";
+    $summary.= '<tr><td>Options: </td><td>'.substr($options, 0, -2).'</td></tr>';
+  date_default_timezone_set($payment->timeZone);
+  $summary.= '<tr><td>Date: </td><td title="'.$payment->timeZone.'">'.date('r', $date).'</td></tr>';
+  $summary.= '</table>';
   $message = "Dear $name,<br><br>"
             ."Thank you for donating $amount to support <a href=\"https://directdemocracy.vote\" target=\"_blank\">directdemocracy.vote</a>!<br>"
             ."Your contribution will help us to advance direct democracy everywhere in the world.<br>"
