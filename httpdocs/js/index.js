@@ -22,6 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('main-page').classList.remove('is-hidden');
       document.getElementById('donors-wall-page').classList.add('is-hidden');
       document.getElementById('faq-page').classList.add('is-hidden');
+      if (window.location.hash)
+        document.getElementById(window.location.hash.substring(1)).scrollIntoView();
     }
   }
   loadPage();
