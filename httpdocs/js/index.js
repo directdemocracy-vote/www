@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let donor_page = 1;
   window.addEventListener('popstate', function(event) { // browser back button pressed
     console.log('back button pressed');
-  }
+  });
   if (window.location.hash === '#faq' || window.location.hash.startsWith('#q')) {
     document.getElementById('main-page').classList.add('is-hidden');
     document.getElementById('faq-page').classList.remove('is-hidden');
