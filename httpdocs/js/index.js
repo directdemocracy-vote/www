@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
           document.getElementById(`language-${previous}`).classList.remove('is-disabled');
           document.getElementById(`language-${language}`).classList.add('is-disabled');
           console.log(flags[language]);
-          document.getElementById('language').innerHTML = '<img src="/images/flags/' + flags[language] + '.svg" width="28">';
+          document.getElementById('language').innerHTML = '<img src="/images/flags/' + flags[language] + '.svg" width="24">';
         }
         flags = content;
         let first = true;
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
           a.classList.add('navbar-item');
           if (first) {
             a.classList.add('is-disabled');
-            language.innerHTML = '<img src="/images/flags/' + flag + '.svg" width="28">';
+            language.innerHTML = '<img src="/images/flags/' + flag + '.svg" width="24">';
             first = false;
           }
           a.setAttribute('id', `language-${country}`);
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
           });
           let span = document.createElement('span');
           span.classList.add('is-size-4', 'pr-2');
-          span.innerHTML = '<img src="/images/flags/' + flag + '.svg" width="28">';
+          span.innerHTML = '<img src="/images/flags/' + flag + '.svg" width="24">';
           a.appendChild(span);
           a.appendChild(document.createTextNode(translator.languages[country]));
           dropdown.appendChild(a);
