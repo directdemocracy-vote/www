@@ -73,10 +73,10 @@ document.addEventListener('DOMContentLoaded', () => {
           a.addEventListener('click', function(event) {
             setLanguage(country);
           });
-          let span = document.createElement('span');
-          span.classList.add('is-size-4', 'pr-2');
-          span.innerHTML = '<img src="/images/flags/' + flag + '.svg" width="24">';
-          a.appendChild(span);
+          let img = document.createElement('img');
+          img.src = '/images/flags/' + flag + '.svg';
+          img.width = '24';
+          a.appendChild(img);
           a.appendChild(document.createTextNode(translator.languages[country]));
           dropdown.appendChild(a);
         }
