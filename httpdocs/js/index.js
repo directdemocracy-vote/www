@@ -59,6 +59,8 @@ document.addEventListener('DOMContentLoaded', () => {
         flags = content;
         let first = true;
         for (const [country, flag] of Object.entries(flags)) {
+          console.log('country = ' + country);
+          console.log('flag = ' + flag);
           let a = document.createElement('a');
           a.classList.add('navbar-item');
           if (first) {
