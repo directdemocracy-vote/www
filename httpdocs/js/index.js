@@ -159,7 +159,13 @@ document.addEventListener('DOMContentLoaded', () => {
           td.textContent = payment.paid;    
           td = document.createElement('td');
           tr.appendChild(td);
-          td.textContent = getFlagEmoji(payment.country);
+          const img = document.createElement('img');
+          td.appendChild(img);
+          img.src = '/images/flags/' + payment.country.toLowerCase() + '.svg';
+          img.width = '32px';
+          img.title = payment.country;
+          img.align = 'top';
+          // td.textContent = getFlagEmoji(payment.country);
           td.title = payment.country;
           td.style.fontStyle = 'normal';
           td.style.textAlign = 'center';
