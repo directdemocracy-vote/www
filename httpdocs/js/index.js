@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let donors_page = 0;  // not loaded
   window.addEventListener('popstate', function(event) {
     loadPage();
+    document.getElementById('navbar-menu').classList.remove('is-active');
   });
   document.getElementById('faq-menu').addEventListener('click', function(event) {
     event.currentTarget.blur();
