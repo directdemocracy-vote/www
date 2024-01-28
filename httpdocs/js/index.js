@@ -162,16 +162,11 @@ document.addEventListener('DOMContentLoaded', () => {
           const img = document.createElement('img');
           td.appendChild(img);
           img.src = '/images/flags/' + payment.country.toLowerCase() + '.svg';
-          img.style.width = '32px';
+          // img.style.width = '32px';
+          img.style.height = '100%';
           img.title = payment.country;
           img.align = 'top';
           td.style.textAlign = 'center';
-          /* td.textContent = getFlagEmoji(payment.country);
-          td.title = payment.country;
-          td.style.fontStyle = 'normal';
-          td.style.padding = '0';
-          td.style.fontSize = '160%';
-          */
         }
       });
   }
