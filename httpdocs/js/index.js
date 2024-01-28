@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const img = document.createElement('img');
           td.appendChild(img);
           img.src = '/images/flags/' + payment.country.toLowerCase() + '.svg';
-          img.style.width = '32px';
+          img.style.width = '24px';
           img.title = payment.country;
           img.align = 'top';
           td.style.textAlign = 'center';
