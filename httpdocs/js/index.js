@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch('../i18n/flags.json')
       .then((r) => r.json())
       .then((content) => {
-        function setLanguage(language, previous) {
+        function setLanguage(language, previous, flag) {
           if (previous === undefined) {
             previous = translator.language;
             const dd = document.getElementById('language-dropdown');
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
           translator.language = language;
           document.getElementById(`language-${previous}`).classList.remove('is-disabled');
           document.getElementById(`language-${language}`).classList.add('is-disabled');
-          document.getElementById('language').innerHTML = '<img src="/images/flags/' + flag[language] + '.svg" width="28">';
+          document.getElementById('language').innerHTML = '<img src="/images/flags/' + flag + '.svg" width="28">';
         }
         flags = content;
         let first = true;
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }
           a.setAttribute('id', `language-${country}`);
           a.addEventListener('click', function(event) {
-            setLanguage(country);
+            setLanguage(country, flag);
           });
           let span = document.createElement('span');
           span.classList.add('is-size-4', 'pr-2');
