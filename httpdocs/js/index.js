@@ -39,6 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
   translator.onready = function() {
     const language = document.getElementById('language');
     const dropdown = document.getElementById('language-dropdown');
+    function getFlag(language) {
+    }
     fetch('../i18n/flags.json')
       .then((r) => r.json())
       .then((content) => {
@@ -54,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
           translator.language = language;
           document.getElementById(`language-${previous}`).classList.remove('is-disabled');
           document.getElementById(`language-${language}`).classList.add('is-disabled');
-          document.getElementById('language').innerHTML = '<img src="/images/flags/' + language.toLowerCase() + '.svg" width="28" alt="' + language + '">';
+          document.getElementById('language').innerHTML = '<img src="/images/flags/' + getFlag(language) + '.svg" width="28">';
         }
         flags = content;
         let first = true;
@@ -63,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
           a.classList.add('navbar-item');
           if (first) {
             a.classList.add('is-disabled');
-            language.textContent = flag;
+            language.innerHTML = '<img src="/images/flags/' + getFlag(country) + '.svg" width="28">';
             first = false;
           }
           a.setAttribute('id', `language-${country}`);
