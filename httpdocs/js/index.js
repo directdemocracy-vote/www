@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('popstate', function(event) {
     loadPage();
     document.getElementById('navbar-menu').classList.remove('is-active');
+    document.getElementById('navbar-burger').classList.remove('is-active');
   });
   document.getElementById('faq-menu').addEventListener('click', function(event) {
     event.currentTarget.blur();
