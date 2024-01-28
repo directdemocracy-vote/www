@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
           translator.language = language;
           document.getElementById(`language-${previous}`).classList.remove('is-disabled');
           document.getElementById(`language-${language}`).classList.add('is-disabled');
-          document.getElementById('language').innerHTML = '<img src="/images/flags/' + language + '.svg" width="28">';
+          document.getElementById('language').innerHTML = '<img src="/images/flags/' + flag[language] + '.svg" width="28">';
         }
         flags = content;
         let first = true;
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
           });
           let span = document.createElement('span');
           span.classList.add('is-size-4', 'pr-2');
-          span.textContent = flag;
+          span.innerHTML = '<img src="/images/flags/' + flag + '.svg" width="28">';
           a.appendChild(span);
           a.appendChild(document.createTextNode(translator.languages[country]));
           dropdown.appendChild(a);
