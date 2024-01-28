@@ -36,10 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
   loadPage();
   let flags = null;
   let translator = new Translator('i18n');
-  function getFlagEmoji(countryCode) {
-    const codePoints = countryCode.toUpperCase().split('').map(char =>  127397 + char.charCodeAt());
-    return String.fromCodePoint(...codePoints);
-  }
   translator.onready = function() {
     const language = document.getElementById('language');
     const dropdown = document.getElementById('language-dropdown');
@@ -58,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
           translator.language = language;
           document.getElementById(`language-${previous}`).classList.remove('is-disabled');
           document.getElementById(`language-${language}`).classList.add('is-disabled');
-          document.getElementById('language').innerHTML = flags[language];
+          document.getElementById('language').innerHTML = '<img src="/images/flags/' + language.toLowerCase() + '.svg" width="28" alt="' + language + '">';
         }
         flags = content;
         let first = true;
@@ -162,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const img = document.createElement('img');
           td.appendChild(img);
           img.src = '/images/flags/' + payment.country.toLowerCase() + '.svg';
-          img.style.width = '24px';
+          img.style.width = '28px';
           img.title = payment.country;
           img.align = 'top';
           td.style.textAlign = 'center';
