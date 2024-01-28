@@ -76,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
           let img = document.createElement('img');
           img.src = '/images/flags/' + flag + '.svg';
           img.width = '24';
+          img-style.marginRight = '6px';
           a.appendChild(img);
           a.appendChild(document.createTextNode(translator.languages[country]));
           dropdown.appendChild(a);
