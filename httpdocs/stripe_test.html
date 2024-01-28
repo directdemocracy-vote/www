@@ -303,7 +303,7 @@
         <div class="columns">
           <div class="column">
             <div class="card">
-              <header class="card-header has-background-grey level mb-0">
+              <header class="card-header has-background-grey level is-mobile mb-0">
                 <div class="level-left">
                   <a id="donate" class="anchor"></a>
                   <div class="card-header-title has-text-white level-item"><a class="link has-text-white is-hidden" id="donate-back"><i class="f7-icons mr-2" style="font-size:100%">arrow_left</i></a> Donate</div>
@@ -329,9 +329,9 @@
                   <p>Use the online form to pay with credit card or other means of payment. You can also wire your donation directly to our bank or using cryptocurrencies:</p>
                   <ul>
                     <li>Bank (IBAN):<br><tt style="font-size:80%">CH50 8080 8002 8372 8994 4</tt></li>
-                    <li>Bitcoin (BTN):<br><tt style="font-size:80%">bc1qhu7mcphkpcg58wlwh6l9c6ymmrsaumtznaq9v8</tt></li>
-                    <li>Ethereum (ETH):<br><tt style="font-size:80%">0x07c9f45bed6dff37089F2B7657D9C1652f28E1A1</tt></li>
-                    <li>Filecoin (FIL):<br><tt style="font-size:80%">f1mjbnu5zduiuy3lgabtlbbbhorx6o6jtvmjcifsy</tt></li>
+                    <li>Bitcoin (BTN):<br><tt style="font-size:80%;word-wrap: break-word">bc1qhu7mcphkpcg58wlwh6l9c6ymmrsaumtznaq9v8</tt></li>
+                    <li>Ethereum (ETH):<br><tt style="font-size:80%;word-wrap: break-word">0x07c9f45bed6dff37089F2B7657D9C1652f28E1A1</tt></li>
+                    <li>Filecoin (FIL):<br><tt style="font-size:80%;word-wrap: break-word">f1mjbnu5zduiuy3lgabtlbbbhorx6o6jtvmjcifsy</tt></li>
                   </ul>
                   <p>Contact us at <a href="mailto:donate@directdemocracy.vote">donate@directdemocracy.vote</a> for any question regarding donations.</p>
                 </div>
@@ -433,13 +433,15 @@
     <section class="section container">
       <h1 class="title">Donors Wall</h1>
       <h2 class="subtitle"><em>People and Organizations supporting us</h2>
-      <table class="table">
-        <thead>
-          <tr></tr><th>Name</th><th>Amount</th><th>Comment</th><th>Date</th><th>Country</th></tr>
-        </thead>
-        <tbody id="donors-table-body">
-        </tbody>
-      </table>
+      <div class="table-container">
+        <table class="table is-stripped is-narrow is-fullwidth">
+          <thead>
+            <tr></tr><th>Name</th><th>Amount</th><th>Comment</th><th>Date</th><th>Country</th></tr>
+          </thead>
+          <tbody id="donors-table-body">
+          </tbody>
+        </table>
+      </div>
     </section>
   </div>
   <div id="faq-page" class="is-hidden">
