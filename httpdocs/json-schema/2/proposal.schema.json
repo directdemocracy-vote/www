@@ -38,9 +38,9 @@
       "maximum": 999999999999
     },
     "area": {
-      "description": "signature of an area publication",
-      "type": "string",
-      "maxLength": 512
+      "description": "area id published by the judge of the proposal",
+      "type": "integer",
+      "minimum": 0
     },
     "title": {
       "description": "title of the proposal",
