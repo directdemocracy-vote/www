@@ -208,6 +208,7 @@ $parameters = [
   ]],
   'mode' => $mode,
   'customer_email' => $email,
+  'consent_collection' => ['terms_of_service' => 'required'],
   'client_reference_id' => "$id",
   'redirect_on_completion' => 'if_required',
   'return_url' => $return_url
