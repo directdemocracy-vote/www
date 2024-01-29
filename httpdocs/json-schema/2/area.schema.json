@@ -9,6 +9,7 @@
     "key",
     "signature",
     "published",
+    "id",
     "name",
     "polygons",
     "local"
@@ -32,6 +33,11 @@
       "type": "integer",
       "minimum": 0,
       "maximum": 999999999999
+    },
+    "id": {
+      "description": "area id of the judge",
+      "type": "integer",
+      "minimum": 1
     },
     "name": {
       "description": "name of the area",
