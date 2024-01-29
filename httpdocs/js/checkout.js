@@ -57,8 +57,6 @@ window.addEventListener('load', function() {
       return;
     if (!document.getElementById('donate-comment').reportValidity())
       return;
-    if (!document.getElementById('donate-terms-of-service').reportValidity())
-      return;
     const button = event.currentTarget;
     button.classList.add('is-loading');
     const publishableKey = test ?
