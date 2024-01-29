@@ -15,7 +15,7 @@
     "number",
     "ballot",
     "answer",
-    "tag"
+    "area"
   ],
   "properties": {
     "schema": {
@@ -65,8 +65,8 @@
       "description": "answer of the citizen to the referendum question",
       "type": "string"
     },
-    "tag": {
-      "description": "unique number for a vote cast by a station for a referendum",
+    "area": {
+      "description": "local area number issued by the judge of the referendum",
       "type": "integer",
       "minimum": 1
     }
