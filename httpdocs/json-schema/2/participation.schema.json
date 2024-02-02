@@ -12,7 +12,7 @@
     "appKey",
     "appSignature",
     "referendum",
-    "encryptedVote"
+    "area"
   ],
   "properties": {
     "schema": {
@@ -49,9 +49,10 @@
       "type": "string",
       "maxLength": 512
     },
-    "encryptedVote": {
-      "description": "vote encrypted for blind signature",
-      "type": "string"
+    "area": {
+      "description": "local area from which the vote is coming",
+      "type": "integer",
+      "minimum": 1
     }
   },
   "additionalProperties": false
