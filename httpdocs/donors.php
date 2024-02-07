@@ -2,7 +2,8 @@
 
 require_once '../php/database.php';
 header("Content-Type: application/json");
-$result = $mysqli->query("SELECT givenNames, familyName, organization, frequency, currency, amount, comment, paid, displayGivenNames, hideAmount, country FROM payment WHERE display=1 AND paid!='0000-00-00 00:00:00' ORDER BY paid") or die($mysqli->error);
+$test = isset($_GET['test']) ? 1 : 0;
+$result = $mysqli->query("SELECT givenNames, familyName, organization, frequency, currency, amount, comment, paid, displayGivenNames, hideAmount, country FROM payment WHERE display=1 AND test=$test AND paid!='0000-00-00 00:00:00' ORDER BY paid") or die($mysqli->error);
 $payments = [];
 while($payment = $result->fetch_assoc()) {
   if ($payment['displayGivenNames'] == 1)
