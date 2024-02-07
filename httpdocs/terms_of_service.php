@@ -35,9 +35,23 @@ For the purposes of these Terms of Service:
 <li><b>You</b> means the individual using Our Service</li>
 <li><b>DirectDemocracy</b> (referred to as either "We", "Us" or "Our" in this Agreement) refers to the DirectDemocracy Association, Chemin des vignes 7, CH-1124 Gollion, Swizerland.</li>
 <li><b>Service</b> refers to the the donation service We provide to You.</li>  
-<li><b>Third Party Payment Service</b> refers to payment service used by the Us.</li>
+<li><b>Third Party Payment Service</b> refers to payment service used by the Us, which is Stripe Inc. (<a target="_blank" href="https://stripe.com">https://stripe.com</a>)</li>
 <li><b>Personal Data</b> is any information that relates to an identified or identifiable individual.</li>
 </ul>
+
+<h2 class="title is-2">One-Time Donations</h2>
+
+If you choose to donate using the one-time donation option, you will be charged only once for the specified amount.
+Your payment Personal Data, including possibly your credit card number or other banking information, is stored only at our Third Party Payment Service, according to their terms of service.
+
+<h2 class="title is-2">Recurrent Donations</h2>
+
+If you choose to donate every month or every year, you will be charged immediately of the specified amount.
+Then, after one month, respectively one year, you will be charged again with the same amount.
+This will repeat again every month, respectively every year, until you cancel your recurrent donation.
+Your payment Personal Data, including possibly your credit card number or other banking information, is stored only at our Third Party Payment Service, according to their terms of service.
+You can cancel your recurring donation anytime by simply sending us an e-mail at <a href="mailto:donate@directdemocracy.vote>donate@directdemocracy.vote</a> with the details of your recurrent donation: your name, date of last payment, amount and payment frequency.
+You may also cancel your recurring donations directly from our Third Party Payment Service.
 
 <h2 class="title is-2">Collecting and Using Your Personal Data</h2>
 
