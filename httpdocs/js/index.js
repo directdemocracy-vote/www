@@ -129,7 +129,9 @@ document.addEventListener('DOMContentLoaded', () => {
     donors_page = page;
     const body = document.getElementById('donors-table-body');
     body.replaceChildren();
-    fetch(`/donors.php?page=${page}`)
+    const test = location.pathname === '/stripe_test.html';
+    const url = test ? `/donors.php?test=1&page=${page}` : `/donors.php?page=${page}`;
+    fetch(url)
       .then(response => response.json())
       .then(answer => {
         for(const payment of answer) {
