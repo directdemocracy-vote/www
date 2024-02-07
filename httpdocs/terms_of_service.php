@@ -67,7 +67,7 @@ You may also provide Our Third Party Payment Services with additional informatio
 <p>Personal Data is collected automatically by Third Party Payment Services when donating to Us.
 We strongly recommend that you review the Terms of Service of Our Third Party Payment Services to understand how your Personal Data will be used, transfered, disclosed and stored securely.</p>
 
-<h3 class="title is-3">Personal Data Usage</h4>
+<h3 class="title is-3">Personal Data Usage</h3>
 <p>
 We may use your Personal Data to create anonymized statistical data which could be used for Our own purposes.
 We may occasionally send you some e-mail to inform you about the receipt of your payment, changes in these Terms of Services and other important information.
