@@ -10,6 +10,8 @@
   <link rel="stylesheet" href="//app.directdemocracy.vote/app/css/framework7-icons.css">
   <link rel="stylesheet" href="/css/corner-ribbon.css">
   <link rel="stylesheet" href="/css/directdemocracy.css">
+  <script src="https://js.stripe.com/v3/"></script>
+  <script src="/js/checkout.js"></script>
   <script type="module" src="/js/index.js"></script>
 </head>
 
@@ -301,25 +303,141 @@
         <div class="columns">
           <div class="column">
             <div class="card">
-              <header class="card-header has-background-grey">
-                <a id="donate" class="anchor"></a>
-                <p class="card-header-title has-text-white">Donate</p>
+              <header class="card-header has-background-grey level is-mobile mb-0">
+                <div class="level-left">
+                  <a id="donate" class="anchor"></a>
+                  <div class="card-header-title has-text-white level-item"><a class="link has-text-white is-hidden" id="donate-back"><i class="f7-icons mr-2" style="font-size:100%">arrow_left</i></a> Donate</div>
+                </div>
+                <div class="level-right">
+                  <div class="card-header-title has-text-white level-item">
+                    <i class="f7-icons mr-4" style="font-size:100%">lock</i>
+                    <i id="donate-1" class="f7-icons mr-2" style="font-size:100%">circle_fill</i>
+                    <i id="donate-2" class="f7-icons mr-2" style="font-size:100%">circle</i>
+                    <i id="donate-3" class="f7-icons" style="font-size:100%">circle</i>
+                </div>
               </header>
               <div class="card-content has-background-white-ter content">
-                <p>
-                  We are seeking financial support from foundations and individuals to help us:
-                </p>
-                <ul>
-                  <li>deploy the necessary computing resources</li>
-                  <li>improve the technology</li>
-                  <li>help to organize referendums and petitions</li>
-                  <li>promote direct<b>democracy</b> worldwide</li>
-                </ul>
-                <p>Please contact us if you would like to support to this project.</p>
+              <div class="columns">
+                <div id="donate-explanation" class="column">
+                  <p>We are seeking financial support from foundations and individuals to help us:</p>
+                  <ul>
+                    <li>deploy the necessary computing resources</li>
+                    <li>improve the technology</li>
+                    <li>help to organize referendums and petitions</li>
+                    <li>promote direct<b>democracy</b> worldwide</li>
+                  </ul>
+                  <p>Use the online form to pay with credit card or other means of payment. You can also wire your donation directly to our bank or using cryptocurrencies:</p>
+                  <ul>
+                    <li>Bank (IBAN):<br><tt style="font-size:80%">CH50 8080 8002 8372 8994 4</tt></li>
+                    <li>Bitcoin (BTN):<br><tt style="font-size:80%;word-wrap: break-word">bc1qhu7mcphkpcg58wlwh6l9c6ymmrsaumtznaq9v8</tt></li>
+                    <li>Ethereum (ETH):<br><tt style="font-size:80%;word-wrap: break-word">0x07c9f45bed6dff37089F2B7657D9C1652f28E1A1</tt></li>
+                    <li>Filecoin (FIL):<br><tt style="font-size:80%;word-wrap: break-word">f1mjbnu5zduiuy3lgabtlbbbhorx6o6jtvmjcifsy</tt></li>
+                  </ul>
+                  <p>Contact us at <a href="mailto:donate@directdemocracy.vote">donate@directdemocracy.vote</a> for any question regarding donations.</p>
+                </div>
+                <div id="donate-form" class="column">
+                  <div class="buttons has-addons is-centered">
+                    <button id="donate-one-time" class="button is-info">One-time</button>
+                    <button id="donate-monthly" class="button">Monthly</button>
+                    <button id="donate-annually" class="button">Annually</button>
+                  </div>
+                  <div class="buttons is-centered">
+                    <label class="radio mr-2 ml-2"><input type="radio" class="mr-1" name="donate-currency" value="EUR" checked>EUR</label>
+                    <label class="radio m2-2 ml-2"><input type="radio" class="mr-1" name="donate-currency" value="CHF">CHF</label>
+                    <label class="radio mr-2 ml-2"><input type="radio" class="mr-1" name="donate-currency" value="USD">USD</label>
+                  </div>
+                  <div class="buttons is-centered">
+                    <button id="donate-5" class="button is-info">5</button>
+                    <button id="donate-10" class="button">10</button>
+                    <button id="donate-20" class="button">20</button>
+                    <button id="donate-50" class="button">50</button>
+                  </div>
+                  <div class="buttons is-centered">
+                    <button id="donate-100" class="button">100</button>
+                    <button id="donate-200" class="button">200</button>
+                    <button id="donate-500" class="button">500</button>
+                    <button id="donate-1000" class="button">1000</button>
+                  </div>
+                  <div class="field">
+                    <label class="label">E-mail</label>
+                    <div class="control has-icons-left">
+                      <input id="donate-email" class="input" type="email" required placeholder="E-mail" size="64" maxlength="320">
+                      <span class="icon is-small is-left"><i class="f7-icons">envelope</i></span>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label class="checkbox mr-1"><input id="donate-organization-checkbox" type="checkbox" class="mr-1">This donation is on behalf of an organization</label>
+                  </div>
+                  <div id="donate-name-field" class="field is-horizontal">
+                    <div class="mr-1">
+                      <label class="label">Given Name(s)</label>
+                      <div class="control">
+                        <input id="donate-given-names" class="input" type="text" placeholder="Given Name(s)" size="32" maxlength="64" required>
+                      </div>
+                    </div>
+                    <div class="ml-1">
+                      <label class="label">Family Name</label>
+                      <div class="control">
+                        <input id="donate-family-name" class="input" type="text" placeholder="Family Name" size="32" maxlength="64" required>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="donate-organization-field" class="field is-hidden">
+                    <div class="field mb-3">
+                      <label class="label">Organization</label>
+                      <p class="control">
+                        <input id="donate-organization" class="input" type="text" placeholder="Organization name" size="64" maxlength="64">
+                      </p>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label class="checkbox"><input id="donate-comment-checkbox" type="checkbox" class="mr-1">Write us a comment</label>
+                  </div>
+                  <div id="donate-comment-field" class="field is-hidden">
+                    <p class="control">
+                      <input id="donate-comment" class="input" type="text" placeholder="Comment">
+                    </p>
+                  </div>
+                  <div class="field">
+                    <label class="checkbox mr-1"><input id="donate-display-checkbox" type="checkbox" class="mr-1"><span id="donate-display-text">Display donation on the</span></label><a id="donors-wall-link" href="#donors">Donors Wall</a>
+                  </div>
+                  <div id="donate-display-given-names-field" class="field ml-4 is-hidden">
+                    <label class="checkbox mr-1"><input id="donate-display-given-names-checkbox" type="checkbox" class="mr-1">Display given name(s) instead of full name</label>
+                  </div>
+                  <div id="donate-hide-amount-field" class="field ml-4 is-hidden">
+                    <label class="checkbox mr-1"><input id="donate-hide-amount-checkbox" type="checkbox" class="mr-1">Hide donation amount</label>
+                  </div>
+
+                  <div class="field buttons is-centered">
+                    <button id="donate-button" class="button is-success">Donate <i class="f7-icons ml-2" style="font-size:100%">arrow_right</i></button>
+                  </div>
+                </div>
+                <div id="donate-checkout" class="column is-hidden">
+                </div>
+                <div id="donate-complete" class="column is-hidden">
+                  <p id="donate-thank-you"></p>
+                  <p id="donate-information"></p>
+                  <p>Contact us at <a href="mailto:donate@directdemocracy.vote">donate@directdemocracy.vote</a> if you have any question.</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
+    </section>
+  </div>
+  <div id="donors-wall-page" class="is-hidden">
+    <section class="section container">
+      <h1 class="title">Donors Wall</h1>
+      <h2 class="subtitle"><em>People and Organizations supporting us</h2>
+      <div class="table-container">
+        <table class="table is-stripped is-narrow is-fullwidth">
+          <thead>
+            <tr></tr><th>Name</th><th>Amount</th><th>Comment</th><th>Date</th><th align="center">Country</th></tr>
+          </thead>
+          <tbody id="donors-table-body">
+          </tbody>
+        </table>
       </div>
     </section>
   </div>
@@ -817,7 +935,7 @@
   </div>
   <footer class="footer">
     <div class="content has-text-centered">
-      &copy; Copyright 2023 DirectDemocracy Association &mdash; <a id="privacy-link" href="#privacy">privacy policy</a>
+      &copy; Copyright 2023 DirectDemocracy Association &mdash; <a id="privacy-link" href="#privacy">Privacy Policy</a> &mdash; <a href="/terms_of_service.php" target="_blank">Terms of Service</a>
     </div>
   </footer>
   <div id="privacy" class="modal">
@@ -830,8 +948,9 @@
       <section class="modal-card-body">
         This web site does not collect any information about you. It doesn't use any cookie at all.
         In case you e-mail us, we will reply you, but we won't resell your e-mail address to anyone.
+        If you donate to support us, we will collect the minimum amount of information to process your donation according to our <a href="/terms_of_service.php" target="_blank">Terms of Service</a>.
         If you use our direct<b>democracy</b> app, be sure to read and agree with the
-        <a href="//app.directdemocracy.vote/privacy.html" target="_blank">privacy policiy of the app</a>.
+        <a href="//app.directdemocracy.vote/privacy.html" target="_blank">Privacy Policy</a> of the app.
       </section>
       <footer class="modal-card-foot">
         <button class="button is-success">OK</button>
