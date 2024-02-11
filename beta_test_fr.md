@@ -2,7 +2,7 @@
 
 Cette page explique la procédure à suivre en tant qu'utilisateur bêta pour tester l'app DirectDemocracy.
 
-## Procédure
+## 1 Testez
 
 Pour devenir testeur bêta francophone de DirectDemocracy, suivez la procédure suivante :
 
@@ -27,4 +27,8 @@ Pour devenir testeur bêta francophone de DirectDemocracy, suivez la procédure 
    - Votez à votre propre référendum ou signez votre pétition.
    - Observez les résultats.
 
-# Rapport de bugs
+## 2 Rapportez des bugs
+
+## 3 Donnez nous votre retour
+
+
