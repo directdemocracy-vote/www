@@ -5,10 +5,10 @@ Cette page explique la procédure à suivre en tant qu'utilisateur bêta pour te
 ## Localité
 
 Les testeurs bêta doivent suivre la procédure suivante :
-1. Installer l'app DirectDemocracy sur leur téléphone mobile (iOS ou Android) 
-2. Créer une fausse carte de citoyen:
-    2.1 Prétendre que l'on utilise l'app DirectDemocracy pour la première fois (même si c'est faux).
-    2.2 Entrer votre véritable nom et prénom(s) ou éventuellement des noms et prénom(s) fictifs.
+_1. Installer l'app DirectDemocracy sur leur téléphone mobile (iOS ou Android)_
+_2. Créer une fausse carte de citoyen:_
+__2.1 Prétendre que l'on utilise l'app DirectDemocracy pour la première fois (même si c'est faux).
+__2.2 Entrer votre véritable nom et prénom(s) ou éventuellement des noms et prénom(s) fictifs.
     2.3 Fournir votre véritable photo d'identité ou éventuellement une photo d'identité qui n'est pas vous.
     2.4 **Important**: Définir votre domicile dans le village fantôme du [Poil](https://nominatim.openstreetmap.org/ui/details.html?osmtype=R&osmid=6834621&class=boundary).
 3. Se faire assermenter par d'autres citoyens bêta du Poil:
