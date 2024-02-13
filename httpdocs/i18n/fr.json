@@ -54,11 +54,16 @@
     "display-donation": "Afficher mon don sur le",
     "display-donation-and-comment": "Afficher mon don et mon commentaire sur le",
     "donors-wall": "Mur des Donateurs",
+    "donors-wall-moto": "Individus et organisations qui nous soutiennent",
     "given-names-only": "Afficher mon prénom plutôt que mon nom complet",
     "hide-amount": "Cacher le montant de mon don",
     "error-processing-payment": "Une erreur est survenue dans le traitement de votre paiement.",
     "thank-you-for": "Merci %1 pour votre soutien à directdemocracy !",
     "did-not-receive": "%1, nous n'avons pas reçu votre paiement parce qu'il a été soit annulé, soit différé.",
     "should-have-received-mail": "Vous avez reçu un e-mail avec la confirmation de votre don.",
-    "latter-case": "Dans ce dernier cas, nous vous enverrons un e-mail dès que nous le recevrons. Sinon, merci d'utiliser un autre moyen de paiement."
+    "latter-case": "Dans ce dernier cas, nous vous enverrons un e-mail dès que nous le recevrons. Sinon, merci d'utiliser un autre moyen de paiement.",
+    "name": "Nom",
+    "amount": "Montant",
+    "date": "Date",
+    "country": "Pays"
 }
