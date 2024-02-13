@@ -25,5 +25,10 @@
     "open-source": "Open-Source",
     "open-source-text": "Free, open and belonging to all.",
     "e-voting": "E-Voting",
-    "e-voting-text": "Safe, verifiable and anonymous."
+    "e-voting-text": "Safe, verifiable and anonymous.",
+    "need-to-change-something": "Need to change something?",
+    "need-to-change-something-list": "<ol><li>Write a referendum text</li><li>Register as a citizen</li><li>Get endorsed by others</li><li>Vote at your own referendum</li><li>Ask others to register and vote</li></ol>",
+    "and-the-results": "And the results will be...",
+    "and-the-results-list": "<ul><li>A verifiable and indisputable process</li><li>A participation level</li><li>The choice of the voting citizens</li><li>The democratic solution to a problem</li><li>A pressure on governments</li></ul>",
+    "governements-will-have": "Governments will have to decide if they respect democracy or not."
 }
