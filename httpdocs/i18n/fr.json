@@ -41,6 +41,18 @@
     "donate-list": "<li>déployer les resources informatiques nécessaires</li><li>améliroer la technologie</li><li>aider à l'organisation de référendums et pétitions</li><li>promouvoir direct<b>democracy</b> dans le monde</li>",
     "donate-payment": "Vous pouvez utiliser notre formulaire en ligne pour payer par carte de crédit ou avec d'autres moyens de paiement. Vous pouvez aussi nous envoyer vos dons directement sur notre compte bancaire ou en crypto-monnaie :",
     "donate-bank": "Banque",
-    "donate-contact": "Contactez-nous à <a href=\"mailto:donate@directdemocracy.vote\">donate@directdemocracy.vote</a> pour toute question concernant les donations."
-
+    "donate-contact": "Contactez-nous à <a href=\"mailto:donate@directdemocracy.vote\">donate@directdemocracy.vote</a> pour toute question concernant les donations.",
+    "one-time": "une fois",
+    "monthly": "mensuellement",
+    "annually": "anuellement",
+    "organization-behalf": "Cette donation est faite au nom d'une organisation",
+    "given-names": "Prénom(s)",
+    "family-name": "Nom de famille",
+    "organization": "Organisation",
+    "write-us-a-coment": "Laisser un commentaire",
+    "comment": "Commentaire",
+    "display-donation": "Afficher ma donation sur le",
+    "donors-wall": "Mur des Donateurs",
+    "given-names-only": "Afficher mon prénom plutôt que mon nom complet",
+    "hide-amount": "Cacher le montant de ma donation"
 }
