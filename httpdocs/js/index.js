@@ -2,6 +2,34 @@ import Translator from 'https://app.directdemocracy.vote/app/js/translator.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   let donors_page = 0;  // not loaded
+  // generate FAQ
+  const faq = document.getElementById('faq');
+  for (i = 0; i < 16; i++) {
+    const columns = document.createElement('div');
+    faq.appendChild(columns);
+    columns.classList.add('columns');
+    const column = document.createElement('div');
+    columns.appendChild(column);
+    column.classList.add('column');
+    const card = document.createElement('div');
+    column.appendChild(card);
+    card.classList.add('card');
+    const a = document.createElement('a');
+    card.appendChild(a);
+    a.classList.add('anchor');
+    a.setAttribute('id', 'q' + (i + 1));
+    const header = document.createElement('header');
+    card.appendChild(header);
+    header.classList.add('card-header', 'has-background-grey');
+    const p = document.createElement('p');
+    header.appendChild(p);
+    p.classList.add('card-header-title', 'has-text-white');
+    p.innerHTML = `<span class="has-text-black mr-3"><span data-i18n="q"></span>${(i + 1)}</span><span data-i18n="q${(i + 1)}"></span>`;
+    const content = document.createElement('div');
+    card.appendChild(content);
+    content.classList.add('card-content', 'has-background-white-ter', 'content');
+    content.setAttribute('data-i18n', 'a' + ( i + 1));
+  }
   window.addEventListener('popstate', function(event) {
     loadPage();
     document.getElementById('navbar-menu').classList.remove('is-active');
