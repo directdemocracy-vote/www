@@ -86,9 +86,8 @@ window.addEventListener('load', function() {
       document.getElementById('donate-complete').classList.remove('is-hidden');
       document.getElementById('donate-2').textContent = 'circle';
       document.getElementById('donate-3').textContent = 'circle_fill';
-      document.getElementById('donate-thank-you').textContent =
-        `Thank you ${isOrganization ? organization : givenNames} for supporting directdemocracy!`
-      document.getElementById('donate-information').textContent = 'You should have received an e-mail with a confirmation of your donation.';
+      document.getElementById('donate-thank-you').textContent = translator.translate('thank-you-for').replace('%1', isOrganization ? organization : givenNames);
+      document.getElementById('donate-information').textContent = translator.translate('should-have-received-mail');
     };
     checkout = await stripe.initEmbeddedCheckout({clientSecret, onComplete: handleComplete});
     document.getElementById('donate-explanation').classList.add('is-hidden');
