@@ -54,11 +54,16 @@
     "display-donation": "Display donation on the",
     "display-donation-and-comment": "Display donation and comment on the",
     "donors-wall": "Donors Wall",
+    "donors-wall-moto": "People and Organizations supporting us",
     "given-names-only": "Display given name(s) instead of full name",
     "hide-amount": "Hide donation amount",
     "error-processing-payment": "There was an error processing your payment.",
     "thank-you-for": "Thank you %1 for supporting directdemocracy!",
     "did-not-receive": "%1, we didn't received your payment because it was either cancelled or delayed.",
     "should-have-received-mail": "You should have received an e-mail with a confirmation of your donation.",
-    "latter-case": "In the latter case, we will send you an e-mail as soon as we receive it. Otherwise, please consider using a different payment method."
+    "latter-case": "In the latter case, we will send you an e-mail as soon as we receive it. Otherwise, please consider using a different payment method.",
+    "name": "Name",
+    "amount": "Amount",
+    "date": "Date",
+    "country": "Country"
 }
