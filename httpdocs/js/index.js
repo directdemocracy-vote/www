@@ -145,10 +145,6 @@ document.addEventListener('DOMContentLoaded', () => {
       hidePrivacy();
     });
   });
-  document.getElementById('donate-link').addEventListener('click', function() {
-    document.getElementById('main-page').classList.remove('is-hidden');
-    document.getElementById('faq-page').classList.add('is-hidden');
-  });
   function loadDonors(page) {
     if (donors_page === page)
       return;
