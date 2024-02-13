@@ -65,5 +65,7 @@
     "name": "Nom",
     "amount": "Montant",
     "date": "Date",
-    "country": "Pays"
+    "country": "Pays",
+    "frequently-asked": "Foire Aux Questions"
+
 }
