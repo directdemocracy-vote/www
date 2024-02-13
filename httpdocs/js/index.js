@@ -55,14 +55,11 @@ document.addEventListener('DOMContentLoaded', () => {
           translator.language = language;
           document.getElementById(`language-${previous}`).classList.remove('is-disabled');
           document.getElementById(`language-${language}`).classList.add('is-disabled');
-          console.log(flags[language]);
           document.getElementById('language').innerHTML = '<img src="/images/flags/' + flags[language] + '.svg" width="24">';
         }
         flags = content;
         let first = true;
         for (const [country, flag] of Object.entries(flags)) {
-          console.log('country = ' + country);
-          console.log('flag = ' + flag);
           let a = document.createElement('a');
           a.classList.add('navbar-item');
           if (first) {
