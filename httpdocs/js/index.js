@@ -1,5 +1,7 @@
 import Translator from 'https://app.directdemocracy.vote/app/js/translator.js';
 
+let translator;
+
 document.addEventListener('DOMContentLoaded', () => {
   let donors_page = 0;  // not loaded
   window.addEventListener('popstate', function(event) {
@@ -35,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   loadPage();
   let flags = null;
-  let translator = new Translator('i18n');
+  translator = new Translator('i18n');
   translator.onready = function() {
     const language = document.getElementById('language');
     const dropdown = document.getElementById('language-dropdown');
