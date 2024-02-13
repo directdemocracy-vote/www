@@ -27,8 +27,11 @@
     "e-voting": "E-Voting",
     "e-voting-text": "Safe, verifiable and anonymous.",
     "need-to-change-something": "Need to change something?",
-    "need-to-change-something-list": "<ol><li>Write a referendum text</li><li>Register as a citizen</li><li>Get endorsed by others</li><li>Vote at your own referendum</li><li>Ask others to register and vote</li></ol>",
+    "need-to-change-something-list": "<li>Write a referendum text</li><li>Register as a citizen</li><li>Get endorsed by others</li><li>Vote at your own referendum</li><li>Ask others to register and vote</li>",
     "and-the-results": "And the results will be...",
-    "and-the-results-list": "<ul><li>A verifiable and indisputable process</li><li>A participation level</li><li>The choice of the voting citizens</li><li>The democratic solution to a problem</li><li>A pressure on governments</li></ul>",
-    "governements-will-have": "Governments will have to decide if they respect democracy or not."
+    "and-the-results-list": "<li>A verifiable and indisputable process</li><li>A participation level</li><li>The choice of the voting citizens</li><li>The democratic solution to a problem</li><li>A pressure on governments</li>",
+    "governements-will-have": "Governments will have to decide if they respect democracy or not.",
+    "made-to": "direct<b>democracy</b> is made to:",
+    "made-to-list": "<li>Fix the broken world governance</li><li>Take fast democratic decisions</li><li>Allow humanity to save the planet</li><li>Bring peace, prosperity and freedom</li><li>Enforce true democracy everywhere</li>",
+    "availability": "To be available on February 28th, 2024 on:"
 }
