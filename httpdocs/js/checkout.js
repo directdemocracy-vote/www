@@ -17,17 +17,13 @@ window.addEventListener('load', function() {
         const info = document.getElementById('donate-information');
         document.getElementById('donate-3').scrollIntoView(true);
         if (answer.error) {
-          thanks.textContent = 'There was an error processing your payment.';
+          thanks.textContent = translator.translate('error-processing-payment');
           info.textContent = answer.error;
         } else {
           const name = answer.organization === '' ? answer.givenNames : answer.organization;
           const received = answer.paid !== '0000-00-00 00:00:00';
-          thanks.textContent = received
-            ? `Thank you ${name} for supporting directdemocracy!`
-            : `${name}, we didn't received your payment because it was either cancelled or delayed.`;
-          info.textContent = received
-            ? 'You should have received an e-mail with a confirmation of your donation.'
-            : "In the latter case, we will send you an e-mail as soon as we receive it. Otherwise, please consider using a different payment method.";
+          thanks.textContent = translator.translate(received ? 'thank-you-for' : 'did-not-receive').replace('%1', name);
+          info.textContent = translator.translate(received ? 'should-have-received-mail' : 'latter-case');
         }
         document.getElementById('donate-explanation').classList.add('is-hidden');
         document.getElementById('donate-form').classList.add('is-hidden');
