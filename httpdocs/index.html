@@ -271,9 +271,9 @@
                 </div>
                 <div id="donate-form" class="column">
                   <div class="buttons has-addons is-centered">
-                    <button id="donate-one-time" class="button is-info">One-time</button>
-                    <button id="donate-monthly" class="button">Monthly</button>
-                    <button id="donate-annually" class="button">Annually</button>
+                    <button id="donate-one-time" class="button is-info" data-i18n="one-time"></button>
+                    <button id="donate-monthly" class="button" data-i18n="monthly"></button>
+                    <button id="donate-annually" class="button" data-i18n="annually"></button>
                   </div>
                   <div class="buttons is-centered">
                     <label class="radio mr-2 ml-2"><input type="radio" class="mr-1" name="donate-currency" value="EUR" checked>EUR</label>
@@ -300,50 +300,50 @@
                     </div>
                   </div>
                   <div class="field">
-                    <label class="checkbox mr-1"><input id="donate-organization-checkbox" type="checkbox" class="mr-1">This donation is on behalf of an organization</label>
+                    <label class="checkbox mr-1"><input id="donate-organization-checkbox" type="checkbox" class="mr-1" data-i18n="organization-behalf"></label>
                   </div>
                   <div id="donate-name-field" class="field is-horizontal">
                     <div class="mr-1">
-                      <label class="label">Given Name(s)</label>
+                      <label class="label" data-i18n="given-names"></label>
                       <div class="control">
-                        <input id="donate-given-names" class="input" type="text" placeholder="Given Name(s)" size="32" maxlength="64" required>
+                        <input id="donate-given-names" class="input" type="text" size="32" maxlength="64" required data-i18n="given-names">
                       </div>
                     </div>
                     <div class="ml-1">
-                      <label class="label">Family Name</label>
+                      <label class="label" data-i18n="family-name"></label>
                       <div class="control">
-                        <input id="donate-family-name" class="input" type="text" placeholder="Family Name" size="32" maxlength="64" required>
+                        <input id="donate-family-name" class="input" type="text" size="32" maxlength="64" required data-i18n="family-name">
                       </div>
                     </div>
                   </div>
                   <div id="donate-organization-field" class="field is-hidden">
                     <div class="field mb-3">
-                      <label class="label">Organization</label>
+                      <label class="label" data-i18n="organization"></label>
                       <p class="control">
-                        <input id="donate-organization" class="input" type="text" placeholder="Organization name" size="64" maxlength="64">
+                        <input id="donate-organization" class="input" type="text" size="64" maxlength="64" data-i18n="organization">
                       </p>
                     </div>
                   </div>
                   <div class="field">
-                    <label class="checkbox"><input id="donate-comment-checkbox" type="checkbox" class="mr-1">Write us a comment</label>
+                    <label class="checkbox"><input id="donate-comment-checkbox" type="checkbox" class="mr-1" data-i18n="write-us-a-comment"></label>
                   </div>
                   <div id="donate-comment-field" class="field is-hidden">
                     <p class="control">
-                      <input id="donate-comment" class="input" type="text" placeholder="Comment">
+                      <input id="donate-comment" class="input" type="text" data-i18n="comment">
                     </p>
                   </div>
                   <div class="field">
-                    <label class="checkbox mr-1"><input id="donate-display-checkbox" type="checkbox" class="mr-1"><span id="donate-display-text">Display donation on the</span></label><a id="donors-wall-link" href="#donors">Donors Wall</a>
+                    <label class="checkbox mr-1"><input id="donate-display-checkbox" type="checkbox" class="mr-1"><span id="display-donation"></span></label><a id="donors-wall-link" href="#donors" data-i18n="donors-wall">Donors Wall</a>
                   </div>
                   <div id="donate-display-given-names-field" class="field ml-4 is-hidden">
-                    <label class="checkbox mr-1"><input id="donate-display-given-names-checkbox" type="checkbox" class="mr-1">Display given name(s) instead of full name</label>
+                    <label class="checkbox mr-1"><input id="donate-display-given-names-checkbox" type="checkbox" class="mr-1" data-i18n="given-names-only"></label>
                   </div>
                   <div id="donate-hide-amount-field" class="field ml-4 is-hidden">
-                    <label class="checkbox mr-1"><input id="donate-hide-amount-checkbox" type="checkbox" class="mr-1">Hide donation amount</label>
+                    <label class="checkbox mr-1"><input id="donate-hide-amount-checkbox" type="checkbox" class="mr-1" data-i18n="hide-amount"></label>
                   </div>
 
                   <div class="field buttons is-centered">
-                    <button id="donate-button" class="button is-success">Donate <i class="f7-icons ml-2" style="font-size:100%">arrow_right</i></button>
+                    <button id="donate-button" class="button is-success"><span data-i18n="donate"></span><i class="f7-icons ml-2" style="font-size:100%">arrow_right</i></button>
                   </div>
                 </div>
                 <div id="donate-checkout" class="column is-hidden">
@@ -351,7 +351,7 @@
                 <div id="donate-complete" class="column is-hidden">
                   <p id="donate-thank-you"></p>
                   <p id="donate-information"></p>
-                  <p>Contact us at <a href="mailto:donate@directdemocracy.vote">donate@directdemocracy.vote</a> if you have any question.</p>
+                  <p data-i18n="donate-contact"></p>
                 </div>
               </div>
             </div>
@@ -363,7 +363,7 @@
   <div id="donors-wall-page" class="is-hidden">
     <section class="section container">
       <h1 class="title">Donors Wall</h1>
-      <h2 class="subtitle"><em>People and Organizations supporting us</h2>
+      <h2 class="subtitle"><em>People and Organizations supporting us</em></h2>
       <div class="table-container">
         <table class="table is-stripped is-narrow is-fullwidth">
           <thead>
