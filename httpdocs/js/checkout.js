@@ -154,10 +154,12 @@ window.addEventListener('load', function() {
     const donateDisplayText = document.getElementById('donate-display-text');
     const comment = document.getElementById('donate-comment');
     if (event.currentTarget.checked) {
+      donateDisplayText.setAttribute('data-i18n', 'display-donation-and-comment');
       donateDisplayText.textContent = translator.translate('display-donation-and-comment');
       classList.remove('is-hidden');
       comment.setAttribute('required', '');
     } else {
+      donateDisplayText.setAttribute('data-i18n', 'display-donation');
       donateDisplayText.textContent = translator.translate('display-donation');
       classList.add('is-hidden');
       comment.removeAttribute('required');
