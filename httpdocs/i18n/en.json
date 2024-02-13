@@ -52,6 +52,7 @@
     "write-us-a-comment": "Write us a comment",
     "comment": "Comment",
     "display-donation": "Display donation on the",
+    "display-donation-and-comment": "Display donation and comment on the",
     "donors-wall": "Donors Wall",
     "given-names-only": "Display given name(s) instead of full name",
     "hide-amount": "Hide donation amount"
