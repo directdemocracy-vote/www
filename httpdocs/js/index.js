@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let donors_page = 0;  // not loaded
   // generate FAQ
   const faq = document.getElementById('faq');
-  for (i = 0; i < 16; i++) {
+  for (let i = 1; i <= 16; i++) {
     const columns = document.createElement('div');
     faq.appendChild(columns);
     columns.classList.add('columns');
@@ -24,11 +24,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const p = document.createElement('p');
     header.appendChild(p);
     p.classList.add('card-header-title', 'has-text-white');
-    p.innerHTML = `<span class="has-text-black mr-3"><span data-i18n="q"></span>${(i + 1)}</span><span data-i18n="q${(i + 1)}"></span>`;
+    p.innerHTML = `<span class="has-text-black mr-3"><span data-i18n="q"></span>${i}</span><span data-i18n="q${i}"></span>`;
     const content = document.createElement('div');
     card.appendChild(content);
     content.classList.add('card-content', 'has-background-white-ter', 'content');
-    content.setAttribute('data-i18n', 'a' + ( i + 1));
+    content.setAttribute('data-i18n', `a${i}`);
   }
   window.addEventListener('popstate', function(event) {
     loadPage();
