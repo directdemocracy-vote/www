@@ -22,7 +22,7 @@ window.addEventListener('load', function() {
         } else {
           const name = answer.organization === '' ? answer.givenNames : answer.organization;
           const received = answer.paid !== '0000-00-00 00:00:00';
-          thanks.textContent = translator.translate(received ? 'thank-you-for' : 'did-not-receive').replace('%1', name);
+          thanks.textContent = translator.translate(received ? 'thank-you-for' : 'did-not-receive', name);
           info.textContent = translator.translate(received ? 'should-have-received-mail' : 'latter-case');
         }
         document.getElementById('donate-explanation').classList.add('is-hidden');
@@ -86,7 +86,7 @@ window.addEventListener('load', function() {
       document.getElementById('donate-complete').classList.remove('is-hidden');
       document.getElementById('donate-2').textContent = 'circle';
       document.getElementById('donate-3').textContent = 'circle_fill';
-      document.getElementById('donate-thank-you').textContent = translator.translate('thank-you-for').replace('%1', isOrganization ? organization : givenNames);
+      document.getElementById('donate-thank-you').textContent = translator.translate('thank-you-for', isOrganization ? organization : givenNames);
       document.getElementById('donate-information').textContent = translator.translate('should-have-received-mail');
     };
     checkout = await stripe.initEmbeddedCheckout({clientSecret, onComplete: handleComplete});
