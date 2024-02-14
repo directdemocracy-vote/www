@@ -2,9 +2,8 @@ import Translator from 'https://app.directdemocracy.vote/app/js/translator.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   let donors_page = 0;  // not loaded
-  // generate FAQ
   const faq = document.getElementById('faq');
-  for (let i = 1; i <= 16; i++) {
+  for (let i = 1; i <= 16; i++) { // generate FAQ
     const columns = document.createElement('div');
     faq.appendChild(columns);
     columns.classList.add('columns');
@@ -98,6 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
           a.setAttribute('id', `language-${country}`);
           a.addEventListener('click', function(event) {
             setLanguage(country);
+            document.getElementById('navbar-menu').classList.remove('is-active');
+            document.getElementById('navbar-burger').classList.remove('is-active');
           });
           let img = document.createElement('img');
           img.src = '/images/flags/' + flag + '.svg';
