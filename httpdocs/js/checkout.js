@@ -17,13 +17,13 @@ window.addEventListener('load', function() {
         const info = document.getElementById('donate-information');
         document.getElementById('donate-3').scrollIntoView(true);
         if (answer.error) {
-          thanks.textContent = translator.translate('error-processing-payment');
+          translator.translateElement(thanks, 'error-processing-payment');
           info.textContent = answer.error;
         } else {
           const name = answer.organization === '' ? answer.givenNames : answer.organization;
           const received = answer.paid !== '0000-00-00 00:00:00';
-          thanks.textContent = translator.translate(received ? 'thank-you-for' : 'did-not-receive', name);
-          info.textContent = translator.translate(received ? 'should-have-received-mail' : 'latter-case');
+          translator.translateElement(thanks, received ? 'thank-you-for' : 'did-not-receive', name);
+          translator.translateElement(info, received ? 'should-have-received-mail' : 'latter-case');
         }
         document.getElementById('donate-explanation').classList.add('is-hidden');
         document.getElementById('donate-form').classList.add('is-hidden');
@@ -86,8 +86,8 @@ window.addEventListener('load', function() {
       document.getElementById('donate-complete').classList.remove('is-hidden');
       document.getElementById('donate-2').textContent = 'circle';
       document.getElementById('donate-3').textContent = 'circle_fill';
-      document.getElementById('donate-thank-you').textContent = translator.translate('thank-you-for', isOrganization ? organization : givenNames);
-      document.getElementById('donate-information').textContent = translator.translate('should-have-received-mail');
+      translator.translateElement(document.getElementById('donate-thank-you'), 'thank-you-for', isOrganization ? organization : givenNames);
+      translator.translateElement(document.getElementById('donate-information'), 'should-have-received-mail');
     };
     checkout = await stripe.initEmbeddedCheckout({clientSecret, onComplete: handleComplete});
     document.getElementById('donate-explanation').classList.add('is-hidden');
@@ -149,13 +149,11 @@ window.addEventListener('load', function() {
     const donateDisplayText = document.getElementById('donate-display-text');
     const comment = document.getElementById('donate-comment');
     if (event.currentTarget.checked) {
-      donateDisplayText.setAttribute('data-i18n', 'display-donation-and-comment');
-      donateDisplayText.textContent = translator.translate('display-donation-and-comment');
+      translator.translateElement(donateDisplayText, 'display-donation-and-comment');
       classList.remove('is-hidden');
       comment.setAttribute('required', '');
     } else {
-      donateDisplayText.setAttribute('data-i18n', 'display-donation');
-      donateDisplayText.textContent = translator.translate('display-donation');
+      translator.translateElement(donateDisplayText, 'display-donation');
       classList.add('is-hidden');
       comment.removeAttribute('required');
     }
