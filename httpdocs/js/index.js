@@ -124,13 +124,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
   document.getElementById('main-menu').addEventListener('click', function() {
-    console.log(window.location.hostname);
-    if (window.location.hostname === 'directdemocracy.vote') {
-      history.replaceState({}, document.title, window.location.href.split('#')[0]);
-      loadPage();
-      window.scrollTo(0, 0);
-    } else
-      window.location.href = 'https://directdemocracy.vote';
+    history.replaceState({}, document.title, window.location.href.split('#')[0]);
+    loadPage();
+    window.scrollTo(0, 0);
   });
   function showPrivacy() {
     document.getElementById('privacy').classList.add('is-active');
