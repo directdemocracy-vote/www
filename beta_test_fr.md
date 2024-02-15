@@ -23,6 +23,7 @@ Pour devenir testeur bêta francophone de DirectDemocracy, suivez la procédure 
    - Observez les résultats, votes ou signatures.
 5. Proposez un référendum ou une pétition au Poil
    - Rédigez et [publiez](https://judge.directdemocracy.vote/propose.html?latitude=43.9371&longitude=6.2847) votre proposition.
+   - [Bodie](https://judge.directdemocracy.vote/propose.html?latitude=38.2115&longitude=-119.0126).
    - Faites connaître votre référendum ou proposition sur notre chaîne Discord et ou tout avec autre moyen de communication.
    - Votez à votre propre référendum ou signez votre pétition.
    - Observez les résultats.
