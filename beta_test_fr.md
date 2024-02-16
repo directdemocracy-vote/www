@@ -2,7 +2,9 @@
 
 Cette page explique la procédure à suivre en tant qu'utilisateur bêta pour tester l'app DirectDemocracy.
 
-## 1 Testez
+**Note**: toutes les données fournie dans le cadre de ce test bêta peuvent être effacées à tout moment.
+
+## Testez
 
 Pour devenir testeur bêta francophone de DirectDemocracy, suivez la procédure suivante :
 
@@ -28,11 +30,11 @@ Pour devenir testeur bêta francophone de DirectDemocracy, suivez la procédure 
    - Votez à votre propre référendum ou signez votre pétition.
    - Observez les résultats.
 
-## 2 Rapportez des bugs
+## Rapportez les bugs
 
-Si vous trouvez des bugs ou des vulnérabilités, merci de les rapporter en ouvrant une [issue GitHub](https://github.com/directdemocracy-vote/www/issues/new) (en Anglais).
+Si vous trouvez un bug ou une vulnérabilité, merci de les rapporter en ouvrant une [issue GitHub](https://github.com/directdemocracy-vote/www/issues/new) (en Anglais).
 
-## 3 Donnez nous votre retour
+## Donnez nous votre retour
 
 Poster vos commentaires et idées dans [GitHub Discussions](https://github.com/directdemocracy-vote/www/discussions/categories/discussions-sur-le-test-b%C3%AAta).
 
