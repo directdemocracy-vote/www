@@ -2,7 +2,7 @@
 
 Cette page explique la procédure à suivre en tant qu'utilisateur bêta pour tester l'app DirectDemocracy.
 
-**Note**: toutes les données fournie dans le cadre de ce test bêta peuvent être effacées à tout moment.
+**Note**: toutes les données fournies dans le cadre de ce test bêta peuvent être effacées à tout moment.
 
 ## Testez
 
