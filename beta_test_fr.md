@@ -11,7 +11,7 @@ Pour devenir testeur bêta francophone de DirectDemocracy, suivez la procédure 
    - Prétendez que vous utilisez l'app DirectDemocracy pour la première fois (même si c'est faux).
    - Entrez vos véritable nom et prénom(s) ou éventuellement des noms et prénom(s) fictifs.
    - Fournissez votre véritable photo d'identité ou éventuellement une photo d'identité qui n'est pas vous.
-   - **Important**: Définissez votre domicile dans le village fantôme du [Poil](https://nominatim.openstreetmap.org/ui/details.html?osmtype=R&osmid=6834621&class=boundary).
+   - **Important**: Définissez votre domicile dans le village fantôme du [Poil](https://nominatim.openstreetmap.org/ui/details.html?osmtype=R&osmid=6834621&class=boundary). Par défaut, l'app bêta va vous positionner au Poil si votre langue définie à Français dans les Options (et à Bodie, USA si votre langue est l'anglais).
 3. Faites vous assermenter par d'autres citoyens bêta du Poil
    - Recherchez vos voisins parmis les citoyens bêta du Poil dans le [registre du notaire](https://notary.directdemocracy.vote?latitude=43.9371&longitude=6.2847).
    - Entrez en contact avec ces voisins sur notre chaîne Discord.
