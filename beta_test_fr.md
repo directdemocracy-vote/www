@@ -30,6 +30,9 @@ Pour devenir testeur bêta francophone de DirectDemocracy, suivez la procédure 
 
 ## 2 Rapportez des bugs
 
+Si vous trouvez des bugs ou des vulnérabilitées, merci de les rapporter en ouvrant une [issue GitHub](https://github.com/directdemocracy-vote/www/issues/new) (en Anglais).
+
 ## 3 Donnez nous votre retour
 
+Poster vos commentaires et idées dans [GitHub Discussions](https://github.com/directdemocracy-vote/www/discussions/categories/discussions-sur-le-test-b%C3%AAta).
 
