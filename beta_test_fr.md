@@ -18,7 +18,7 @@ Pour devenir testeur bêta francophone de DirectDemocracy, suivez la procédure 
    - Recherchez vos voisins parmis les citoyens bêta du Poil dans le [registre du notaire](https://notary.directdemocracy.vote?latitude=43.9371&longitude=6.2847).
    - Entrez en contact avec ces voisins sur [GitHub Discussions](https://github.com/directdemocracy-vote/www/discussions/categories/assermentations).
    - Assermentez vos voisins qui vous assermenteront probablement en retour.
-   - Répétez l'opération avec d'autres voisins jusqu'à ce que votre réputation dépasse les 50%.
+   - Répétez l'opération avec d'autres voisins jusqu'à ce que votre réputation dépasse les 50%. Il faut en général 4 ou 5 assermentations pour être approuvé par un juge.
 4. Votez à un référendum ou signez une pétition
    - Recherchez un référendum ou une pétition qui vous intéresse au Poil dans le [registre du notaire](https://notary.directdemocracy.vote?tab=proposals&latitude=43.9371&longitude=6.2847) ou sur GitHub Discussions ([référendums](https://github.com/directdemocracy-vote/www/discussions/categories/r%C3%A9f%C3%A9rendums-fran%C3%A7ais) et [pétitions](https://github.com/directdemocracy-vote/www/discussions/categories/p%C3%A9titions-fran%C3%A7ais)).
    - Cliquez sur le bouton Voter de la page du référendum (ou sur le bouton Signer pour une pétition) et suivez la procédure.
