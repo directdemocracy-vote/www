@@ -40,3 +40,7 @@ If you find a bug or vulnerability, please report it by opening a [GitHub issue]
 
 Post your comments and ideas in [GitHub Discussions](https://github.com/directdemocracy-vote/www/discussions/categories/discussions-on-the-beta-test).
 
+## Why Bodie?
+
+[Bodie](https://en.wikipedia.org/wiki/Bodie,_California) is one of the largest ghost town in the world. No one lives there any more. By creating citizen located in Bodie, we know they actually don't exist and they are just beta testers. So, we can feel safe to delete them at the end (or during) the beta test program.
+
