@@ -43,6 +43,6 @@ Poster vos commentaires et idées dans [GitHub Discussions](https://github.com/d
 
 ## Pourquoi Le Poil ?
 
-[Le Poil](https://fr.wikipedia.org/wiki/Le_Poil) est l'un des plus grands villages fantômes francophones. Plus personne n'y habite depuis des dizaines d'années. En créant des citoyens à Le Poil, on sait qu'ils sont forcément fictifs. On pourra donc les effacer sans soucis à la fin du programme de test bêta ou pendant ce programme si besoin.
+[Le Poil](https://fr.wikipedia.org/wiki/Le_Poil) est l'un des plus grands villages fantômes francophones. Plus personne n'y habite depuis 2014. En créant des citoyens à Le Poil, on sait qu'ils sont forcément fictifs. On pourra donc les effacer sans soucis à la fin du programme de test bêta ou pendant ce programme si besoin.
 
 
