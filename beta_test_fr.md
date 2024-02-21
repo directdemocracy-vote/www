@@ -10,7 +10,7 @@ Pour devenir testeur bêta francophone de DirectDemocracy, suivez la procédure 
 
 1. Installez l'[app DirectDemocracy](https://app.directdemocracy.vote) sur votre téléphone mobile (iOS ou Android)
    - Android : télécharger le fichier [APK](https://github.com/directdemocracy-vote/app/releases/download/2.0.54/directdemocracy-2.0.54.apk) depuis [la page de release](https://github.com/directdemocracy-vote/app/releases) de l'app et exécutez le pour qu'il s'installe.
-   - iOS : pas encore disponible.
+   - iOS : envoyez un message à [info@directdemocracy.vote](mailto:info@directdemocracy.vote) avec l'adresse e-mail de votre Apple ID pour que nous puissions vous inviter à tester la bêta.
 3. Créez une fausse carte de citoyen
    - Prétendez que vous utilisez l'app DirectDemocracy pour la première fois (même si c'est faux).
    - Assurez-vous que la langue sélectionnée dans les Options (ou Settings) est bien le Français. Si ce n'est pas le cas, sélectionnez le Français.
