@@ -41,7 +41,7 @@ Si vous trouvez un bug ou une vulnérabilité, merci de les rapporter en ouvrant
 
 ## Donnez nous votre retour
 
-Poster vos commentaires et idées dans [GitHub Discussions](https://github.com/directdemocracy-vote/www/discussions/categories/discussions-sur-le-test-b%C3%AAta).
+Poster vos commentaires et idées dans notre [groupe Telegram](https://t.me/directdemocracy_group_fr).
 
 ## Pourquoi Le Poil ?
 
