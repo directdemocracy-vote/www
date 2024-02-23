@@ -11,7 +11,7 @@ We recommend that you subscribe to our [Telegram channel](https://t.me/directdem
 To become a DirectDemocracy beta tester, follow the steps below:
 
 1. Install the [DirectDemocracy app](https://app.directdemocracy.vote) on your cell phone (iOS or Android)
-   - Android: download the [APK](https://github.com/directdemocracy-vote/app/releases/download/2.0.54/directdemocracy-2.0.54.apk) file from the app's [release page](https://github.com/directdemocracy-vote/app/releases) and run it to install. Alternatively, you will soon be able to get the app from the play store [here](https://play.google.com/store/apps/details?id=vote.directdemocracy.app) (not yet available).
+   - Android: download the [APK](https://github.com/directdemocracy-vote/app/releases/download/2.0.56/directdemocracy-2.0.56.apk) file from the app's [release page](https://github.com/directdemocracy-vote/app/releases) and run it to install. Alternatively, you will soon be able to get the app from the play store [here](https://play.google.com/store/apps/details?id=vote.directdemocracy.app) (not yet available).
    - iOS: send a message to [info@directdemocracy.vote](mailto:info@directdemocracy.vote) with your Apple ID e-mail address so that we can invite you to test the beta.
 3. Create a fake citizen card
    - Pretend you're using the DirectDemocracy app for the first time (even if you're not).
