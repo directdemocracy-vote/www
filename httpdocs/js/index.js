@@ -3,7 +3,7 @@ import Translator from 'https://app.directdemocracy.vote/app/js/translator.js';
 document.addEventListener('DOMContentLoaded', () => {
   let donors_page = 0;  // not loaded
   const faq = document.getElementById('faq');
-  for (let i = 1; i <= 16; i++) { // generate FAQ
+  for (let i = 1; i <= 17; i++) { // generate FAQ
     const columns = document.createElement('div');
     faq.appendChild(columns);
     columns.classList.add('columns');
