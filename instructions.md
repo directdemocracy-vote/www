@@ -1,4 +1,4 @@
-# English instructions
+# Usage Instructions
 
 This page explains how to use the DirectDemocracy app.
 
