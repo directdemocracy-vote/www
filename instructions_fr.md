@@ -1,6 +1,6 @@
 # Instructions d'utilisation
 
-Cette page explique la procédure à suivre en tant qu'utilisateur pour devenir citoyen dans l'app DirectDemocracy.
+Cette page explique la procédure à suivre pour devenir citoyen de DirectDemocracy.
 
 Nous vous recommendons de vous abonner à notre [chaîne Telegram](https://t.me/directdemocracy_news_fr) pour rester informé sur DirectDemocracy et notre [groupe Telegram](https://t.me/directdemocracy_group_fr) pour discuter avec nous et les autres utilisateurs.
 
@@ -22,7 +22,7 @@ Pour devenir citoyen de DirectDemocracy, suivez la procédure suivante :
    - Assermentez vos voisins qui vous assermenteront probablement en retour.
    - Répétez l'opération avec d'autres voisins jusqu'à ce que votre réputation dépasse les 50%. Il faut en général 4 ou 5 assermentations pour être approuvé par un juge qui vous attribuera une réputation supérieure à 50%.
 5. Votez à un référendum ou signez une pétition
-   - Recherchez un référendum ou une pétition qui vous intéresse dans le [registre du notaire](https://notary.directdemocracy.vote?tab=proposals) ou sur le [groupe Telegram](https://t.me/directdemocracy_group_fr).
+   - Recherchez un référendum ou une pétition dans le [registre du notaire](https://notary.directdemocracy.vote?tab=proposals) ou sur le [groupe Telegram](https://t.me/directdemocracy_group_fr).
    - Cliquez sur le bouton Voter de la page du référendum (ou sur le bouton Signer pour une pétition) et suivez la procédure.
    - Observez les résultats, votes ou signatures.
 6. Proposez un référendum ou une pétition
