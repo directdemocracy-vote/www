@@ -9,7 +9,7 @@ Nous vous recommendons de vous abonner à notre [chaîne Telegram](https://t.me/
 Pour devenir citoyen de DirectDemocracy, suivez la procédure suivante :
 
 1. Installez l'[app DirectDemocracy](https://app.directdemocracy.vote) sur votre téléphone mobile (iOS ou Android)
-   - Android : installez l'app depuis le [PlayStore](https://play.google.com/store/apps/details?id=vote.directdemocracy.app). *Vous pouvez aussi télécharger le fichier [APK](https://github.com/directdemocracy-vote/app/releases/download/2.0.62/directdemocracy-2.0.62.apk) depuis [la page de release](https://github.com/directdemocracy-vote/app/releases)*.
+   - Android : installez l'app depuis le [PlayStore](https://play.google.com/store/apps/details?id=vote.directdemocracy.app) (Vous pouvez aussi télécharger le fichier [APK](https://github.com/directdemocracy-vote/app/releases/download/2.0.62/directdemocracy-2.0.62.apk) depuis [la page de release](https://github.com/directdemocracy-vote/app/releases)).
    - iOS : installez l'app depuis l'[AppStore](https://apps.apple.com/fr/app/directdemocracy/id6471849230).
 3. Créez votre carte de citoyen
    - Répondez aux questions initiales.
