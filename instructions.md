@@ -1,6 +1,6 @@
 # Usage Instructions
 
-This page explains how to use the DirectDemocracy app.
+This page explains the procedure to follow to become a citizen in DirectDemocracy.
 
 We recommend that you subscribe to our [Telegram channel](https://t.me/directdemocracy_news) to get news about DirectDemocracy and our [Telegram Group](https://t.me/directdemocracy_group) to discuss with us and other users.
 
