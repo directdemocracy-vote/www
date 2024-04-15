@@ -13,7 +13,7 @@
     "appSignature",
     "givenNames",
     "familyName",
-    "picture",
+    "home",
     "latitude",
     "longitude"
   ],
@@ -65,6 +65,10 @@
       "contentMediaType": "image/jpeg",
       "contentEncoding": "base64",
       "maxLength": 32768
+    },
+    "home": {
+      "description": "whether the latitude and longitude point to the home of the citizen (if not, it should point to the municipality of the citizen)",
+      "type": "boolean"
     },
     "latitude": {
       "description": "latitude of the home of the citizen expressed in degrees",
