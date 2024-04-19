@@ -12,9 +12,7 @@
     "appKey",
     "appSignature",
     "givenNames",
-    "familyName",
-    "latitude",
-    "longitude"
+    "familyName"
   ],
   "properties": {
     "schema": {
