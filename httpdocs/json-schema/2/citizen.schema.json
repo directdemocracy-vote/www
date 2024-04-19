@@ -58,16 +58,16 @@
       "maxLength": 256,
       "minLength": 1
     },
+    "commune": {
+      "description": "OSM id of the relation corresponding to the commune of the citizen",
+      "type": "integer"
+    },
     "picture": {
       "description": "portrait ID photo of the citizen with a resolution of 150x200 pixels",
       "type": "string",
       "contentMediaType": "image/jpeg",
       "contentEncoding": "base64",
       "maxLength": 32768
-    },
-    "home": {
-      "description": "whether the latitude and longitude point to the home of the citizen (if not, it should point to the municipality of the citizen)",
-      "type": "boolean"
     },
     "latitude": {
       "description": "latitude of the home of the citizen expressed in degrees",
