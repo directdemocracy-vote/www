@@ -24,9 +24,15 @@ CH-1015 Lausanne
 
 <h2 class="title is-2">Programme</h2>
 
-14h00: Présentation<br>
-14h30: Questions / Réponses<br>
-15h00: Installation de l'app par les participants, mini-débat, et premier vote democratique mondial.
+<h3 class="title is-3">14h00: Présentation</h3>
+<p><b>Démarrons ensemble une démocratie directe mondiale le 15 septembre 2024 !</b></p>
+<p>Notre planète a urgemment besoin d'une gouvernance réellement démocratique.
+Devenez les premiers citoyens d'une application mobile révolutionnaire qui ambitionne de changer monde.</p>
+
+<h3 class="title is-3">14h30: Questions / Réponses</h3>
+
+<h3 class="title is-3">15h00: Atelier pratique</h3>
+<p>Installation de l'app par les participants, mini-débat et participation au premier vote democratique mondial.</p>
 
 <h2 class="title is-2">Plus d'information</h2>
 
