@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Terms of Service</title>
+  <title>Democracy Day</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
   <link rel="stylesheet" href="https://directdemocracy.vote/css/directdemocracy.css" />
@@ -12,7 +12,7 @@
 <div class="content">
 <section class="section">
 
-<h1 class="title is-1">Democracy Day &mdash; directdemocracy.vote</h1>
+<h1 class="title is-1">Democracy Day</h1>
 
 <p>Le dimanche 15 septembre 2024, c'est la journée mondiale de la démocratie. Ce jour là, nous organisons le lancement de notre projet de démocratie directe mondiale.
 </p>
