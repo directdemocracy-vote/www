@@ -19,7 +19,8 @@
 
 <h2 class="title is-2">Lieu</h2>
 
-EPFL Innovation Park
+EPFL Innovation Park<br>
+CH-1015 Lausanne
 
 <h2 class="title is-2">Programme</h2>
 
