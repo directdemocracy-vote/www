@@ -14,7 +14,7 @@
 
 <h1 class="title is-1">Democracy Day</h1>
 
-<p>Le dimanche 15 septembre 2024, c'est la journée mondiale de la démocratie. Ce jour là, nous organisons le lancement de notre projet de démocratie directe mondiale.
+<p>Le dimanche 15 septembre 2024, c'est la <a href="https://www.un.org/observances/democracy-day" target="_blank">journée mondiale de la démocratie</a>. Ce jour là, nous organisons le lancement de notre projet de démocratie directe mondiale.
 </p>
 
 <h2 class="title is-2">Lieu</h2>
