@@ -21,7 +21,7 @@
 
 <h2 class="title is-2">Quand ?</h2>
 <p>
-  Dimanche 15 septembre 2004.
+  Le dimanche 15 septembre 2004.
 </p>
   
 <h2 class="title is-2">Où ?</h2>
@@ -29,7 +29,7 @@
   À Lausanne (l'adresse exacte sera publiée ici prochainment).
 </p>
 
-<h2 class="title is-2">Par ici le programme !</h2>
+<h2 class="title is-2">Pour quoi faire ?</h2>
 <h3 class="title is-3">14h00: Présentation</h3>
 <p>
   <b>Démarrons ensemble une démocratie directe mondiale le 15 septembre 2024 !</b>
