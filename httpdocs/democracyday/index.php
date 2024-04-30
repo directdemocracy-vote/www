@@ -36,16 +36,16 @@
 </p>
 
 <h2 class="title is-2">Comment ?</h2>
-<h3 class="title is-4">14h00: Présentation</h3>
+<b>14h00: Présentation</b>
 <p>
   Notre planète a urgemment besoin d'une gouvernance réellement démocratique.
   Nous vous invitons à devenir les premiers citoyens d'une application mobile révolutionnaire qui ambitionne de changer le monde.
 </p>
-<h3 class="title is-4">14h30: Questions / Réponses</h3>
+<b>14h30: Questions / Réponses</b>
 <p>
   Assurez-vous que vous avez bien compris ce qu'on vous a présenté.
 </p>
-<h3 class="title is-4">15h00: Atelier pratique</h3>
+<b>15h00: Atelier pratique</b>
 <p>
   Installez l'app sur votre téléphone, participez au débat et prenez part au premier vote democratique mondial.
 </p>
