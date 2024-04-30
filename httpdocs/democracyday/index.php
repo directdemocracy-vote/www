@@ -13,6 +13,7 @@
 <section class="section">
 
 <h1 class="title is-1">Democracy Day</h1>
+<h1 class="subtitle is-1">Démarrons ensemble une démocratie directe mondiale le 15 septembre 2024 !</h1>
 
 <h2 class="title is-2">Quoi ?</h2>
 <p>
@@ -29,19 +30,19 @@
   À Lausanne (l'adresse exacte sera publiée ici prochainment).
 </p>
 
-<h2 class="title is-2">Pour quoi faire ?</h2>
+<h2 class="title is-2">Pourquoi ?</h2>
 <h3 class="title is-3">14h00: Présentation</h3>
 <p>
-  <b>Démarrons ensemble une démocratie directe mondiale le 15 septembre 2024 !</b>
-</p>
-<p>
   Notre planète a urgemment besoin d'une gouvernance réellement démocratique.
-  Devenez les premiers citoyens d'une application mobile révolutionnaire qui ambitionne de changer monde.
+  Nous vous invitons à devenir les premiers citoyens d'une application mobile révolutionnaire qui ambitionne de changer le monde.
 </p>
 <h3 class="title is-3">14h30: Questions / Réponses</h3>
+<p>
+  Assurez-vous que vous avez bien compris ce qu'on vous a présenté.
+</p>
 <h3 class="title is-3">15h00: Atelier pratique</h3>
 <p>
-  Installation de l'app par les participants, mini-débat et participation au premier vote democratique mondial.
+  Installez l'app sur votre téléphone, participez au débat et prenez part au premier vote democratique mondial.
 </p>
 
 <h2 class="title is-2">Plus d'information</h2>
