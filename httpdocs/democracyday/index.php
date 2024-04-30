@@ -22,7 +22,7 @@
 
 <h2 class="title is-2">Quand ?</h2>
 <p>
-  Le dimanche 15 septembre 2004.
+  Le dimanche 15 septembre 2024.
 </p>
   
 <h2 class="title is-2">Où ?</h2>
