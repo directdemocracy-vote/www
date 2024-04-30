@@ -47,11 +47,11 @@
 </p>
 <b>15h00 : Atelier pratique</b>
 <p>
-  Installez l'app sur votre téléphone, participez à un mini-débat et prenez part au premier vote democratique mondial.
+  Installez l'app sur votre téléphone, participez à un mini-débat et votez au premier référendum mondial.
 </p>
 <b>Les jours suivants : Faites vivre la démocratie</b>
 <p>
-  Votez, parlez-en autour de vous, participez aux débats et proposez vos référendums.
+  Votez, parlez-en autour de vous, participez aux débats et proposez vos propres référendums.
 </p>
 
 <h2 class="title is-2">Mais encore ?</h2>
