@@ -51,7 +51,7 @@
 </p>
 <b>Les jours suivants : Faites vivre la démocratie</b>
 <p>
-  Votez, parlez-en autour de vous, participez aux débats et proposez vos propres référendums.
+  Restez à l'écoute, votez, parlez-en autour de vous, participez aux débats et proposez vos propres référendums.
 </p>
 
 <h2 class="title is-2">Mais encore ?</h2>
