@@ -30,6 +30,11 @@
   À Lausanne (l'adresse exacte sera publiée ici prochainment).
 </p>
 
+  <h2 class="title is-2">Qui ?</h2>
+<p>
+  Toute personne intéressée par la démocratie.
+</p>
+
 <h2 class="title is-2">Comment ?</h2>
 <h3 class="title is-4">14h00: Présentation</h3>
 <p>
@@ -45,7 +50,7 @@
   Installez l'app sur votre téléphone, participez au débat et prenez part au premier vote democratique mondial.
 </p>
 
-<h2 class="title is-2">Plus d'information</h2>
+<h2 class="title is-2">Mais encore ?</h2>
 <p>
   Davantage d'informations seront publiées sur ce site prochainement.
   En attendant, vous pouvez visiter notre <a href="https://directdemocracy.vote">site web</a>.
