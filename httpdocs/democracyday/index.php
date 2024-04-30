@@ -47,7 +47,7 @@
 </p>
 <b>15h00: Atelier pratique</b>
 <p>
-  Installez l'app sur votre téléphone, participez au débat et prenez part au premier vote democratique mondial.
+  Installez l'app sur votre téléphone, participez à un mini-débat et prenez part au premier vote democratique mondial.
 </p>
 <b>Les jours suivants: Chez vous</b>
 <p>
