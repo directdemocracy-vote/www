@@ -30,7 +30,7 @@
   À Lausanne (l'adresse exacte sera publiée ici prochainment).
 </p>
 
-<h2 class="title is-2">Pourquoi ?</h2>
+<h2 class="title is-2">Comment ?</h2>
 <h3 class="title is-4">14h00: Présentation</h3>
 <p>
   Notre planète a urgemment besoin d'une gouvernance réellement démocratique.
