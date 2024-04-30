@@ -32,7 +32,7 @@
 
   <h2 class="title is-2">Qui ?</h2>
 <p>
-  Toute personne intéressée par la démocratie.
+  Toute personne intéressée par la démocratie est bienvenue.
 </p>
 
 <h2 class="title is-2">Comment ?</h2>
