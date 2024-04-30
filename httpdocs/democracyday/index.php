@@ -49,9 +49,9 @@
 <p>
   Installez l'app sur votre téléphone, participez à un mini-débat et prenez part au premier vote democratique mondial.
 </p>
-<b>Les jours suivants : Chez vous</b>
+<b>Les jours suivants : Faites vivre la démocratie</b>
 <p>
-  Continuez à faire vivre la démocratie directe mondiale en votant, en faisant connaître autour de vous, en participant aux débats et en proposant des référendums.
+  Votez, parlez-en autour de vous, participez aux débats et proposez vos référendums.
 </p>
 
 <h2 class="title is-2">Mais encore ?</h2>
