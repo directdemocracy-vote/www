@@ -13,7 +13,7 @@
 <section class="section">
 
 <h1 class="title is-1">Democracy Day</h1>
-<h1 class="subtitle is-1">Démarrons ensemble une démocratie directe mondiale le 15 septembre 2024 !</h1>
+<h1 class="subtitle is-3">Démarrons ensemble une démocratie directe mondiale le 15 septembre 2024 !</h1>
 
 <h2 class="title is-2">Quoi ?</h2>
 <p>
