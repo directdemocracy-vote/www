@@ -36,20 +36,20 @@
 </p>
 
 <h2 class="title is-2">Comment ?</h2>
-<b>14h00: Présentation</b>
+<b>14h00 : Présentation</b>
 <p>
   Notre planète a urgemment besoin d'une gouvernance réellement démocratique.
   Nous vous invitons à devenir les premiers citoyens d'une application mobile révolutionnaire qui ambitionne de changer le monde.
 </p>
-<b>14h30: Questions / Réponses</b>
+<b>14h30 : Questions / Réponses</b>
 <p>
   Assurez-vous que vous avez bien compris ce qu'on vous a présenté.
 </p>
-<b>15h00: Atelier pratique</b>
+<b>15h00 : Atelier pratique</b>
 <p>
   Installez l'app sur votre téléphone, participez à un mini-débat et prenez part au premier vote democratique mondial.
 </p>
-<b>Les jours suivants: Chez vous</b>
+<b>Les jours suivants : Chez vous</b>
 <p>
   Continuez à faire vivre la démocratie directe mondiale en votant, en faisant connaître autour de vous, en participant aux débats et en proposant des référendums.
 </p>
