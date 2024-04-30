@@ -14,7 +14,7 @@
 
 <h1 class="title is-1">Democracy Day</h1>
 <h1 class="subtitle is-4">Démarrons ensemble une démocratie directe mondiale le 15 septembre 2024 !</h1>
-
+<br>
 <h2 class="title is-2">Quoi ?</h2>
 <p>
   À l'occasion de la <a href="https://www.un.org/observances/democracy-day" target="_blank">journée mondiale de la démocratie</a>, nous organisons le lancement de notre projet de démocratie directe mondiale.
