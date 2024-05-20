@@ -13,7 +13,7 @@
     "appSignature",
     "givenNames",
     "familyName",
-    "commune",
+    "locality",
     "picture"
   ],
   "properties": {
@@ -58,8 +58,8 @@
       "maxLength": 256,
       "minLength": 1
     },
-    "commune": {
-      "description": "OSM id of the relation corresponding to the commune of the citizen",
+    "locality": {
+      "description": "OSM id of the relation corresponding to the locality of the citizen",
       "type": "integer"
     },
     "picture": {
