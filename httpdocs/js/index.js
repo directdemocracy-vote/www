@@ -127,6 +127,23 @@ document.addEventListener('DOMContentLoaded', () => {
     loadPage();
     window.scrollTo(0, 0);
   });
+  function setThemeIcon(theme) {
+    document.getElementById('theme-icon').style.transform = theme === 'dark' ? 'rotate(180deg)' : '';
+  }
+  document.getElementById('theme').addEventListener('click', function() {
+    const html = document.getElementsByTagName('html')[0];
+    const dark = (html.hasAttribute('data-theme') && html.getAttribute('data-theme') === 'dark')
+              || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    const theme = dark ? 'light' : 'dark';
+    localStorage.setItem('theme', theme);
+    html.setAttribute('data-theme', theme);
+    setThemeIcon(theme);
+  });
+  const theme = localStorage.getItem('theme');
+  if (theme) {
+    document.getElementsByTagName('html')[0].setAttribute('data-theme', theme);
+    setThemeIcon(theme);
+  }
   function showPrivacy() {
     document.getElementById('privacy').classList.add('is-active');
   }
