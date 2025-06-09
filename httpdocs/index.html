@@ -384,7 +384,7 @@
   </div>
   <footer class="footer">
     <div class="content has-text-centered">
-      &copy; Copyright 2024 DirectDemocracy Association &mdash; <a id="privacy-link" href="#privacy">Privacy Policy</a> &mdash; <a href="/terms_of_service.php" target="_blank">Terms of Service</a>
+      &copy; Copyright <span id="year"></span> DirectDemocracy Association &mdash; <a id="privacy-link" href="#privacy">Privacy Policy</a> &mdash; <a href="/terms_of_service.php" target="_blank">Terms of Service</a>
     </div>
   </footer>
   <div id="privacy" class="modal">
@@ -407,6 +407,7 @@
       </footer>
     </div>
   </div>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 
 </html>
