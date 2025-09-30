@@ -137,7 +137,7 @@ Notaries also provide a web user interface to allow anyone to search and browse 
 
 In order to provide incentives to participate, citizens are rewarded with a specific cryptocurrency inspired from the [Ğ1 currency](https://g1currency.org).
 
-- everyday they are a member of the web of trust they receive some money from the judges who trust them. The amount of this basic income is bigger if:
+- every day they are a member of the web of trust they receive some money from the judges who trust them. The amount of this basic income is bigger if:
   - they have a high reputation attributed by this judge
   - they endorsed another citizen and this citizen has been trusted by the judge in the past 24 hours
   - they voted or signed a petition registered at this judge within the past 24 hours (voting/signing more than one referendum/petition per day doesn't provide any additional money)
