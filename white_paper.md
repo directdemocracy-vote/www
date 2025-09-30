@@ -521,7 +521,7 @@ Fortunately, nowadays it is possible to distribute smartphone apps on Android an
 These apps are called Progressive Web App (PWA).
 They cannot be censored by Google or Apple or any organization putting pressure on them.
 These apps are however limited in their capabilities and they can be installed in a non-standard way, comparing to regular apps.
-Luckily, the directdemocracy app doesn't need any capability that are missing to PWA.
+Luckily, the directdemocracy app doesn't need any capabilities that are missing from PWA.
 
 ### Necessity to Have a Smartphone
 
