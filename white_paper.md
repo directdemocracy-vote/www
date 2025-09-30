@@ -141,7 +141,7 @@ In order to provide incentives to participate, citizens are rewarded with a spec
   - they have a high reputation attributed by this judge
   - they endorsed another citizen and this citizen has been trusted by the judge in the past 24 hours
   - they voted or signed a petition registered at this judge within the past 24 hours (voting/signing more than one referendum/petition per day doesn't provide any additional money)
-  - they published a referendum or a petition at this judge and some trusted citizen voted or signed it in the past 24 hours. 
+  - they published a referendum or a petition at this judge and some trusted citizen voted or signed it in the past 24 hours
 
 ## Properties
 
