@@ -1,8 +1,8 @@
 # directdemocracy.vote: Let's Make a Better World!
 
-Date: October 28th, 2023
+Date: September 30th, 2025
 
-Version: 2.0 (draft)
+Version: 3.0 (draft)
 
 ## Abstract
 
@@ -133,6 +133,16 @@ Notaries should also communicate with other notaries to gather more publications
 A good notary is a notary which publishes all the available publications of *directdemocracy.vote*.
 Notaries also provide a web user interface to allow anyone to search and browse the various publications.
 
+### Cryptocurrency
+
+In order to provide incentives to participate, citizens are rewarded with a specific cryptocurrency inspired from the [Ğ1 currency](https://g1currency.org).
+
+- everyday they are a member of the web of trust they receive some money from the judges who trust them. The amount of this basic income is bigger if:
+  - they have a high reputation attributed by this judge
+  - they endorsed another citizen and this citizen has been trusted by the judge in the past 24 hours
+  - they voted or signed a petition registered at this judge within the past 24 hours (voting/signing more than one referendum/petition per day doesn't provide any additional money)
+  - they published a referendum or a petition at this judge and some trusted citizen voted or signed it in the past 24 hours. 
+
 ## Properties
 
 This section describes the essential properties of the *directdemocracy.vote* system necessary to convince people to use it.
@@ -229,24 +239,6 @@ These commands can be used for any participant except citizens.
 The blind signatures used during the voting process are based on 2048-bit RSA keys.
 They implement the [IETF RFC 9474](https://datatracker.ietf.org/doc/html/rfc9474) norm.
 
-#### Hardware Keystore
-
-The private key of a citizen is generated, stored and operated by some special hardware of the smartphone, so that it cannot be read by anyone.
-Smartphone operating systems actually provide a hardware-based API allowing to generate a key pair, sign, encrypt and perform other operations without disclosing the private key.
-This is implemented in the [Android Keystore](https://source.android.com/docs/security/features/keystore) and [Apple iOS Secure Enclave](https://developer.apple.com/documentation/security/certificate_key_and_trust_services/keys/protecting_keys_with_the_secure_enclave).
-The app may also generate a password protected revocation message that the participant should save and use if they loose access to their smartphone.
-
-#### Integrity Check
-
-The operating system of the smartphone also provides integrity checks on itself and on the app.
-These integrity checks guarantee that the genuine app is used on a non-rooted unmodified smartphone.
-The app integrity check prevents malicious users from using a modified app to cheat or to extract sensitive data.
-The operating system integrity check prevents malicious users from modifying the behavior of the app at run-time or extracting sensitive data.
-These features are currently offered by the [Android Play Integrity](https://developer.android.com/google/play/integrity) and the [Apple iOS DeviceCheck](https://developer.apple.com/documentation/devicecheck).
-An integrity check is performed each time a citizen wants to publish a citizen, certificate or registration publication.
-If the check is successful, the app will also sign the publication on server-side of the app and publish it at the notary indicated by the client-side of the app.
-This way, the notary has no clue on the IP address of the client.
-
 #### App Transparency
 
 The app being open-source, it can be rebuild from the source and compared against the signed binary app to ensure that the signed binary app was built from the same unmodified source.
@@ -287,11 +279,11 @@ This base64 string translates into a 256-byte binary data chunk.
 
 There are mainly 6 types of publications in *directdemocracy.vote*:
 
-- citizen (signed by app after integrity check to garantee the private key is inside in the phone keystore by the app)
-- certificate (citizen certificates should be signed by app after integrity check to prevent fake certificates)
+- citizen (signed by app)
+- certificate (citizen certificates should be signed by app)
 - area
 - proposal (referendum or petition)
-- participation (signed by app after integrity check to guarantee the vote encryption key is only known by the client app)
+- participation (signed by app)
 - vote
 
 #### Citizen
@@ -308,9 +300,7 @@ Alternatively, they may also ask some judges to endorse them.
 Judges compute the reputation of a citizen based on endorsements by citizens and by other judges.
 If a citizen has a large number of endorsements from citizens and/or judges with a good reputation, their reputation will increase and they will get endorsed by more and more judges.
 
-When a citizen card is published, the app performs an integrity check and if successful, it signs the citizen card.
-This guarantees that the private key used to create the citizen card originates from the geniune app and is stored in the system keystore.
-Thus, the private key cannot be read by anyone and the identity of the citizen cannot be usurpated, unless some malicious people physically access their phone and app.
+When a citizen card is published, the app signs the citizen card.
 
 A [citizen](https://directdemocracy.vote/json-schema/2/citizen.schema.json) publication contains the name, picture and GPS home location of a citizen.
 It is signed by the citizen themself.
@@ -322,7 +312,7 @@ key: [citizen public key]
 signature: [citizen signature]
 published: 1590298858
 appKey: [public key of the app]
-appSignature: [signature of the app after integrity check]
+appSignature: [signature of the app]
 familyName: Smith
 givenNames: John
 picture: [base64 encoded jpeg picture of 150x200 pixels]
@@ -344,7 +334,7 @@ Otherwise, in case of the endorsement of a web service or an app, it means that 
 
 A **revoke** certificate is a special kind of certificate which cancels a previous endorsement.
 
-All certificates published by citizens should be signed by the app after integrity check to prevent a citizen to sell their signature for signing petitions or endorsing others.
+All certificates published by citizens should be signed by the app to prevent a citizen to sell their signature for signing petitions or endorsing others.
 
 Example:
 ```yaml
@@ -353,7 +343,7 @@ key: [citizen1 public key]
 signature: [citizen1 signature]
 published: 1590298858
 appKey: [public key of the app]
-appSignature: [signature of the app after integrity check]
+appSignature: [signature of the app]
 type: "endorse"
 object: [signature of a citizen or petition]
 ```
@@ -487,7 +477,6 @@ When the deadline of the referendum is reached, the stations should not accept n
 #### Citizen Registration
 
 A citizen with public key *C* sends to the app server their signed *registration* to referendum *R* using app server public key *A* and encrypted vote *~V~*
-The app server ensures the client app is unmodifed thanks to the integrity check.
 The client app ensures that *C* is endorsed by *J* and is located inside the area of the referendum *R*.
 The client app generates a vote blob *V* which contains the signature of the referendum *R*, a vote number, a unique random ballot number and the answer of the citizen to the referendum question.
 The answer could be "yes", "no", "abstain" or something else.
@@ -526,13 +515,13 @@ A perfect anonymous voting system doesn't exists.
 The system we propose has a number of minor shortcomings explained in this section.
 However, such limitations should not affect significantly the democratic process.
 
-### Dependency on Google and Apple
+### Independency from Google and Apple
 
-Unfortunately, nowadays the vast majority of smartphones run either Google Android or Apple iOS proprietary systems which constitutes a strong dependency on the companies providing these devices.
-We currently have no other choice than trusting these smartphones with respect to the integrity check and keystore in particular.
-However, for users who are running their own rooted devices or alternative operating systems, we recommend them to have a spare cheap genuine Android smartphone that they could use only for running the trusted integrity checked *directdemocracy.vote* apps.
-In the future, the might be other hardware and software providers offering devices with integrity checks as an alternative to Google and Apple.
-Unlike Google and Apple, such new systems could be publicly audited from both a hardware and software point of view to guarantee they do not include any backdoor and thus would gain a better reputation.
+Fortunately, nowadays it is possible to distribute smartphone apps on Android and iOS without any authorisation from Google or Apple.
+These apps are called Progressive Web App (PWA).
+They cannot be censored by Google or Apple or any organization putting pressure on them.
+These apps are however limited in their capabilities and they can be installed in a non-standard way, comparing to regular apps.
+Luckily, the directdemocracy app doesn't need any capability that are missing to PWA.
 
 ### Necessity to Have a Smartphone
 
@@ -596,21 +585,6 @@ However, the local news may relay the fact that some citizens self-organized a r
 This will have a side effect to spread the word about *directdemocracy.vote* and encourage other villages or cities to use it.
 At some point, citizens will launch a referendum for a whole region, then a whole country.
 This self-feeding marketing will eventually outreach the whole planet.
-
-## The 1% Rule
-
-In Switzerland, a citizen initiave (e.g., referendum) needs to collect 100'000 signatures from swiss citizens to trigger a nationwide referendum. This number should be compared to the swiss population which is currently nearing 9 million people. In other words, a referendum needs to be approved by roughly 1.1% of the population before a vote is officially organised.
-
-We could consider something similar in *directdemocracy.vote*.
-A referendum receiving votes from at least 1% of a local population could be considered as significant.
-However, this 1% threshold should be reached sufficiently ahead of the deadline so that other people could vote.
-There should be one month or so, between the time the 1% is reached and the referendum deadline is over.
-
-For example, let's consider a village of 1020 inhabitants.
-A referendum concerning this village is published on June 30, 2024 with a deadline set to September 30, 2024.
-On July 15th, 2024, 11 people already voted to this referendum, which is more than 1% of the village population.
-This happens more than one month ahead of the deadline.
-Therefore the referendum should be considered as valid and the rest of the population should vote on it.
 
 ## Roadmap
 
