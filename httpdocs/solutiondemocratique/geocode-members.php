@@ -167,7 +167,7 @@ function parseInputCSV(string $path): array
     $handle = fopen($path, 'r')
         ?: jsonResponse(['error' => 'Cannot read CSV file.'], 500);
 
-    $headers = fgetcsv($handle);
+    $headers = fgetcsv($handle, 0, ',', '"', '');
     if ($headers === false) {
         fclose($handle);
         jsonResponse(['error' => 'Empty CSV file.'], 400);
@@ -189,7 +189,7 @@ function parseInputCSV(string $path): array
     $rows   = [];
     $cities = [];
 
-    while (($row = fgetcsv($handle)) !== false) {
+    while (($row = fgetcsv($handle, 0, ',', '"', '')) !== false) {
         $city     = trim($row[$cityCol]    ?? '');
         $postcode = trim($row[$pcCol]      ?? '');
         $country  = normaliseCountry($row[$countryCol] ?? '');
