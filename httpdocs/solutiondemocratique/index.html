@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geocode Members for uMap</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:       #0f1117;
+    --surface:  #181b24;
+    --border:   #2a2e3a;
+    --text:     #e4e6ed;
+    --muted:    #8b8fa3;
+    --accent:   #3b82f6;
+    --accent2:  #60a5fa;
+    --green:    #34d399;
+    --red:      #f87171;
+    --orange:   #fbbf24;
+    --radius:   10px;
+  }
+
+  html { font-size: 15px; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 640px;
+  }
+
+  /* ── Header ── */
+  .header {
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  .header h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: .35rem;
+  }
+  .header h1 span { color: var(--accent2); }
+  .header p {
+    color: var(--muted);
+    font-size: .9rem;
+    line-height: 1.5;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+  }
+
+  /* ── Drop zone ── */
+  .dropzone {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color .2s, background .2s;
+    position: relative;
+  }
+  .dropzone:hover,
+  .dropzone.dragover {
+    border-color: var(--accent);
+    background: rgba(59,130,246,.06);
+  }
+  .dropzone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .dropzone-icon {
+    width: 48px; height: 48px;
+    margin: 0 auto .8rem;
+    color: var(--muted);
+  }
+  .dropzone-text {
+    color: var(--muted);
+    font-size: .9rem;
+    line-height: 1.6;
+  }
+  .dropzone-text strong {
+    color: var(--accent2);
+    font-weight: 500;
+  }
+  .dropzone-file {
+    margin-top: .6rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .8rem;
+    color: var(--green);
+    word-break: break-all;
+  }
+
+  /* ── Button ── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .65rem 1.4rem;
+    border: none;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: .9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .15s, opacity .15s, transform .1s;
+  }
+  .btn:active { transform: scale(.97); }
+  .btn:disabled { opacity: .4; cursor: not-allowed; }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn-primary:hover:not(:disabled) { background: #2563eb; }
+
+  .btn-green {
+    background: var(--green);
+    color: #0f1117;
+  }
+  .btn-green:hover:not(:disabled) { background: #2dd4a0; }
+
+  .btn-row {
+    display: flex;
+    gap: .75rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  /* ── Stats ── */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: .75rem;
+    margin-top: 1.5rem;
+  }
+  .stat {
+    background: var(--bg);
+    border-radius: 8px;
+    padding: .75rem;
+    text-align: center;
+  }
+  .stat-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--accent2);
+  }
+  .stat-label {
+    font-size: .72rem;
+    color: var(--muted);
+    margin-top: .15rem;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+  }
+
+  /* ── Progress ── */
+  .progress-section { margin-top: 1.5rem; }
+
+  .progress-bar-outer {
+    height: 6px;
+    background: var(--bg);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: .6rem;
+  }
+  .progress-bar-inner {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--green));
+    border-radius: 3px;
+    transition: width .3s ease;
+  }
+
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: .8rem;
+    color: var(--muted);
+  }
+  .progress-city {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .78rem;
+    color: var(--text);
+    max-width: 70%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ── Log ── */
+  .log-section {
+    margin-top: 1.25rem;
+    max-height: 200px;
+    overflow-y: auto;
+    background: var(--bg);
+    border-radius: 8px;
+    padding: .75rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .72rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+  .log-section::-webkit-scrollbar { width: 4px; }
+  .log-section::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .log-ok     { color: var(--green); }
+  .log-cached { color: var(--muted); }
+  .log-fail   { color: var(--red); }
+  .log-geo    { color: var(--orange); }
+
+  /* ── Done section ── */
+  .done-section {
+    margin-top: 1.5rem;
+    padding: 1.25rem;
+    background: rgba(52,211,153,.08);
+    border: 1px solid rgba(52,211,153,.2);
+    border-radius: var(--radius);
+  }
+  .done-section h3 {
+    color: var(--green);
+    font-size: .95rem;
+    margin-bottom: .4rem;
+  }
+  .done-section p {
+    font-size: .85rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .error-box {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: rgba(248,113,113,.08);
+    border: 1px solid rgba(248,113,113,.2);
+    border-radius: var(--radius);
+    color: var(--red);
+    font-size: .85rem;
+  }
+
+  /* ── Sections visibility ── */
+  .hidden { display: none !important; }
+
+  /* ── Responsive ── */
+  @media (max-width: 480px) {
+    .stats { grid-template-columns: 1fr; }
+    .card  { padding: 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>Geocode <span>Members</span></h1>
+    <p>Upload a CiviCRM contact export CSV. This tool geocodes each city<br>
+    via OpenStreetMap and generates a CSV ready for uMap import.</p>
+  </div>
+
+  <div class="card">
+
+    <!-- Step 1: Upload -->
+    <div id="step-upload">
+      <div class="dropzone" id="dropzone">
+        <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="17 8 12 3 7 8"/>
+          <line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+        <div class="dropzone-text">
+          <strong>Click to browse</strong> or drag &amp; drop your CSV file
+        </div>
+        <div class="dropzone-file hidden" id="file-name"></div>
+        <input type="file" id="file-input" accept=".csv,text/csv">
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" id="btn-upload" disabled>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/></svg>
+          Upload &amp; Analyze
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 2: Stats + Geocode -->
+    <div id="step-geocode" class="hidden">
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-value" id="stat-members">—</div>
+          <div class="stat-label">Members</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="stat-cities">—</div>
+          <div class="stat-label">Unique cities</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="stat-togeocode">—</div>
+          <div class="stat-label">To geocode</div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" id="btn-geocode">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 7 8 11.7z"/></svg>
+          Start Geocoding
+        </button>
+      </div>
+
+      <div class="progress-section hidden" id="progress-section">
+        <div class="progress-bar-outer">
+          <div class="progress-bar-inner" id="progress-bar"></div>
+        </div>
+        <div class="progress-info">
+          <span class="progress-city" id="progress-city">Preparing…</span>
+          <span id="progress-pct">0%</span>
+        </div>
+      </div>
+
+      <div class="log-section hidden" id="log-section"></div>
+    </div>
+
+    <!-- Step 3: Done -->
+    <div id="step-done" class="hidden">
+      <div class="done-section">
+        <h3>&#10003; Geocoding complete</h3>
+        <p id="done-summary"></p>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-green" id="btn-download">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download CSV for uMap
+        </button>
+        <button class="btn btn-primary" id="btn-restart">
+          Start over
+        </button>
+      </div>
+    </div>
+
+    <!-- Error display -->
+    <div class="error-box hidden" id="error-box"></div>
+
+  </div><!-- .card -->
+</div>
+
+<script>
+const API = 'geocode-members.php';
+
+const $ = id => document.getElementById(id);
+
+// ── State
+let selectedFile = null;
+let sessionToken = null;
+
+// ── Elements
+const dropzone     = $('dropzone');
+const fileInput    = $('file-input');
+const fileNameEl   = $('file-name');
+const btnUpload    = $('btn-upload');
+const btnGeocode   = $('btn-geocode');
+const btnDownload  = $('btn-download');
+const btnRestart   = $('btn-restart');
+const progressSec  = $('progress-section');
+const progressBar  = $('progress-bar');
+const progressCity = $('progress-city');
+const progressPct  = $('progress-pct');
+const logSection   = $('log-section');
+const errorBox     = $('error-box');
+
+// ── File selection
+function onFileSelected(file) {
+  if (!file) return;
+  selectedFile = file;
+  fileNameEl.textContent = file.name;
+  fileNameEl.classList.remove('hidden');
+  btnUpload.disabled = false;
+}
+
+fileInput.addEventListener('change', e => onFileSelected(e.target.files[0]));
+
+dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('dragover'); });
+dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+dropzone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropzone.classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (file) {
+    fileInput.files = e.dataTransfer.files; // sync the input
+    onFileSelected(file);
+  }
+});
+
+// ── Show/hide steps
+function showStep(step) {
+  $('step-upload').classList.toggle('hidden', step !== 'upload');
+  $('step-geocode').classList.toggle('hidden', step !== 'geocode');
+  $('step-done').classList.toggle('hidden', step !== 'done');
+  errorBox.classList.add('hidden');
+}
+
+function showError(msg) {
+  errorBox.textContent = msg;
+  errorBox.classList.remove('hidden');
+}
+
+// ── Upload
+btnUpload.addEventListener('click', async () => {
+  if (!selectedFile) return;
+  btnUpload.disabled = true;
+  errorBox.classList.add('hidden');
+
+  const form = new FormData();
+  form.append('csv', selectedFile);
+
+  try {
+    const res = await fetch(`${API}?action=upload`, { method: 'POST', body: form });
+    const data = await res.json();
+
+    if (!res.ok || data.error) {
+      showError(data.error || 'Upload failed.');
+      btnUpload.disabled = false;
+      return;
+    }
+
+    sessionToken = data.token;
+
+    $('stat-members').textContent  = data.total_members;
+    $('stat-cities').textContent   = data.unique_cities;
+    $('stat-togeocode').textContent = data.to_geocode;
+
+    showStep('geocode');
+  } catch (err) {
+    showError('Network error: ' + err.message);
+    btnUpload.disabled = false;
+  }
+});
+
+// ── Geocode (SSE)
+btnGeocode.addEventListener('click', () => {
+  btnGeocode.disabled = true;
+  progressSec.classList.remove('hidden');
+  logSection.classList.remove('hidden');
+  logSection.innerHTML = '';
+
+  const source = new EventSource(`${API}?action=geocode&token=${sessionToken}`);
+
+  source.addEventListener('progress', e => {
+    const d = JSON.parse(e.data);
+    const pct = Math.round((d.done / d.total) * 100);
+    progressBar.style.width = pct + '%';
+    progressPct.textContent = pct + '%';
+    progressCity.textContent = d.city;
+
+    // Log entry
+    const cls = {ok:'log-ok', cached:'log-cached', failed:'log-fail', geocoding:'log-geo'}[d.status] || '';
+    const icon = {ok:'&#10003;', cached:'&#9679;', failed:'&#10007;', geocoding:'&#9881;'}[d.status] || '';
+    const line = document.createElement('div');
+    line.className = cls;
+    if (d.status === 'ok') {
+      line.innerHTML = `${icon} ${d.city} &rarr; ${d.lat.toFixed(4)}, ${d.lon.toFixed(4)}`;
+    } else if (d.status === 'cached') {
+      line.innerHTML = `${icon} ${d.city} (cached)`;
+    } else if (d.status === 'failed') {
+      line.innerHTML = `${icon} ${d.city} — not found`;
+    } else {
+      line.innerHTML = `${icon} ${d.city}…`;
+    }
+    logSection.appendChild(line);
+    logSection.scrollTop = logSection.scrollHeight;
+  });
+
+  source.addEventListener('done', e => {
+    source.close();
+    const d = JSON.parse(e.data);
+
+    let summary = `${d.rows_written} rows written to CSV.`;
+    if (d.rows_skipped > 0) {
+      summary += ` ${d.rows_skipped} rows skipped (city not found).`;
+    }
+    if (d.failed && d.failed.length > 0) {
+      summary += `\nFailed lookups: ${d.failed.join(', ')}`;
+    }
+    $('done-summary').textContent = summary;
+
+    showStep('done');
+  });
+
+  source.addEventListener('error', () => {
+    source.close();
+    showError('Connection lost during geocoding. You can retry — cached results are preserved.');
+    btnGeocode.disabled = false;
+  });
+});
+
+// ── Download
+btnDownload.addEventListener('click', () => {
+  window.location.href = `${API}?action=download&token=${sessionToken}`;
+});
+
+// ── Restart
+btnRestart.addEventListener('click', () => {
+  selectedFile = null;
+  sessionToken = null;
+  fileInput.value = '';
+  fileNameEl.classList.add('hidden');
+  btnUpload.disabled = true;
+  btnGeocode.disabled = false;
+  progressSec.classList.add('hidden');
+  logSection.classList.add('hidden');
+  progressBar.style.width = '0%';
+  showStep('upload');
+});
+</script>
+
+</body>
+</html>
