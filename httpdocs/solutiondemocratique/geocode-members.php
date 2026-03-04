@@ -123,6 +123,53 @@ function nominatimRequest(array $params): array|false
     return is_array($decoded) ? $decoded : false;
 }
 
+/**
+ * Normalize a string for fuzzy comparison: lowercase, strip accents,
+ * replace dashes/spaces with nothing.
+ */
+function fuzzyNorm(string $s): string
+{
+    $s = mb_strtolower(trim($s));
+    // Transliterate accented characters to ASCII equivalents
+    $s = transliterator_transliterate('NFD; [:Nonspacing Mark:] Remove; NFC', $s);
+    // Remove dashes, spaces, apostrophes
+    $s = preg_replace('/[\-\s\']+/', '', $s);
+    return $s;
+}
+
+/**
+ * Extract the best display name from Nominatim address details.
+ *
+ * Nominatim may return a broader administrative name (e.g. "Annecy")
+ * when the input was a merged commune or suburb (e.g. "Cran-Gevrier").
+ * We check the more specific address fields first and pick the one
+ * that best matches the original input. If none match, we fall back
+ * to the standard city/town/village hierarchy.
+ */
+function extractName(array $addr, string $inputCity): string
+{
+    $inputNorm = fuzzyNorm($inputCity);
+
+    // Check specific-to-general: if any matches the input, use it
+    $specificFields = ['suburb', 'quarter', 'neighbourhood', 'locality',
+                       'village', 'town', 'city', 'municipality'];
+
+    foreach ($specificFields as $field) {
+        if (!empty($addr[$field]) && fuzzyNorm($addr[$field]) === $inputNorm) {
+            return $addr[$field]; // match found — return Nominatim's proper casing
+        }
+    }
+
+    // No match — use the most specific available name
+    foreach ($specificFields as $field) {
+        if (!empty($addr[$field])) {
+            return $addr[$field];
+        }
+    }
+
+    return $inputCity; // fallback to original input
+}
+
 function geocodeCity(string $city, string $postcode, string $country): ?array
 {
     $params = [
@@ -140,8 +187,7 @@ function geocodeCity(string $city, string $postcode, string $country): ?array
     // First attempt: with postcode
     $results = nominatimRequest($params);
     if ($results !== false && !empty($results[0]['lat']) && !empty($results[0]['lon'])) {
-        $addr = $results[0]['address'] ?? [];
-        $name = $addr['city'] ?? $addr['town'] ?? $addr['village'] ?? $addr['municipality'] ?? $city;
+        $name = extractName($results[0]['address'] ?? [], $city);
         return [
             'lat'  => (float) $results[0]['lat'],
             'lon'  => (float) $results[0]['lon'],
@@ -155,8 +201,7 @@ function geocodeCity(string $city, string $postcode, string $country): ?array
 
     $results = nominatimRequest($params);
     if ($results !== false && !empty($results[0]['lat']) && !empty($results[0]['lon'])) {
-        $addr = $results[0]['address'] ?? [];
-        $name = $addr['city'] ?? $addr['town'] ?? $addr['village'] ?? $addr['municipality'] ?? $city;
+        $name = extractName($results[0]['address'] ?? [], $city);
         return [
             'lat'  => (float) $results[0]['lat'],
             'lon'  => (float) $results[0]['lon'],
