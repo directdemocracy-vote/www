@@ -130,6 +130,7 @@ function geocodeCity(string $city, string $postcode, string $country): ?array
         'country' => $country,
         'format'  => 'json',
         'limit'   => 1,
+        'addressdetails' => 1,
     ];
 
     if ($postcode !== '') {
@@ -139,9 +140,12 @@ function geocodeCity(string $city, string $postcode, string $country): ?array
     // First attempt: with postcode
     $results = nominatimRequest($params);
     if ($results !== false && !empty($results[0]['lat']) && !empty($results[0]['lon'])) {
+        $addr = $results[0]['address'] ?? [];
+        $name = $addr['city'] ?? $addr['town'] ?? $addr['village'] ?? $addr['municipality'] ?? $city;
         return [
-            'lat' => (float) $results[0]['lat'],
-            'lon' => (float) $results[0]['lon'],
+            'lat'  => (float) $results[0]['lat'],
+            'lon'  => (float) $results[0]['lon'],
+            'name' => $name,
         ];
     }
 
@@ -151,9 +155,12 @@ function geocodeCity(string $city, string $postcode, string $country): ?array
 
     $results = nominatimRequest($params);
     if ($results !== false && !empty($results[0]['lat']) && !empty($results[0]['lon'])) {
+        $addr = $results[0]['address'] ?? [];
+        $name = $addr['city'] ?? $addr['town'] ?? $addr['village'] ?? $addr['municipality'] ?? $city;
         return [
-            'lat' => (float) $results[0]['lat'],
-            'lon' => (float) $results[0]['lon'],
+            'lat'  => (float) $results[0]['lat'],
+            'lon'  => (float) $results[0]['lon'],
+            'name' => $name,
         ];
     }
 
@@ -365,7 +372,7 @@ function handleGeocode(): never
     // ── Build output CSV
     $outputPath = "$sessionDir/members-geocoded.csv";
     $out = fopen($outputPath, 'w');
-    fputcsv($out, ['lat', 'lon', 'name', 'Created Date']);
+    fputcsv($out, ['lat', 'lon', 'name']);
 
     $written = 0;
     $skipped = 0;
@@ -376,7 +383,7 @@ function handleGeocode(): never
             $skipped++;
             continue;
         }
-        fputcsv($out, [$coords['lat'], $coords['lon'], $r['city'], $r['date']]);
+        fputcsv($out, [$coords['lat'], $coords['lon'], $coords['name']]);
         $written++;
     }
     fclose($out);
