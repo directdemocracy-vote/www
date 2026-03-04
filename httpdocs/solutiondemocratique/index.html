@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Geocode Members for uMap</title>
+<title>Géocodage des membres pour uMap</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700&family=JetBrains+Mono:wght@400;500&display=swap');
 
@@ -271,14 +271,14 @@
 
 <div class="container">
   <div class="header">
-    <h1>Geocode <span>Members</span></h1>
-    <p>Upload a CiviCRM contact export CSV. This tool geocodes each city<br>
-    via OpenStreetMap and generates a CSV ready for uMap import.</p>
+    <h1>Géocodage des <span>membres</span></h1>
+    <p>Téléversez un export CSV de contacts CiviCRM. Cet outil géocode chaque ville<br>
+    via OpenStreetMap et génère un CSV prêt à importer dans uMap.</p>
   </div>
 
   <div class="card">
 
-    <!-- Step 1: Upload -->
+    <!-- Étape 1 : Téléversement -->
     <div id="step-upload">
       <div class="dropzone" id="dropzone">
         <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -287,7 +287,7 @@
           <line x1="12" y1="3" x2="12" y2="15"/>
         </svg>
         <div class="dropzone-text">
-          <strong>Click to browse</strong> or drag &amp; drop your CSV file
+          <strong>Cliquez pour parcourir</strong> ou glissez-déposez votre fichier CSV
         </div>
         <div class="dropzone-file hidden" id="file-name"></div>
         <input type="file" id="file-input" accept=".csv,text/csv">
@@ -296,32 +296,32 @@
       <div class="btn-row">
         <button class="btn btn-primary" id="btn-upload" disabled>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/></svg>
-          Upload &amp; Analyze
+          Téléverser et analyser
         </button>
       </div>
     </div>
 
-    <!-- Step 2: Stats + Geocode -->
+    <!-- Étape 2 : Statistiques + Géocodage -->
     <div id="step-geocode" class="hidden">
       <div class="stats">
         <div class="stat">
           <div class="stat-value" id="stat-members">—</div>
-          <div class="stat-label">Members</div>
+          <div class="stat-label">Membres</div>
         </div>
         <div class="stat">
           <div class="stat-value" id="stat-cities">—</div>
-          <div class="stat-label">Unique cities</div>
+          <div class="stat-label">Villes uniques</div>
         </div>
         <div class="stat">
           <div class="stat-value" id="stat-togeocode">—</div>
-          <div class="stat-label">To geocode</div>
+          <div class="stat-label">À géocoder</div>
         </div>
       </div>
 
       <div class="btn-row">
         <button class="btn btn-primary" id="btn-geocode">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 7 8 11.7z"/></svg>
-          Start Geocoding
+          Lancer le géocodage
         </button>
       </div>
 
@@ -330,7 +330,7 @@
           <div class="progress-bar-inner" id="progress-bar"></div>
         </div>
         <div class="progress-info">
-          <span class="progress-city" id="progress-city">Preparing…</span>
+          <span class="progress-city" id="progress-city">Préparation…</span>
           <span id="progress-pct">0%</span>
         </div>
       </div>
@@ -338,24 +338,24 @@
       <div class="log-section hidden" id="log-section"></div>
     </div>
 
-    <!-- Step 3: Done -->
+    <!-- Étape 3 : Terminé -->
     <div id="step-done" class="hidden">
       <div class="done-section">
-        <h3>&#10003; Geocoding complete</h3>
+        <h3>&#10003; Géocodage terminé</h3>
         <p id="done-summary"></p>
       </div>
       <div class="btn-row">
         <button class="btn btn-green" id="btn-download">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Download CSV for uMap
+          Télécharger le CSV pour uMap
         </button>
         <button class="btn btn-primary" id="btn-restart">
-          Start over
+          Recommencer
         </button>
       </div>
     </div>
 
-    <!-- Error display -->
+    <!-- Affichage des erreurs -->
     <div class="error-box hidden" id="error-box"></div>
 
   </div><!-- .card -->
@@ -366,11 +366,11 @@ const API = 'geocode-members.php';
 
 const $ = id => document.getElementById(id);
 
-// ── State
+// ── État
 let selectedFile = null;
 let sessionToken = null;
 
-// ── Elements
+// ── Éléments
 const dropzone     = $('dropzone');
 const fileInput    = $('file-input');
 const fileNameEl   = $('file-name');
@@ -385,7 +385,7 @@ const progressPct  = $('progress-pct');
 const logSection   = $('log-section');
 const errorBox     = $('error-box');
 
-// ── File selection
+// ── Sélection du fichier
 function onFileSelected(file) {
   if (!file) return;
   selectedFile = file;
@@ -403,12 +403,12 @@ dropzone.addEventListener('drop', e => {
   dropzone.classList.remove('dragover');
   const file = e.dataTransfer.files[0];
   if (file) {
-    fileInput.files = e.dataTransfer.files; // sync the input
+    fileInput.files = e.dataTransfer.files;
     onFileSelected(file);
   }
 });
 
-// ── Show/hide steps
+// ── Afficher/masquer les étapes
 function showStep(step) {
   $('step-upload').classList.toggle('hidden', step !== 'upload');
   $('step-geocode').classList.toggle('hidden', step !== 'geocode');
@@ -421,7 +421,7 @@ function showError(msg) {
   errorBox.classList.remove('hidden');
 }
 
-// ── Upload
+// ── Téléversement
 btnUpload.addEventListener('click', async () => {
   if (!selectedFile) return;
   btnUpload.disabled = true;
@@ -435,7 +435,7 @@ btnUpload.addEventListener('click', async () => {
     const data = await res.json();
 
     if (!res.ok || data.error) {
-      showError(data.error || 'Upload failed.');
+      showError(data.error || 'Échec du téléversement.');
       btnUpload.disabled = false;
       return;
     }
@@ -448,12 +448,12 @@ btnUpload.addEventListener('click', async () => {
 
     showStep('geocode');
   } catch (err) {
-    showError('Network error: ' + err.message);
+    showError('Erreur réseau : ' + err.message);
     btnUpload.disabled = false;
   }
 });
 
-// ── Geocode (SSE)
+// ── Géocodage (SSE)
 btnGeocode.addEventListener('click', () => {
   btnGeocode.disabled = true;
   progressSec.classList.remove('hidden');
@@ -469,17 +469,17 @@ btnGeocode.addEventListener('click', () => {
     progressPct.textContent = pct + '%';
     progressCity.textContent = d.city;
 
-    // Log entry
+    // Entrée de journal
     const cls = {ok:'log-ok', cached:'log-cached', failed:'log-fail', geocoding:'log-geo'}[d.status] || '';
     const icon = {ok:'&#10003;', cached:'&#9679;', failed:'&#10007;', geocoding:'&#9881;'}[d.status] || '';
     const line = document.createElement('div');
     line.className = cls;
     if (d.status === 'ok') {
-      line.innerHTML = `${icon} ${d.city} &rarr; ${d.lat.toFixed(4)}, ${d.lon.toFixed(4)}`;
+      line.innerHTML = `${icon} ${d.name} &rarr; ${d.lat.toFixed(4)}, ${d.lon.toFixed(4)}`;
     } else if (d.status === 'cached') {
-      line.innerHTML = `${icon} ${d.city} (cached)`;
+      line.innerHTML = `${icon} ${d.city} (en cache)`;
     } else if (d.status === 'failed') {
-      line.innerHTML = `${icon} ${d.city} — not found`;
+      line.innerHTML = `${icon} ${d.city} — introuvable`;
     } else {
       line.innerHTML = `${icon} ${d.city}…`;
     }
@@ -491,12 +491,12 @@ btnGeocode.addEventListener('click', () => {
     source.close();
     const d = JSON.parse(e.data);
 
-    let summary = `${d.rows_written} rows written to CSV.`;
+    let summary = `${d.rows_written} lignes écrites dans le CSV.`;
     if (d.rows_skipped > 0) {
-      summary += ` ${d.rows_skipped} rows skipped (city not found).`;
+      summary += ` ${d.rows_skipped} lignes ignorées (ville introuvable).`;
     }
     if (d.failed && d.failed.length > 0) {
-      summary += `\nFailed lookups: ${d.failed.join(', ')}`;
+      summary += `\nRecherches échouées : ${d.failed.join(', ')}`;
     }
     $('done-summary').textContent = summary;
 
@@ -505,17 +505,17 @@ btnGeocode.addEventListener('click', () => {
 
   source.addEventListener('error', () => {
     source.close();
-    showError('Connection lost during geocoding. You can retry — cached results are preserved.');
+    showError('Connexion perdue pendant le géocodage. Vous pouvez réessayer — les résultats en cache sont conservés.');
     btnGeocode.disabled = false;
   });
 });
 
-// ── Download
+// ── Téléchargement
 btnDownload.addEventListener('click', () => {
   window.location.href = `${API}?action=download&token=${sessionToken}`;
 });
 
-// ── Restart
+// ── Recommencer
 btnRestart.addEventListener('click', () => {
   selectedFile = null;
   sessionToken = null;
