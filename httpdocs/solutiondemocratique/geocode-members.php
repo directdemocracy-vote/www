@@ -389,6 +389,7 @@ function handleGeocode(): never
                 'done'   => $done,
                 'total'  => $total,
                 'city'   => $loc['city'],
+                'name'   => $result['name'],
                 'status' => 'ok',
                 'lat'    => $result['lat'],
                 'lon'    => $result['lon'],
