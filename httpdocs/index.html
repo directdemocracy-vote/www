@@ -10,8 +10,6 @@
   <link rel="stylesheet" href="//app.directdemocracy.vote/app/css/framework7-icons.css">
   <link rel="stylesheet" href="/css/corner-ribbon.css">
   <link rel="stylesheet" href="/css/directdemocracy.css">
-  <script src="https://js.stripe.com/v3/"></script>
-  <script src="/js/checkout.js"></script>
   <script type="module" src="/js/index.js"></script>
 </head>
 
@@ -241,18 +239,9 @@
         <div class="columns">
           <div class="column">
             <div class="card">
-              <header class="card-header has-background-grey level is-mobile mb-0">
-                <div class="level-left">
-                  <a id="donate" class="anchor"></a>
-                  <div class="card-header-title has-text-white level-item"><a class="link has-text-white is-hidden" id="donate-back"><i class="f7-icons mr-2" style="font-size:100%">arrow_left</i></a> <span data-i18n="donate"></span></div>
-                </div>
-                <div class="level-right">
-                  <div class="card-header-title has-text-white level-item">
-                    <i class="f7-icons mr-4" style="font-size:100%">lock</i>
-                    <i id="donate-1" class="f7-icons mr-2" style="font-size:100%">circle_fill</i>
-                    <i id="donate-2" class="f7-icons mr-2" style="font-size:100%">circle</i>
-                    <i id="donate-3" class="f7-icons" style="font-size:100%">circle</i>
-                </div>
+              <header class="card-header has-background-grey">
+                <a id="donate" class="anchor"></a>
+                <p class="card-header-title has-text-white" data-i18n="donate"></p>
               </header>
               
               <div class="card-content has-background-white-ter content">
@@ -269,89 +258,8 @@
                   </ul>
                   <p data-i18n="donate-contact"></p>
                 </div>
-                <div id="donate-form" class="column">
-                  <div class="buttons has-addons is-centered">
-                    <button id="donate-one-time" class="button is-info" data-i18n="one-time"></button>
-                    <button id="donate-monthly" class="button" data-i18n="monthly"></button>
-                    <button id="donate-annually" class="button" data-i18n="annually"></button>
-                  </div>
-                  <div class="buttons is-centered">
-                    <label class="radio mr-2 ml-2"><input type="radio" class="mr-1" name="donate-currency" value="EUR" checked>EUR</label>
-                    <label class="radio m2-2 ml-2"><input type="radio" class="mr-1" name="donate-currency" value="CHF">CHF</label>
-                    <label class="radio mr-2 ml-2"><input type="radio" class="mr-1" name="donate-currency" value="USD">USD</label>
-                  </div>
-                  <div class="buttons is-centered">
-                    <button id="donate-5" class="button is-info">5</button>
-                    <button id="donate-10" class="button">10</button>
-                    <button id="donate-20" class="button">20</button>
-                    <button id="donate-50" class="button">50</button>
-                  </div>
-                  <div class="buttons is-centered">
-                    <button id="donate-100" class="button">100</button>
-                    <button id="donate-200" class="button">200</button>
-                    <button id="donate-500" class="button">500</button>
-                    <button id="donate-1000" class="button">1000</button>
-                  </div>
-                  <div class="field">
-                    <label class="label">E-mail</label>
-                    <div class="control has-icons-left">
-                      <input id="donate-email" class="input" type="email" required placeholder="E-mail" size="64" maxlength="320">
-                      <span class="icon is-small is-left"><i class="f7-icons">envelope</i></span>
-                    </div>
-                  </div>
-                  <div class="field">
-                    <label class="checkbox mr-1"><input id="donate-organization-checkbox" type="checkbox" class="mr-1"><span data-i18n="organization-behalf"></span></label>
-                  </div>
-                  <div id="donate-name-field" class="field is-horizontal">
-                    <div class="mr-1">
-                      <label class="label" data-i18n="given-names"></label>
-                      <div class="control">
-                        <input id="donate-given-names" class="input" type="text" size="32" maxlength="64" required data-i18n="given-names">
-                      </div>
-                    </div>
-                    <div class="ml-1">
-                      <label class="label" data-i18n="family-name"></label>
-                      <div class="control">
-                        <input id="donate-family-name" class="input" type="text" size="32" maxlength="64" required data-i18n="family-name">
-                      </div>
-                    </div>
-                  </div>
-                  <div id="donate-organization-field" class="field is-hidden">
-                    <div class="field mb-3">
-                      <label class="label" data-i18n="organization"></label>
-                      <p class="control">
-                        <input id="donate-organization" class="input" type="text" size="64" maxlength="64" data-i18n="organization">
-                      </p>
-                    </div>
-                  </div>
-                  <div class="field">
-                    <label class="checkbox"><input id="donate-comment-checkbox" type="checkbox" class="mr-1"><span data-i18n="write-us-a-comment"></span></label>
-                  </div>
-                  <div id="donate-comment-field" class="field is-hidden">
-                    <p class="control">
-                      <input id="donate-comment" class="input" type="text" data-i18n="comment">
-                    </p>
-                  </div>
-                  <div class="field">
-                    <label class="checkbox mr-1"><input id="donate-display-checkbox" type="checkbox" class="mr-1"><span id="donate-display-text" data-i18n="display-donation"></span></label><a id="donors-wall-link" href="#donors" data-i18n="donors-wall"></a>
-                  </div>
-                  <div id="donate-display-given-names-field" class="field ml-4 is-hidden">
-                    <label class="checkbox mr-1"><input id="donate-display-given-names-checkbox" type="checkbox" class="mr-1"><span data-i18n="given-names-only"></span></label>
-                  </div>
-                  <div id="donate-hide-amount-field" class="field ml-4 is-hidden">
-                    <label class="checkbox mr-1"><input id="donate-hide-amount-checkbox" type="checkbox" class="mr-1"><span data-i18n="hide-amount"></span></label>
-                  </div>
-
-                  <div class="field buttons is-centered">
-                    <button id="donate-button" class="button is-success"><span data-i18n="donate"></span><i class="f7-icons ml-2" style="font-size:100%">arrow_right</i></button>
-                  </div>
-                </div>
-                <div id="donate-checkout" class="column is-hidden">
-                </div>
-                <div id="donate-complete" class="column is-hidden">
-                  <p id="donate-thank-you"></p>
-                  <p id="donate-information"></p>
-                  <p data-i18n="donate-contact"></p>
+                <div class="column">
+                  <p class="mt-5"><a id="donors-wall-link" href="#donors" data-i18n="donors-wall"></a></p>
                 </div>
               </div>
             </div>
@@ -396,9 +304,8 @@
       </header>
       <section class="modal-card-body">
         This web site collects very little information about you.
-        It uses only a couple of cookies which are necessary for Stripe donations (including fraud prevention and detection).
+        It doesn't use any cookies.
         In case you e-mail us, we will reply you, but we won't resell your e-mail address to anyone.
-        If you donate to support us, we will collect the minimum amount of information to process your donation according to our <a href="/terms_of_service.php" target="_blank">Terms of Service</a>.
         If you use our direct<b>democracy</b> app, be sure to read and agree with the
         <a href="//app.directdemocracy.vote/privacy.html" target="_blank">Privacy Policy</a> of the app.
       </section>
