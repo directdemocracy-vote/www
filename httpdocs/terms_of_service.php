@@ -40,7 +40,7 @@ For the purposes of these Terms of Service:
 <h2 class="title is-2">Donations</h2>
 
 You can donate to Us via bank transfer or cryptocurrency.
-Contact us at <a href="mailto:donate@directdemocracy.vote">donate@directdemocracy.vote</a> for any question regarding donations.
+Contact us at <a href="mailto:donate@directdemocracy.vote">donate@directdemocracy.vote</a> for any questions regarding donations.
 
 <h2 class="title is-2">Collecting and Using Your Personal Data</h2>
 
