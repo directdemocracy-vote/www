@@ -1,7 +1,6 @@
 import Translator from 'https://app.directdemocracy.vote/app/js/translator.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-  let donors_page = 0;  // not loaded
   const faq = document.getElementById('faq');
   for (let i = 1; i <= 17; i++) { // generate FAQ
     const columns = document.createElement('div');
@@ -41,23 +40,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.location.hash === '#faq' || window.location.hash.startsWith('#q')) {
       document.getElementById('main-page').classList.add('is-hidden');
       document.getElementById('faq-page').classList.remove('is-hidden');
-      document.getElementById('donors-wall-page').classList.add('is-hidden');
       if (window.location.hash === '#faq')
         window.scrollTo(0, 0);
       else
         document.getElementById(window.location.hash.substring(1)).scrollIntoView();
-    } else if (window.location.hash.startsWith('#donors')) {
-      document.getElementById('main-page').classList.add('is-hidden');
-      document.getElementById('faq-page').classList.add('is-hidden');
-      document.getElementById('donors-wall-page').classList.remove('is-hidden');
-      const page = (window.location.hash === '#donors') ? 1 : parseInt(window.location.hash.split('-')[1]);
-      loadDonors(page);
     } else {
       document.getElementById('main-page').classList.remove('is-hidden');
-      document.getElementById('donors-wall-page').classList.add('is-hidden');
       document.getElementById('faq-page').classList.add('is-hidden');
-      if (window.location.hash)
-        document.getElementById(window.location.hash.substring(1)).scrollIntoView();
+      if (window.location.hash) {
+        const target = document.getElementById(window.location.hash.substring(1));
+        if (target) target.scrollIntoView();
+      }
     }
   }
   loadPage();
@@ -145,50 +138,4 @@ document.addEventListener('DOMContentLoaded', () => {
       hidePrivacy();
     });
   });
-  function loadDonors(page) {
-    if (donors_page === page)
-      return;
-    donors_page = page;
-    const body = document.getElementById('donors-table-body');
-    body.replaceChildren();
-    fetch(`/donors.php?page=${page}`)
-      .then(response => response.json())
-      .then(answer => {
-        for(const payment of answer) {
-          const tr = document.createElement('tr');
-          body.appendChild(tr);
-          let td = document.createElement('td');
-          tr.appendChild(td);
-          let name = payment.organization !== '' ? payment.organization : (payment.familyName === '' ? payment.givenNames : payment.givenNames + ' ' + payment.familyName);
-          td.textContent = name;
-          if (payment.organization !== '')
-            td.style.fontStyle = 'italic';
-          td = document.createElement('td');
-          tr.appendChild(td);
-          if (payment.amount != 0) {
-            let amount = payment.currency + ' ' + payment.amount;
-            if (payment.frequency === 'monthly')
-              amount += ' / month';
-            else if (payment.frequency === 'annually')
-              amount += ' / year';
-            td.textContent = amount;
-          }
-          td = document.createElement('td');
-          tr.appendChild(td);
-          td.textContent = payment.comment;
-          td = document.createElement('td');
-          tr.appendChild(td);
-          td.textContent = payment.paid;    
-          td = document.createElement('td');
-          tr.appendChild(td);
-          const img = document.createElement('img');
-          td.appendChild(img);
-          img.src = '/images/flags/' + payment.country.toLowerCase() + '.svg';
-          img.style.width = '28px';
-          img.title = payment.country;
-          img.align = 'top';
-          td.style.textAlign = 'center';
-        }
-      });
-  }
 });
