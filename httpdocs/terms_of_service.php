@@ -34,7 +34,7 @@ For the purposes of these Terms of Service:
 <li><b>You</b> means the individual using Our Service</li>
 <li><b>DirectDemocracy</b> (referred to as either "We", "Us" or "Our" in this Agreement) refers to the DirectDemocracy Association, Chemin des vignes 7, CH-1124 Gollion, Swizerland.</li>
 <li><b>Service</b> refers to the the donation service We provide to You.</li>  
-<li><b>Third Party Payment Service</b> refers to payment service used by the Us, which is Stripe Inc. (<a target="_blank" href="https://stripe.com">https://stripe.com</a>)</li>
+<li><b>Third Party Payment Service</b> refers to any external payment service used by Us.</li>
 <li><b>Personal Data</b> is any information that relates to an identified or identifiable individual.</li>
 </ul>
 
