@@ -47,8 +47,10 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       document.getElementById('main-page').classList.remove('is-hidden');
       document.getElementById('faq-page').classList.add('is-hidden');
-      if (window.location.hash)
-        document.getElementById(window.location.hash.substring(1)).scrollIntoView();
+      if (window.location.hash) {
+        const target = document.getElementById(window.location.hash.substring(1));
+        if (target) target.scrollIntoView();
+      }
     }
   }
   loadPage();
